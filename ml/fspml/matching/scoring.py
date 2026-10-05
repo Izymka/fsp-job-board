@@ -1,0 +1,517 @@
+"""Механика подбора: сила профиля внутри категории и соответствие потребности работодателя.
+
+Два скора — ровно по ТЗ:
+
+* `profile_strength` — порядок *внутри категории* (специализация × грейд): результат теста,
+  подтверждённые достижения ФСП и регулярные задания. Не зависит от работодателя.
+* `match_score` — выдача *под потребность*: соответствие требуемым навыкам (подтверждённое
+  тестом весит больше заявленного), сила профиля, совместимость условий (вилка, формат,
+  отрасль — прокси готовности принять приглашение) и свежесть профиля.
+
+Каждый скор раскладывается на вклады компонентов — из них строится объяснение выдачи.
+Веса вынесены в `Weights` и обоснованы в docs/matching.md; чувствительность к ним проверяется
+в `fspml.validation.matching`.
+"""
+
+from __future__ import annotations
+
+import math
+from collections.abc import Iterable, Sequence
+from dataclasses import dataclass, field
+from datetime import date
+
+import numpy as np
+
+from ..catalog import Catalog, get_catalog
+from ..nlp.skills import get_dictionary
+
+# --------------------------------------------------------------------------------------- данные
+
+
+@dataclass(frozen=True)
+class FspAchievement:
+    discipline: str
+    level: str
+    result: str
+    event_date: date
+    title: str = ""
+    role: str | None = None
+
+
+@dataclass
+class CandidateFeatures:
+    id: str
+    specialization: str
+    grade: str | None  # подтверждённый тестом грейд; None — категория не присвоена
+    theta: float | None = None
+    theta_se: float | None = None
+    skill_status: dict[str, str] = field(
+        default_factory=dict
+    )  # навык теста → confirmed/uncertain/weak/no_data
+    skill_theta: dict[str, tuple[float, float]] = field(default_factory=dict)  # навык → (θ, SE) из теста
+    claimed: set[str] = field(default_factory=set)  # технологии из профиля/опроса/резюме
+    task_skills: dict[str, float] = field(default_factory=dict)  # навык → 0..1 по регулярным заданиям
+    tasks_score: float = 0.0  # 0..1, с затуханием по времени
+    fsp: list[FspAchievement] | None = None  # None — ФСП ID не привязан
+    salary_from: int | None = None
+    salary_to: int | None = None
+    work_formats: set[str] = field(default_factory=set)
+    industries: set[str] = field(default_factory=set)  # предпочтительные отрасли
+    excluded_industries: set[str] = field(default_factory=set)
+    excluded_companies: set[str] = field(default_factory=set)
+    search_status: str = "open"
+    last_active: date | None = None
+    tested_at: date | None = None
+    about: str = ""
+    embedding: np.ndarray | None = None
+
+
+@dataclass
+class Need:
+    specialization: str
+    grade: str
+    skills: dict[str, float] = field(default_factory=dict)  # технология → важность 0..1
+    salary_from: int | None = None
+    salary_to: int | None = None
+    work_format: str | None = None
+    industry: str | None = None
+    company_id: str | None = None
+    text: str = ""
+    embedding: np.ndarray | None = None
+    include_adjacent: bool = True
+
+
+@dataclass(frozen=True)
+class Weights:
+    # profile_strength
+    ps_test: float = 0.60
+    ps_fsp: float = 0.25
+    ps_tasks: float = 0.15
+    # match_score
+    need_fit: float = 0.40
+    profile: float = 0.30
+    conditions: float = 0.20
+    freshness: float = 0.10
+    adjacent_grade_multiplier: float = 0.85
+    # need_fit
+    coverage_share: float = 0.75
+    claim_base: float = 0.4  # заявленная технология без подтверждения
+    unclaimed_factor: float = 0.25  # навык подтверждён тестом, но технология не заявлена
+    # conditions
+    cond_salary: float = 0.6
+    cond_format: float = 0.3
+    cond_industry: float = 0.1
+    freshness_days: float = 60.0
+
+
+DEFAULT_WEIGHTS = Weights()
+# Сила подтверждения навыка тестом. «Нет данных» — нейтрально, «слабо» — хуже, чем нет данных:
+# тест опроверг заявленное.
+STATUS_EVIDENCE = {"confirmed": 1.0, "uncertain": 0.6, "no_data": 0.35, "weak": 0.0}
+
+
+@dataclass
+class Reason:
+    kind: str  # positive / neutral / negative
+    text: str
+
+
+@dataclass
+class Scored:
+    candidate_id: str
+    score: float
+    profile_strength: float
+    components: dict[str, float]  # вклад в итоговый скор
+    details: dict[str, float]  # значения компонентов 0..1
+    reasons: list[Reason]
+    missing: list[str]
+    adjacent: bool
+    salary_fit: str  # within / partial / below / above / unknown
+
+
+# ----------------------------------------------------------------------------------- компоненты
+
+
+def fsp_strength(
+    achievements: Sequence[FspAchievement] | None, spec: str, today: date, catalog: Catalog | None = None
+) -> float:
+    """Noisy-OR по достижениям: насыщается, десять участий не равны победе."""
+    if not achievements:
+        return 0.0
+    catalog = catalog or get_catalog()
+    hl = float(catalog.fsp["half_life_years"])
+    prod = 1.0
+    for a in achievements:
+        age = max(0.0, (today - a.event_date).days / 365.25)
+        s = (
+            catalog.fsp_weight("levels", a.level)
+            * catalog.fsp_weight("results", a.result)
+            * catalog.fsp_relevance(a.discipline, spec)
+            * 0.5 ** (age / hl)
+        )
+        prod *= 1.0 - min(max(s, 0.0), 0.99)
+    return 1.0 - prod
+
+
+def test_strength(c: CandidateFeatures, catalog: Catalog | None = None) -> float:
+    """Насколько уверенно θ превышает порог подтверждённого грейда (0..1), со штрафом за неточность."""
+    if c.theta is None or c.grade is None:
+        return 0.0
+    catalog = catalog or get_catalog()
+    cut = catalog.grade(c.grade).cut
+    z = (c.theta - cut) / 0.8
+    base = 0.5 * (1 + math.erf(z / math.sqrt(2)))
+    penalty = min(0.15, max(0.0, (c.theta_se or 0.0) - 0.35) * 0.5)
+    return max(0.0, base - penalty)
+
+
+def profile_strength(
+    c: CandidateFeatures, today: date, w: Weights = DEFAULT_WEIGHTS, catalog: Catalog | None = None
+) -> tuple[float, dict]:
+    t = test_strength(c, catalog)
+    f = fsp_strength(c.fsp, c.specialization, today, catalog)
+    k = c.tasks_score
+    total = w.ps_test * t + w.ps_fsp * f + w.ps_tasks * k
+    return total, {"test": t, "fsp": f, "tasks": k}
+
+
+def _skill_proof(c: CandidateFeatures, skill: str, cut: float | None) -> tuple[float, bool]:
+    """Подтверждённость навыка тестом: P(θ_навыка > порог грейда потребности), если есть оценка."""
+    if cut is not None and skill in c.skill_theta:
+        th, se = c.skill_theta[skill]
+        return 0.5 * (1 + math.erf((th - cut) / (max(se, 0.2) * math.sqrt(2)))), True
+    status = c.skill_status.get(skill, "no_data")
+    return STATUS_EVIDENCE.get(status, 0.35), status != "no_data"
+
+
+def skill_evidence(
+    c: CandidateFeatures, tech: str, w: Weights = DEFAULT_WEIGHTS, cut: float | None = None
+) -> tuple[float, str]:
+    """Подтверждённость технологии у кандидата: 0..1 и источник (test / tasks / claim / none).
+
+    Тест подтверждает *заявление*, а не заменяет его: заявленная технология с подтверждённым
+    тестом навыком = 1.0; заявленная без данных теста ≈ 0.6; заявленная, но опровергнутая тестом
+    = 0.4; не заявленная при сильном навыке — лишь общий потенциал (≤ 0.25).
+    """
+    dic = get_dictionary()
+    t = dic.techs.get(tech)
+    assess = t.assess if t else ()
+    claimed = tech in c.claimed
+    if not assess:
+        # технология не проверяется тестом (например, Java): доверяем заявлению с понижением
+        return (0.6 if claimed else 0.0), ("claim" if claimed else "none")
+    proofs = [_skill_proof(c, a, cut) for a in assess]
+    test_ev = max(p for p, _ in proofs)
+    has_test = any(h for _, h in proofs)
+    task_ev = max(c.task_skills.get(a, 0.0) for a in assess)
+    proof = max(test_ev, task_ev)
+    if claimed:
+        value = w.claim_base + (1 - w.claim_base) * proof
+    else:
+        value = w.unclaimed_factor * (proof if has_test or task_ev > 0 else 0.0)
+    if task_ev > test_ev and task_ev > 0:
+        src = "tasks"
+    elif has_test and test_ev >= 0.6:
+        src = "test"
+    else:
+        src = "claim" if claimed else "none"
+    return value, src
+
+
+def salary_fit(c: CandidateFeatures, offer_from: int | None, offer_to: int | None) -> tuple[float, str]:
+    """Совместимость вилки работодателя с ожиданиями кандидата (без раскрытия чисел)."""
+    if c.salary_from is None or (offer_from is None and offer_to is None):
+        return 0.7, "unknown"
+    top = offer_to or offer_from
+    if top >= c.salary_from:
+        if c.salary_to is not None and offer_from is not None and offer_from > c.salary_to:
+            return 1.0, "above"
+        if offer_from is not None and offer_from >= c.salary_from:
+            return 1.0, "within"
+        return 0.85, "partial"
+    gap = (c.salary_from - top) / c.salary_from
+    return max(0.0, 1.0 - 4 * gap), "below"
+
+
+def format_fit(c: CandidateFeatures, fmt: str | None) -> float:
+    if not fmt or not c.work_formats:
+        return 0.8
+    if fmt in c.work_formats:
+        return 1.0
+    if fmt == "hybrid" or "hybrid" in c.work_formats:
+        return 0.5
+    return 0.1
+
+
+def freshness(c: CandidateFeatures, today: date, w: Weights = DEFAULT_WEIGHTS) -> float:
+    dates = [d for d in (c.last_active, c.tested_at) if d]
+    if not dates:
+        return 0.3
+    days = (today - max(dates)).days
+    return math.exp(-max(0, days) / w.freshness_days)
+
+
+# ----------------------------------------------------------------------------------- выдача
+
+
+def eligible(c: CandidateFeatures, need: Need, catalog: Catalog) -> tuple[bool, bool]:
+    """(попадает в выдачу, соседняя категория). Жёсткие правила видимости — здесь."""
+    if c.grade is None or c.specialization != need.specialization:
+        return False, False
+    if c.search_status == "closed":
+        return False, False
+    if need.industry and need.industry in c.excluded_industries:
+        return False, False
+    if need.company_id and need.company_id in c.excluded_companies:
+        return False, False
+    diff = abs(catalog.grade_index(c.grade) - catalog.grade_index(need.grade))
+    if diff == 0:
+        return True, False
+    if diff == 1 and need.include_adjacent:
+        return True, True
+    return False, False
+
+
+def score_candidate(
+    c: CandidateFeatures,
+    need: Need,
+    today: date,
+    *,
+    w: Weights = DEFAULT_WEIGHTS,
+    adjacent: bool = False,
+    catalog: Catalog | None = None,
+    percentile: float | None = None,
+) -> Scored:
+    catalog = catalog or get_catalog()
+    ps, ps_parts = profile_strength(c, today, w, catalog)
+
+    # need_fit: покрытие требуемых технологий с учётом подтверждённости + семантика текста
+    reasons: list[Reason] = []
+    missing: list[str] = []
+    confirmed_names, claimed_names = [], []
+    if need.skills:
+        num = den = 0.0
+        need_cut = catalog.grade(need.grade).cut
+        for tech, imp in need.skills.items():
+            ev, src = skill_evidence(c, tech, w, cut=need_cut)
+            num += imp * ev
+            den += imp
+            if ev >= 0.85 and src in ("test", "tasks"):
+                confirmed_names.append(tech)
+            elif tech in c.claimed:
+                claimed_names.append(tech)
+            if ev < 0.5 and imp >= 0.6:
+                missing.append(tech)
+        coverage = num / den if den else 0.0
+    else:
+        coverage = 0.5
+    semantic = None
+    if need.embedding is not None and c.embedding is not None:
+        cos = float(np.dot(need.embedding, c.embedding))
+        semantic = min(1.0, max(0.0, (cos - 0.15) / 0.6))
+    need_fit = (
+        coverage if semantic is None else w.coverage_share * coverage + (1 - w.coverage_share) * semantic
+    )
+
+    sal, sal_kind = salary_fit(c, need.salary_from, need.salary_to)
+    fmt = format_fit(c, need.work_format)
+    ind = 1.0 if (not c.industries or (need.industry and need.industry in c.industries)) else 0.8
+    conditions = w.cond_salary * sal + w.cond_format * fmt + w.cond_industry * ind
+    fresh = freshness(c, today, w)
+
+    raw = {
+        "need_fit": w.need_fit * need_fit,
+        "profile": w.profile * ps,
+        "conditions": w.conditions * conditions,
+        "freshness": w.freshness * fresh,
+    }
+    mult = w.adjacent_grade_multiplier if adjacent else 1.0
+    total = sum(raw.values()) * mult
+    components = {k: v * mult for k, v in raw.items()}
+
+    # --- объяснение ---
+    if confirmed_names:
+        reasons.append(Reason("positive", "Подтверждено тестом: " + ", ".join(confirmed_names[:5])))
+    if claimed_names:
+        reasons.append(Reason("neutral", "Заявлено, но не проверено: " + ", ".join(claimed_names[:4])))
+    if c.theta is not None:
+        pct = (
+            f"{round(percentile * 100)}-й перцентиль категории"
+            if percentile is not None
+            else f"θ = {c.theta:+.2f}"
+        )
+        reasons.append(Reason("positive" if ps_parts["test"] >= 0.6 else "neutral", f"Тест: {pct}"))
+    if c.fsp is None:
+        reasons.append(Reason("neutral", "ФСП ID не привязан"))
+    elif c.fsp:
+        best = max(
+            c.fsp,
+            key=lambda a: catalog.fsp_weight("levels", a.level) * catalog.fsp_weight("results", a.result),
+        )
+        res_t = next(x["title"] for x in catalog.fsp["results"] if x["id"] == best.result)
+        lvl_t = next(x["title"] for x in catalog.fsp["levels"] if x["id"] == best.level).lower()
+        disc = next(
+            (d["title"] for d in catalog.fsp["disciplines"] if d["id"] == best.discipline), best.discipline
+        )
+        extra = f" (+{len(c.fsp) - 1})" if len(c.fsp) > 1 else ""
+        reasons.append(
+            Reason(
+                "positive",
+                f"ФСП: {res_t.lower()} — {lvl_t} соревнования, {disc.lower()}, {best.event_date.year}{extra}",
+            )
+        )
+    else:
+        reasons.append(Reason("neutral", "ФСП ID привязан, достижений пока нет"))
+    if c.tasks_score >= 0.3:
+        reasons.append(Reason("positive", "Решает регулярные задания"))
+    sal_text = {
+        "within": "Ожидания по ЗП в вашей вилке",
+        "above": "Ожидания по ЗП ниже вашей вилки",
+        "partial": "Вилка частично пересекается с ожиданиями",
+        "below": "Вилка ниже ожиданий кандидата",
+        "unknown": "Ожидания по ЗП не указаны",
+    }[sal_kind]
+    reasons.append(
+        Reason(
+            {
+                "within": "positive",
+                "above": "positive",
+                "partial": "neutral",
+                "below": "negative",
+                "unknown": "neutral",
+            }[sal_kind],
+            sal_text,
+        )
+    )
+    if fmt <= 0.5 and need.work_format:
+        reasons.append(Reason("negative", "Формат работы не совпадает с предпочтениями"))
+    if c.last_active:
+        days = (today - c.last_active).days
+        reasons.append(
+            Reason(
+                "positive" if days <= 14 else "neutral",
+                "Активен " + ("сегодня" if days <= 0 else f"{days} дн. назад"),
+            )
+        )
+    if adjacent:
+        reasons.append(Reason("neutral", f"Соседняя категория: {catalog.grade(c.grade).name}"))
+    if missing:
+        reasons.append(Reason("negative", "Не подтверждено: " + ", ".join(missing[:4])))
+
+    return Scored(
+        candidate_id=c.id,
+        score=round(total, 4),
+        profile_strength=round(ps, 4),
+        components={k: round(v, 4) for k, v in components.items()},
+        details={
+            "need_fit": need_fit,
+            "coverage": coverage,
+            "semantic": semantic if semantic is not None else -1,
+            "conditions": conditions,
+            "freshness": fresh,
+            **ps_parts,
+        },
+        reasons=reasons,
+        missing=missing,
+        adjacent=adjacent,
+        salary_fit=sal_kind,
+    )
+
+
+def rank(
+    candidates: Iterable[CandidateFeatures],
+    need: Need,
+    today: date,
+    *,
+    w: Weights = DEFAULT_WEIGHTS,
+    catalog: Catalog | None = None,
+) -> list[Scored]:
+    catalog = catalog or get_catalog()
+    pool = []
+    for c in candidates:
+        ok, adj = eligible(c, need, catalog)
+        if ok:
+            pool.append((c, adj))
+    # перцентиль θ внутри собственной категории кандидата (для объяснения)
+    by_cat: dict[tuple, list[float]] = {}
+    for c, _ in pool:
+        if c.theta is not None:
+            by_cat.setdefault((c.specialization, c.grade), []).append(c.theta)
+    for k in by_cat:
+        by_cat[k].sort()
+    out = []
+    for c, adj in pool:
+        pct = None
+        peers = by_cat.get((c.specialization, c.grade))
+        if c.theta is not None and peers and len(peers) >= 5:
+            pct = float(np.searchsorted(peers, c.theta, side="right")) / len(peers)
+        out.append(score_candidate(c, need, today, w=w, adjacent=adj, catalog=catalog, percentile=pct))
+    out.sort(key=lambda s: (-s.score, s.candidate_id))
+    return out
+
+
+def rank_in_category(
+    candidates: Iterable[CandidateFeatures], spec: str, grade: str, today: date, w: Weights = DEFAULT_WEIGHTS
+) -> list[tuple[str, float]]:
+    """Порядок внутри категории (просмотр базы без описания потребности)."""
+    rows = []
+    for c in candidates:
+        if c.specialization == spec and c.grade == grade and c.search_status != "closed":
+            rows.append((c.id, profile_strength(c, today, w)[0]))
+    rows.sort(key=lambda x: (-x[1], x[0]))
+    return rows
+
+
+@dataclass
+class CategorySummary:
+    specialization: str
+    grade: str
+    total: int
+    with_fsp: int
+    salary_median: int | None
+    in_budget_share: float | None
+    relation: str  # target / adjacent / alternative
+
+
+def recommend_categories(
+    candidates: Sequence[CandidateFeatures],
+    need: Need,
+    spec_scores: dict[str, float] | None = None,
+    catalog: Catalog | None = None,
+) -> list[CategorySummary]:
+    """Рекомендованные категории: целевая, соседние по грейду и альтернативные специализации."""
+    catalog = catalog or get_catalog()
+    g_idx = catalog.grade_index(need.grade)
+    targets: list[tuple[str, str, str]] = [(need.specialization, need.grade, "target")]
+    for d in (-1, 1):
+        g = catalog.grade_by_index(g_idx + d)
+        if g:
+            targets.append((need.specialization, g.id, "adjacent"))
+    if spec_scores:
+        for s, p in sorted(spec_scores.items(), key=lambda x: -x[1]):
+            if s != need.specialization and p >= 0.15:
+                targets.append((s, need.grade, "alternative"))
+    out = []
+    for spec, grade, rel in targets:
+        pool = [
+            c
+            for c in candidates
+            if c.specialization == spec and c.grade == grade and c.search_status != "closed"
+        ]
+        sal = sorted(c.salary_from for c in pool if c.salary_from)
+        in_budget = None
+        top = need.salary_to or need.salary_from
+        if top and sal:
+            in_budget = sum(1 for s in sal if s <= top) / len(sal)
+        out.append(
+            CategorySummary(
+                specialization=spec,
+                grade=grade,
+                total=len(pool),
+                with_fsp=sum(1 for c in pool if c.fsp),
+                salary_median=int(np.median(sal)) if sal else None,
+                in_budget_share=in_budget,
+                relation=rel,
+            )
+        )
+    return out
