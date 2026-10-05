@@ -1,0 +1,31 @@
+[project]
+name = "fspml"
+version = "0.1.0"
+description = "ML-ядро ФСП Job Board: адаптивное тестирование (IRT/CAT), банк параметризованных заданий, подбор, разбор резюме, валидация"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.14",
+    "pyyaml>=6.0",
+    "rapidfuzz>=3.10",
+    "scikit-learn>=1.5",
+    "pdfplumber>=0.11",
+    "pandas>=2.2",
+]
+
+[project.optional-dependencies]
+embeddings = ["sentence-transformers>=3.2"]
+validation = [
+    "matplotlib>=3.9",
+    "fpdf2>=2.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fspml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

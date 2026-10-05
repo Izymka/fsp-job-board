@@ -1,0 +1,138 @@
+# Справочники платформы. Единый источник правды для бэкенда, фронтенда (через API) и валидации.
+# Изменения порогов/весов — только здесь, с пересчётом `make validate`.
+
+grades:
+  # cut — порог на шкале способности θ (N(0,1) популяции специализации), выше которого грейд подтверждается.
+  # Начальные значения экспертные; уточняются по пилоту и онлайн-перекалибровке.
+  - {id: intern, name: Intern, title: "Стажёр", experience: "без коммерческого опыта", cut: -2.25}
+  - {id: junior, name: Junior, title: "Младший специалист", experience: "до 1–2 лет", cut: -1.25}
+  - {id: middle, name: Middle, title: "Специалист", experience: "2–4 года", cut: -0.25}
+  - {id: senior, name: Senior, title: "Старший специалист", experience: "4+ лет", cut: 0.75}
+  - {id: lead, name: Lead, title: "Ведущий / техлид", experience: "6+ лет, лидерство", cut: 1.6}
+
+specializations:
+  - id: backend
+    name: Backend
+    title: "Backend-разработка"
+    description: "Серверная логика, API, базы данных, интеграции, производительность и надёжность сервисов"
+    # Языковой навык выбирается по стеку кандидата (первый совпавший из stack_languages)
+    stack_languages: [python, javascript]
+    blueprint: {algorithms: 0.15, sql: 0.2, http: 0.15, architecture: 0.1, git: 0.05, linux: 0.05, docker: 0.05, security: 0.05, $language: 0.2}
+  - id: frontend
+    name: Frontend
+    title: "Frontend-разработка"
+    description: "Веб-интерфейсы, браузер, JavaScript/TypeScript, React, вёрстка, взаимодействие с API"
+    blueprint: {javascript: 0.3, html_css: 0.15, react: 0.15, typescript: 0.1, http: 0.15, algorithms: 0.1, git: 0.05}
+  - id: mobile
+    name: Mobile
+    title: "Мобильная разработка"
+    description: "Приложения для Android и iOS: жизненный цикл, UI, хранение данных, сеть, публикация"
+    blueprint: {mobile: 0.4, algorithms: 0.2, http: 0.2, git: 0.1, architecture: 0.1}
+  - id: data_science
+    name: Data Science
+    title: "Data Science / ML"
+    description: "Анализ данных, статистика, машинное обучение, подготовка признаков, оценка моделей"
+    blueprint: {python: 0.15, pandas: 0.15, statistics: 0.25, ml: 0.3, sql: 0.15}
+  - id: qa
+    name: QA
+    title: "QA / тестирование"
+    description: "Тест-дизайн, ручное и автоматизированное тестирование, API и баг-репорты"
+    blueprint: {testing: 0.45, http: 0.2, sql: 0.15, python: 0.1, git: 0.1}
+  - id: devops
+    name: DevOps
+    title: "DevOps / SRE"
+    description: "Инфраструктура, контейнеры, CI/CD, наблюдаемость, сети и безопасность эксплуатации"
+    blueprint: {linux: 0.25, docker: 0.2, kubernetes: 0.15, cicd: 0.15, http: 0.1, git: 0.05, security: 0.1}
+  - id: analyst
+    name: Analyst
+    title: "Системный / бизнес-аналитик"
+    description: "Требования, моделирование процессов, интеграции, SQL и продуктовые метрики"
+    blueprint: {requirements: 0.35, sql: 0.25, http: 0.15, metrics: 0.25}
+
+# Навыки, которые проверяет тест (единица подоценки). anchor — языконезависимые якоря для связывания шкал.
+assessment_skills:
+  - {id: algorithms, title: "Алгоритмы и структуры данных", anchor: true}
+  - {id: sql, title: "SQL и базы данных", anchor: true}
+  - {id: http, title: "HTTP, REST и сети", anchor: true}
+  - {id: git, title: "Git", anchor: true}
+  - {id: architecture, title: "Архитектура и проектирование", anchor: true}
+  - {id: security, title: "Безопасность приложений", anchor: true}
+  - {id: linux, title: "Linux и shell"}
+  - {id: docker, title: "Docker"}
+  - {id: kubernetes, title: "Kubernetes"}
+  - {id: cicd, title: "CI/CD"}
+  - {id: python, title: "Python"}
+  - {id: javascript, title: "JavaScript"}
+  - {id: typescript, title: "TypeScript"}
+  - {id: html_css, title: "HTML и CSS"}
+  - {id: react, title: "React"}
+  - {id: pandas, title: "pandas / NumPy"}
+  - {id: statistics, title: "Статистика и вероятность"}
+  - {id: ml, title: "Машинное обучение"}
+  - {id: testing, title: "Тест-дизайн и теория тестирования"}
+  - {id: requirements, title: "Требования и моделирование"}
+  - {id: metrics, title: "Продуктовые метрики"}
+  - {id: mobile, title: "Мобильные платформы"}
+
+industries:
+  - {id: fintech, title: "Финтех и банки"}
+  - {id: ecommerce, title: "E-commerce и ритейл"}
+  - {id: govtech, title: "Госсектор"}
+  - {id: gamedev, title: "Геймдев"}
+  - {id: edtech, title: "Образование"}
+  - {id: healthtech, title: "Медицина"}
+  - {id: telecom, title: "Телеком"}
+  - {id: industry, title: "Промышленность и энергетика"}
+  - {id: media, title: "Медиа и развлечения"}
+  - {id: logistics, title: "Логистика и транспорт"}
+  - {id: security, title: "Информационная безопасность"}
+  - {id: other, title: "Другое"}
+
+work_formats:
+  - {id: office, title: "Офис"}
+  - {id: hybrid, title: "Гибрид"}
+  - {id: remote, title: "Удалённо"}
+
+search_statuses:
+  - {id: active, title: "Ищу работу", visible: true}
+  - {id: open, title: "Открыт к предложениям", visible: true}
+  - {id: closed, title: "Не ищу", visible: false}
+
+decline_reasons:
+  - {id: salary, title: "Не устраивает зарплата"}
+  - {id: stack, title: "Не подходит стек"}
+  - {id: format, title: "Не подходит формат работы"}
+  - {id: company, title: "Не интересна компания или отрасль"}
+  - {id: not_looking, title: "Сейчас не ищу работу"}
+  - {id: other, title: "Другое"}
+
+# ФСП: предложенная командой схема данных реестра (см. docs/fsp-integration.md)
+fsp:
+  levels:
+    - {id: international, title: "Международные", weight: 1.0}
+    - {id: national, title: "Всероссийские", weight: 0.75}
+    - {id: regional, title: "Региональные", weight: 0.45}
+    - {id: local, title: "Муниципальные и прочие", weight: 0.25}
+  results:
+    - {id: winner, title: "Победитель", weight: 1.0}
+    - {id: prize, title: "Призёр", weight: 0.8}
+    - {id: finalist, title: "Финалист", weight: 0.6}
+    - {id: participant, title: "Участник", weight: 0.3}
+  half_life_years: 2.0
+  disciplines:
+    # relevance — насколько дисциплина подтверждает навыки специализации (0..1)
+    - id: algorithmic
+      title: "Алгоритмическое программирование"
+      relevance: {backend: 0.9, frontend: 0.5, mobile: 0.6, data_science: 0.8, qa: 0.4, devops: 0.5, analyst: 0.3}
+    - id: product
+      title: "Продуктовое программирование"
+      relevance: {backend: 1.0, frontend: 1.0, mobile: 1.0, data_science: 0.7, qa: 0.7, devops: 0.7, analyst: 0.8}
+    - id: security
+      title: "Программирование систем информационной безопасности"
+      relevance: {backend: 0.7, frontend: 0.4, mobile: 0.4, data_science: 0.4, qa: 0.5, devops: 1.0, analyst: 0.3}
+    - id: robotics
+      title: "Программирование робототехники"
+      relevance: {backend: 0.5, frontend: 0.3, mobile: 0.4, data_science: 0.6, qa: 0.4, devops: 0.4, analyst: 0.2}
+    - id: uav
+      title: "Программирование беспилотных авиационных систем"
+      relevance: {backend: 0.5, frontend: 0.3, mobile: 0.4, data_science: 0.7, qa: 0.4, devops: 0.4, analyst: 0.2}
