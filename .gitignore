@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ФСП Job Board
+backend/dev.db
+docs/fsp-job-board-docs.html
+frontend/dist/
+*.rar
+
+# Техническая документация ведётся локально
+docs/

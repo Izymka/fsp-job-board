@@ -1,0 +1,30 @@
+[project]
+name = "fsp-job-board"
+version = "0.1.0"
+description = "ФСП Job Board: платформа подбора IT-специалистов с обратной механикой"
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = ["ml", "backend", "fsp-registry-mock"]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.7",
+    "matplotlib>=3.9",
+    "fpdf2>=2.8",
+    "markdown>=3.7",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# B008 — FastAPI Depends() в аргументах по умолчанию (идиома фреймворка);
+# B905 — zip без strict там, где длины совпадают по построению; E741 — `l` в коротких генераторах.
+ignore = ["E501", "B008", "B905", "E741"]
