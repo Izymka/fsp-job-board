@@ -1,0 +1,64 @@
+{
+ "n_candidates": 1000,
+ "families": 175,
+ "unique_of_200_median": 166.0,
+ "accuracy_exact": 0.693,
+ "accuracy_within1": 0.996,
+ "overgrade_rate": 0.042,
+ "retest_agreement": 0.741,
+ "retest_kappa_weighted": 0.8587159600355951,
+ "items_per_attempt": 17.875,
+ "leak_50": {
+  "fixed": 0.8567567567567568,
+  "pool": 0.8378378378378378,
+  "ours": 0.32432432432432434
+ },
+ "drift_detection": 1.0,
+ "drift_delay_median": 75.0,
+ "recalibration": {
+  "families": 164,
+  "mae_b_nominal": 0.2803065675872222,
+  "mae_b_recalibrated": 0.2312760306747947,
+  "responses": 17707
+ },
+ "ndcg": {
+  "ours": 0.7312328345002709,
+  "ours_without_fsp": 0.7350637449902993,
+  "ours_claims_only": 0.723864193781995,
+  "ours_without_conditions": 0.5056716012399842,
+  "test_only_in_category": 0.33168313042615705,
+  "random_in_category": 0.3450067589962605,
+  "bm25_in_specialization": 0.22302872021681092,
+  "bm25_universal": 0.20331253238178046
+ },
+ "ndcg_clean": {
+  "ours": 0.7349963770079582,
+  "ours_without_fsp": 0.7503420531528512,
+  "ours_claims_only": 0.7348949917562696,
+  "ours_without_conditions": 0.5429785393722626,
+  "test_only_in_category": 0.34782662566762473,
+  "random_in_category": 0.363673250345804,
+  "bm25_in_specialization": 0.3019205076605171,
+  "bm25_universal": 0.2771286977938729
+ },
+ "accepted": {
+  "ours": 3.986572594072594,
+  "ours_without_fsp": 3.9755725940725943,
+  "ours_claims_only": 3.872432733932734,
+  "ours_without_conditions": 2.315812141110922,
+  "test_only_in_category": 1.8837,
+  "random_in_category": 2.074011938061938,
+  "bm25_in_specialization": 1.3478983516483518,
+  "bm25_universal": 1.2028983516483518
+ },
+ "p10": {
+  "ours": 0.6999999999999998,
+  "ours_without_fsp": 0.7033333333333333,
+  "ours_claims_only": 0.6799999999999999,
+  "ours_without_conditions": 0.43000000000000005,
+  "test_only_in_category": 0.3466666666666666,
+  "random_in_category": 0.3733333333333333,
+  "bm25_in_specialization": 0.23333333333333334,
+  "bm25_universal": 0.21
+ }
+}
