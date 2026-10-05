@@ -1,0 +1,118 @@
+import { useQuery } from '@tanstack/react-query'
+import { Download, Lock, Medal, Send } from 'lucide-react'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { FspList, InviteModal, SkillList } from '../../components/domain'
+import { Badge, ErrorBox, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
+import { api } from '../../lib/api'
+import { date, lookup, pct, SKILL_STATUS, useCatalog } from '../../lib/catalog'
+import type { CandidateCard } from '../../lib/types'
+
+export default function CandidateView() {
+  const { id } = useParams()
+  const { data: cat } = useCatalog()
+  const L = lookup(cat)
+  const [invite, setInvite] = useState(false)
+  const { data: c, error } = useQuery({ queryKey: ['candidate', id], queryFn: () => api.get<CandidateCard>(`/api/employer/candidates/${id}`) })
+  if (error) return <ErrorBox error={error} />
+  if (!c) return <PageLoader />
+  return (
+    <div>
+      <PageHeader
+        eyebrow={c.revealed ? 'Контакты открыты' : 'Обезличенный профиль'}
+        title={c.revealed && c.full_name ? c.full_name : c.alias}
+        subtitle={[c.headline, c.city, c.experience_years != null ? `опыт ${c.experience_years} г.` : null].filter(Boolean).join(' · ')}
+        actions={
+          <>
+            <button className="btn-secondary" onClick={() => api.download(`/api/employer/candidates/${c.id}/profile.pdf`, 'candidate.pdf')}>
+              <Download className="h-4 w-4" /> PDF
+            </button>
+            {!c.revealed && (
+              <button className="btn-primary" onClick={() => setInvite(true)}>
+                <Send className="h-4 w-4" /> Пригласить
+              </button>
+            )}
+          </>
+        }
+      />
+      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <div className="space-y-6">
+          <Section title="Категория и результат теста">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge tone="bg-brand-500 text-white">{c.category}</Badge>
+              <span className="text-sm text-muted">подтверждено {date(c.confirmed_at)}</span>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+              <div className="rounded-xl bg-surface p-3">
+                <div className="font-mono text-xl font-bold">{pct(c.test_percentile)}</div>
+                <div className="text-[11px] text-muted">перцентиль в категории</div>
+              </div>
+              <div className="rounded-xl bg-surface p-3">
+                <div className="font-mono text-xl font-bold">{Math.round(c.profile_strength * 100)}</div>
+                <div className="text-[11px] text-muted">сила профиля</div>
+              </div>
+              <div className="rounded-xl bg-surface p-3">
+                <div className="font-mono text-xl font-bold">{c.last_active_days ?? '—'}</div>
+                <div className="text-[11px] text-muted">дн. с последней активности</div>
+              </div>
+            </div>
+            <div className="mt-5">
+              <SkillList scores={c.skill_scores} />
+            </div>
+            <p className="hint mt-3">
+              <span className="mr-2 inline-block h-2 w-2 rounded-full bg-ok-600" />
+              {SKILL_STATUS.confirmed.label} — навык проверен адаптивным тестом на уровне грейда.
+            </p>
+          </Section>
+          <Section title="Стек (заявлено кандидатом)">
+            <div className="flex flex-wrap gap-1.5">
+              {c.stack.map((s) => (
+                <Badge key={s}>{s}</Badge>
+              ))}
+            </div>
+          </Section>
+          {c.about && (
+            <Section title="О себе">
+              <p className="text-sm whitespace-pre-wrap text-ink-soft">{c.about}</p>
+            </Section>
+          )}
+        </div>
+        <div className="space-y-6">
+          <Section title="Контакты">
+            {c.revealed && c.contacts ? (
+              <dl className="grid grid-cols-[6rem_1fr] gap-y-1.5 text-sm">
+                {Object.entries(c.contacts).map(([k, v]) => (
+                  <div key={k} className="contents">
+                    <dt className="text-muted">{k}</dt>
+                    <dd className="font-mono break-all">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : (
+              <div className="flex gap-3 text-sm text-muted">
+                <Lock className="h-5 w-5 shrink-0 text-steel" />
+                ФИО и контакты откроются, когда кандидат примет ваше приглашение или откликнется на вашу вакансию.
+              </div>
+            )}
+          </Section>
+          <Section
+            title={
+              <span className="flex items-center gap-2">
+                <Medal className="h-4 w-4 text-accent-500" /> Достижения ФСП
+              </span>
+            }
+          >
+            <FspList items={c.fsp} linked={c.fsp_linked} visible={c.fsp_visible} />
+          </Section>
+          <Section title="Условия">
+            <div className="text-sm text-ink-soft">Формат: {c.work_formats.map(L.format).join(', ') || '—'}</div>
+            <div className="mt-2">
+              <Notice>Ожидания по зарплате не раскрываются — при отправке приглашения вы увидите, укладывается ли ваша вилка.</Notice>
+            </div>
+          </Section>
+        </div>
+      </div>
+      {invite && <InviteModal open candidate={{ id: c.id, label: c.alias }} onClose={() => setInvite(false)} />}
+    </div>
+  )
+}

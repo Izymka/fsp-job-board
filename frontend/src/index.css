@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/700.css";
+
+/* Цвета и шрифты брендбука ФСП */
+@theme {
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-brand-50: #f1efff;
+  --color-brand-100: #e3e0ff;
+  --color-brand-200: #c9c3ff;
+  --color-brand-300: #a69cff;
+  --color-brand-400: #7b6cff;
+  --color-brand-500: #402fff;
+  --color-brand-600: #3322e0;
+  --color-brand-700: #2818b3;
+  --color-brand-800: #1f148a;
+  --color-brand-900: #161066;
+
+  --color-accent-50: #fdecee;
+  --color-accent-100: #fbd5da;
+  --color-accent-500: #ec1d35;
+  --color-accent-600: #c9122a;
+
+  --color-ink: #1b1c21;
+  --color-ink-soft: #4a4b52;
+  --color-muted: #6b6d75;
+  --color-line: #e4e4e9;
+  --color-surface: #f6f6f8;
+  --color-fog: #ededed;
+  --color-steel: #c8c9ca;
+
+  --color-ok-50: #e9f8ef;
+  --color-ok-600: #138a4a;
+  --color-warn-50: #fff6e5;
+  --color-warn-600: #a96500;
+}
+
+@layer base {
+  html {
+    color: var(--color-ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-mono);
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: var(--color-brand-100);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+}
+
+/* Компоненты как утилиты Tailwind v4 (чтобы их можно было комбинировать через @apply) */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-brand-500 text-white hover:bg-brand-600 active:bg-brand-700;
+}
+@utility btn-secondary {
+  @apply btn border border-line bg-white text-ink hover:border-brand-300 hover:bg-brand-50;
+}
+@utility btn-ghost {
+  @apply btn text-ink-soft hover:bg-surface hover:text-ink;
+}
+@utility btn-danger {
+  @apply btn border border-accent-100 bg-white text-accent-600 hover:bg-accent-50;
+}
+@utility btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+@utility card {
+  @apply rounded-2xl border border-line bg-white;
+}
+@utility input {
+  @apply w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 focus:outline-none disabled:bg-surface;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-medium text-ink;
+}
+@utility hint {
+  @apply mt-1 text-xs text-muted;
+}
+@utility chip {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+}
+@utility link {
+  @apply text-brand-500 underline-offset-2 hover:underline;
+}
+
+/* Фирменная графика: тонкие линии с узлами */
+.node-line {
+  background-image: radial-gradient(circle, var(--color-brand-500) 2.5px, transparent 3px);
+  background-size: 8px 8px;
+}
+
+pre code {
+  font-family: var(--font-mono);
+}
