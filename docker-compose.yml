@@ -1,0 +1,113 @@
+# ФСП Job Board — локальный запуск всего стека: `docker compose up -d --build`
+# Приложение: http://localhost · Swagger: http://localhost/api/docs · Keycloak: http://localhost:8080
+# Письма (подтверждение email, уведомления): http://localhost:8025
+# Суммарно ≈ 1.5–2 ГБ RAM (основной потребитель — Keycloak).
+
+name: fsp-job-board
+
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://fsp:${POSTGRES_PASSWORD:-fsp}@postgres:5432/fsp_jobs
+  AUTH_MODE: ${AUTH_MODE:-keycloak}
+  KEYCLOAK_PUBLIC_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8080}
+  KEYCLOAK_INTERNAL_URL: http://keycloak:8080
+  FRONTEND_URL: ${PUBLIC_URL:-http://localhost}
+  PUBLIC_API_URL: ${PUBLIC_URL:-http://localhost}
+  CORS_ORIGINS: ${PUBLIC_URL:-http://localhost},http://localhost:5173
+  FSP_REGISTRY_URL: http://fsp-registry:8090
+  FSP_REGISTRY_API_KEY: ${FSP_REGISTRY_API_KEY:-fsp-registry-demo-key}
+  FSP_ID_CLIENT_SECRET: ${FSP_ID_CLIENT_SECRET:-fsp-jobs-link-secret}
+  ASSESSMENT_SECRET: ${ASSESSMENT_SECRET:-change-me-in-production-0123456789abcdef}
+  SMTP_HOST: mailpit
+  SMTP_PORT: "1025"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: fsp_jobs
+      POSTGRES_USER: fsp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fsp}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fsp -d fsp_jobs"]
+      interval: 5s
+      retries: 20
+    mem_limit: 512m
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: fsp
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-fsp}
+      # Токены выпускаются с публичным issuer; бэкенд ходит во внутреннюю сеть (backchannel)
+      KC_HOSTNAME: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8080}
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      JAVA_OPTS_KC_HEAP: "-XX:MaxRAMPercentage=65"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q UP <&3"]
+      interval: 10s
+      retries: 30
+    mem_limit: 1g
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+    mem_limit: 64m
+    restart: unless-stopped
+
+  fsp-registry:
+    build: ./fsp-registry-mock
+    environment:
+      FSP_REGISTRY_API_KEY: ${FSP_REGISTRY_API_KEY:-fsp-registry-demo-key}
+    ports:
+      - "8090:8090"
+    mem_limit: 128m
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        WITH_EMBEDDINGS: ${WITH_EMBEDDINGS:-0}
+    environment: *backend-env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      fsp-registry:
+        condition: service_started
+    mem_limit: 1g
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    depends_on:
+      - backend
+    mem_limit: 64m
+    restart: unless-stopped
+
+volumes:
+  pgdata:

@@ -1,0 +1,79 @@
+{
+  "realm": "fsp-id",
+  "displayName": "ФСП ID (демо)",
+  "displayNameHtml": "<b>ФСП ID</b> — единый вход участника ФСП (имитация)",
+  "enabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "sslRequired": "none",
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "ru"
+  ],
+  "defaultLocale": "ru",
+  "clients": [
+    {
+      "clientId": "fsp-jobs-link",
+      "name": "ФСП Job Board — привязка профиля",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "fsp-jobs-link-secret",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8000/api/fsp/link/callback",
+        "http://localhost/api/fsp/link/callback"
+      ],
+      "webOrigins": [
+        "+"
+      ],
+      "protocolMappers": [
+        {
+          "name": "fsp_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "config": {
+            "user.attribute": "username",
+            "claim.name": "fsp_id",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "fsp-000123",
+      "email": "maria.fsp@demo.fsp",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Мария",
+      "lastName": "Иванова",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo12345",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "fsp-000999",
+      "email": "newbie.fsp@demo.fsp",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Новичок",
+      "lastName": "ФСП",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo12345",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

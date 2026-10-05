@@ -1,0 +1,115 @@
+{
+  "realm": "fsp-jobs",
+  "displayName": "ФСП Job Board",
+  "displayNameHtml": "<b>ФСП</b> Job Board",
+  "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "verifyEmail": true,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "bruteForceProtected": true,
+  "failureFactor": 10,
+  "sslRequired": "none",
+  "passwordPolicy": "length(8) and notUsername(undefined)",
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "ru",
+    "en"
+  ],
+  "defaultLocale": "ru",
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 28800,
+  "smtpServer": {
+    "host": "mailpit",
+    "port": "1025",
+    "from": "noreply@fsp-jobs.local",
+    "fromDisplayName": "ФСП Job Board"
+  },
+  "clients": [
+    {
+      "clientId": "fsp-jobs-web",
+      "name": "ФСП Job Board — веб-приложение",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "http://localhost/*",
+        "http://localhost:5173/*",
+        "http://localhost:3000/*",
+        "http://127.0.0.1/*",
+        "http://127.0.0.1:5173/*"
+      ],
+      "webOrigins": [
+        "+"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "+"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience-fsp-jobs-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "fsp-jobs-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "employer@demo.fsp",
+      "email": "employer@demo.fsp",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Анна",
+      "lastName": "Рекрутерова",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo12345",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "maria@demo.fsp",
+      "email": "maria@demo.fsp",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Мария",
+      "lastName": "Иванова",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo12345",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "candidate@demo.fsp",
+      "email": "candidate@demo.fsp",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Кандидат",
+      "lastName": "Демо",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo12345",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

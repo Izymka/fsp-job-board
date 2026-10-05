@@ -1,0 +1,10 @@
+**/node_modules
+**/.venv
+**/__pycache__
+**/*.pyc
+.git
+frontend/dist
+backend/dev.db
+docs
+*.rar
+*.pdf
