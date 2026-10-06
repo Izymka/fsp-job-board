@@ -1,0 +1,384 @@
+# Граф смежности технологий для частичного зачёта навыков при подборе.
+#
+# Ребро {from: X, to: Y, w} читается так: «кандидат владеет X → требование вакансии Y
+# закрыто с долей w». Рёбра НАПРАВЛЕННЫЕ: обратное ребро задаётся явно и со своим весом
+# (TypeScript → JavaScript = 0.8, JavaScript → TypeScript = 0.6).
+#
+# Шкала w (допустимы только эти значения):
+#   0.8  — почти взаимозаменяемы, переход за дни (PostgreSQL → MySQL, TypeScript → JavaScript);
+#   0.6  — та же категория, переучивание за недели (Django → FastAPI, React → Vue);
+#   0.4  — близкая область, общий фундамент (RabbitMQ → Kafka);
+#   0.25 — слабая связь, полезный задел (Docker → Kubernetes).
+# Связи слабее 0.25 не заводятся.
+#
+# Имена — только канонические (первый элемент строки) из skills.yaml, раздел technologies.
+# Рёбра «технология → её язык» (Django → Python) не заводятся: эта связь уже выражена
+# через assess. Исключение — надмножества и родственные языки (TypeScript → JavaScript,
+# Kotlin ↔ Java, C++ → C).
+# Учтены алиасы словаря: Webpack покрывает Vite/esbuild, MobX — Zustand/React Query,
+# Jest — Vitest, Playwright — Cypress, Prometheus — Grafana, CatBoost — бустинги в целом,
+# Vue — Nuxt, MySQL — MariaDB, Elasticsearch — OpenSearch, S3 — MinIO.
+version: 1
+edges:
+  # ---------------- Языки ----------------
+  - {from: TypeScript, to: JavaScript, w: 0.8, why: "TS — надмножество JS"}
+  - {from: JavaScript, to: TypeScript, w: 0.6, why: "та же экосистема, нужно освоить систему типов"}
+  - {from: Kotlin, to: Java, w: 0.6, why: "JVM, общая стандартная библиотека и экосистема"}
+  - {from: Java, to: Kotlin, w: 0.6, why: "JVM, Kotlin — эволюция синтаксиса Java"}
+  - {from: Scala, to: Java, w: 0.4, why: "JVM, общая экосистема"}
+  - {from: Java, to: Scala, w: 0.25, why: "JVM, но функциональная парадигма Scala требует переучивания"}
+  - {from: Scala, to: Kotlin, w: 0.4, why: "JVM, функциональные элементы в обоих языках"}
+  - {from: Kotlin, to: Scala, w: 0.25, why: "JVM, но глубокая функциональщина Scala"}
+  - {from: C++, to: C, w: 0.6, why: "C++ почти надмножество C, но идиомы чистого C отличаются"}
+  - {from: C, to: C++, w: 0.4, why: "общий синтаксис и модель памяти, без ООП и шаблонов"}
+  - {from: Java, to: C#, w: 0.6, why: "близкие управляемые ООП-языки со сходным синтаксисом"}
+  - {from: C#, to: Java, w: 0.6, why: "близкие управляемые ООП-языки со сходным синтаксисом"}
+  - {from: Kotlin, to: C#, w: 0.25, why: "современный статически типизированный ООП-язык"}
+  - {from: Java, to: Go, w: 0.25, why: "типизированный backend-язык, но другая модель конкурентности"}
+  - {from: C++, to: Rust, w: 0.4, why: "системное программирование, ручное управление ресурсами"}
+  - {from: Rust, to: C++, w: 0.4, why: "системное программирование, RAII и владение"}
+  - {from: Rust, to: Go, w: 0.4, why: "компилируемый язык, Go проще для освоения"}
+  - {from: Go, to: Rust, w: 0.25, why: "компилируемые языки, но borrow checker требует переучивания"}
+  - {from: C++, to: Go, w: 0.25, why: "компилируемые языки, низкоуровневый фундамент"}
+  - {from: Objective-C, to: Swift, w: 0.4, why: "одна платформа Apple и фреймворки, разный язык"}
+  - {from: Swift, to: Objective-C, w: 0.4, why: "iOS-разработчики поддерживают legacy-код на Objective-C"}
+  - {from: Kotlin, to: Swift, w: 0.25, why: "современные мобильные языки со схожими конструкциями"}
+  - {from: Swift, to: Kotlin, w: 0.25, why: "современные мобильные языки со схожими конструкциями"}
+  - {from: Kotlin, to: Dart, w: 0.25, why: "мобильная разработка, похожий синтаксис"}
+  - {from: TypeScript, to: Dart, w: 0.25, why: "похожий C-подобный типизированный синтаксис, async/await"}
+  - {from: Python, to: Ruby, w: 0.25, why: "динамические скриптовые языки"}
+  - {from: Ruby, to: Python, w: 0.25, why: "динамические скриптовые языки"}
+  - {from: PHP, to: Python, w: 0.25, why: "динамические языки веб-backend"}
+  - {from: Python, to: R, w: 0.25, why: "анализ данных, разные экосистемы"}
+  - {from: R, to: Python, w: 0.25, why: "анализ данных, разные экосистемы"}
+  - {from: Bash, to: Linux, w: 0.4, why: "shell — основной инструмент работы в Linux"}
+  - {from: Linux, to: Bash, w: 0.4, why: "администрирование Linux подразумевает shell-скрипты"}
+
+  # Язык → платформа/рантайм (язык фактически привязан к платформе)
+  - {from: JavaScript, to: Node.js, w: 0.4, why: "тот же язык, нужно освоить серверный рантайм"}
+  - {from: TypeScript, to: Node.js, w: 0.4, why: "тот же язык, нужно освоить серверный рантайм"}
+  - {from: Swift, to: iOS, w: 0.6, why: "Swift используется почти только под платформы Apple"}
+  - {from: Objective-C, to: iOS, w: 0.6, why: "Objective-C используется почти только под платформы Apple"}
+  - {from: Kotlin, to: Android, w: 0.4, why: "основной язык Android, но бывает и backend"}
+  - {from: Java, to: Android, w: 0.25, why: "язык Android-разработки, но без знания SDK"}
+  - {from: Dart, to: Flutter, w: 0.8, why: "Dart применяется практически только во Flutter"}
+  - {from: Kotlin, to: Coroutines, w: 0.4, why: "корутины — стандартный механизм асинхронности Kotlin"}
+
+  # ---------------- Backend: Python ----------------
+  - {from: Django, to: FastAPI, w: 0.6, why: "Python web-фреймворки, иная модель (async, pydantic)"}
+  - {from: FastAPI, to: Django, w: 0.4, why: "Python web, но Django — большой фреймворк со своим ORM"}
+  - {from: Django, to: Flask, w: 0.8, why: "Flask — минималистичное подмножество идей Django"}
+  - {from: Flask, to: Django, w: 0.4, why: "Python web, но у Django своя ORM, админка, архитектура"}
+  - {from: Flask, to: FastAPI, w: 0.6, why: "микрофреймворки с похожим роутингом, FastAPI асинхронный"}
+  - {from: FastAPI, to: Flask, w: 0.8, why: "Flask проще, роутинг и концепции те же"}
+  - {from: FastAPI, to: aiohttp, w: 0.6, why: "асинхронные Python web-фреймворки"}
+  - {from: aiohttp, to: FastAPI, w: 0.6, why: "асинхронные Python web-фреймворки"}
+  - {from: Flask, to: aiohttp, w: 0.4, why: "Python web, но aiohttp требует асинхронной модели"}
+  - {from: aiohttp, to: Flask, w: 0.6, why: "Python web, синхронный Flask проще"}
+  - {from: Django, to: aiohttp, w: 0.4, why: "Python web, разный уровень абстракции"}
+  - {from: aiohttp, to: Django, w: 0.4, why: "Python web, разный уровень абстракции"}
+  - {from: FastAPI, to: asyncio, w: 0.6, why: "FastAPI-сервисы пишутся на async/await"}
+  - {from: aiohttp, to: asyncio, w: 0.8, why: "aiohttp построен напрямую на asyncio"}
+  - {from: asyncio, to: aiohttp, w: 0.6, why: "владение asyncio — основа aiohttp"}
+  - {from: asyncio, to: FastAPI, w: 0.4, why: "асинхронный Python — основа FastAPI"}
+  - {from: Celery, to: Airflow, w: 0.4, why: "оркестрация фоновых задач и пайплайнов на Python"}
+  - {from: Airflow, to: Celery, w: 0.4, why: "очереди и воркеры задач на Python"}
+  - {from: Celery, to: RabbitMQ, w: 0.25, why: "RabbitMQ — типовой брокер Celery"}
+
+  # ---------------- Backend: JVM / JS / прочие ----------------
+  - {from: Spring, to: Hibernate, w: 0.4, why: "Spring Data JPA — стандартная часть стека Spring"}
+  - {from: Express, to: NestJS, w: 0.6, why: "Node.js-фреймворки, Nest добавляет DI и модули"}
+  - {from: NestJS, to: Express, w: 0.8, why: "NestJS работает поверх Express"}
+  - {from: Node.js, to: Express, w: 0.6, why: "Express — базовый web-фреймворк Node.js"}
+  - {from: Express, to: Node.js, w: 0.8, why: "Express-разработчик владеет рантаймом Node.js"}
+  - {from: NestJS, to: Node.js, w: 0.8, why: "NestJS-разработчик владеет рантаймом Node.js"}
+  - {from: Node.js, to: NestJS, w: 0.4, why: "тот же рантайм, нужно освоить архитектуру Nest"}
+  - {from: Spring, to: NestJS, w: 0.25, why: "NestJS скопирован с архитектуры Spring (DI, модули), другой язык"}
+  - {from: NestJS, to: Spring, w: 0.25, why: "схожая архитектура DI и модулей, другой язык"}
+  - {from: Django, to: Laravel, w: 0.25, why: "полновесные MVC-фреймворки с ORM, другой язык"}
+  - {from: Laravel, to: Django, w: 0.25, why: "полновесные MVC-фреймворки с ORM, другой язык"}
+  - {from: Flask, to: Express, w: 0.25, why: "минималистичные web-фреймворки, другой язык"}
+  - {from: Express, to: Flask, w: 0.25, why: "минималистичные web-фреймворки, другой язык"}
+  - {from: Gin, to: Express, w: 0.25, why: "легковесные роутеры HTTP, другой язык"}
+  - {from: Express, to: Gin, w: 0.25, why: "легковесные роутеры HTTP, другой язык"}
+  - {from: FastAPI, to: Gin, w: 0.25, why: "легковесные API-фреймворки, другой язык"}
+
+  # ---------------- ORM ----------------
+  - {from: SQLAlchemy, to: Hibernate, w: 0.4, why: "ORM с unit of work и сессиями, другой язык"}
+  - {from: Hibernate, to: SQLAlchemy, w: 0.4, why: "ORM с unit of work и сессиями, другой язык"}
+  - {from: Django, to: SQLAlchemy, w: 0.4, why: "Django ORM — те же идеи маппинга и миграций"}
+  - {from: SQLAlchemy, to: Django, w: 0.25, why: "опыт ORM переносится на Django ORM"}
+  - {from: Room, to: SQLite, w: 0.6, why: "Room — обёртка над SQLite"}
+  - {from: SQLite, to: Room, w: 0.25, why: "знание SQLite помогает в Room, но нужен мобильный стек"}
+
+  # ---------------- API, протоколы, безопасность ----------------
+  - {from: OpenAPI, to: REST, w: 0.8, why: "OpenAPI — спецификация REST API"}
+  - {from: REST, to: OpenAPI, w: 0.4, why: "REST-разработчики обычно описывают API в Swagger"}
+  - {from: GraphQL, to: REST, w: 0.6, why: "проектирование HTTP API, REST проще"}
+  - {from: REST, to: GraphQL, w: 0.4, why: "проектирование API, нужно освоить схему и резолверы"}
+  - {from: gRPC, to: REST, w: 0.6, why: "проектирование API, REST проще"}
+  - {from: REST, to: gRPC, w: 0.25, why: "проектирование API, но protobuf и HTTP/2 — другая модель"}
+  - {from: gRPC, to: GraphQL, w: 0.25, why: "схемно-ориентированные API"}
+  - {from: WebSocket, to: REST, w: 0.25, why: "сетевые API поверх HTTP"}
+  - {from: Postman, to: REST, w: 0.4, why: "работа с REST API через Postman"}
+  - {from: REST, to: Postman, w: 0.6, why: "Postman — стандартный инструмент работы с REST"}
+  - {from: Postman, to: OpenAPI, w: 0.25, why: "импорт и чтение Swagger-спецификаций"}
+  - {from: OAuth 2.0, to: JWT, w: 0.6, why: "токены OAuth/OIDC обычно JWT"}
+  - {from: JWT, to: OAuth 2.0, w: 0.4, why: "токенная авторизация, но OAuth — целый протокол"}
+  - {from: Keycloak, to: OAuth 2.0, w: 0.8, why: "Keycloak — реализация OAuth 2.0 / OIDC"}
+  - {from: OAuth 2.0, to: Keycloak, w: 0.4, why: "знание протокола, нужно освоить сервер"}
+  - {from: Keycloak, to: JWT, w: 0.6, why: "Keycloak выпускает JWT-токены"}
+  - {from: JWT, to: Keycloak, w: 0.25, why: "токены знакомы, сервер идентификации — нет"}
+  - {from: Информационная безопасность, to: OAuth 2.0, w: 0.25, why: "протоколы аутентификации — часть AppSec"}
+
+  # ---------------- Архитектура ----------------
+  - {from: System design, to: Microservices, w: 0.6, why: "проектирование распределённых систем"}
+  - {from: Microservices, to: System design, w: 0.4, why: "опыт распределённой архитектуры"}
+  - {from: DDD, to: Microservices, w: 0.4, why: "bounded contexts — основа нарезки сервисов"}
+  - {from: Microservices, to: DDD, w: 0.25, why: "нарезка сервисов по доменам"}
+  - {from: Паттерны проектирования, to: ООП, w: 0.6, why: "GoF-паттерны построены на ООП"}
+  - {from: ООП, to: Паттерны проектирования, w: 0.4, why: "ООП — фундамент паттернов"}
+  - {from: DDD, to: Паттерны проектирования, w: 0.4, why: "DDD опирается на тактические паттерны"}
+  - {from: SRE, to: System design, w: 0.25, why: "надёжность и масштабирование систем"}
+
+  # ---------------- Реляционные СУБД ----------------
+  - {from: PostgreSQL, to: MySQL, w: 0.8, why: "реляционные СУБД, MySQL проще по возможностям"}
+  - {from: MySQL, to: PostgreSQL, w: 0.6, why: "реляционные СУБД, у PostgreSQL богаче диалект"}
+  - {from: PostgreSQL, to: MS SQL, w: 0.6, why: "реляционные СУБД, другой диалект и инструменты"}
+  - {from: MS SQL, to: PostgreSQL, w: 0.6, why: "реляционные СУБД, другой диалект и инструменты"}
+  - {from: PostgreSQL, to: Oracle, w: 0.6, why: "реляционные СУБД, PL/pgSQL близок к PL/SQL"}
+  - {from: Oracle, to: PostgreSQL, w: 0.6, why: "реляционные СУБД, PL/SQL близок к PL/pgSQL"}
+  - {from: MySQL, to: MS SQL, w: 0.6, why: "реляционные СУБД, другой диалект"}
+  - {from: MS SQL, to: MySQL, w: 0.6, why: "реляционные СУБД, MySQL проще"}
+  - {from: MySQL, to: Oracle, w: 0.4, why: "реляционные СУБД, Oracle сильно сложнее"}
+  - {from: Oracle, to: MySQL, w: 0.6, why: "реляционные СУБД, MySQL проще"}
+  - {from: Oracle, to: MS SQL, w: 0.6, why: "корпоративные СУБД с процедурными расширениями"}
+  - {from: MS SQL, to: Oracle, w: 0.6, why: "корпоративные СУБД с процедурными расширениями"}
+  - {from: PostgreSQL, to: SQLite, w: 0.8, why: "SQLite — упрощённая встраиваемая СУБД"}
+  - {from: MySQL, to: SQLite, w: 0.8, why: "SQLite — упрощённая встраиваемая СУБД"}
+  - {from: MS SQL, to: SQLite, w: 0.8, why: "SQLite — упрощённая встраиваемая СУБД"}
+  - {from: Oracle, to: SQLite, w: 0.6, why: "SQLite — упрощённая встраиваемая СУБД"}
+  - {from: SQLite, to: PostgreSQL, w: 0.4, why: "SQL общий, нет опыта серверной СУБД"}
+  - {from: SQLite, to: MySQL, w: 0.4, why: "SQL общий, нет опыта серверной СУБД"}
+  - {from: SQL, to: PostgreSQL, w: 0.4, why: "язык запросов общий, без администрирования и специфики СУБД"}
+  - {from: SQL, to: MySQL, w: 0.4, why: "язык запросов общий, без специфики СУБД"}
+  - {from: SQL, to: MS SQL, w: 0.4, why: "язык запросов общий, без специфики T-SQL"}
+  - {from: SQL, to: Oracle, w: 0.4, why: "язык запросов общий, без специфики PL/SQL"}
+  - {from: SQL, to: SQLite, w: 0.6, why: "SQLite почти не требует знаний сверх SQL"}
+  - {from: SQL, to: ClickHouse, w: 0.25, why: "SQL-диалект, но колоночная OLAP-модель"}
+  - {from: ClickHouse, to: PostgreSQL, w: 0.4, why: "SQL общий, OLTP-специфика другая"}
+  - {from: PostgreSQL, to: ClickHouse, w: 0.4, why: "SQL общий, колоночная OLAP-модель другая"}
+
+  # ---------------- NoSQL, кеши, поиск, хранилища ----------------
+  - {from: Cassandra, to: MongoDB, w: 0.4, why: "NoSQL, MongoDB проще в освоении"}
+  - {from: MongoDB, to: Cassandra, w: 0.25, why: "NoSQL, но wide-column модель и распределённость Cassandra"}
+  - {from: MongoDB, to: Elasticsearch, w: 0.25, why: "документные JSON-хранилища"}
+  - {from: Elasticsearch, to: MongoDB, w: 0.25, why: "документные JSON-хранилища"}
+  - {from: Hadoop, to: ClickHouse, w: 0.4, why: "аналитические хранилища, SQL через Hive"}
+  - {from: ClickHouse, to: Hadoop, w: 0.25, why: "большие данные, но другая экосистема"}
+  - {from: Redis, to: RabbitMQ, w: 0.25, why: "Redis pub/sub и streams как лёгкая очередь"}
+  - {from: Elasticsearch, to: ELK, w: 0.6, why: "Elasticsearch — ядро ELK-стека"}
+  - {from: ELK, to: Elasticsearch, w: 0.6, why: "ELK построен на Elasticsearch, но для логов, не для поиска"}
+  - {from: AWS, to: S3, w: 0.8, why: "S3 — базовый сервис AWS"}
+  - {from: Yandex Cloud, to: S3, w: 0.8, why: "Object Storage Yandex Cloud совместим с S3 API"}
+  - {from: S3, to: AWS, w: 0.25, why: "один из сервисов облака"}
+  - {from: S3, to: Yandex Cloud, w: 0.25, why: "один из сервисов облака"}
+
+  # ---------------- Брокеры сообщений ----------------
+  - {from: Kafka, to: RabbitMQ, w: 0.6, why: "брокеры сообщений, RabbitMQ проще концептуально"}
+  - {from: RabbitMQ, to: Kafka, w: 0.4, why: "брокеры сообщений, но лог-модель, партиции, offsets у Kafka"}
+  - {from: Kafka, to: Spark, w: 0.25, why: "потоковая обработка данных"}
+
+  # ---------------- Frontend: фреймворки ----------------
+  - {from: React, to: Vue, w: 0.6, why: "компонентные SPA-фреймворки"}
+  - {from: Vue, to: React, w: 0.6, why: "компонентные SPA-фреймворки"}
+  - {from: React, to: Angular, w: 0.4, why: "SPA, но у Angular DI, RxJS и строгая архитектура"}
+  - {from: Angular, to: React, w: 0.4, why: "SPA, другая модель компонентов и состояния"}
+  - {from: Vue, to: Angular, w: 0.4, why: "SPA, но у Angular DI, RxJS и строгая архитектура"}
+  - {from: Angular, to: Vue, w: 0.4, why: "SPA, шаблоны и директивы похожи"}
+  - {from: React, to: Svelte, w: 0.6, why: "компонентные фреймворки, Svelte проще"}
+  - {from: Vue, to: Svelte, w: 0.6, why: "компонентные фреймворки с однофайловыми компонентами"}
+  - {from: Svelte, to: React, w: 0.6, why: "компонентные фреймворки"}
+  - {from: Svelte, to: Vue, w: 0.6, why: "компонентные фреймворки с однофайловыми компонентами"}
+  - {from: Angular, to: Svelte, w: 0.4, why: "компонентные фреймворки"}
+  - {from: Svelte, to: Angular, w: 0.25, why: "SPA, но Angular значительно тяжелее"}
+  - {from: Next.js, to: React, w: 0.8, why: "Next.js построен на React"}
+  - {from: React, to: Next.js, w: 0.6, why: "тот же React, нужно освоить SSR и роутинг Next"}
+  - {from: Vue, to: Next.js, w: 0.4, why: "Nuxt (в алиасах Vue) — аналог Next.js, но другой фреймворк"}
+  - {from: Next.js, to: Node.js, w: 0.25, why: "серверная часть Next.js работает на Node.js"}
+  - {from: React Native, to: React, w: 0.6, why: "та же модель компонентов и хуков"}
+  - {from: React, to: React Native, w: 0.6, why: "та же модель компонентов, но мобильная специфика"}
+  - {from: Angular, to: NestJS, w: 0.25, why: "NestJS повторяет архитектуру модулей и DI Angular"}
+
+  # ---------------- Frontend: состояние, сборка, стили, тесты ----------------
+  - {from: Redux, to: MobX, w: 0.6, why: "стейт-менеджеры React, другая модель реактивности"}
+  - {from: MobX, to: Redux, w: 0.6, why: "стейт-менеджеры React, Redux более шаблонный"}
+  - {from: Tailwind, to: CSS, w: 0.6, why: "utility-классы отражают CSS-свойства"}
+  - {from: CSS, to: Tailwind, w: 0.6, why: "Tailwind быстро осваивается при знании CSS"}
+  - {from: CSS, to: HTML, w: 0.8, why: "вёрстка — это HTML и CSS вместе"}
+  - {from: HTML, to: CSS, w: 0.4, why: "вёрстка, но стилизация — отдельный навык"}
+  - {from: Accessibility, to: HTML, w: 0.4, why: "доступность строится на семантической разметке"}
+  - {from: Web performance, to: Webpack, w: 0.25, why: "оптимизация бандла — часть производительности"}
+  - {from: Storybook, to: React, w: 0.25, why: "Storybook используется в компонентной React-разработке"}
+  - {from: Jest, to: pytest, w: 0.25, why: "фреймворки модульного тестирования, другой язык"}
+  - {from: pytest, to: Jest, w: 0.25, why: "фреймворки модульного тестирования, другой язык"}
+
+  # ---------------- Мобильная разработка ----------------
+  - {from: Jetpack Compose, to: Android, w: 0.8, why: "Compose — UI-тулкит Android"}
+  - {from: Android, to: Jetpack Compose, w: 0.6, why: "платформа знакома, декларативный UI нужно освоить"}
+  - {from: Coroutines, to: Android, w: 0.25, why: "корутины используются в основном в Android-разработке"}
+  - {from: Android, to: Coroutines, w: 0.6, why: "корутины — стандарт асинхронности в современном Android"}
+  - {from: Android, to: iOS, w: 0.25, why: "нативная мобильная разработка, другая платформа"}
+  - {from: iOS, to: Android, w: 0.25, why: "нативная мобильная разработка, другая платформа"}
+  - {from: Flutter, to: React Native, w: 0.4, why: "кросс-платформенные мобильные фреймворки"}
+  - {from: React Native, to: Flutter, w: 0.4, why: "кросс-платформенные мобильные фреймворки"}
+  - {from: Flutter, to: Jetpack Compose, w: 0.4, why: "декларативный UI с похожей моделью виджетов"}
+  - {from: Jetpack Compose, to: Flutter, w: 0.4, why: "декларативный UI с похожей моделью виджетов"}
+  - {from: Swift, to: Jetpack Compose, w: 0.25, why: "SwiftUI (алиас Swift) — аналог Compose на iOS"}
+  - {from: Jetpack Compose, to: Swift, w: 0.25, why: "декларативный UI, аналог SwiftUI"}
+  - {from: Android, to: Flutter, w: 0.25, why: "мобильная платформа знакома, другой фреймворк и язык"}
+  - {from: iOS, to: Flutter, w: 0.25, why: "мобильная платформа знакома, другой фреймворк и язык"}
+  - {from: Flutter, to: Android, w: 0.25, why: "мобильная разработка, но без нативного SDK"}
+  - {from: Flutter, to: iOS, w: 0.25, why: "мобильная разработка, но без нативного SDK"}
+  - {from: React Native, to: Android, w: 0.25, why: "мобильная разработка, но без нативного SDK"}
+  - {from: React Native, to: iOS, w: 0.25, why: "мобильная разработка, но без нативного SDK"}
+  - {from: Android, to: Room, w: 0.4, why: "Room — стандартное локальное хранилище Android"}
+  - {from: iOS, to: Room, w: 0.4, why: "Core Data / Realm (алиасы Room) — локальные хранилища iOS"}
+  - {from: Appium, to: Selenium, w: 0.6, why: "Appium реализует протокол WebDriver"}
+  - {from: Selenium, to: Appium, w: 0.4, why: "WebDriver общий, мобильная специфика другая"}
+
+  # ---------------- DevOps: CI/CD ----------------
+  - {from: GitLab CI, to: GitHub Actions, w: 0.8, why: "YAML-пайплайны с похожими концепциями"}
+  - {from: GitHub Actions, to: GitLab CI, w: 0.8, why: "YAML-пайплайны с похожими концепциями"}
+  - {from: GitLab CI, to: Jenkins, w: 0.4, why: "CI-системы, но Jenkins — Groovy и плагины"}
+  - {from: Jenkins, to: GitLab CI, w: 0.6, why: "CI-системы, YAML-пайплайны проще"}
+  - {from: GitHub Actions, to: Jenkins, w: 0.4, why: "CI-системы, но Jenkins — Groovy и плагины"}
+  - {from: Jenkins, to: GitHub Actions, w: 0.6, why: "CI-системы, YAML-пайплайны проще"}
+  - {from: GitLab CI, to: CI/CD, w: 0.8, why: "конкретная CI/CD-система"}
+  - {from: GitHub Actions, to: CI/CD, w: 0.8, why: "конкретная CI/CD-система"}
+  - {from: Jenkins, to: CI/CD, w: 0.8, why: "конкретная CI/CD-система"}
+  - {from: ArgoCD, to: CI/CD, w: 0.6, why: "CD по модели GitOps"}
+  - {from: CI/CD, to: GitLab CI, w: 0.4, why: "принципы CI/CD знакомы, инструмент — нет"}
+  - {from: CI/CD, to: GitHub Actions, w: 0.4, why: "принципы CI/CD знакомы, инструмент — нет"}
+  - {from: CI/CD, to: Jenkins, w: 0.4, why: "принципы CI/CD знакомы, инструмент — нет"}
+  - {from: GitLab CI, to: ArgoCD, w: 0.25, why: "доставка кода, но GitOps — другой подход"}
+
+  # ---------------- DevOps: контейнеры, оркестрация, IaC ----------------
+  - {from: Kubernetes, to: Docker, w: 0.8, why: "работа с Kubernetes подразумевает контейнеры"}
+  - {from: Docker, to: Kubernetes, w: 0.25, why: "контейнеры знакомы, оркестрация — нет"}
+  - {from: ArgoCD, to: Kubernetes, w: 0.6, why: "ArgoCD деплоит манифесты в Kubernetes"}
+  - {from: Kubernetes, to: ArgoCD, w: 0.4, why: "GitOps-надстройка над знакомыми манифестами"}
+  - {from: Terraform, to: Ansible, w: 0.4, why: "инфраструктура как код, декларативный провижининг vs конфигурация"}
+  - {from: Ansible, to: Terraform, w: 0.4, why: "инфраструктура как код, конфигурация vs провижининг"}
+  - {from: Linux, to: Nginx, w: 0.25, why: "администрирование сервисов в Linux"}
+  - {from: Nginx, to: Сети, w: 0.25, why: "HTTP, проксирование, балансировка"}
+  - {from: Linux, to: Сети, w: 0.25, why: "сетевая настройка в Linux"}
+  - {from: Сети, to: Linux, w: 0.25, why: "сетевые инженеры работают с Linux"}
+
+  # ---------------- DevOps: облака и мониторинг ----------------
+  - {from: AWS, to: Yandex Cloud, w: 0.6, why: "публичные облака с аналогичными сервисами"}
+  - {from: Yandex Cloud, to: AWS, w: 0.6, why: "публичные облака с аналогичными сервисами"}
+  - {from: Prometheus, to: ELK, w: 0.4, why: "наблюдаемость: Grafana/Loki в алиасах, разные типы данных"}
+  - {from: ELK, to: Prometheus, w: 0.4, why: "наблюдаемость, метрики вместо логов"}
+  - {from: SRE, to: Prometheus, w: 0.4, why: "SLO и алертинг строятся на мониторинге"}
+  - {from: Prometheus, to: SRE, w: 0.25, why: "мониторинг — часть практики SRE"}
+
+  # ---------------- Data / ML ----------------
+  - {from: PyTorch, to: TensorFlow, w: 0.6, why: "фреймворки глубокого обучения"}
+  - {from: TensorFlow, to: PyTorch, w: 0.6, why: "фреймворки глубокого обучения"}
+  - {from: PyTorch, to: Deep learning, w: 0.8, why: "PyTorch — инструмент глубокого обучения"}
+  - {from: TensorFlow, to: Deep learning, w: 0.8, why: "TensorFlow/Keras — инструмент глубокого обучения"}
+  - {from: Deep learning, to: PyTorch, w: 0.4, why: "теория знакома, конкретный фреймворк — не обязательно"}
+  - {from: Deep learning, to: TensorFlow, w: 0.4, why: "теория знакома, конкретный фреймворк — не обязательно"}
+  - {from: Deep learning, to: Machine learning, w: 0.6, why: "DL — часть ML, но классика (бустинги, линейные модели) может проседать"}
+  - {from: Machine learning, to: Deep learning, w: 0.25, why: "общий фундамент, нейросети — отдельная область"}
+  - {from: scikit-learn, to: Machine learning, w: 0.8, why: "scikit-learn — основной инструмент классического ML"}
+  - {from: Machine learning, to: scikit-learn, w: 0.6, why: "практик ML почти всегда работал со sklearn"}
+  - {from: CatBoost, to: Machine learning, w: 0.6, why: "градиентный бустинг — ключевой метод ML"}
+  - {from: Machine learning, to: CatBoost, w: 0.4, why: "бустинги — стандартный инструмент ML"}
+  - {from: scikit-learn, to: CatBoost, w: 0.6, why: "табличный ML, sklearn-совместимый API"}
+  - {from: CatBoost, to: scikit-learn, w: 0.6, why: "табличный ML, sklearn-совместимый API"}
+  - {from: NLP, to: Deep learning, w: 0.6, why: "современный NLP построен на трансформерах"}
+  - {from: Computer vision, to: Deep learning, w: 0.6, why: "современный CV построен на свёрточных сетях"}
+  - {from: NLP, to: PyTorch, w: 0.4, why: "HuggingFace-стек основан на PyTorch"}
+  - {from: Computer vision, to: PyTorch, w: 0.4, why: "CV-модели обучаются в основном на PyTorch"}
+  - {from: Deep learning, to: NLP, w: 0.25, why: "общие архитектуры, доменная специфика"}
+  - {from: Deep learning, to: Computer vision, w: 0.25, why: "общие архитектуры, доменная специфика"}
+  - {from: NLP, to: Computer vision, w: 0.25, why: "прикладной DL, другой домен"}
+  - {from: Computer vision, to: NLP, w: 0.25, why: "прикладной DL, другой домен"}
+  - {from: NLP, to: Machine learning, w: 0.4, why: "прикладная ML-специализация"}
+  - {from: Computer vision, to: Machine learning, w: 0.4, why: "прикладная ML-специализация"}
+  - {from: Machine learning, to: MLflow, w: 0.25, why: "трекинг экспериментов — часть ML-практики"}
+  - {from: MLflow, to: Machine learning, w: 0.4, why: "MLOps подразумевает понимание ML-цикла"}
+  - {from: pandas, to: NumPy, w: 0.6, why: "pandas построен на NumPy"}
+  - {from: NumPy, to: pandas, w: 0.4, why: "векторные вычисления, табличный API нужно освоить"}
+  - {from: Matplotlib, to: pandas, w: 0.4, why: "визуализация данных обычно идёт из DataFrame"}
+  - {from: pandas, to: Matplotlib, w: 0.4, why: "встроенная визуализация pandas на Matplotlib"}
+  - {from: pandas, to: Spark, w: 0.25, why: "DataFrame-API похож, но распределённые вычисления"}
+  - {from: Spark, to: pandas, w: 0.4, why: "DataFrame-API, pandas проще"}
+  - {from: Spark, to: Hadoop, w: 0.4, why: "экосистема больших данных"}
+  - {from: Hadoop, to: Spark, w: 0.4, why: "экосистема больших данных"}
+  - {from: Airflow, to: dbt, w: 0.25, why: "инструменты дата-пайплайнов"}
+  - {from: dbt, to: Airflow, w: 0.25, why: "инструменты дата-пайплайнов"}
+  - {from: Jupyter, to: pandas, w: 0.25, why: "Jupyter — среда анализа данных"}
+  - {from: R, to: pandas, w: 0.4, why: "data frames в R — прообраз pandas"}
+  - {from: pandas, to: R, w: 0.25, why: "анализ табличных данных, другой язык"}
+  - {from: R, to: Matplotlib, w: 0.4, why: "визуализация данных (ggplot)"}
+  - {from: R, to: A/B-тестирование, w: 0.25, why: "статистический анализ экспериментов"}
+
+  # ---------------- BI и продуктовая аналитика ----------------
+  - {from: BI, to: Excel, w: 0.6, why: "отчётность и сводные таблицы"}
+  - {from: Excel, to: BI, w: 0.25, why: "отчётность, но BI-инструменты сложнее"}
+  - {from: Matplotlib, to: BI, w: 0.25, why: "визуализация данных"}
+  - {from: pandas, to: Excel, w: 0.4, why: "обработка табличных данных"}
+  - {from: Excel, to: pandas, w: 0.25, why: "табличный анализ, без программирования"}
+  - {from: Статистика, to: A/B-тестирование, w: 0.4, why: "A/B-тесты — проверка статистических гипотез"}
+  - {from: A/B-тестирование, to: Статистика, w: 0.6, why: "A/B-тестирование требует прикладной статистики"}
+  - {from: Продуктовый анализ, to: Продуктовые метрики, w: 0.8, why: "продуктовый анализ строится на метриках"}
+  - {from: Продуктовые метрики, to: Продуктовый анализ, w: 0.6, why: "метрики — основа продуктового анализа"}
+  - {from: A/B-тестирование, to: Продуктовые метрики, w: 0.4, why: "эксперименты оценивают продуктовые метрики"}
+  - {from: Продуктовый анализ, to: A/B-тестирование, w: 0.4, why: "A/B — инструмент продуктовой аналитики"}
+  - {from: Продуктовые метрики, to: A/B-тестирование, w: 0.25, why: "метрики знакомы, статистика экспериментов — нет"}
+  - {from: BI, to: Продуктовые метрики, w: 0.25, why: "дашборды метрик"}
+  - {from: dbt, to: BI, w: 0.25, why: "подготовка витрин для BI"}
+
+  # ---------------- Тестирование ----------------
+  - {from: Selenium, to: Playwright, w: 0.6, why: "браузерная автоматизация UI-тестов"}
+  - {from: Playwright, to: Selenium, w: 0.6, why: "браузерная автоматизация UI-тестов"}
+  - {from: Selenium, to: Автотесты, w: 0.8, why: "автоматизация UI-тестов"}
+  - {from: Playwright, to: Автотесты, w: 0.8, why: "автоматизация UI-тестов"}
+  - {from: Appium, to: Автотесты, w: 0.8, why: "автоматизация мобильных тестов"}
+  - {from: pytest, to: Автотесты, w: 0.6, why: "фреймворк автотестов, может быть только модульными тестами"}
+  - {from: Jest, to: Автотесты, w: 0.4, why: "модульные тесты фронтенда, не полноценная автоматизация QA"}
+  - {from: JMeter, to: Автотесты, w: 0.25, why: "автоматизация нагрузочных сценариев"}
+  - {from: Allure, to: Автотесты, w: 0.4, why: "отчётность автотестов"}
+  - {from: Автотесты, to: Selenium, w: 0.4, why: "автоматизатор, инструмент может быть другим"}
+  - {from: Автотесты, to: Playwright, w: 0.4, why: "автоматизатор, инструмент может быть другим"}
+  - {from: Автотесты, to: pytest, w: 0.4, why: "автоматизатор, фреймворк может быть другим"}
+  - {from: Автотесты, to: Allure, w: 0.4, why: "отчёты Allure — стандарт в автотестах"}
+  - {from: Автотесты, to: Тест-дизайн, w: 0.4, why: "автоматизация опирается на тест-дизайн"}
+  - {from: Автотесты, to: Ручное тестирование, w: 0.4, why: "автоматизаторы обычно имеют опыт ручного тестирования"}
+  - {from: Тест-дизайн, to: Ручное тестирование, w: 0.6, why: "тест-дизайн — основа ручного тестирования"}
+  - {from: Ручное тестирование, to: Тест-дизайн, w: 0.6, why: "ручной тестировщик пишет тест-кейсы и чек-листы"}
+  - {from: Ручное тестирование, to: Автотесты, w: 0.25, why: "понимание тестирования, без программирования"}
+  - {from: Postman, to: Автотесты, w: 0.25, why: "скриптовые проверки API в Postman"}
+
+  # ---------------- Системный и бизнес-анализ ----------------
+  - {from: BPMN, to: UML, w: 0.6, why: "нотации моделирования"}
+  - {from: UML, to: BPMN, w: 0.6, why: "нотации моделирования (activity ≈ процессы)"}
+  - {from: User Story, to: Сбор требований, w: 0.6, why: "формулирование требований"}
+  - {from: Сбор требований, to: User Story, w: 0.6, why: "формулирование требований"}
+  - {from: ТЗ, to: Сбор требований, w: 0.6, why: "ТЗ — результат сбора требований"}
+  - {from: Сбор требований, to: ТЗ, w: 0.6, why: "оформление требований в ТЗ"}
+  - {from: User Story, to: ТЗ, w: 0.4, why: "требования, другой формат документирования"}
+  - {from: ТЗ, to: User Story, w: 0.4, why: "требования, другой формат документирования"}
+  - {from: BPMN, to: Сбор требований, w: 0.4, why: "моделирование процессов — часть анализа требований"}
+  - {from: UML, to: Сбор требований, w: 0.4, why: "моделирование — часть анализа требований"}
+  - {from: Сбор требований, to: BPMN, w: 0.25, why: "аналитик, нотацию нужно освоить"}
+  - {from: Сбор требований, to: UML, w: 0.25, why: "аналитик, нотацию нужно освоить"}
+  - {from: Интеграции, to: REST, w: 0.4, why: "интеграции систем по HTTP API"}
+  - {from: REST, to: Интеграции, w: 0.4, why: "REST — основной способ интеграции"}
+  - {from: OpenAPI, to: Интеграции, w: 0.4, why: "описание контрактов интеграций"}
+  - {from: Интеграции, to: OpenAPI, w: 0.4, why: "контракты интеграций описывают в Swagger"}
+  - {from: Kafka, to: Интеграции, w: 0.25, why: "асинхронные интеграции через брокер"}
+  - {from: Jira, to: Agile, w: 0.25, why: "трекер задач agile-команд"}

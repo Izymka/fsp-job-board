@@ -1,0 +1,50 @@
+{"pair_id": "d98844007a29", "label": 1, "rationale": "Middle 3.4 года, TypeScript частично, React подтверждён; удалёнка не рассматривается."}
+{"pair_id": "b510c186a49c", "label": 1, "rationale": "Middle 3.5 года, 8-й перцентиль, TypeScript и вёрстка частично; уровень ниже Senior."}
+{"pair_id": "1a50a9d1fb1f", "label": 3, "rationale": "Senior 11 лет, React/TS/HTML подтверждены, Redux; ожидания в вилке; удалёнка; победы ФСП."}
+{"pair_id": "182a7971f0f3", "label": 2, "rationale": "Middle, но 5.6 года, все ключевые навыки подтверждены, Redux, Storybook; вилка подходит; давно неактивен."}
+{"pair_id": "5e44681f0a5d", "label": 1, "rationale": "Middle 6.8 года, React не заявлен и не подтверждён, стек больше Vue/Angular."}
+{"pair_id": "14944629a4a3", "label": 2, "rationale": "Middle, но 5.5 года, React/TS подтверждены, a11y, Next.js, Redux, Web performance; вилка подходит."}
+{"pair_id": "eb892833c798", "label": 3, "rationale": "Senior 6.9 года, React/HTML/JS подтверждены, полный стек включая Storybook, a11y; вилка подходит; победы ФСП."}
+{"pair_id": "4d192d2926a9", "label": 2, "rationale": "Senior/Lead, 93-й перцентиль, всё подтверждено; ожидания от 460k чуть выше вилки."}
+{"pair_id": "bdaf47184f02", "label": 1, "rationale": "Middle 3.9 года, React и TypeScript лишь частично, React в стеке нет."}
+{"pair_id": "11f547fa6936", "label": 1, "rationale": "Lead, React/TS частично; ожидания от 580k значительно выше вилки."}
+{"pair_id": "f5e962a2100f", "label": 1, "rationale": "Middle 3.2 года, TypeScript частично; уровень и опыт ниже требуемого."}
+{"pair_id": "4a260f8e0204", "label": 0, "rationale": "Data Science / ML, другая специализация."}
+{"pair_id": "f37d6fc9500a", "label": 1, "rationale": "Senior, но React частично и не в стеке (Angular/Vue); только гибрид."}
+{"pair_id": "c757a82f46fe", "label": 1, "rationale": "Senior 4.5 года, React частично и не в стеке, опыт на Angular."}
+{"pair_id": "9b4d08793024", "label": 1, "rationale": "Lead, 14-й перцентиль, все навыки лишь частично; ожидания немного выше вилки."}
+{"pair_id": "cd05118b8b32", "label": 1, "rationale": "Senior, сильный тест, но только офис при удалённой вакансии; давно неактивен."}
+{"pair_id": "a0db4b37a4f7", "label": 1, "rationale": "Middle 3.9 года, TypeScript частично; уровень ниже Senior."}
+{"pair_id": "6a290cea6425", "label": 1, "rationale": "Senior 9.4 года, всё подтверждено, вилка подходит, но только гибрид при удалённой вакансии."}
+{"pair_id": "09fd4cced363", "label": 1, "rationale": "Lead, 100-й перцентиль, всё подтверждено, но только офис при удалённой вакансии."}
+{"pair_id": "7ee4e872635f", "label": 1, "rationale": "Middle 4.5 года, React подтверждён, TypeScript не заявлен; уровень ниже."}
+{"pair_id": "860d94cda99b", "label": 1, "rationale": "Senior/Lead, всё подтверждено, но ожидания от 550k выше вилки на 22%."}
+{"pair_id": "b6bcb61efa7f", "label": 2, "rationale": "Middle, но 6.1 года и 99-й перцентиль, React, Redux; TypeScript не заявлен; вилка подходит."}
+{"pair_id": "f52c3940cdd9", "label": 1, "rationale": "Middle 2.5 года, только гибрид; уровень и формат не совпадают."}
+{"pair_id": "82c5b3fd8fba", "label": 3, "rationale": "Senior 6.4 года, React/TS подтверждены, a11y, Storybook; ожидания в вилке; удалёнка."}
+{"pair_id": "971673706f14", "label": 1, "rationale": "Lead, сильный профиль, но ожидания от 520k выше вилки и только гибрид."}
+{"pair_id": "98c5e2d68d31", "label": 2, "rationale": "Senior 11.5 лет, React подтверждён, Next.js, Redux, Storybook; TypeScript не заявлен; вилка подходит."}
+{"pair_id": "3ae271e5743d", "label": 1, "rationale": "Middle 2.6 года, навыки подтверждены, но опыт и уровень сильно ниже требуемых."}
+{"pair_id": "9c0e59b137f2", "label": 3, "rationale": "Senior 6.6 года, React/TS подтверждены, Redux, Storybook, a11y, Next.js; вилка покрывает; удалёнка."}
+{"pair_id": "ef02911355a7", "label": 0, "rationale": "Опыт 0.7 года, React и TypeScript частично; уровень далёк от Senior."}
+{"pair_id": "863495ed5071", "label": 1, "rationale": "Middle 3.5 года, навыки подтверждены, но удалёнка не рассматривается."}
+{"pair_id": "09d98cb7408e", "label": 1, "rationale": "Middle 2.4 года, TypeScript не заявлен; уровень ниже."}
+{"pair_id": "b37b04de92fb", "label": 2, "rationale": "Senior/Lead 8.1 года, React подтверждён, JS/TS частично; ожидания в вилке; победы ФСП."}
+{"pair_id": "af2469c4cec8", "label": 1, "rationale": "Senior, 4-й перцентиль, все навыки частично, React в стеке не заявлен."}
+{"pair_id": "2b8b50682f2b", "label": 2, "rationale": "Senior 4.3 года, React подтверждён, TypeScript частично, Next.js, Storybook; вилка подходит; удалёнка."}
+{"pair_id": "70bf908945d8", "label": 2, "rationale": "Lead на ступень выше, всё подтверждено, 86-й перцентиль; ожидания в вилке; удалёнка."}
+{"pair_id": "387d464e2166", "label": 3, "rationale": "Senior, React/TS/HTML подтверждены, Redux, a11y, Web performance; ожидания в вилке; удалёнка."}
+{"pair_id": "56f865d657e2", "label": 1, "rationale": "Middle с фокусом на Vue; ожидания от 450k на верхней границе вилки для Middle."}
+{"pair_id": "1d144c667c08", "label": 3, "rationale": "Senior 6.5 года, 96-й перцентиль, React подтверждён, TypeScript, a11y, Web performance; ожидания в вилке."}
+{"pair_id": "f9a7a15df6d8", "label": 0, "rationale": "QA Junior, другая специализация."}
+{"pair_id": "df3cc23ac829", "label": 2, "rationale": "Senior 8 лет, 100-й перцентиль, React, Redux, Next.js; TypeScript не заявлен; вилка подходит."}
+{"pair_id": "c4a226667f71", "label": 1, "rationale": "Senior, но React и TypeScript частично, React в стеке нет."}
+{"pair_id": "fcc50f01ba1f", "label": 1, "rationale": "Middle 2.5 года, TypeScript не заявлен; уровень и опыт ниже."}
+{"pair_id": "bef2fdc5ea9e", "label": 0, "rationale": "По резюме Junior 2.5 года, только офис; уровень и формат не подходят."}
+{"pair_id": "54ec7f94ed13", "label": 1, "rationale": "Middle 3.5 года, TypeScript не заявлен, React не подтверждён тестом."}
+{"pair_id": "d973dd810477", "label": 1, "rationale": "Middle, ожидания от 450k на верхней границе, давно неактивен; уровень ниже."}
+{"pair_id": "47199088fa4d", "label": 1, "rationale": "Lead, ожидания от 510k выше вилки; HTTP частично."}
+{"pair_id": "1a92cd2b504e", "label": 1, "rationale": "Middle 2.2 года, стек подходит, но опыт и уровень ниже Senior."}
+{"pair_id": "dc37e42f9b90", "label": 1, "rationale": "Middle 2.4 года, стек подходит, но опыт и уровень ниже Senior."}
+{"pair_id": "b38eb86c7548", "label": 1, "rationale": "Middle 3.7 года, React и TypeScript только заявлены; уровень ниже."}
+{"pair_id": "bbf50ba94657", "label": 1, "rationale": "Middle 2.5 года, React подтверждён, но опыт и уровень ниже Senior."}

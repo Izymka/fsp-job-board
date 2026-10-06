@@ -1,0 +1,368 @@
+# Архетипы технологических стеков IT-специалистов (российский рынок, 2026).
+# Используются генератором синтетической популяции: и кандидат, и вакансия сэмплируются
+# из одного архетипа своей специализации, поэтому технологии появляются реальными связками.
+#
+# Поля архетипа:
+#   id       — уникальный идентификатор (snake_case, префикс — специализация);
+#   spec     — id специализации из catalog.yaml (specializations);
+#   title    — человекочитаемое название;
+#   share    — доля архетипа среди специалистов этой специализации (сумма по spec = 1.0);
+#   core     — 2–4 технологии, присутствующие почти всегда (p≈0.9);
+#   common   — 3–7 технологий, встречающихся часто (p≈0.5);
+#   optional — 2–6 технологий, встречающихся иногда (p≈0.2).
+# Все имена — канонические имена из skills.yaml (раздел technologies).
+# Близкие заменители (Kafka/RabbitMQ, React/Vue, Selenium/Playwright, GitLab CI/Jenkins и т. п.)
+# намеренно разнесены по разным архетипам, а общие инструменты (Git, Docker, SQL, REST)
+# повторяются — так возникают кандидаты со смежным, но не идентичным стеком.
+version: 1
+archetypes:
+  # ---------------------------------------------------------------- backend
+  - id: backend_python_django
+    spec: backend
+    title: "Python / Django, монолит и фоновые задачи"
+    share: 0.15
+    core: [Python, Django, PostgreSQL]
+    common: [Celery, Redis, Docker, Git, REST, Linux]
+    optional: [RabbitMQ, Elasticsearch, Nginx, pytest, Kubernetes]
+
+  - id: backend_python_async
+    spec: backend
+    title: "Python / FastAPI, асинхронные микросервисы"
+    share: 0.15
+    core: [Python, FastAPI, PostgreSQL, asyncio]
+    common: [SQLAlchemy, Docker, Redis, Kafka, Git, REST, pytest]
+    optional: [aiohttp, Kubernetes, ClickHouse, gRPC, Microservices]
+
+  - id: backend_java_spring
+    spec: backend
+    title: "Java / Spring, энтерпрайз-микросервисы"
+    share: 0.20
+    core: [Java, Spring, PostgreSQL]
+    common: [Hibernate, Kafka, Docker, Git, Microservices, REST, Kubernetes]
+    optional: [Oracle, Redis, Kotlin, Elasticsearch, GitLab CI, Prometheus]
+
+  - id: backend_go
+    spec: backend
+    title: "Go, высоконагруженные сервисы"
+    share: 0.13
+    core: [Go, PostgreSQL, Docker]
+    common: [gRPC, Kafka, Redis, Kubernetes, Microservices, Git]
+    optional: [Gin, ClickHouse, Prometheus, RabbitMQ, Yandex Cloud]
+
+  - id: backend_node
+    spec: backend
+    title: "Node.js / TypeScript, API и BFF"
+    share: 0.10
+    core: [Node.js, TypeScript, PostgreSQL]
+    common: [NestJS, Express, Docker, Redis, Git, REST]
+    optional: [MongoDB, GraphQL, RabbitMQ, WebSocket, Kafka]
+
+  - id: backend_php
+    spec: backend
+    title: "PHP / Laravel, веб-сервисы и e-commerce"
+    share: 0.10
+    core: [PHP, MySQL, Laravel]
+    common: [Redis, Docker, Git, Nginx, REST, Linux]
+    optional: [RabbitMQ, Elasticsearch, PostgreSQL, JavaScript]
+
+  - id: backend_csharp
+    spec: backend
+    title: "C# / .NET, корпоративные системы"
+    share: 0.07
+    core: [C#, MS SQL]
+    common: [REST, Docker, Git, RabbitMQ, SQL]
+    optional: [PostgreSQL, Redis, Kafka, Microservices]
+
+  - id: backend_1c
+    spec: backend
+    title: "1С-разработка и интеграции"
+    share: 0.10
+    core: [1C, SQL]
+    common: [MS SQL, PostgreSQL, Интеграции, REST, Git]
+    optional: [Linux, RabbitMQ, BPMN]
+
+  # ---------------------------------------------------------------- frontend
+  - id: frontend_react_redux
+    spec: frontend
+    title: "React / TypeScript / Redux, SPA"
+    share: 0.35
+    core: [React, TypeScript, JavaScript]
+    common: [Redux, HTML, CSS, Git, REST, Jest, Webpack]
+    optional: [Next.js, Storybook, Tailwind, GraphQL, Figma]
+
+  - id: frontend_react_mobx
+    spec: frontend
+    title: "React / MobX, сложные интерфейсы"
+    share: 0.12
+    core: [React, TypeScript, MobX]
+    common: [JavaScript, HTML, CSS, Git, Webpack, Storybook]
+    optional: [Jest, Figma, WebSocket, Accessibility]
+
+  - id: frontend_vue
+    spec: frontend
+    title: "Vue, веб-приложения и админки"
+    share: 0.20
+    core: [Vue, JavaScript, HTML, CSS]
+    common: [TypeScript, Git, REST, Tailwind, Figma]
+    optional: [Jest, Webpack, Node.js, PHP, Svelte]
+
+  - id: frontend_angular
+    spec: frontend
+    title: "Angular, корпоративный фронтенд"
+    share: 0.12
+    core: [Angular, TypeScript]
+    common: [JavaScript, HTML, CSS, Git, REST, Jest]
+    optional: [WebSocket, Storybook, Webpack, Java]
+
+  - id: frontend_nextjs_fullstack
+    spec: frontend
+    title: "Next.js / Node.js, SSR и fullstack"
+    share: 0.13
+    core: [Next.js, React, TypeScript]
+    common: [Node.js, Tailwind, Git, REST, Docker, Web performance]
+    optional: [GraphQL, PostgreSQL, Playwright, NestJS]
+
+  - id: frontend_markup
+    spec: frontend
+    title: "Вёрстка и лендинги"
+    share: 0.08
+    core: [HTML, CSS, JavaScript]
+    common: [Figma, Git, Accessibility, Web performance, Webpack]
+    optional: [Vue, React, PHP, Tailwind]
+
+  # ---------------------------------------------------------------- mobile
+  - id: mobile_android_kotlin
+    spec: mobile
+    title: "Android / Kotlin, современный стек"
+    share: 0.38
+    core: [Kotlin, Android, Coroutines]
+    common: [Jetpack Compose, Room, Git, REST, Java]
+    optional: [gRPC, SQLite, CI/CD, WebSocket]
+
+  - id: mobile_android_java
+    spec: mobile
+    title: "Android / Java, поддержка legacy-приложений"
+    share: 0.07
+    core: [Java, Android]
+    common: [Kotlin, SQLite, Git, REST]
+    optional: [Room, ООП, Паттерны проектирования]
+
+  - id: mobile_ios_swift
+    spec: mobile
+    title: "iOS / Swift"
+    share: 0.32
+    core: [Swift, iOS]
+    common: [Git, REST, ООП, Паттерны проектирования, CI/CD]
+    optional: [Objective-C, SQLite, WebSocket, Figma]
+
+  - id: mobile_flutter
+    spec: mobile
+    title: "Flutter / Dart, кроссплатформа"
+    share: 0.13
+    core: [Flutter, Dart]
+    common: [Android, iOS, Git, REST, SQLite]
+    optional: [Kotlin, Swift, Figma]
+
+  - id: mobile_react_native
+    spec: mobile
+    title: "React Native, кроссплатформа на JS"
+    share: 0.10
+    core: [React Native, JavaScript, TypeScript]
+    common: [React, Redux, Git, REST, Android, iOS]
+    optional: [MobX, Jest, Swift, Kotlin]
+
+  # ---------------------------------------------------------------- data_science
+  - id: ds_classic_ml
+    spec: data_science
+    title: "Классический ML на табличных данных"
+    share: 0.30
+    core: [Python, pandas, scikit-learn, Machine learning]
+    common: [SQL, NumPy, CatBoost, Jupyter, Matplotlib, Git, Статистика]
+    optional: [ClickHouse, Airflow, MLflow, Docker, A/B-тестирование]
+
+  - id: ds_deep_learning_cv
+    spec: data_science
+    title: "Deep learning и компьютерное зрение"
+    share: 0.15
+    core: [Python, PyTorch, Deep learning, Computer vision]
+    common: [NumPy, Docker, Git, Linux, Jupyter]
+    optional: [TensorFlow, MLflow, Kubernetes, C++, S3]
+
+  - id: ds_nlp_llm
+    spec: data_science
+    title: "NLP и LLM-приложения"
+    share: 0.17
+    core: [Python, NLP, PyTorch]
+    common: [Deep learning, Machine learning, Docker, Git, FastAPI, Jupyter]
+    optional: [Elasticsearch, Kubernetes, MLflow, Yandex Cloud, PostgreSQL]
+
+  - id: ds_mlops
+    spec: data_science
+    title: "MLOps и вывод моделей в прод"
+    share: 0.12
+    core: [Python, MLflow, Docker]
+    common: [Airflow, Kubernetes, Git, Machine learning, CI/CD, S3]
+    optional: [Spark, FastAPI, Prometheus, Yandex Cloud, ClickHouse]
+
+  - id: ds_data_engineering
+    spec: data_science
+    title: "Data engineering и большие данные"
+    share: 0.13
+    core: [Spark, SQL, Python]
+    common: [Airflow, Hadoop, Kafka, ClickHouse, Git, dbt]
+    optional: [Scala, PostgreSQL, Docker, S3]
+
+  - id: ds_product_analytics
+    spec: data_science
+    title: "Продуктовая аналитика и эксперименты"
+    share: 0.13
+    core: [Python, SQL, Статистика]
+    common: [pandas, A/B-тестирование, Jupyter, ClickHouse, Matplotlib, Продуктовые метрики]
+    optional: [R, Machine learning, BI, Excel]
+
+  # ---------------------------------------------------------------- qa
+  - id: qa_manual
+    spec: qa
+    title: "Ручное тестирование веб-приложений"
+    share: 0.28
+    core: [Ручное тестирование, Тест-дизайн]
+    common: [Jira, Postman, SQL, REST, Agile]
+    optional: [Figma, Selenium, Allure, Git]
+
+  - id: qa_auto_python
+    spec: qa
+    title: "Автотесты на Python / pytest"
+    share: 0.20
+    core: [Python, pytest, Автотесты]
+    common: [Selenium, Allure, Git, REST, Postman, SQL]
+    optional: [Playwright, Docker, GitLab CI, JMeter]
+
+  - id: qa_auto_java
+    spec: qa
+    title: "Автотесты на Java / Selenium"
+    share: 0.20
+    core: [Java, Selenium, Автотесты]
+    common: [Allure, Git, REST, SQL, Jenkins, Тест-дизайн]
+    optional: [Appium, Docker, Kafka, JMeter]
+
+  - id: qa_auto_js
+    spec: qa
+    title: "Автотесты на TypeScript / Playwright"
+    share: 0.12
+    core: [TypeScript, Playwright, Автотесты]
+    common: [JavaScript, Jest, Git, REST, GitLab CI]
+    optional: [Allure, Docker, Storybook]
+
+  - id: qa_mobile
+    spec: qa
+    title: "Тестирование мобильных приложений"
+    share: 0.10
+    core: [Ручное тестирование, Android, iOS]
+    common: [Тест-дизайн, Jira, Postman, Git, REST]
+    optional: [Appium, Kotlin, Swift, Python]
+
+  - id: qa_performance
+    spec: qa
+    title: "Нагрузочное тестирование"
+    share: 0.10
+    core: [JMeter, Linux]
+    common: [Python, Prometheus, SQL, Docker, Bash, Git]
+    optional: [Kafka, Kubernetes, ELK, Java]
+
+  # ---------------------------------------------------------------- devops
+  - id: devops_k8s_gitlab
+    spec: devops
+    title: "Kubernetes и GitLab CI"
+    share: 0.30
+    core: [Kubernetes, Docker, Linux, GitLab CI]
+    common: [Terraform, Ansible, Prometheus, Git, Bash, Nginx, ArgoCD]
+    optional: [Yandex Cloud, Python, Go, ELK, PostgreSQL]
+
+  - id: devops_linux_admin
+    spec: devops
+    title: "Linux-администрирование и автоматизация"
+    share: 0.20
+    core: [Linux, Bash, Ansible]
+    common: [Nginx, Docker, Сети, Git, Jenkins, PostgreSQL]
+    optional: [Prometheus, ELK, Python, Информационная безопасность]
+
+  - id: devops_cloud_iac
+    spec: devops
+    title: "Облачная инфраструктура как код (Yandex Cloud)"
+    share: 0.15
+    core: [Yandex Cloud, Terraform, Kubernetes]
+    common: [Docker, Linux, CI/CD, Git, S3, Python]
+    optional: [AWS, Go, ArgoCD, GitHub Actions]
+
+  - id: devops_sre
+    spec: devops
+    title: "SRE и наблюдаемость"
+    share: 0.15
+    core: [SRE, Prometheus, Kubernetes, Linux]
+    common: [ELK, Go, Python, Docker, Git, Terraform]
+    optional: [Kafka, PostgreSQL, ClickHouse, Сети, System design]
+
+  - id: devops_jenkins_enterprise
+    spec: devops
+    title: "Jenkins и on-premise инфраструктура"
+    share: 0.12
+    core: [Jenkins, Docker, Linux]
+    common: [Ansible, Git, Bash, Nginx, Kubernetes, Java]
+    optional: [ELK, Python, PostgreSQL, Oracle]
+
+  - id: devops_devsecops
+    spec: devops
+    title: "DevSecOps"
+    share: 0.08
+    core: [Информационная безопасность, Linux, Kubernetes]
+    common: [Docker, CI/CD, GitLab CI, Keycloak, Сети, Bash]
+    optional: [Python, Terraform, OAuth 2.0, ELK]
+
+  # ---------------------------------------------------------------- analyst
+  - id: analyst_system_integration
+    spec: analyst
+    title: "Системный аналитик, интеграции и API"
+    share: 0.30
+    core: [Сбор требований, REST, SQL]
+    common: [UML, BPMN, OpenAPI, ТЗ, Интеграции, Postman, Jira]
+    optional: [RabbitMQ, PostgreSQL, Oracle, JWT]
+
+  - id: analyst_business
+    spec: analyst
+    title: "Бизнес-аналитик, процессы и требования"
+    share: 0.20
+    core: [Сбор требований, BPMN, ТЗ]
+    common: [User Story, Jira, Excel, UML, Agile]
+    optional: [SQL, Figma, 1C]
+
+  - id: analyst_product
+    spec: analyst
+    title: "Продуктовый аналитик"
+    share: 0.15
+    core: [Продуктовый анализ, Продуктовые метрики, SQL]
+    common: [A/B-тестирование, Статистика, Excel, BI, User Story]
+    optional: [Python, ClickHouse, Figma, Jira]
+
+  - id: analyst_data_bi
+    spec: analyst
+    title: "Аналитик данных / BI"
+    share: 0.15
+    core: [SQL, BI, Excel]
+    common: [ClickHouse, PostgreSQL, Python, Продуктовые метрики, dbt]
+    optional: [Airflow, pandas, MS SQL, Oracle]
+
+  - id: analyst_1c_erp
+    spec: analyst
+    title: "Аналитик 1С / ERP"
+    share: 0.12
+    core: [1C, Сбор требований, BPMN]
+    common: [ТЗ, SQL, Интеграции, Excel, MS SQL]
+    optional: [UML, REST, Jira]
+
+  - id: analyst_system_microservices
+    spec: analyst
+    title: "Системный аналитик, микросервисная архитектура"
+    share: 0.08
+    core: [System design, Microservices, Сбор требований]
+    common: [OpenAPI, Kafka, gRPC, UML, SQL, DDD, Jira]
+    optional: [PostgreSQL, Docker, OAuth 2.0, ТЗ]

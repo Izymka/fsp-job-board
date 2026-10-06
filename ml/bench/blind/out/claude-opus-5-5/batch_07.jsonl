@@ -1,0 +1,61 @@
+{"pair_id": "e3b3a5983c83", "label": 3, "rationale": "Middle backend, Python, SQL, HTTP подтверждены тестом, опыт 2.5 года, ожидания в вилке, гибрид подходит; PostgreSQL не указан."}
+{"pair_id": "66dde4db6984", "label": 1, "rationale": "Junior с опытом 0.6 года при требовании от 2 лет; Python и SQL подтверждены, но уровень ниже."}
+{"pair_id": "267570d32147", "label": 1, "rationale": "Сильный Junior со стеком FastAPI/Kafka/Redis, но уровень ниже Middle и только удалёнка при гибриде."}
+{"pair_id": "6d81d2877497", "label": 2, "rationale": "Middle, SQL и HTTP подтверждены, заявлены FastAPI, PostgreSQL, Kafka; Python тестом не проверен, условия совместимы."}
+{"pair_id": "3e77b96c457b", "label": 1, "rationale": "Middle backend, но стек JavaScript/PHP, Python не подтверждён и не заявлен явно; только Flask в стеке."}
+{"pair_id": "69f4e74a26ad", "label": 1, "rationale": "Junior, низкий перцентиль, опыт 1.3 года, только удалённая работа при гибридном формате вакансии."}
+{"pair_id": "0ac9378ea9cc", "label": 3, "rationale": "Middle, Python, SQL, HTTP подтверждены, опыт 3.9 года, Redis, интерес к финтеху, вилка и гибрид совпадают."}
+{"pair_id": "659c7b637ea5", "label": 2, "rationale": "Грейд Junior по тесту, но опыт 3.4 года, Python и SQL подтверждены, высокий перцентиль, ожидания в вилке."}
+{"pair_id": "927729c3d77f", "label": 1, "rationale": "Senior/Lead с полным подтверждением навыков, но ожидания 390+ тыс. заметно выше вилки, уровень выше требуемого."}
+{"pair_id": "1f24c8afe664", "label": 3, "rationale": "Middle, Python, SQL, HTTP подтверждены, FastAPI и Redis, опыт 3.2 года, ожидания в вилке, гибрид."}
+{"pair_id": "225619c02e0c", "label": 0, "rationale": "Грейд Junior, основной стек JavaScript/Node.js, Python не подтверждён; ключевое требование не закрыто."}
+{"pair_id": "22db5f4d1b3f", "label": 2, "rationale": "Сильный Senior с Python, SQL, PostgreSQL; нижняя граница ожиданий на верхней границе вилки, уровень выше."}
+{"pair_id": "5811cae917ec", "label": 2, "rationale": "Middle, Python и SQL подтверждены, HTTP частично, низкий перцентиль; интерес к финтеху, условия подходят."}
+{"pair_id": "7c949798f22a", "label": 2, "rationale": "Грейд Junior, но опыт 3.7 года, Python, SQL, HTTP подтверждены; только офис, давно не активен."}
+{"pair_id": "74f0fa526ed0", "label": 3, "rationale": "Middle 82 перцентиль, Python, SQL, HTTP подтверждены, PostgreSQL и asyncio, ожидания ниже вилки, формат подходит."}
+{"pair_id": "061eeaf4eae7", "label": 1, "rationale": "Senior с частичным SQL, ожидания 370+ тыс. существенно выше вилки."}
+{"pair_id": "f34d91a52c57", "label": 1, "rationale": "Middle с опытом 1.4 года, Python подтверждён частично, низкий перцентиль, только офис."}
+{"pair_id": "99e81a732a59", "label": 1, "rationale": "Middle с подтверждёнными Python и SQL, но ожидания 510+ тыс. намного выше вилки."}
+{"pair_id": "f4c3bae50d60", "label": 1, "rationale": "Сильный Senior, Python/SQL/HTTP подтверждены, но ожидания 390+ тыс. выше вилки более чем на 15%."}
+{"pair_id": "1f966c9b69a0", "label": 3, "rationale": "Middle 98 перцентиль, Python и SQL подтверждены, опыт 2.2 года, ожидания в вилке, любой формат."}
+{"pair_id": "47dbfd2c7727", "label": 2, "rationale": "Middle, SQL подтверждён, Python и HTTP частично, PostgreSQL и asyncio заявлены, ожидания в вилке."}
+{"pair_id": "f533807e6ec5", "label": 3, "rationale": "Middle, Python, SQL, HTTP подтверждены, PostgreSQL, Kafka, gRPC, опыт 4.1 года, ожидания почти в вилке, гибрид."}
+{"pair_id": "5c7dc57d9597", "label": 1, "rationale": "Junior с опытом 0.4 года, далёк от требования 2 лет; давно не активен."}
+{"pair_id": "5c11ab84e7a0", "label": 1, "rationale": "Junior, опыт 1.9 года, навыки подтверждены, но низкий перцентиль и уровень ниже Middle."}
+{"pair_id": "51e76e458162", "label": 0, "rationale": "Junior без Python, SQL частично, 4 перцентиль, неактивен 96 дней."}
+{"pair_id": "b0864f4b3c3f", "label": 2, "rationale": "Senior, все навыки подтверждены, PostgreSQL и gRPC, ожидания в вилке; уровень выше требуемого."}
+{"pair_id": "93edebf9a5ec", "label": 3, "rationale": "Middle, все ключевые навыки подтверждены, PostgreSQL, Kafka, Redis, asyncio, опыт 3.5 года, условия подходят."}
+{"pair_id": "54042188c71f", "label": 0, "rationale": "Senior/Lead на JavaScript/Node.js без Python, ожидания значительно выше вилки."}
+{"pair_id": "657a730d58f9", "label": 1, "rationale": "Сильный Junior, Python и SQL подтверждены, но опыт 1.6 года и уровень ниже Middle."}
+{"pair_id": "c2147ad0dfec", "label": 2, "rationale": "Middle, все навыки подтверждены, опыт 2.7 года; только офис, верх ожиданий выше вилки."}
+{"pair_id": "0edb2e8d7e36", "label": 0, "rationale": "Мобильный разработчик, другая специализация."}
+{"pair_id": "290adeaf9959", "label": 3, "rationale": "Middle, все ключевые навыки подтверждены, Kafka, опыт 2.3 года, ожидания в вилке, гибрид."}
+{"pair_id": "368e256afb40", "label": 1, "rationale": "Middle 4 перцентиль, Python и HTTP подтверждены лишь частично; SQL подтверждён."}
+{"pair_id": "4a4398038eea", "label": 2, "rationale": "Middle 89 перцентиль, Python и SQL подтверждены, Redis; нет PostgreSQL, давно не активен."}
+{"pair_id": "b441c424ab03", "label": 1, "rationale": "Python не подтверждён, основной стек JavaScript, ожидания 400+ тыс. выше вилки, только удалёнка."}
+{"pair_id": "0b93a46bbe55", "label": 1, "rationale": "Middle с опытом 1.5 года, низкий перцентиль, Python только заявлен."}
+{"pair_id": "4c3f8ade4b3d", "label": 1, "rationale": "Senior/Lead с подтверждёнными навыками, но ожидания 590+ тыс. почти вдвое выше вилки."}
+{"pair_id": "bcc888d869e8", "label": 0, "rationale": "Frontend Junior, другая специализация."}
+{"pair_id": "0842968fe87f", "label": 0, "rationale": "Стек JavaScript/Go/Node.js, Python отсутствует и в заявлениях, и в тесте."}
+{"pair_id": "f5c5fbecaa29", "label": 1, "rationale": "Python подтверждён, но SQL и HTTP лишь частично при требовании уверенного SQL; низкий перцентиль."}
+{"pair_id": "f0f4e407e2ac", "label": 2, "rationale": "Senior, все навыки подтверждены; верх ожиданий выше вилки, низ в ней; давно не активен."}
+{"pair_id": "2623438af42a", "label": 1, "rationale": "Python и SQL подтверждены лишь частично, 5 перцентиль, хотя стек FastAPI/PostgreSQL/Kafka заявлен."}
+{"pair_id": "5f96b23d0b5e", "label": 2, "rationale": "Middle, SQL и HTTP подтверждены, FastAPI, PostgreSQL, asyncio заявлены; Python тестом не проверен."}
+{"pair_id": "948ac335fba8", "label": 3, "rationale": "Middle, Python, SQL, HTTP подтверждены, PostgreSQL, опыт 3.5 года, ожидания в вилке, гибрид."}
+{"pair_id": "67e3f1a1a0e6", "label": 2, "rationale": "Senior с подтверждёнными Python, SQL, HTTP, ожидания в вилке; только офис, уровень выше."}
+{"pair_id": "85017fb4c06f", "label": 1, "rationale": "Junior с опытом 1.1 года, только офис, неактивен 92 дня."}
+{"pair_id": "766e425ddac3", "label": 0, "rationale": "Junior на JavaScript/Node.js без Python."}
+{"pair_id": "54eff41e4467", "label": 1, "rationale": "Python подтверждён, но SQL и HTTP частично, 1 перцентиль."}
+{"pair_id": "d33751f72d13", "label": 1, "rationale": "Lead с 11 годами опыта, Python не подтверждён, ожидания выше вилки."}
+{"pair_id": "bdcc1af6aafe", "label": 1, "rationale": "Junior с опытом 1.7 года, подходящий стек FastAPI/Kafka, но уровень ниже, только офис."}
+{"pair_id": "666f307fe9bf", "label": 1, "rationale": "Грейд Junior, навыки подтверждены, но только удалённая работа при гибриде."}
+{"pair_id": "7982eb5e222d", "label": 0, "rationale": "Lead, ожидания 550+ тыс. вдвое выше вилки, только удалёнка; приглашение маловероятно примет."}
+{"pair_id": "ddc7e37ba7f2", "label": 0, "rationale": "Junior на JavaScript без Python, только удалёнка."}
+{"pair_id": "35ed7c386d3b", "label": 2, "rationale": "Middle, Python, SQL, HTTP подтверждены, опыт 3.7 года, ожидания в вилке; только офис."}
+{"pair_id": "25af602dcd58", "label": 3, "rationale": "Middle, все ключевые навыки подтверждены, Kafka, интерес к финтеху, ожидания в вилке, любой формат."}
+{"pair_id": "7466a55614fa", "label": 2, "rationale": "Middle, Python и SQL подтверждены, Kafka; только офис, нет PostgreSQL."}
+{"pair_id": "cb3568be57ce", "label": 3, "rationale": "Middle, Python и SQL подтверждены, FastAPI, aiohttp, gRPC, опыт 3.1 года, ожидания в вилке."}
+{"pair_id": "112aeb9b69c3", "label": 1, "rationale": "Опыт 0.5 года при требовании 2 лет, только удалённо."}
+{"pair_id": "67e68e6bbc53", "label": 0, "rationale": "Junior на JavaScript/Node.js, Python не подтверждён."}
+{"pair_id": "ddb810961d2b", "label": 2, "rationale": "Грейд Junior, но опыт 2.7 года, Python и SQL подтверждены, ожидания в вилке; давно не активен."}
+{"pair_id": "cea4d4aa74dd", "label": 1, "rationale": "Сильный Senior, но ожидания 460+ тыс. значительно выше вилки."}

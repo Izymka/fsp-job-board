@@ -1,0 +1,54 @@
+{"pair_id": "3f9d228716ed", "label": 0, "rationale": "Middle/Senior с ожиданиями от 300 тыс., нет CSS и Tailwind; формат без гибрида."}
+{"pair_id": "b5d039b48718", "label": 1, "rationale": "Junior, CSS подтверждён, Tailwind и Next.js есть, нет Svelte; только удалёнка, неактивен 93 дня."}
+{"pair_id": "74efdf8828bf", "label": 1, "rationale": "Junior, CSS подтверждён, Next.js и Svelte есть, нет Tailwind; 1-й перцентиль, давно неактивен."}
+{"pair_id": "75d178c99f8b", "label": 0, "rationale": "Middle с ожиданиями от 210 тыс., из обязательных только CSS."}
+{"pair_id": "cd46b298108a", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "e80cce258c2d", "label": 1, "rationale": "Junior, CSS подтверждён, Tailwind есть, нет Next.js и Svelte; вилка подходит."}
+{"pair_id": "9bbf0c8cbad4", "label": 0, "rationale": "Middle с ожиданиями от 190 тыс., только CSS из обязательных."}
+{"pair_id": "cbe1fd916aa5", "label": 0, "rationale": "Middle/Lead с ожиданиями от 290 тыс., нет CSS и Tailwind."}
+{"pair_id": "81a114565488", "label": 0, "rationale": "Middle с ожиданиями от 210 тыс., нет Next.js и Svelte."}
+{"pair_id": "140552d783f0", "label": 3, "rationale": "Junior, CSS подтверждён, Next.js, Svelte, Tailwind заявлены; вилка и гибрид подходят."}
+{"pair_id": "5098736b3e02", "label": 1, "rationale": "Middle, CSS подтверждён, Tailwind и Svelte, нет Next.js; ожидания выше вилки на ~38%."}
+{"pair_id": "1bb9d42df675", "label": 2, "rationale": "Junior, CSS подтверждён, Next.js и Svelte, нет Tailwind; ожидания немного выше вилки."}
+{"pair_id": "d304bedc6b77", "label": 0, "rationale": "Ожидания от 210 тыс. сильно выше вилки, нет Next.js и Svelte."}
+{"pair_id": "6fda29e477a8", "label": 1, "rationale": "Junior, CSS подтверждён, Tailwind есть, нет Next.js и Svelte; условия подходят."}
+{"pair_id": "622a55908940", "label": 0, "rationale": "Middle/Senior с ожиданиями от 340 тыс., нет Svelte; вилка несовместима."}
+{"pair_id": "f35b12a19404", "label": 3, "rationale": "Junior, CSS подтверждён, Next.js, Svelte, Tailwind заявлены; вилка и формат подходят."}
+{"pair_id": "ed3fabc7ebff", "label": 0, "rationale": "Ожидания от 200 тыс., только офис, нет CSS и Svelte."}
+{"pair_id": "bd104db34637", "label": 1, "rationale": "Intern с опытом 0.2 года, Next.js и Tailwind есть, нет CSS и Svelte."}
+{"pair_id": "59bc9366122c", "label": 0, "rationale": "Middle, только удалённо, ожидания от 170 тыс., нет Tailwind и Next.js."}
+{"pair_id": "52445d364a07", "label": 1, "rationale": "Все обязательные навыки, CSS подтверждён, но Middle с ожиданиями от 310 тыс."}
+{"pair_id": "0ecf87540eb3", "label": 0, "rationale": "Ожидания от 240 тыс., только удалёнка, нет Tailwind и Svelte."}
+{"pair_id": "29c0fae1502b", "label": 0, "rationale": "Middle с ожиданиями от 200 тыс., нет Next.js и Svelte, без гибрида."}
+{"pair_id": "b383a7b15b53", "label": 0, "rationale": "Middle, только офис, ожидания от 210 тыс., из обязательных только Next.js."}
+{"pair_id": "add869f21d57", "label": 1, "rationale": "Все обязательные навыки есть, но Middle с ожиданиями от 390 тыс."}
+{"pair_id": "7fffff232cd9", "label": 0, "rationale": "Middle с ожиданиями от 280 тыс., нет Tailwind, гибрид не указан."}
+{"pair_id": "11310c90ad49", "label": 0, "rationale": "Middle, только удалённо, ожидания от 300 тыс."}
+{"pair_id": "c04d1fb0b5b0", "label": 2, "rationale": "Junior, Next.js, Svelte, Tailwind есть, CSS не указан; вилка и гибрид подходят."}
+{"pair_id": "f5e1470c1fb4", "label": 2, "rationale": "Junior с малым опытом, CSS подтверждён, Next.js и Tailwind, нет Svelte; вилка подходит."}
+{"pair_id": "85fc65c74848", "label": 1, "rationale": "Junior, из обязательных только Next.js; давно неактивен."}
+{"pair_id": "16efd22323fb", "label": 1, "rationale": "Junior, все обязательные навыки заявлены, но ожидания от 260 тыс. вдвое выше вилки."}
+{"pair_id": "80f0b2f5b738", "label": 2, "rationale": "Junior 97-й перцентиль, CSS подтверждён, Svelte и Tailwind, нет Next.js; вилка и гибрид подходят."}
+{"pair_id": "4811dfe5ff62", "label": 1, "rationale": "Junior, Next.js и Svelte есть, нет CSS и Tailwind; условия подходят."}
+{"pair_id": "a13518557cf4", "label": 3, "rationale": "Junior, все четыре обязательных навыка заявлены; вилка и гибрид подходят, ищет работу."}
+{"pair_id": "7e003ddebf00", "label": 0, "rationale": "Ожидания от 200 тыс., из обязательных только Svelte."}
+{"pair_id": "7162acd80030", "label": 0, "rationale": "Intern 9-й перцентиль, нет ни одного обязательного навыка."}
+{"pair_id": "bcb88c94d2ed", "label": 0, "rationale": "Системный/бизнес-аналитик, другая специализация."}
+{"pair_id": "28add41ab0d9", "label": 0, "rationale": "Ожидания от 290 тыс., нет Tailwind и Next.js."}
+{"pair_id": "37d63f4b05e7", "label": 0, "rationale": "Middle с ожиданиями от 220 тыс., нет Next.js и Svelte."}
+{"pair_id": "8f9fb10bb24e", "label": 0, "rationale": "Только удалённо, нет Next.js и Svelte, 18-й перцентиль."}
+{"pair_id": "65e3e153d8c5", "label": 3, "rationale": "Junior, CSS, Tailwind, Next.js, Svelte заявлены; вилка и гибрид подходят, активно ищет."}
+{"pair_id": "f6723a4fad3e", "label": 1, "rationale": "Junior 6-й перцентиль, CSS лишь частично, Next.js, Svelte, Tailwind заявлены."}
+{"pair_id": "cce450894fae", "label": 1, "rationale": "Junior, CSS подтверждён, но нет Tailwind, Next.js и Svelte."}
+{"pair_id": "9bcd4e12fc5d", "label": 0, "rationale": "Ожидания от 260 тыс. и только удалённо, нет CSS."}
+{"pair_id": "02ac7f6f107d", "label": 3, "rationale": "Junior, CSS подтверждён тестом, Next.js, Svelte, Tailwind заявлены; вилка подходит, офис и удалёнка."}
+{"pair_id": "a6220da0cf70", "label": 0, "rationale": "Middle/Senior с ожиданиями от 340 тыс., нет CSS, Svelte, Tailwind."}
+{"pair_id": "93e79748e822", "label": 3, "rationale": "Junior, CSS подтверждён, Next.js, Svelte, Tailwind заявлены; вилка подходит, готов к офису."}
+{"pair_id": "c98ec1c2e574", "label": 0, "rationale": "Middle/Lead с ожиданиями от 340 тыс., нет обязательных навыков."}
+{"pair_id": "2fbe7778a353", "label": 1, "rationale": "Junior, только Next.js из обязательных; условия подходят."}
+{"pair_id": "2f79df4b4e50", "label": 2, "rationale": "Junior, CSS, Next.js, Tailwind есть, нет Svelte; вилка и гибрид подходят."}
+{"pair_id": "3670dbe71268", "label": 2, "rationale": "Junior, CSS, Next.js, Tailwind есть, нет Svelte; вилка и гибрид подходят."}
+{"pair_id": "761ef4115fc3", "label": 1, "rationale": "Junior, CSS, Svelte, Tailwind есть, нет Next.js; только удалённо."}
+{"pair_id": "98470bb731ec", "label": 1, "rationale": "Junior, CSS подтверждён, Next.js и Svelte, но ожидания от 260 тыс. вдвое выше вилки."}
+{"pair_id": "3a7c1d6e6d76", "label": 2, "rationale": "CSS подтверждён, Next.js, Svelte, Tailwind заявлены, вилка подходит; но опыт 0.7 года и слабый тест."}
+{"pair_id": "1063f21fbbe5", "label": 2, "rationale": "Junior, CSS подтверждён, Next.js и Tailwind, нет Svelte; вилка и гибрид подходят."}

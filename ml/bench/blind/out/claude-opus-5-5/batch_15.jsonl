@@ -1,0 +1,52 @@
+{"pair_id": "ed28ecceeb6d", "label": 0, "rationale": "Middle без DDD, System design, MySQL и RabbitMQ; только офис, уровень ниже Senior."}
+{"pair_id": "f21ce7bed770", "label": 1, "rationale": "Senior с System design и RabbitMQ, но нет DDD и MySQL, все навыки по тесту частично, 3 перцентиль, неактивен 75 дней."}
+{"pair_id": "5ffe950f9124", "label": 1, "rationale": "Сильный Lead с DDD, RabbitMQ, архитектурой по тесту, но ожидания 570+ тыс. намного выше вилки."}
+{"pair_id": "751d694de9e1", "label": 2, "rationale": "Заявлены все обязательные DDD, System design, MySQL, RabbitMQ и FastAPI; грейд Middle, низ ожиданий на верхней границе вилки."}
+{"pair_id": "27de765f78c9", "label": 0, "rationale": "Senior, но нет ни DDD, ни System design, ни MySQL, ни RabbitMQ; только офис."}
+{"pair_id": "a85f6969e5a9", "label": 0, "rationale": "Грейд Middle, обязательные DDD, System design, MySQL, RabbitMQ отсутствуют, ожидания выше вилки."}
+{"pair_id": "d65be686d364", "label": 1, "rationale": "Middle с опытом 2 года, есть MySQL и RabbitMQ, но нет DDD и System design, уровень ниже."}
+{"pair_id": "e0f077e97467", "label": 1, "rationale": "Грейд Middle, архитектура подтверждена, MySQL есть, но нет DDD и RabbitMQ; только удалённо."}
+{"pair_id": "32fd54cd325f", "label": 1, "rationale": "Senior с DDD, RabbitMQ, PostgreSQL, но архитектура частично и только удалённая работа при гибриде."}
+{"pair_id": "2d816265a5e8", "label": 1, "rationale": "Senior с подтверждённой архитектурой, но нет DDD, MySQL, RabbitMQ; только удалёнка, ожидания выше вилки."}
+{"pair_id": "05c00d10fbad", "label": 0, "rationale": "QA-инженер Junior, другая специализация."}
+{"pair_id": "466ef4143446", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "28f995914e1a", "label": 1, "rationale": "Lead с DDD, но нет System design, MySQL, RabbitMQ; только офис, ожидания выше вилки."}
+{"pair_id": "ab836c1063da", "label": 0, "rationale": "Ожидания 550+ тыс. почти вдвое выше вилки, только удалёнка, нет DDD, System design, MySQL."}
+{"pair_id": "de4b17b23ca0", "label": 2, "rationale": "Senior/Lead с System design и RabbitMQ, ожидания в вилке, гибрид; нет DDD и MySQL."}
+{"pair_id": "e2a036ce39f6", "label": 1, "rationale": "Сильный Senior с DDD, но нет System design, MySQL, RabbitMQ; ожидания 460+ тыс. выше вилки."}
+{"pair_id": "7ff009acd23c", "label": 1, "rationale": "Lead с DDD и подтверждённой архитектурой, но нет MySQL и RabbitMQ, только офис."}
+{"pair_id": "b4f6d485b1a4", "label": 1, "rationale": "Lead с DDD, MySQL, архитектурой, но нет RabbitMQ, 14 перцентиль, ожидания 460+ тыс. значительно выше вилки."}
+{"pair_id": "281e6109ba97", "label": 0, "rationale": "Middle на Java/JS, ни одного обязательного требования: DDD, System design, MySQL, RabbitMQ."}
+{"pair_id": "321e42d2054f", "label": 0, "rationale": "Middle без DDD, System design, MySQL и RabbitMQ."}
+{"pair_id": "c44984438c01", "label": 0, "rationale": "Middle без DDD, System design, MySQL и RabbitMQ; только офис."}
+{"pair_id": "122f6febdd6a", "label": 1, "rationale": "Есть DDD, RabbitMQ, PostgreSQL, архитектура подтверждена, но Middle с опытом 2.7 года и низким перцентилем."}
+{"pair_id": "42876ec602d8", "label": 2, "rationale": "Senior с DDD, MySQL и подтверждённой архитектурой; нет RabbitMQ, ожидания чуть выше вилки."}
+{"pair_id": "b513ff049906", "label": 0, "rationale": "Middle на Node.js, ожидания 490+ тыс., только удалёнка, нет DDD, MySQL, RabbitMQ."}
+{"pair_id": "c2472e96225c", "label": 0, "rationale": "Middle с опытом 2.5 года, нет DDD, MySQL, RabbitMQ; только System design заявлен."}
+{"pair_id": "1c2bb7f477f9", "label": 0, "rationale": "Middle 10 перцентиль, нет DDD, System design, RabbitMQ; ожидания 400+ тыс. выше вилки."}
+{"pair_id": "4c5241d3226b", "label": 1, "rationale": "Lead с MySQL и RabbitMQ, но DDD и System design не заявлены, ожидания 420+ тыс. выше вилки."}
+{"pair_id": "87c91a7b6be5", "label": 1, "rationale": "Middle 11 перцентиль с DDD, RabbitMQ, PostgreSQL; архитектура частично, уровень ниже Senior."}
+{"pair_id": "ce0cbbc461d8", "label": 1, "rationale": "Senior с подтверждённой архитектурой и JWT, но нет DDD, RabbitMQ, MySQL; давно не активен."}
+{"pair_id": "73c63bd2c482", "label": 2, "rationale": "Senior, архитектура подтверждена, System design и PostgreSQL, ожидания в вилке; нет DDD и RabbitMQ."}
+{"pair_id": "7932bb28cec9", "label": 3, "rationale": "Senior, архитектура подтверждена, DDD, System design, RabbitMQ, FastAPI, Cassandra; ожидания в вилке, гибрид; MySQL не указан."}
+{"pair_id": "5f39ceedbd70", "label": 0, "rationale": "Middle только с RabbitMQ, нет DDD, System design, MySQL."}
+{"pair_id": "eaaaddc525e6", "label": 1, "rationale": "Lead с DDD, System design, MySQL, но без RabbitMQ; только удалёнка, ожидания 440+ тыс. выше вилки."}
+{"pair_id": "9021ce36b83b", "label": 1, "rationale": "Senior с подтверждённой архитектурой, но нет DDD и RabbitMQ; верх ожиданий выше вилки."}
+{"pair_id": "de30884b41fa", "label": 0, "rationale": "Middle без DDD, MySQL, RabbitMQ, только офис, неактивен 86 дней."}
+{"pair_id": "255b182b6676", "label": 0, "rationale": "Middle только с RabbitMQ, нет DDD, System design, MySQL."}
+{"pair_id": "e70e9b723654", "label": 1, "rationale": "Senior с архитектурой и MySQL, но нет DDD и RabbitMQ, SQL частично, только удалёнка."}
+{"pair_id": "e946ce54ff5a", "label": 0, "rationale": "Опыт 1.1 года для Senior-вакансии, нет DDD и RabbitMQ."}
+{"pair_id": "aeb1d96c6b0f", "label": 0, "rationale": "Middle без обязательных технологий, только удалёнка, ожидания выше вилки."}
+{"pair_id": "328eb77fbe61", "label": 0, "rationale": "Грейд Middle, из обязательных только DDD; нет System design, MySQL, RabbitMQ."}
+{"pair_id": "bfc7b76f1ed0", "label": 1, "rationale": "Middle с DDD и подтверждённой архитектурой, но нет MySQL и RabbitMQ, только офис, низкий перцентиль."}
+{"pair_id": "7bdfc5a22d75", "label": 1, "rationale": "Lead с подтверждённой архитектурой, но нет DDD, MySQL, RabbitMQ; ожидания 450+ тыс. выше вилки."}
+{"pair_id": "887612e4d248", "label": 0, "rationale": "Middle без DDD, System design, MySQL, RabbitMQ."}
+{"pair_id": "522b01059b1a", "label": 1, "rationale": "Сильный Senior с RabbitMQ и FastAPI, но нет DDD, System design, MySQL; ожидания выше вилки."}
+{"pair_id": "55a644a90e68", "label": 1, "rationale": "Senior с DDD, но все навыки по тесту частично, 6 перцентиль, нет MySQL и RabbitMQ, только офис."}
+{"pair_id": "e20c04c52bfb", "label": 2, "rationale": "Senior с подтверждённой архитектурой, RabbitMQ, FastAPI; ожидания в вилке, гибрид; нет DDD и MySQL."}
+{"pair_id": "6238f0010bd6", "label": 1, "rationale": "Lead с архитектурой и MySQL, но нет DDD и RabbitMQ; ожидания 400+ тыс. выше вилки."}
+{"pair_id": "b57d07fb6724", "label": 0, "rationale": "Middle без DDD, System design, MySQL, RabbitMQ; только удалёнка."}
+{"pair_id": "217bbfd026af", "label": 1, "rationale": "Senior с архитектурой, System design, RabbitMQ, но нет DDD и MySQL; ожидания 410+ тыс. выше вилки."}
+{"pair_id": "13cb8cba6bc6", "label": 1, "rationale": "Senior с PostgreSQL, ожидания в вилке, гибрид, но нет DDD, System design, RabbitMQ."}
+{"pair_id": "8203f2102719", "label": 0, "rationale": "Middle 8 перцентиль, архитектура частично, нет DDD, MySQL, RabbitMQ."}
+{"pair_id": "ebac99f2c259", "label": 1, "rationale": "Грейд Middle, есть System design и MS SQL, но нет DDD и RabbitMQ."}

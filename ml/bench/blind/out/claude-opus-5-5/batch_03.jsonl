@@ -1,0 +1,49 @@
+{"pair_id": "8e957b81f5be", "label": 2, "rationale": "Junior, но 3.6 года и 91-й перцентиль; GitHub Actions и Kubernetes в стеке; ожидания в вилке, удалёнка подходит."}
+{"pair_id": "2f171ae2bf68", "label": 1, "rationale": "Senior выше уровня, низкий перцентиль; ожидания от 310k выше вилки; Kubernetes подтверждён, GitHub Actions заявлен."}
+{"pair_id": "19580eefaac1", "label": 1, "rationale": "Junior с опытом 0.3 года, 11-й перцентиль; Kubernetes подтверждён, GitHub Actions заявлен; уровень ниже требуемого."}
+{"pair_id": "bc44eee6c80b", "label": 2, "rationale": "Middle, 73-й перцентиль, Kubernetes заявлен, GitHub Actions нет (общий CI/CD); ожидания в пределах вилки; удалёнка; ФСП-финалист."}
+{"pair_id": "b77fc8bdaf3b", "label": 1, "rationale": "Junior с 1.1 года опыта; Kubernetes заявлен, вместо GitHub Actions GitLab CI; уровень ниже."}
+{"pair_id": "c719841dfad5", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitHub Actions заявлен, вилка подходит, но только гибрид при удалённой вакансии; 3-й перцентиль."}
+{"pair_id": "9f8ae62d95b2", "label": 0, "rationale": "Data Science / ML, другая специализация."}
+{"pair_id": "f876014d3f1d", "label": 2, "rationale": "Senior на ступень выше; Kubernetes подтверждён, GitLab CI вместо GitHub Actions; ожидания на верхней границе вилки; удалёнка."}
+{"pair_id": "eb2531babd17", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitHub Actions заявлен, но ожидания от 360k выше вилки на 24%."}
+{"pair_id": "dcb165d2ff9c", "label": 2, "rationale": "Middle, Kubernetes подтверждён, GitLab CI вместо GitHub Actions; ожидания в вилке; удалёнка подходит."}
+{"pair_id": "7fe260705fcc", "label": 1, "rationale": "Senior/Lead, требования закрыты, но ожидания от 480k сильно выше вилки."}
+{"pair_id": "368be36bc393", "label": 2, "rationale": "Middle, Kubernetes подтверждён, GitLab CI близок к GitHub Actions; ожидания от 270k в вилке; удалёнка."}
+{"pair_id": "9213e8947691", "label": 3, "rationale": "Middle, Kubernetes подтверждён тестом, GitHub Actions в стеке; ожидания в вилке; удалёнка; ищет работу."}
+{"pair_id": "fca239cfa383", "label": 2, "rationale": "Middle, Kubernetes подтверждён, вместо GitHub Actions GitLab CI/Jenkins; ожидания в вилке; удалёнка."}
+{"pair_id": "d3be69f8f39e", "label": 2, "rationale": "Junior на ступень ниже, но Kubernetes подтверждён, GitHub Actions в опыте; ожидания в вилке; удалёнка."}
+{"pair_id": "c6070e1f61df", "label": 1, "rationale": "Junior с опытом 0.1 года, 9-й перцентиль, Kubernetes лишь частично; GitHub Actions заявлен."}
+{"pair_id": "80563317510c", "label": 1, "rationale": "Junior, Kubernetes подтверждён, GitHub Actions заявлен, но уровень ниже и только гибридный формат."}
+{"pair_id": "991f75da36fb", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitHub Actions заявлен, но ожидания от 370k значительно выше вилки."}
+{"pair_id": "5511e62bad97", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitHub Actions нет; ожидания от 330k выше вилки."}
+{"pair_id": "492f91f5773c", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitLab CI вместо GitHub Actions; ожидания от 350k выше вилки более чем на 15%."}
+{"pair_id": "20d7c09d7dfc", "label": 2, "rationale": "Senior, 86-й перцентиль, Kubernetes подтверждён, GitLab CI; ожидания от 310k чуть выше вилки; удалёнка."}
+{"pair_id": "6d63f7d900d2", "label": 2, "rationale": "Middle, 84-й перцентиль, Kubernetes подтверждён, GitHub Actions в опыте; ожидания от 330k немного выше вилки."}
+{"pair_id": "302c471b96bd", "label": 3, "rationale": "Middle, Kubernetes подтверждён тестом, GitHub Actions в стеке; ожидания в вилке; удалёнка; ФСП-участник."}
+{"pair_id": "1413c374d7a1", "label": 1, "rationale": "Junior, Kubernetes подтверждён, GitHub Actions заявлен, но уровень ниже и только офис."}
+{"pair_id": "c4a4cff348ee", "label": 1, "rationale": "Senior/Lead без GitHub Actions; ожидания от 420k сильно выше вилки."}
+{"pair_id": "712efd410af4", "label": 0, "rationale": "Junior 0.6 года, нет ни Kubernetes, ни GitHub Actions."}
+{"pair_id": "1c2873d213c1", "label": 0, "rationale": "Нет Kubernetes и GitHub Actions, удалёнка не рассматривается."}
+{"pair_id": "18f221a999f4", "label": 2, "rationale": "Middle, Kubernetes подтверждён, GitLab CI вместо GitHub Actions; ожидания в вилке; удалёнка."}
+{"pair_id": "a683424a9b48", "label": 2, "rationale": "Middle, Kubernetes подтверждён, GitLab CI вместо GitHub Actions; ожидания в вилке; удалёнка; низкий перцентиль."}
+{"pair_id": "92d339ce54b9", "label": 2, "rationale": "Middle, 76-й перцентиль, Kubernetes подтверждён, GitHub Actions нет; ожидания в вилке; удалёнка; ФСП-финалист."}
+{"pair_id": "fc71ccbfda72", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitHub Actions в опыте, но ожидания от 360k выше вилки на 24%."}
+{"pair_id": "f3d1254a1bdd", "label": 1, "rationale": "Junior 1.4 года, Kubernetes подтверждён, GitHub Actions заявлен, но только офис."}
+{"pair_id": "40a25bab9d54", "label": 1, "rationale": "Senior, сильный тест, GitHub Actions заявлен, но ожидания от 350k выше вилки более чем на 15%."}
+{"pair_id": "706aa14f066d", "label": 1, "rationale": "Middle, оба навыка заявлены, но ожидания от 370k значительно выше вилки."}
+{"pair_id": "69507e5aee9f", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitHub Actions в опыте, но ожидания от 370k и нет удалёнки."}
+{"pair_id": "38fd684b9706", "label": 1, "rationale": "Senior/Lead, Kubernetes подтверждён, GitHub Actions заявлен, но ожидания от 350k выше вилки."}
+{"pair_id": "f8a66429c84b", "label": 1, "rationale": "Middle, оба навыка заявлены, но ожидания от 430k значительно выше вилки."}
+{"pair_id": "8b2e8d227258", "label": 1, "rationale": "Middle, оба навыка заявлены, но ожидания от 450k значительно выше вилки."}
+{"pair_id": "e17592fb28c3", "label": 2, "rationale": "Junior, но 3.7 года и 83-й перцентиль; Kubernetes подтверждён, GitHub Actions заявлен; ожидания в вилке; удалёнка."}
+{"pair_id": "3b69ea01a1e9", "label": 1, "rationale": "Junior 1.7 года, оба навыка заявлены, сильный тест; уровень ниже требуемого."}
+{"pair_id": "4b71956eb30b", "label": 3, "rationale": "Middle, Kubernetes подтверждён тестом, GitHub Actions в опыте; ожидания в вилке; удалёнка; ФСП-финалист."}
+{"pair_id": "dedc2d89ee7d", "label": 1, "rationale": "Senior, Kubernetes подтверждён, GitHub Actions нет; ожидания от 320k выше вилки."}
+{"pair_id": "9c4c525d5e14", "label": 0, "rationale": "Нет Kubernetes и GitHub Actions — оба обязательных требования отсутствуют."}
+{"pair_id": "05570920cc06", "label": 0, "rationale": "Frontend-разработка, другая специализация."}
+{"pair_id": "e2732659a0c7", "label": 0, "rationale": "Senior без Kubernetes и GitHub Actions в стеке; ожидания от 540k вдвое выше вилки."}
+{"pair_id": "a9771cc6722f", "label": 1, "rationale": "Middle, Kubernetes подтверждён, GitLab CI; вилка подходит, но удалёнка не рассматривается."}
+{"pair_id": "09015f363f20", "label": 2, "rationale": "Middle, Kubernetes заявлен, GitLab CI вместо GitHub Actions; ожидания в вилке; удалёнка; ФСП-участник."}
+{"pair_id": "6967a68e39e1", "label": 1, "rationale": "Senior, Kubernetes подтверждён, GitHub Actions нет; ожидания от 500k сильно выше вилки."}
+{"pair_id": "f196c1f9dbf7", "label": 0, "rationale": "Junior 1.4 года без Kubernetes; уровень и ключевой навык не соответствуют."}

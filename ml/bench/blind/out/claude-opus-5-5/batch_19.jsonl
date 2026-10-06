@@ -1,0 +1,77 @@
+{"pair_id": "32dd6add6966", "label": 1, "rationale": "Intern, Kubernetes подтверждён, Nginx есть; нет ELK, SRE, Bash; ожидания от 140k на верхней границе."}
+{"pair_id": "daac78833a61", "label": 0, "rationale": "Middle 6.4 года, ожидания от 360k в 2.5 раза выше вилки — приглашение не примет."}
+{"pair_id": "a3ac1f42270a", "label": 0, "rationale": "Мобильная разработка, другая специализация."}
+{"pair_id": "0905a697d765", "label": 1, "rationale": "Junior, Nginx, Bash, ELK в стеке, но 3-й перцентиль, Kubernetes частично, только офис."}
+{"pair_id": "fcd58730e8b4", "label": 3, "rationale": "Junior, Kubernetes подтверждён, все обязательные (Nginx, Bash, ELK, SRE) в стеке; ожидания в вилке; удалёнка."}
+{"pair_id": "57108008a013", "label": 2, "rationale": "Junior, Kubernetes подтверждён, Nginx, Bash, GitHub Actions; нет ELK и SRE; ожидания в вилке; удалёнка."}
+{"pair_id": "798eae030db5", "label": 1, "rationale": "Intern 0.6 года, Kubernetes подтверждён, Nginx; нет Bash, ELK, SRE."}
+{"pair_id": "08c2df973076", "label": 1, "rationale": "Junior, Kubernetes и Nginx заявлены, нет ELK, SRE, Bash; ожидания от 230k намного выше вилки."}
+{"pair_id": "b98b4f149fa3", "label": 0, "rationale": "Middle, ожидания от 450k втрое выше вилки — приглашение не примет."}
+{"pair_id": "522211f6285c", "label": 2, "rationale": "Junior, ELK, Kubernetes, Nginx в стеке, shell подтверждён; нет SRE; ожидания немного выше вилки; удалёнка."}
+{"pair_id": "88ec5c55a4b7", "label": 0, "rationale": "Middle, ожидания от 430k втрое выше вилки."}
+{"pair_id": "6371062e3616", "label": 0, "rationale": "Нет Nginx, ELK, SRE; удалёнка не рассматривается; неактивен 79 дней."}
+{"pair_id": "1771caad253b", "label": 0, "rationale": "Опыт 0.3 года, 11-й перцентиль; из обязательных только Kubernetes."}
+{"pair_id": "34d8d9540fe6", "label": 0, "rationale": "Kubernetes частично, нет Nginx, Bash, ELK; только гибрид."}
+{"pair_id": "5b02de429188", "label": 1, "rationale": "Junior, Kubernetes подтверждён, SRE; нет Nginx, Bash, ELK; ожидания в вилке."}
+{"pair_id": "26d69a9b3172", "label": 1, "rationale": "Все обязательные навыки в стеке, но Middle и ожидания от 190k выше вилки на 36%."}
+{"pair_id": "2384405d2ccc", "label": 1, "rationale": "Kubernetes подтверждён, Nginx; нет Bash, ELK, SRE; ожидания от 210k выше вилки на 50%."}
+{"pair_id": "51d350194d14", "label": 0, "rationale": "Middle/Senior, ожидания от 350k в 2.5 раза выше вилки."}
+{"pair_id": "af936e8ec07f", "label": 0, "rationale": "Middle, ожидания от 330k более чем вдвое выше вилки; нет Nginx, ELK, Bash."}
+{"pair_id": "e1f9c16f517a", "label": 0, "rationale": "Middle, ожидания от 370k, нет удалёнки."}
+{"pair_id": "aee1a7ead78a", "label": 1, "rationale": "Middle, ELK и Nginx есть, нет Kubernetes и SRE; ожидания от 210k выше вилки."}
+{"pair_id": "021876e2141b", "label": 1, "rationale": "Junior, ELK и shell, но нет Kubernetes, Nginx, SRE; вилка и формат подходят."}
+{"pair_id": "a6032f816aff", "label": 1, "rationale": "Nginx, Bash, ELK заявлены, но 9-й перцентиль, Kubernetes частично, опыт 0.1 года; нет SRE."}
+{"pair_id": "f9feafef795b", "label": 1, "rationale": "Kubernetes подтверждён, Nginx, SRE; ожидания от 230k намного выше вилки, нет удалёнки."}
+{"pair_id": "e23ef6fd5059", "label": 1, "rationale": "Middle, Kubernetes подтверждён, ELK, SRE; нет Nginx и Bash; ожидания от 260k сильно выше."}
+{"pair_id": "601797a59d6b", "label": 1, "rationale": "Middle, Kubernetes подтверждён, Bash, ELK; нет Nginx, SRE; ожидания от 220k выше вилки."}
+{"pair_id": "a0aaa4bc844e", "label": 3, "rationale": "Junior, 94-й перцентиль, все обязательные навыки в стеке; ожидания в вилке; удалёнка; ФСП-финалист."}
+{"pair_id": "ea21fccfdf8c", "label": 0, "rationale": "Middle без Kubernetes и SRE, ожидания от 230k, нет удалёнки."}
+{"pair_id": "9f0d4881f097", "label": 0, "rationale": "Middle, ожидания от 370k почти втрое выше вилки."}
+{"pair_id": "f85a06d1d888", "label": 0, "rationale": "Middle, ожидания от 250k, нет удалёнки, нет ELK и SRE."}
+{"pair_id": "c6742f598cd1", "label": 1, "rationale": "Junior без опыта, Bash и Kubernetes в стеке; нет Nginx, ELK, SRE."}
+{"pair_id": "fea0621b5cdb", "label": 1, "rationale": "Junior 0.5 года, Nginx, shell; нет Kubernetes, ELK, SRE; вилка подходит."}
+{"pair_id": "2dcfbb6b0e79", "label": 1, "rationale": "Junior, Kubernetes подтверждён, SRE; нет Nginx, Bash, ELK; ожидания в вилке."}
+{"pair_id": "171b841f3ec3", "label": 1, "rationale": "Junior 0.6 года, SRE и shell; нет Kubernetes, Nginx, ELK."}
+{"pair_id": "a89ee8d74529", "label": 0, "rationale": "Middle без Kubernetes, Nginx, ELK; ожидания от 220k; нет удалёнки."}
+{"pair_id": "354e2cb5e380", "label": 0, "rationale": "6-й перцентиль, Kubernetes частично, нет Nginx, Bash, ELK, SRE."}
+{"pair_id": "72d64950e919", "label": 2, "rationale": "Junior, Bash, Kubernetes, SRE, GitHub Actions; нет Nginx и ELK; ожидания в вилке; удалёнка."}
+{"pair_id": "9be499ac826e", "label": 0, "rationale": "Frontend-разработка, другая специализация."}
+{"pair_id": "792d0b6a1617", "label": 0, "rationale": "Middle без Kubernetes, Nginx, ELK, SRE; ожидания выше вилки; нет удалёнки."}
+{"pair_id": "f9e25ef33583", "label": 0, "rationale": "Middle/Lead без обязательных навыков, ожидания от 380k."}
+{"pair_id": "a72e431bfef3", "label": 0, "rationale": "Middle, ожидания от 360k в 2.5 раза выше вилки."}
+{"pair_id": "af32f52e486c", "label": 1, "rationale": "Junior, Kubernetes подтверждён, Nginx; нет Bash, ELK, SRE; ожидания от 280k вдвое выше вилки."}
+{"pair_id": "a1a58aac55db", "label": 1, "rationale": "Junior, Kubernetes подтверждён, SRE; нет Nginx, Bash, ELK; только офис."}
+{"pair_id": "c19a65e3b779", "label": 1, "rationale": "Junior, Kubernetes подтверждён, но нет Nginx, Bash, ELK, SRE; вилка подходит."}
+{"pair_id": "59e7cf8e1243", "label": 0, "rationale": "Middle, ожидания от 370k почти втрое выше вилки."}
+{"pair_id": "3885f478ba3a", "label": 1, "rationale": "Junior, Kubernetes подтверждён, ELK, Nginx; нет SRE; только гибрид при удалённой вакансии."}
+{"pair_id": "40c404a01038", "label": 2, "rationale": "Junior, 100-й перцентиль, Bash, ELK, Kubernetes; нет Nginx и SRE; ожидания в вилке; удалёнка."}
+{"pair_id": "1da0c1b07d53", "label": 1, "rationale": "Junior, Kubernetes подтверждён, SRE; нет Nginx, Bash, ELK; только офис."}
+{"pair_id": "78c1cf87dedf", "label": 0, "rationale": "Backend Junior, другая специализация и уровень."}
+{"pair_id": "7e00a80d904b", "label": 1, "rationale": "Senior, MobX и Storybook есть, но JS/TS частично и уровень ниже Lead."}
+{"pair_id": "a77431075aee", "label": 1, "rationale": "Senior, сильный тест, но обязательного MobX нет; уровень ниже Lead."}
+{"pair_id": "f10658ee3f75", "label": 0, "rationale": "Мобильная разработка, другая специализация."}
+{"pair_id": "59eea32ba0f0", "label": 1, "rationale": "Lead, Angular и CSS, но MobX отсутствует, навыки по тесту только частично."}
+{"pair_id": "7f02642ddf82", "label": 1, "rationale": "Senior, Angular, CSS, Storybook, но MobX нет; уровень ниже Lead."}
+{"pair_id": "aa1b7db72cfa", "label": 2, "rationale": "Senior 8 лет, MobX в опыте, Angular, CSS, Storybook; ожидания в вилке; слабый тест, победы ФСП."}
+{"pair_id": "c23440daf159", "label": 1, "rationale": "Senior, 96-й перцентиль, но MobX нет; уровень ниже Lead."}
+{"pair_id": "61d8a667d2c8", "label": 1, "rationale": "Senior 4.3 года, MobX и Storybook есть, но тест слабый, уровень ниже Lead."}
+{"pair_id": "cc5f1f58dd94", "label": 1, "rationale": "Senior, Angular, CSS, Storybook, но обязательного MobX нет."}
+{"pair_id": "a2ed199e6176", "label": 2, "rationale": "Lead, MobX, Angular, CSS; ожидания от 510k на верхней границе вилки; HTTP частично."}
+{"pair_id": "1b01acb9ff9b", "label": 3, "rationale": "Lead, 86-й перцентиль, всё подтверждено, MobX, CSS; ожидания в вилке; удалёнка; призёр ФСП."}
+{"pair_id": "af33abc6e18a", "label": 1, "rationale": "Senior 4.5 года, MobX, Angular, Storybook, но React частично; уровень ниже Lead."}
+{"pair_id": "e5a5cc207267", "label": 2, "rationale": "Senior на ступень ниже, 100-й перцентиль, MobX в опыте, Angular, CSS; вилка подходит; победы ФСП."}
+{"pair_id": "38230fdd794d", "label": 2, "rationale": "Senior 11 лет, всё подтверждено, MobX в опыте, Angular, CSS; вилка подходит; победы ФСП."}
+{"pair_id": "f4f3dfcb3451", "label": 2, "rationale": "Senior 6.6 года, всё подтверждено, MobX, Angular, CSS, Storybook; вилка подходит; удалёнка."}
+{"pair_id": "3c717aab0e4b", "label": 0, "rationale": "Senior с 19-м перцентилем, React/JS частично, обязательного MobX нет."}
+{"pair_id": "b664b0cc9199", "label": 0, "rationale": "Senior без MobX, React частично, только гибрид."}
+{"pair_id": "763941850afd", "label": 1, "rationale": "Lead, 100-й перцентиль, MobX, Angular, но только офис при удалённой вакансии."}
+{"pair_id": "dcfc596712c1", "label": 1, "rationale": "Lead, Angular, CSS, Storybook, но нет MobX и только гибрид."}
+{"pair_id": "5ac2516bcf61", "label": 1, "rationale": "Senior 11.5 лет, Angular, CSS, Storybook, но MobX нет."}
+{"pair_id": "0bc52794d438", "label": 2, "rationale": "Lead, MobX, CSS, Storybook; ожидания от 580k выше вилки на 14%; React/TS частично."}
+{"pair_id": "642e3a42c772", "label": 0, "rationale": "Senior с опытом 3.4 года, MobX нет; далеко от Lead."}
+{"pair_id": "8747e6f01ee4", "label": 0, "rationale": "Senior, 11-й перцентиль, MobX нет, нет удалёнки."}
+{"pair_id": "db74f7eaf166", "label": 1, "rationale": "Senior, MobX в опыте, но React/TS частично и только офис."}
+{"pair_id": "d992e1664e0f", "label": 1, "rationale": "Senior, MobX и плюсы в стеке, но 4-й перцентиль, все навыки частично."}
+{"pair_id": "a2bd584fa33b", "label": 1, "rationale": "Senior, MobX, Angular, Storybook, но React/TS частично; уровень ниже Lead."}
+{"pair_id": "e4ac835a5274", "label": 2, "rationale": "Senior на ступень ниже, 85-й перцентиль, MobX, Angular, CSS, Storybook; вилка подходит; победы ФСП."}
+{"pair_id": "469839c9d15d", "label": 1, "rationale": "Senior, MobX есть, сильный тест, но только офис и давно неактивен."}

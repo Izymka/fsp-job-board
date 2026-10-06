@@ -1,0 +1,61 @@
+{"pair_id": "b9f0192ccbe6", "label": 0, "rationale": "Middle, нет OAuth 2.0, Spring, Cassandra; ожидания выше вилки."}
+{"pair_id": "41e67e98ce50", "label": 1, "rationale": "Intern, есть только Spring; нет OAuth и Cassandra; условия подходят."}
+{"pair_id": "e78f1935a30c", "label": 0, "rationale": "Уровень выше, ожидания почти вдвое выше вилки, только офис; обязательных навыков нет."}
+{"pair_id": "0f65cde9f0b0", "label": 1, "rationale": "Junior с сильным тестом, Java/Hibernate/JWT/MongoDB близки, но точных обязательных навыков нет; условия подходят."}
+{"pair_id": "00ae7e5e287c", "label": 1, "rationale": "Junior, обязательные навыки отсутствуют, лишь близкие Keycloak и Hibernate; условия подходят."}
+{"pair_id": "8c8354987b05", "label": 1, "rationale": "Есть Cassandra, OAuth, FastAPI, но ожидания на 36% выше вилки и только гибрид."}
+{"pair_id": "e633f0c81639", "label": 2, "rationale": "Junior, Cassandra и Spring, FastAPI; нет OAuth; вилка и удалёнка подходят, тест слабоват."}
+{"pair_id": "4af468e1884d", "label": 2, "rationale": "Junior 92-й перцентиль, OAuth, Java/Hibernate близко к Spring; нет Cassandra; условия подходят."}
+{"pair_id": "0699c3b51084", "label": 1, "rationale": "Junior, есть Cassandra, нет OAuth и Spring; формат только гибрид при удалённой вакансии."}
+{"pair_id": "0b336428df52", "label": 0, "rationale": "Middle, ожидания сильно выше вилки, нет Spring и Cassandra."}
+{"pair_id": "6bb2a34fb6b9", "label": 1, "rationale": "OAuth и Spring есть, но ожидания значительно выше вилки и нет удалёнки."}
+{"pair_id": "c72d0daf20e7", "label": 0, "rationale": "Intern, обязательных навыков нет, только офис."}
+{"pair_id": "ad9b56edde8b", "label": 1, "rationale": "Junior со Spring и FastAPI, но нет OAuth и Cassandra; ожидания на верхней границе."}
+{"pair_id": "3665fb8b7f17", "label": 0, "rationale": "Ожидания 240 тыс. сильно выше вилки, есть только OAuth."}
+{"pair_id": "e6c7d67d2b88", "label": 2, "rationale": "Junior с Cassandra и OAuth, вилка подходит; нет Spring, формат гибрид вместо удалёнки."}
+{"pair_id": "61786269f9a3", "label": 0, "rationale": "Middle с ожиданиями 360 тыс., обязательных навыков нет."}
+{"pair_id": "0cb7b918bc49", "label": 0, "rationale": "Очень слабый тест, обязательных навыков нет."}
+{"pair_id": "dbb90727e840", "label": 0, "rationale": "Middle, ожидания 250 тыс., обязательных навыков нет."}
+{"pair_id": "a832f2946a3f", "label": 0, "rationale": "Слабый тест, только Spring, давно неактивен, ожидания выше вилки."}
+{"pair_id": "ed83cb3eb1d1", "label": 1, "rationale": "Junior, Java/Hibernate и Elasticsearch, но обязательных навыков нет; условия подходят."}
+{"pair_id": "575c879c0571", "label": 0, "rationale": "Middle, только офис, ожидания 220 тыс.; нет Cassandra."}
+{"pair_id": "71a553f5bdfd", "label": 0, "rationale": "Только OAuth, только офис, ожидания выше вилки."}
+{"pair_id": "4f468319021d", "label": 1, "rationale": "Junior, JWT и FastAPI, но нет Spring и Cassandra; ожидания немного выше вилки."}
+{"pair_id": "c24d02587ba3", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "eeb38218406a", "label": 0, "rationale": "Middle с ожиданиями 380 тыс., обязательных навыков нет."}
+{"pair_id": "be70d0c5a7b0", "label": 1, "rationale": "Junior со Spring, нет OAuth и Cassandra; условия подходят."}
+{"pair_id": "a7e74b2641b4", "label": 0, "rationale": "Обязательных навыков нет, нет удалёнки, ожидания выше вилки."}
+{"pair_id": "ccd09e1bee71", "label": 1, "rationale": "Spring и Keycloak/JWT, нет Cassandra; тест средний; условия подходят."}
+{"pair_id": "92796ed0a9d1", "label": 1, "rationale": "Сильный Junior, FastAPI, MongoDB, но нет OAuth, Spring, Cassandra; условия подходят."}
+{"pair_id": "95c1ac12fa58", "label": 1, "rationale": "Elasticsearch и FastAPI в плюсах, обязательных навыков нет; условия подходят."}
+{"pair_id": "dd9a85bde0a0", "label": 0, "rationale": "Middle, ожидания 240 тыс., нет удалёнки и обязательных навыков."}
+{"pair_id": "ef946714dee5", "label": 0, "rationale": "Обязательных навыков нет, формат только гибрид."}
+{"pair_id": "26272e6d128c", "label": 1, "rationale": "OAuth и Java, нет Spring и Cassandra; ожидания на 21% выше вилки."}
+{"pair_id": "caa40a47a588", "label": 0, "rationale": "Обязательных навыков нет, только офис."}
+{"pair_id": "99030790c26f", "label": 0, "rationale": "Обязательных навыков нет, только офис."}
+{"pair_id": "5c27af63373c", "label": 0, "rationale": "Крайне слабый тест, обязательных навыков нет."}
+{"pair_id": "15b2652fa184", "label": 0, "rationale": "Обязательных навыков и близких технологий нет."}
+{"pair_id": "87d5a76a0d15", "label": 0, "rationale": "Уровень выше, ожидания 400 тыс."}
+{"pair_id": "f9b75b42b1e8", "label": 1, "rationale": "Junior, только JWT близко к OAuth; условия подходят."}
+{"pair_id": "c4b6f0370277", "label": 0, "rationale": "Уровень выше, ожидания 360 тыс."}
+{"pair_id": "bc65ffa326c3", "label": 1, "rationale": "Cassandra и OAuth, сильный тест, но Middle, ожидания 200 тыс. и только гибрид."}
+{"pair_id": "db785578ac74", "label": 1, "rationale": "Spring и Elasticsearch, нет OAuth и Cassandra; слабый тест; условия подходят."}
+{"pair_id": "a953d328ea15", "label": 1, "rationale": "OAuth и Spring заявлены, но тест очень слабый; нет Cassandra."}
+{"pair_id": "5c4b7131cf86", "label": 0, "rationale": "Обязательных навыков нет, ожидания 240 тыс."}
+{"pair_id": "28595936e8a5", "label": 0, "rationale": "Слабый тест, обязательных навыков нет, только гибрид."}
+{"pair_id": "257c4f761562", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "0c971200596e", "label": 0, "rationale": "Middle с ожиданиями 250 тыс., из обязательных только Spring."}
+{"pair_id": "0554934f2d14", "label": 1, "rationale": "Junior с Cassandra, нет OAuth и Spring; условия подходят."}
+{"pair_id": "f6976c1a3ca3", "label": 2, "rationale": "OAuth и Spring, вилка подходит; нет Cassandra, формат без удалёнки."}
+{"pair_id": "ee581be6c36f", "label": 1, "rationale": "Keycloak, FastAPI, Hibernate близки, но обязательных навыков нет; условия подходят."}
+{"pair_id": "b65d37351357", "label": 0, "rationale": "Middle, ожидания 200 тыс., обязательных навыков нет."}
+{"pair_id": "6cef38513e37", "label": 0, "rationale": "Только Spring, ожидания на 36% выше вилки."}
+{"pair_id": "e36f25f5fc4f", "label": 1, "rationale": "Есть Cassandra, но тест очень слабый, нет OAuth и Spring."}
+{"pair_id": "04668d17f125", "label": 1, "rationale": "Все обязательные навыки есть, но ожидания 260 тыс. намного выше вилки."}
+{"pair_id": "fadc4f63948b", "label": 2, "rationale": "Intern с OAuth, Spring, FastAPI; нет Cassandra; условия подходят."}
+{"pair_id": "4538994af7e4", "label": 1, "rationale": "Cassandra и Elasticsearch, нет OAuth и Spring; условия подходят."}
+{"pair_id": "1516953975ec", "label": 0, "rationale": "Уровень выше, ожидания 370 тыс."}
+{"pair_id": "8ee06bad3b24", "label": 1, "rationale": "Keycloak, Hibernate, FastAPI близки, обязательных нет; условия подходят."}
+{"pair_id": "ef3dddf942c1", "label": 1, "rationale": "Intern с OAuth и Spring, слабый тест, только офис."}
+{"pair_id": "6955b053f836", "label": 1, "rationale": "Junior, FastAPI и Hibernate, обязательных навыков нет; условия подходят."}
+{"pair_id": "1ec863e76e06", "label": 0, "rationale": "Intern без обязательных навыков."}

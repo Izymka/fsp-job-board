@@ -1,0 +1,91 @@
+{"pair_id": "1ea7bd73abfe", "label": 1, "rationale": "DS Middle, Python и статистика подтверждены, DL и R; но ожидания от 450 тыс. значительно выше вилки."}
+{"pair_id": "d2cba1f69bd3", "label": 2, "rationale": "DS Middle, статистика подтверждена, TensorFlow, DL, R в стеке; Python не показан, вилка и гибрид подходят."}
+{"pair_id": "830d7f9e7439", "label": 1, "rationale": "Senior DS, Python/NumPy подтверждены, TF и DL; нет R, ожидания от 340 тыс. выше вилки >15%."}
+{"pair_id": "6f94f347bf53", "label": 3, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TensorFlow и R в стеке; вилка и формат подходят, DL не указан."}
+{"pair_id": "b61010956eca", "label": 1, "rationale": "Junior DS, все навыки частично, 4-й перцентиль; уровень ниже."}
+{"pair_id": "c678b9171cfd", "label": 1, "rationale": "Senior/Lead DS, ожидания от 400 тыс. значительно выше вилки, давняя активность."}
+{"pair_id": "ebbcc94ffadd", "label": 1, "rationale": "Junior DS с 0.8 года опыта; навыки подтверждены, но нет TF и R."}
+{"pair_id": "72a9e97d0697", "label": 1, "rationale": "Senior/Lead DS со стеком TF/R/NumPy, но ожидания от 360 тыс. значительно выше вилки."}
+{"pair_id": "9ba343794c6e", "label": 1, "rationale": "DS Middle, 6-й перцентиль, статистика частично; нет TensorFlow и DL."}
+{"pair_id": "a9eb9cd6a682", "label": 2, "rationale": "DS Middle, все обязательные в стеке, Python/NumPy подтверждены; статистика частично, 18-й перцентиль, ожидания чуть выше вилки."}
+{"pair_id": "5a8f8bc850d3", "label": 1, "rationale": "Junior DS с 0.8 года опыта и 15-м перцентилем; уровень ниже."}
+{"pair_id": "5ee2e97a9e51", "label": 1, "rationale": "Senior DS, ожидания от 340 тыс. выше вилки, только удалёнка."}
+{"pair_id": "d597d430979c", "label": 1, "rationale": "DS Middle с хорошим стеком, но ожидания от 440 тыс. значительно выше вилки."}
+{"pair_id": "985a43d81a59", "label": 1, "rationale": "DS Middle, статистика подтверждена, но нет TF, NumPy, Python, R; ожидания выше вилки."}
+{"pair_id": "dd6cc0ea6cc6", "label": 1, "rationale": "DS Middle с сильным тестом, но нет TF, DL, R; только удалёнка."}
+{"pair_id": "41013dc19aa1", "label": 1, "rationale": "Senior/Lead DS со стеком, но ожидания от 560 тыс. вдвое выше вилки, только офис."}
+{"pair_id": "e333f41ff001", "label": 1, "rationale": "DS Middle, статистика и DL, но нет TF, NumPy, Python, R."}
+{"pair_id": "e437f111cf94", "label": 1, "rationale": "Senior/Lead DS, ожидания от 390 тыс. значительно выше вилки."}
+{"pair_id": "1e9cdec410ac", "label": 1, "rationale": "Senior/Lead DS, ожидания от 390 тыс. значительно выше вилки."}
+{"pair_id": "346651af4492", "label": 1, "rationale": "DS Middle, 14-й перцентиль, нет TF и DL, только удалёнка."}
+{"pair_id": "5990140579db", "label": 3, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, DL и R в стеке; вилка подходит, TF заменим PyTorch, готов к офису."}
+{"pair_id": "7a0dfbbbbc39", "label": 1, "rationale": "DS Middle, 12-й перцентиль, Python частично; нет R и DL."}
+{"pair_id": "e393bfd47101", "label": 1, "rationale": "Junior DS, навыки подтверждены, DL; нет TensorFlow и R, уровень ниже."}
+{"pair_id": "0da909606105", "label": 2, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TF и DL; нет R, 20-й перцентиль."}
+{"pair_id": "bd0d833d1591", "label": 1, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, но нет TensorFlow, DL и R."}
+{"pair_id": "e6725c3106cf", "label": 2, "rationale": "DS Middle, статистика подтверждена, TF, DL, Python, CV; нет R и NumPy, условия подходят."}
+{"pair_id": "c339d9a67a82", "label": 2, "rationale": "DS Middle, Python и статистика подтверждены, DL и NumPy; нет TF и R, ожидания на верхней границе."}
+{"pair_id": "192a0332db80", "label": 1, "rationale": "Junior DS с 0.6 года опыта; уровень ниже."}
+{"pair_id": "e51a3f6e22d2", "label": 2, "rationale": "DS Middle, Python и статистика подтверждены, TF и DL; нет R и NumPy, вилка и гибрид подходят."}
+{"pair_id": "4e1b07c1b5c6", "label": 1, "rationale": "DS Middle, 4-й перцентиль, статистика не подтверждена тестом."}
+{"pair_id": "443ce213be8b", "label": 2, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, DL; нет TF и R."}
+{"pair_id": "4f13abaac847", "label": 1, "rationale": "Junior DS с 1.2 года опыта, нет TF, DL, R; только удалёнка."}
+{"pair_id": "5353d95a8df9", "label": 2, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, DL и R; нет TF, ожидания немного выше вилки."}
+{"pair_id": "f4b37ddc839a", "label": 1, "rationale": "Senior DS, 11-й перцентиль, ключевые навыки частично, ожидания выше вилки >15%."}
+{"pair_id": "d42c3f894c73", "label": 1, "rationale": "Junior DS, нет TF, DL и R; уровень ниже."}
+{"pair_id": "15ae6f1f8688", "label": 1, "rationale": "Senior/Lead DS, ожидания от 410 тыс. значительно выше вилки."}
+{"pair_id": "adc4476d96d8", "label": 1, "rationale": "Senior/Lead DS, ожидания от 440 тыс. значительно выше вилки."}
+{"pair_id": "cdeaec3e026f", "label": 0, "rationale": "Системный аналитик уровня Intern, другая специализация."}
+{"pair_id": "704536e6991e", "label": 0, "rationale": "Junior DS, все навыки частично, 8-й перцентиль, только удалёнка."}
+{"pair_id": "9271b8c7e257", "label": 3, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TF, DL, CV; нет R, ожидания на границе вилки."}
+{"pair_id": "852c19df272c", "label": 3, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TF и DL, победа ФСП; нет R, ожидания ниже вилки."}
+{"pair_id": "82b0530d6c32", "label": 2, "rationale": "DS Middle с 100-м перцентилем, NumPy, Python, R, статистика; нет TF и DL."}
+{"pair_id": "31f4f926e08b", "label": 0, "rationale": "Мобильный разработчик, другая специализация."}
+{"pair_id": "f179f9e9ba1e", "label": 1, "rationale": "Senior DS, 17-й перцентиль, навыки частично, ожидания от 350 тыс. выше вилки."}
+{"pair_id": "d310369d3f06", "label": 3, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TF и DL; нет R, ожидания на верхней границе."}
+{"pair_id": "9ed7d5919948", "label": 1, "rationale": "Junior DS со стеком TF/DL/R, но уровень ниже и ожидания выше вилки."}
+{"pair_id": "7d00d16f1d64", "label": 3, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TF и R; вилка и гибрид подходят."}
+{"pair_id": "c873768ad966", "label": 3, "rationale": "DS Middle, все обязательные закрыты: Python/NumPy/статистика подтверждены, TF, DL, R; условия подходят."}
+{"pair_id": "0d4ca628f738", "label": 1, "rationale": "DS Middle с сильным тестом, но нет DL и R, ожидания от 370 тыс. выше вилки."}
+{"pair_id": "0e94055ea03e", "label": 2, "rationale": "DS Middle, Python/NumPy/статистика подтверждены, TF; нет DL и R, вилка и гибрид подходят."}
+{"pair_id": "ceb971ae27f5", "label": 3, "rationale": "DS Middle, Python и статистика подтверждены, TF, DL, NumPy, CV; нет R, вилка и гибрид подходят."}
+{"pair_id": "eb047ba11e55", "label": 1, "rationale": "Senior DS, ожидания от 390 тыс. значительно выше вилки, давняя активность."}
+{"pair_id": "5c18086865d8", "label": 3, "rationale": "Lead DevOps, Linux/сети/Docker/K8s/безопасность подтверждены, GitLab, Terraform, Ansible, Prometheus; вилка и формат подходят."}
+{"pair_id": "e39fedca5fe7", "label": 2, "rationale": "DevOps Middle, Docker/K8s/Linux подтверждены, полный стек, 4.5 года; уровень ниже, условия подходят."}
+{"pair_id": "30ef32a23859", "label": 2, "rationale": "DevOps Middle, Docker/K8s/Linux подтверждены, GitLab, Terraform, Prometheus; уровень ниже, условия подходят."}
+{"pair_id": "0ec88a2ef5df", "label": 2, "rationale": "Senior DevOps, все требования подтверждены, ArgoCD, Terraform; ожидания немного выше вилки."}
+{"pair_id": "9e4fbdbd61f1", "label": 1, "rationale": "DevOps Middle с 3.2 года опыта, Kubernetes не показан; уровень ниже."}
+{"pair_id": "82ac30d430c5", "label": 3, "rationale": "Senior DevOps, все требования подтверждены, полный стек, 9.9 года; ожидания на верхней границе, готов к офису."}
+{"pair_id": "7c25090a8b6b", "label": 3, "rationale": "Senior DevOps, Linux/сети/Docker/K8s/безопасность подтверждены, ArgoCD; вилка и формат подходят."}
+{"pair_id": "9f799b0cfd88", "label": 2, "rationale": "Lead DevOps, K8s/Linux/сети подтверждены, Docker и безопасность частично; вилка и гибрид подходят."}
+{"pair_id": "4442d1b6b4c6", "label": 1, "rationale": "DevOps Middle с 2.7 года опыта при требовании от 4 лет."}
+{"pair_id": "badf1a0ee0ee", "label": 2, "rationale": "DevOps Middle, Docker/K8s/Linux подтверждены, полный стек, 4.7 года; уровень ниже, ожидания ниже вилки."}
+{"pair_id": "fce0aa744344", "label": 1, "rationale": "DevOps Middle с 2.6 года опыта, K8s не показан; уровень ниже."}
+{"pair_id": "bc8eca356eca", "label": 1, "rationale": "DevOps Middle с 3.2 года опыта и 27-м перцентилем; уровень ниже."}
+{"pair_id": "380d24b3cb9f", "label": 2, "rationale": "DevOps Middle, все требования подтверждены, 4 года, GitLab CI, Prometheus; нет Terraform/Ansible, уровень ниже."}
+{"pair_id": "383789f406e9", "label": 1, "rationale": "DevOps Middle с 3.6 года опыта; стек хороший, но уровень ниже."}
+{"pair_id": "ecfbe326dba6", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "2f3d12eff89c", "label": 2, "rationale": "Senior DevOps, Linux/сети/Docker/K8s/безопасность подтверждены; 7-й перцентиль, CI/CD частично."}
+{"pair_id": "6fddf852cb08", "label": 1, "rationale": "DevOps Middle, 3-й перцентиль, Docker и Linux лишь частично."}
+{"pair_id": "622f43c3d282", "label": 2, "rationale": "Senior DevOps, все требования подтверждены, призы ФСП; ожидания немного выше вилки."}
+{"pair_id": "37b6592f6559", "label": 2, "rationale": "DevOps Middle, все требования подтверждены, полный стек, 6.3 года; уровень ниже, вилка подходит."}
+{"pair_id": "fc2c8ef55b06", "label": 1, "rationale": "DevOps Middle с 3.9 года опыта, 19-й перцентиль; уровень ниже."}
+{"pair_id": "9bf038e613db", "label": 2, "rationale": "Senior DevOps, полный стек, Linux/Docker/K8s подтверждены; безопасность частично, 21-й перцентиль."}
+{"pair_id": "dfccc14633b0", "label": 1, "rationale": "DevOps Middle, только удалёнка при офисе/гибриде."}
+{"pair_id": "0ec72f37c543", "label": 1, "rationale": "DevOps Middle с 3.3 года опыта и 22-м перцентилем; уровень ниже."}
+{"pair_id": "46d94b4887f0", "label": 1, "rationale": "Lead DevOps, только удалёнка, ожидания от 530 тыс. выше вилки."}
+{"pair_id": "3396626501fd", "label": 2, "rationale": "DevOps Middle, 86-й перцентиль, полный стек, 4.3 года; уровень ниже, условия подходят."}
+{"pair_id": "43fd9c110a5f", "label": 3, "rationale": "Senior DevOps, все требования подтверждены, ArgoCD/Terraform/Ansible, 9.2 года; вилка и формат подходят."}
+{"pair_id": "e1c4fd708573", "label": 2, "rationale": "DevOps Middle, Docker/Linux/CI подтверждены, ArgoCD, K8s, Terraform, Prometheus; уровень ниже, гибрид подходит."}
+{"pair_id": "e869d44145b5", "label": 0, "rationale": "Backend-разработчик Junior, другая специализация."}
+{"pair_id": "40b648ad98c0", "label": 2, "rationale": "DevOps Middle, Docker/K8s/Linux подтверждены, 6.9 года, GitLab, Terraform; уровень ниже, условия подходят."}
+{"pair_id": "2cf9dc9147f1", "label": 2, "rationale": "DevOps Middle, 92-й перцентиль, полный стек, 4.4 года; уровень ниже, вилка подходит."}
+{"pair_id": "dfd4f164c979", "label": 3, "rationale": "Senior DevOps, 93-й перцентиль, K8s/Docker/Linux/безопасность подтверждены, ArgoCD/Terraform/Prometheus; вилка и гибрид подходят."}
+{"pair_id": "d9a25d084bf2", "label": 1, "rationale": "DevOps Middle с 3.8 года опыта, Kubernetes не показан."}
+{"pair_id": "324e42a5c776", "label": 1, "rationale": "DevOps Middle, 14-й перцентиль, 3.7 года; уровень ниже."}
+{"pair_id": "e2cfbeadfff9", "label": 2, "rationale": "DevOps Middle с 100-м перцентилем, 6 лет, K8s, Ansible, GitLab; уровень ниже, вилка подходит."}
+{"pair_id": "746adae59f6e", "label": 2, "rationale": "DevOps Middle, все требования подтверждены, 4.4 года; уровень ниже, вилка и гибрид подходят."}
+{"pair_id": "68a48abe0821", "label": 3, "rationale": "Senior DevOps, все требования подтверждены, K8s, Ansible, Prometheus; вилка и формат подходят."}
+{"pair_id": "89ac2e611a74", "label": 1, "rationale": "Senior DevOps, требования подтверждены, но только удалёнка при офисе/гибриде."}
+{"pair_id": "6d44d53e3fce", "label": 3, "rationale": "Senior DevOps, Docker/K8s/Linux/сети подтверждены, ArgoCD, Terraform, Ansible; вилка подходит, готов к офису."}
+{"pair_id": "6ab28c0769b8", "label": 3, "rationale": "Senior DevOps, 86-й перцентиль, полный стек ArgoCD/Ansible/GitLab/Prometheus; вилка подходит, готов к офису."}

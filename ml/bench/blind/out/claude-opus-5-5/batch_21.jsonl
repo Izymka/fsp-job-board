@@ -1,0 +1,58 @@
+{"pair_id": "6dae8953fdc3", "label": 1, "rationale": "Middle, CSS, JS, Next.js, Svelte есть, нет MobX и Storybook; удалёнка не указана."}
+{"pair_id": "6600f204d975", "label": 1, "rationale": "Next.js и Svelte есть, нет MobX и Storybook; ожидания от 390 тыс. сильно выше вилки."}
+{"pair_id": "f7e6a4382a52", "label": 1, "rationale": "1-й перцентиль, навыки лишь частично, только офис при удалёнке, давно неактивен."}
+{"pair_id": "7b3f30cf27b8", "label": 2, "rationale": "Middle, CSS и JS подтверждены, MobX и Storybook заявлены; нет Next.js и Svelte; условия подходят."}
+{"pair_id": "313479838929", "label": 1, "rationale": "Junior с годом опыта и 4-м перцентилем, хотя большинство технологий заявлено."}
+{"pair_id": "2b6e3c705e66", "label": 1, "rationale": "8-й перцентиль, CSS частично, нет MobX и Next.js; условия подходят."}
+{"pair_id": "aabc77d51569", "label": 0, "rationale": "Junior с 0.9 года опыта, нет Next.js, Svelte, Storybook, удалёнка не указана."}
+{"pair_id": "e8620882a89f", "label": 0, "rationale": "7-й перцентиль, CSS и JS частично, нет Next.js и Storybook, только офис."}
+{"pair_id": "07af0b50c28c", "label": 2, "rationale": "Middle, CSS, JS подтверждены, Next.js и Svelte заявлены; нет MobX и Storybook; условия подходят."}
+{"pair_id": "23c44af54ed3", "label": 1, "rationale": "CSS, JS, Storybook есть, но нет MobX, Next.js, Svelte."}
+{"pair_id": "d5e2431c3d39", "label": 3, "rationale": "Middle 76-й перцентиль, CSS и JS подтверждены, Next.js, Svelte, Storybook; нет MobX; вилка и удалёнка подходят."}
+{"pair_id": "52c4e75987cf", "label": 1, "rationale": "Сильный Senior, но ожидания от 460 тыс. более чем вдвое выше вилки."}
+{"pair_id": "d9134c0984c5", "label": 1, "rationale": "Senior, ожидания выше вилки более чем на 15%, нет MobX, Next.js, Storybook."}
+{"pair_id": "9cb9cdf51adb", "label": 2, "rationale": "Junior на ступень ниже, но 2.9 года опыта, MobX, Storybook, Svelte, CSS, JS; нет Next.js; условия подходят."}
+{"pair_id": "0c4a50b79a63", "label": 3, "rationale": "Middle, CSS и JS подтверждены, MobX, Storybook, Svelte; нет Next.js; условия подходят, достижения ФСП."}
+{"pair_id": "a1147a1f00a0", "label": 0, "rationale": "Мобильный разработчик, другая специализация."}
+{"pair_id": "330b9b633aab", "label": 2, "rationale": "Middle, CSS, JS, Storybook, Svelte; нет MobX и Next.js; ожидания ниже вилки, удалёнка подходит."}
+{"pair_id": "c1b47126b427", "label": 1, "rationale": "Senior с 7-м перцентилем, ожидания от 410 тыс. сильно выше вилки."}
+{"pair_id": "6fafce0874ce", "label": 2, "rationale": "Middle, CSS и JS подтверждены, Next.js, Storybook, Svelte; нет MobX; низкий перцентиль."}
+{"pair_id": "58e534b9b8c2", "label": 1, "rationale": "Senior, ожидания от 300 тыс. значительно выше вилки, нет MobX, Next.js, Storybook."}
+{"pair_id": "0c1e4c8bd3e9", "label": 0, "rationale": "Мобильный разработчик, другая специализация."}
+{"pair_id": "bf38cd4b8cfd", "label": 1, "rationale": "Junior, CSS, JS, Storybook; нет MobX, Next.js, Svelte."}
+{"pair_id": "fd48cf3e1708", "label": 1, "rationale": "Junior, ожидания выше вилки более чем на 15%; MobX, Next.js, Svelte, Storybook заявлены."}
+{"pair_id": "80f63dd957d3", "label": 2, "rationale": "Middle, CSS и JS подтверждены, MobX, Next.js, Svelte; нет Storybook; ожидания чуть выше вилки."}
+{"pair_id": "1c59cf939088", "label": 1, "rationale": "Ожидания от 360 тыс. сильно выше вилки, нет Next.js и Storybook."}
+{"pair_id": "3738075cf6e1", "label": 1, "rationale": "CSS, JS, Svelte есть, нет MobX, Next.js, Storybook."}
+{"pair_id": "b60480044649", "label": 0, "rationale": "Из обязательных только CSS и JS; нет MobX, Next.js, Svelte, Storybook."}
+{"pair_id": "fbbe1189ddf7", "label": 1, "rationale": "Junior, MobX, Next.js, Storybook есть, нет Svelte и CSS; только гибрид."}
+{"pair_id": "4a193de7a139", "label": 3, "rationale": "Middle, CSS и JS подтверждены, MobX, Svelte, Storybook; нет Next.js; ожидания в вилке, удалёнка."}
+{"pair_id": "f435025db90a", "label": 1, "rationale": "Junior с 1.8 года опыта, нет MobX, Next.js, Svelte."}
+{"pair_id": "334f5cf7d9fc", "label": 0, "rationale": "Только CSS и JS из обязательных; нет MobX, Next.js, Svelte, Storybook."}
+{"pair_id": "ed7ef0b2cea2", "label": 0, "rationale": "Нет MobX, Svelte, CSS; только офис при удалённой вакансии."}
+{"pair_id": "da03d108154c", "label": 2, "rationale": "Middle 86-й перцентиль, CSS, JS, Next.js, Storybook; нет MobX и Svelte; условия подходят."}
+{"pair_id": "60b26a59fc6f", "label": 1, "rationale": "Стек почти полный, но ожидания от 280 тыс. выше вилки более чем на 15%."}
+{"pair_id": "66ec2e55e323", "label": 2, "rationale": "Middle, CSS, JS, MobX, Next.js; нет Svelte и Storybook; условия подходят."}
+{"pair_id": "0565cfa13e50", "label": 1, "rationale": "Senior, ожидания от 420 тыс. вдвое выше вилки."}
+{"pair_id": "735d3eb14ae2", "label": 1, "rationale": "Junior с 1.2 года опыта, нет Next.js и Storybook."}
+{"pair_id": "42efbe83de74", "label": 1, "rationale": "Сильный профиль, но ожидания от 300 тыс. значительно выше вилки, нет Storybook."}
+{"pair_id": "579b8b2cd527", "label": 1, "rationale": "Junior с 1.2 года опыта, нет Next.js и Storybook."}
+{"pair_id": "5d0de5604c52", "label": 0, "rationale": "Junior, 17-й перцентиль, нет MobX, Svelte, Storybook, удалёнка не указана."}
+{"pair_id": "5987078ee020", "label": 0, "rationale": "Нет MobX, Svelte, Storybook, только гибрид при удалённой вакансии."}
+{"pair_id": "7d79a7c34a52", "label": 1, "rationale": "Senior, только офис, ожидания от 400 тыс. сильно выше вилки."}
+{"pair_id": "dd7d32595014", "label": 1, "rationale": "Полный стек, но Senior с ожиданиями от 380 тыс. сильно выше вилки."}
+{"pair_id": "abec4fb813d8", "label": 1, "rationale": "Junior, ожидания выше вилки более чем на 15%, нет MobX и Storybook."}
+{"pair_id": "efa1a1542fa6", "label": 1, "rationale": "Ожидания от 280 тыс. выше вилки более чем на 15%, нет MobX и Storybook."}
+{"pair_id": "2ce3e9fba8f7", "label": 3, "rationale": "Middle, CSS и JS подтверждены, Next.js, Storybook, Svelte; нет MobX; ожидания в вилке, удалёнка."}
+{"pair_id": "d0e89f380c54", "label": 1, "rationale": "Senior с 4-м перцентилем, ожидания от 380 тыс. сильно выше вилки."}
+{"pair_id": "bbc5d4dacd76", "label": 1, "rationale": "Senior, ожидания от 380 тыс. сильно выше вилки, нет MobX, Next.js, Storybook."}
+{"pair_id": "24028ec821ce", "label": 2, "rationale": "Middle 80-й перцентиль, CSS, JS, MobX, Svelte; нет Next.js и Storybook; условия подходят."}
+{"pair_id": "889b3f170b1e", "label": 0, "rationale": "3-й перцентиль, JS частично, нет Next.js и Storybook, только гибрид."}
+{"pair_id": "41255c91c71b", "label": 1, "rationale": "Senior, ожидания от 360 тыс. сильно выше вилки, нет MobX."}
+{"pair_id": "ef4ec46ed48c", "label": 1, "rationale": "Опыт 1.9 года, нет MobX, Next.js, Storybook, давно неактивен."}
+{"pair_id": "e6b249fce032", "label": 1, "rationale": "Ожидания от 310 тыс. значительно выше вилки, нет MobX и Storybook."}
+{"pair_id": "f58b142d22a7", "label": 1, "rationale": "Junior, ожидания выше вилки более чем на 15%, нет MobX и Storybook."}
+{"pair_id": "11935cbb7d4a", "label": 2, "rationale": "Middle, CSS, JS, Next.js, Svelte; нет MobX и Storybook; ожидания в вилке, удалёнка."}
+{"pair_id": "b3371254008f", "label": 1, "rationale": "Стек почти полный, но ожидания от 310 тыс. значительно выше вилки."}
+{"pair_id": "c2f6c32bc6f5", "label": 1, "rationale": "Нет MobX и Storybook, удалёнка не указана, ожидания чуть выше вилки."}
+{"pair_id": "38207dbb39a3", "label": 1, "rationale": "Нет Svelte и Storybook, ожидания выше вилки более 15%, только гибрид."}

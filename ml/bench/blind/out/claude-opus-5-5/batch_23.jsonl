@@ -1,0 +1,100 @@
+{"pair_id": "021deef646d1", "label": 1, "rationale": "Middle с подтверждёнными архитектурой, Git, REST, но стек iOS/Flutter, Android и Kotlin не заявлены; давно не активен."}
+{"pair_id": "8f5c52530834", "label": 1, "rationale": "Сильный Android/Kotlin-стек, но ожидания 340+ тыс. выше вилки и удалённая работа не указана."}
+{"pair_id": "51505c668d41", "label": 1, "rationale": "Junior с опытом 1.7 года при требовании от 2 лет; стек Kotlin, Compose, Room подходит."}
+{"pair_id": "ee7f7835ad89", "label": 3, "rationale": "Middle 97 перцентиль, Kotlin, Compose, Room, Coroutines, опыт 3.5 года, ожидания в вилке, удалёнка подходит."}
+{"pair_id": "b77666b4af70", "label": 2, "rationale": "Грейд Junior, но опыт 3.4 года, Android, Compose, Room, Coroutines; Kotlin не заявлен явно, ожидания ниже вилки."}
+{"pair_id": "456afee36571", "label": 1, "rationale": "Грейд Junior, хороший Android-стек, но только офис при удалённой вакансии."}
+{"pair_id": "c6e9b10beee9", "label": 3, "rationale": "Middle, архитектура, Git, REST подтверждены, Kotlin, Compose, Room, опыт 3.4 года, удалёнка, ожидания ниже вилки."}
+{"pair_id": "095e38264968", "label": 0, "rationale": "Senior без Kotlin и Compose, только офис, ожидания выше вилки, неактивен 98 дней."}
+{"pair_id": "a0d86aad5a71", "label": 1, "rationale": "Kotlin и Compose не заявлены, ожидания 420+ тыс. значительно выше вилки."}
+{"pair_id": "4971c8cc9843", "label": 2, "rationale": "Грейд Junior при высоком перцентиле, опыт 2.7 года, полный Android-стек, ожидания в вилке, удалёнка."}
+{"pair_id": "7c1cec94e5c8", "label": 0, "rationale": "Стажёр с опытом 0.1 года, стек iOS/React Native без Android."}
+{"pair_id": "a1030a9e1a06", "label": 1, "rationale": "Сильный Senior с полным стеком, но ожидания 490+ тыс. намного выше вилки."}
+{"pair_id": "2a11c6f6c9e3", "label": 2, "rationale": "Junior 97 перцентиль, опыт 2.4 года, Kotlin, Compose, Coroutines; ожидания ниже вилки, удалёнка подходит."}
+{"pair_id": "195b75cd1485", "label": 2, "rationale": "Middle, Android, Kotlin, Compose, Room, Git и REST подтверждены; архитектура частично, низкий перцентиль."}
+{"pair_id": "3fc98011c620", "label": 1, "rationale": "Хороший Android-стек, но только офис, ожидания на верхней границе и выше, неактивен 66 дней."}
+{"pair_id": "77ab0624ddc7", "label": 3, "rationale": "Middle 100 перцентиль, полный стек Kotlin, Compose, Room, Coroutines, опыт 3.9 года, удалёнка, ожидания в вилке."}
+{"pair_id": "e359b01e4449", "label": 1, "rationale": "Middle 6 перцентиль, мобильные платформы и архитектура частично, неактивен 81 день."}
+{"pair_id": "8dc1efbd652f", "label": 1, "rationale": "Senior/Lead с подтверждённой архитектурой, но ожидания 390+ тыс. выше вилки."}
+{"pair_id": "e89d2038c393", "label": 0, "rationale": "Стажёр с опытом 0.5 года при требовании 2 лет, удалёнка не указана."}
+{"pair_id": "03acf8683f12", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "5b0fbc849d38", "label": 0, "rationale": "Lead с ожиданиями 420+ тыс., только гибрид при удалённой вакансии; уровень сильно выше."}
+{"pair_id": "64332d6195f6", "label": 1, "rationale": "Полный стек и архитектура подтверждены, но ожидания 360+ тыс. выше вилки более чем на 15%."}
+{"pair_id": "6b14ec7dca2e", "label": 3, "rationale": "Middle 81 перцентиль, полный Android-стек, опыт 3.3 года, удалёнка, ожидания ниже вилки."}
+{"pair_id": "787697f75fdb", "label": 1, "rationale": "Senior с Kotlin, Compose, Room, но ожидания 400+ тыс. значительно выше вилки."}
+{"pair_id": "120e956266cb", "label": 1, "rationale": "Junior с опытом 1.8 года, только офис при удалённой вакансии."}
+{"pair_id": "7a094c8ed818", "label": 1, "rationale": "Middle 3 перцентиль, мобильные платформы и Git частично, удалёнка не указана."}
+{"pair_id": "a8d1759ae14a", "label": 2, "rationale": "Middle 88 перцентиль, Android, Room, Coroutines, опыт 3.3 года; Kotlin и Compose не заявлены."}
+{"pair_id": "9e06a76440e6", "label": 2, "rationale": "Грейд Junior при 100 перцентиле, опыт 3.6 года, полный Android-стек, удалёнка подходит."}
+{"pair_id": "c9ee1f124601", "label": 1, "rationale": "Грейд Junior с низким перцентилем, при этом ожидания на уровне Middle и выше вилки."}
+{"pair_id": "2c6f0e25cd57", "label": 2, "rationale": "Middle, полный Android-стек, опыт 3.7 года; архитектура частично, неактивен 57 дней."}
+{"pair_id": "6c0dadacf092", "label": 1, "rationale": "Lead с опытом 10.8 года, ожидания 390+ тыс. выше вилки, давно не активен."}
+{"pair_id": "f2ff625dc03a", "label": 1, "rationale": "Грейд Junior, Kotlin и Compose есть, но удалённая работа не указана в формате."}
+{"pair_id": "3751ee90eb40", "label": 0, "rationale": "Backend-стажёр, другая специализация."}
+{"pair_id": "2ead7b1b88b3", "label": 3, "rationale": "Middle, архитектура, Git, REST подтверждены, Android, Kotlin, Compose, Room, опыт 2.5 года, удалёнка, ожидания в вилке."}
+{"pair_id": "2a2d6594f47a", "label": 1, "rationale": "Junior с опытом 1.3 года, Kotlin не заявлен."}
+{"pair_id": "a07a78adc24d", "label": 0, "rationale": "Lead с ожиданиями 420+ тыс., без удалённого формата, Android и Compose не заявлены."}
+{"pair_id": "8f5b36793551", "label": 3, "rationale": "Middle 84 перцентиль, Android, Kotlin, Room, Coroutines, опыт 2.6 года, ожидания в вилке, удалёнка."}
+{"pair_id": "4d2573246fae", "label": 2, "rationale": "Senior с полным стеком и подтверждённой архитектурой, ожидания в вилке; уровень выше требуемого."}
+{"pair_id": "a1c7e4c0b996", "label": 1, "rationale": "Опыт 1.3 года при требовании от 2 лет, стек подходит."}
+{"pair_id": "1d879924ca41", "label": 3, "rationale": "Middle, архитектура и Git подтверждены, Kotlin, Compose, Room, опыт 3.1 года, ожидания в вилке, удалёнка."}
+{"pair_id": "bab78b0e94e2", "label": 1, "rationale": "Junior с опытом 1.7 года, стек подходит, уровень ниже."}
+{"pair_id": "d65586b9489c", "label": 3, "rationale": "Middle, архитектура, Git, REST подтверждены, Android, Kotlin, Compose, Room, опыт 3 года, удалёнка."}
+{"pair_id": "6145fbf71e2e", "label": 3, "rationale": "Middle, архитектура и Git подтверждены, Kotlin, Compose, Room, опыт 3.1 года, ожидания в вилке."}
+{"pair_id": "be3066833e65", "label": 1, "rationale": "Полный Android-стек, но ожидания 360+ тыс. выше вилки более чем на 15%."}
+{"pair_id": "05f096af666f", "label": 3, "rationale": "Middle, архитектура и Git подтверждены, Android, Kotlin, Compose, опыт 5.6 года, ожидания в вилке, удалёнка."}
+{"pair_id": "73c121edf4f3", "label": 0, "rationale": "Junior с опытом 1.5 года, Flutter/iOS, нет Android и Kotlin."}
+{"pair_id": "ad6e61cd1324", "label": 2, "rationale": "Middle, архитектура и Git подтверждены, Android, Room, Coroutines, удалёнка; Kotlin и Compose не заявлены."}
+{"pair_id": "b21c93685ced", "label": 2, "rationale": "Junior, все ключевые навыки подтверждены, CatBoost; опыт 0.3 года чуть ниже требования, офис подходит."}
+{"pair_id": "7674e71024fc", "label": 1, "rationale": "Middle с подходящим стеком, но ожидания 250+ тыс. значительно выше вилки."}
+{"pair_id": "73f6121bbe44", "label": 1, "rationale": "Стажёр с опытом 0.1 года, все навыки по тесту лишь частично."}
+{"pair_id": "404c0210dd6a", "label": 1, "rationale": "Сильный Middle с CatBoost, но ожидания 210+ тыс. выше вилки."}
+{"pair_id": "9e2268e8fda8", "label": 3, "rationale": "Junior 88 перцентиль, ML, Python, статистика подтверждены, pandas и NumPy, опыт 0.6 года, ожидания в вилке, гибрид."}
+{"pair_id": "f90fd62854e4", "label": 0, "rationale": "Мобильный разработчик, другая специализация."}
+{"pair_id": "d8f9f5f0ec3d", "label": 3, "rationale": "Junior, pandas/NumPy, Python, SQL, статистика подтверждены, опыт 1.9 года, интерес к телекому, ожидания в вилке."}
+{"pair_id": "96abb6f791af", "label": 1, "rationale": "Сильный Middle с CatBoost и Airflow, но ожидания 250+ тыс. значительно выше вилки."}
+{"pair_id": "f395664495bd", "label": 1, "rationale": "Middle с ClickHouse и Airflow, но ожидания 280+ тыс. значительно выше вилки."}
+{"pair_id": "0467c443f347", "label": 1, "rationale": "Middle, все навыки подтверждены, но ожидания 220+ тыс. выше вилки."}
+{"pair_id": "87db3e217d92", "label": 2, "rationale": "Junior, все ключевые навыки подтверждены, ClickHouse, опыт 0.7 года; ожидания немного выше вилки."}
+{"pair_id": "e38783e2a364", "label": 0, "rationale": "Опыт 6.9 года, уровень Senior по резюме, ожидания 440+ тыс. почти втрое выше вилки."}
+{"pair_id": "be002ff1bd11", "label": 1, "rationale": "Middle 12 перцентиль, Python и SQL частично, ожидания выше вилки."}
+{"pair_id": "c69b1c9578bc", "label": 1, "rationale": "Middle, навыки подтверждены, но ожидания 220+ тыс. выше вилки."}
+{"pair_id": "03c4cc1afc18", "label": 0, "rationale": "Lead по резюме с опытом 6.9 года, ожидания 430+ тыс. почти втрое выше вилки."}
+{"pair_id": "4f42b8a7284b", "label": 1, "rationale": "Junior с CatBoost и подтверждёнными навыками, но ожидания 300+ тыс. почти вдвое выше вилки."}
+{"pair_id": "3fcae3661827", "label": 2, "rationale": "Junior 96 перцентиль, ML, Python, статистика подтверждены, scikit-learn; pandas и NumPy не указаны, ожидания в вилке."}
+{"pair_id": "2797776b381b", "label": 1, "rationale": "Junior с CatBoost, A/B, Airflow, но статистика частично и ожидания 190+ тыс. выше вилки более чем на 15%."}
+{"pair_id": "efc2feb34c67", "label": 1, "rationale": "Middle с CatBoost, но ожидания 240+ тыс. значительно выше вилки."}
+{"pair_id": "7267e8cfafd9", "label": 0, "rationale": "Middle 4 перцентиль, статистика не подтверждена тестом, ожидания значительно выше вилки."}
+{"pair_id": "f6151a408dda", "label": 1, "rationale": "Middle 10 перцентиль, Python и статистика частично, ожидания выше вилки; есть CatBoost и ClickHouse."}
+{"pair_id": "1930c6cad4e4", "label": 1, "rationale": "Стажёр с подтверждёнными навыками и CatBoost, но только удалённо при офисе или гибриде."}
+{"pair_id": "b9d7a5d316ed", "label": 1, "rationale": "Middle, навыки подтверждены, но ожидания 200+ тыс. выше вилки."}
+{"pair_id": "b6ed28ddd970", "label": 1, "rationale": "Сильный Junior с A/B, ClickHouse, Airflow, но ожидания 190+ тыс. выше вилки более чем на 15%."}
+{"pair_id": "c5e06597f76f", "label": 0, "rationale": "Middle, только удалённо при офисе/гибриде, ожидания 220+ тыс. значительно выше вилки."}
+{"pair_id": "dd49db3c617d", "label": 2, "rationale": "Стажёр с опытом 0.5 года, ML, pandas, Python, статистика подтверждены; ожидания ниже вилки, гибрид подходит."}
+{"pair_id": "ecccf3255c84", "label": 3, "rationale": "Junior, все ключевые навыки подтверждены, опыт 0.8 года, ожидания в вилке, формат подходит."}
+{"pair_id": "b8eae39ca5c9", "label": 3, "rationale": "Junior, ML, pandas, Python, статистика подтверждены, CatBoost и ClickHouse, интерес к телекому, ожидания ниже вилки."}
+{"pair_id": "c78f5b6dfa01", "label": 2, "rationale": "Middle с полным стеком CatBoost, A/B, Airflow, ожидания немного выше вилки; уровень выше требуемого."}
+{"pair_id": "21f5d7233e3f", "label": 1, "rationale": "Middle без Python и pandas в стеке, ожидания выше вилки."}
+{"pair_id": "47d7d253d227", "label": 0, "rationale": "Стажёр с опытом 0.1 года, все навыки частично, только удалённо."}
+{"pair_id": "d41037cf3f27", "label": 3, "rationale": "Junior, ML, SQL, статистика подтверждены, Python, pandas, Airflow, опыт 2 года, ожидания в вилке, гибрид."}
+{"pair_id": "bd02aeba822b", "label": 1, "rationale": "Junior с CatBoost и ClickHouse, но ожидания 210+ тыс. значительно выше вилки."}
+{"pair_id": "eb1fc0f135be", "label": 1, "rationale": "Junior 4 перцентиль, все навыки по тесту лишь частично."}
+{"pair_id": "122b0cd796af", "label": 1, "rationale": "Сильный Junior с CatBoost и A/B, но ожидания 270+ тыс. значительно выше вилки."}
+{"pair_id": "6a932268494b", "label": 0, "rationale": "Junior 8 перцентиль, все навыки частично, только удалённо при офисе или гибриде."}
+{"pair_id": "066888862ec6", "label": 2, "rationale": "Стажёр по грейду, но опыт 1.9 года, ML, pandas, статистика подтверждены, интерес к телекому, ожидания в вилке."}
+{"pair_id": "0ebf0fc770cd", "label": 0, "rationale": "Senior по резюме, ожидания 330+ тыс. вдвое выше вилки джуниор-позиции."}
+{"pair_id": "fe18dcca6398", "label": 0, "rationale": "Junior с опытом 0.3 года, большинство навыков частично, только удалённо."}
+{"pair_id": "a2dc41529da5", "label": 1, "rationale": "Middle/Lead с подтверждёнными навыками, но ожидания 280+ тыс. значительно выше вилки."}
+{"pair_id": "cb0031a8fb57", "label": 0, "rationale": "Senior по резюме, ожидания 370+ тыс. более чем вдвое выше вилки."}
+{"pair_id": "d15a68302331", "label": 0, "rationale": "Стажёр 7 перцентиль, опыт 0.3 года, большинство навыков частично, давно не активен."}
+{"pair_id": "4ba7b3bd3d45", "label": 1, "rationale": "Сильный Middle, но ожидания 240+ тыс. значительно выше вилки."}
+{"pair_id": "895a2a60bb4a", "label": 0, "rationale": "Системный аналитик, другая специализация."}
+{"pair_id": "d2ad8d90db12", "label": 1, "rationale": "Junior без pandas/NumPy в стеке, ожидания 220+ тыс. значительно выше вилки."}
+{"pair_id": "75abdea9af9a", "label": 1, "rationale": "Middle с CatBoost и Airflow, но ожидания 230+ тыс. значительно выше вилки."}
+{"pair_id": "9db550e6fda3", "label": 0, "rationale": "Middle 6 перцентиль, SQL и статистика частично, ожидания 270+ тыс. значительно выше вилки."}
+{"pair_id": "9c1bbf112e0e", "label": 0, "rationale": "Senior по резюме с опытом 6 лет, ожидания 330+ тыс. вдвое выше вилки."}
+{"pair_id": "139d14f7982a", "label": 1, "rationale": "Middle с подтверждёнными ML и статистикой, но ожидания 220+ тыс. выше вилки."}
+{"pair_id": "0ec75cb0018a", "label": 2, "rationale": "Стажёр с подтверждёнными ML, pandas, статистикой, CatBoost и Airflow; опыт 0.4 года, ожидания ниже вилки."}
+{"pair_id": "23877be9efb8", "label": 1, "rationale": "Junior, все навыки подтверждены, но ожидания 230+ тыс. значительно выше вилки."}
+{"pair_id": "8bb158b6e814", "label": 0, "rationale": "Middle, только удалённо при офисе/гибриде, ожидания выше вилки."}
+{"pair_id": "d21eecbcfcb2", "label": 1, "rationale": "Middle с подходящим стеком, но ожидания 210+ тыс. значительно выше вилки."}

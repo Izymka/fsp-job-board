@@ -1,0 +1,49 @@
+{"pair_id":"8e957b81f5be","label":2,"rationale":"Смежный Junior с заявленными GitHub Actions и Kubernetes; удалённый формат и ожидания подходят."}
+{"pair_id":"2f171ae2bf68","label":2,"rationale":"Сильный Senior, Kubernetes подтверждён, GitHub Actions заявлен; ожидания немного выше вилки."}
+{"pair_id":"19580eefaac1","label":2,"rationale":"Junior на ступень ниже, но Kubernetes подтверждён и GitHub Actions заявлен; условия совместимы."}
+{"pair_id":"bc44eee6c80b","label":2,"rationale":"Middle по профилю, Kubernetes заявлен; GitHub Actions не указан, но формат и ожидания подходят."}
+{"pair_id":"b77fc8bdaf3b","label":1,"rationale":"Junior ниже уровня; Kubernetes заявлен, но GitHub Actions отсутствует в стеке."}
+{"pair_id":"c719841dfad5","label":1,"rationale":"Middle с подтверждённым Kubernetes и заявленными GitHub Actions, но доступен только гибридный формат."}
+{"pair_id":"9f8ae62d95b2","label":0,"rationale":"Другая специализация: Data Science вместо DevOps/SRE."}
+{"pair_id":"f876014d3f1d","label":2,"rationale":"Senior на ступень выше, Kubernetes подтверждён; нет GitHub Actions, ожидания на верхней границе вилки."}
+{"pair_id":"eb2531babd17","label":1,"rationale":"Middle с подходящим стеком, но ожидания существенно превышают верхнюю границу вилки."}
+{"pair_id":"dcb165d2ff9c","label":2,"rationale":"Middle, Kubernetes подтверждён, условия подходят; GitHub Actions в стеке не заявлен."}
+{"pair_id":"7fe260705fcc","label":1,"rationale":"Сильный Senior, но ожидания значительно выше вилки, несмотря на подходящий удалённый формат."}
+{"pair_id":"368be36bc393","label":2,"rationale":"Middle с подтверждённым Kubernetes, условия совместимы; GitHub Actions отсутствует в заявленном стеке."}
+{"pair_id":"9213e8947691","label":3,"rationale":"Middle: Kubernetes подтверждён, GitHub Actions заявлен, ожидания и удалённый формат совместимы."}
+{"pair_id":"fca239cfa383","label":2,"rationale":"Middle с подтверждённым Kubernetes, но GitHub Actions отсутствует; остальное соответствует вакансии."}
+{"pair_id":"d3be69f8f39e","label":2,"rationale":"Junior на ступень ниже, но Kubernetes подтверждён, GitHub Actions заявлен, условия подходят."}
+{"pair_id":"c6070e1f61df","label":1,"rationale":"Junior с минимальным опытом; Kubernetes подтверждён лишь частично, GitHub Actions заявлен."}
+{"pair_id":"80563317510c","label":2,"rationale":"Junior на ступень ниже с подтверждённым Kubernetes и заявленными GitHub Actions; условия совместимы."}
+{"pair_id":"991f75da36fb","label":1,"rationale":"Требования закрыты, но ожидания значительно превышают верхнюю границу вилки."}
+{"pair_id":"5511e62bad97","label":2,"rationale":"Middle с подтверждённым Kubernetes; GitHub Actions отсутствует, ожидания немного выше вилки."}
+{"pair_id":"492f91f5773c","label":1,"rationale":"Подходящий Middle, но ожидания существенно выше вилки; GitHub Actions также не заявлен."}
+{"pair_id":"20d7c09d7dfc","label":2,"rationale":"Senior на ступень выше с подтверждённым Kubernetes; условия немного выше вилки, GitHub Actions отсутствует."}
+{"pair_id":"6d63f7d900d2","label":3,"rationale":"Middle с подтверждённым Kubernetes и заявленными GitHub Actions; ожидания лишь немного выше вилки, удалённо доступен."}
+{"pair_id":"302c471b96bd","label":3,"rationale":"Middle: Kubernetes подтверждён, GitHub Actions заявлен, ожидания в вилке и доступна удалённая работа."}
+{"pair_id":"1413c374d7a1","label":1,"rationale":"Junior на ступень ниже и готов только к офису, несовместимому с удалённой вакансией."}
+{"pair_id":"c4a4cff348ee","label":1,"rationale":"Senior с Kubernetes, но нет GitHub Actions и ожидания существенно превышают вилку."}
+{"pair_id":"712efd410af4","label":1,"rationale":"Junior ниже уровня; отсутствуют и Kubernetes, и GitHub Actions."}
+{"pair_id":"1c2873d213c1","label":1,"rationale":"Middle, но отсутствуют Kubernetes и GitHub Actions, а удалённый формат недоступен."}
+{"pair_id":"18f221a999f4","label":3,"rationale":"Middle с подтверждённым Kubernetes; ожидания в вилке, формат удалённой работы доступен."}
+{"pair_id":"a683424a9b48","label":2,"rationale":"Middle с подтверждённым Kubernetes; GitHub Actions отсутствует, но условия совместимы."}
+{"pair_id":"92d339ce54b9","label":3,"rationale":"Middle с подтверждённым Kubernetes, подходящими ожиданиями и доступной удалённой работой."}
+{"pair_id":"fc71ccbfda72","label":1,"rationale":"Стек включает GitHub Actions и Kubernetes, но ожидания существенно выше вилки."}
+{"pair_id":"f3d1254a1bdd","label":1,"rationale":"Junior ниже уровня и готов только к офису, что несовместимо с удалённой вакансией."}
+{"pair_id":"40a25bab9d54","label":1,"rationale":"Senior с сильным профилем, но ожидания существенно превышают вилку."}
+{"pair_id":"706aa14f066d","label":1,"rationale":"Подходящий Middle со стеком, но ожидания существенно выше вилки."}
+{"pair_id":"69507e5aee9f","label":1,"rationale":"Есть GitHub Actions и Kubernetes, но ожидания существенно выше вилки и удалённый формат не указан."}
+{"pair_id":"38fd684b9706","label":1,"rationale":"Senior с подтверждённым Kubernetes, но GitHub Actions отсутствует и ожидания выше вилки."}
+{"pair_id":"f8a66429c84b","label":1,"rationale":"Middle со стеком вакансии, но ожидания существенно превышают вилку."}
+{"pair_id":"8b2e8d227258","label":1,"rationale":"Middle с GitHub Actions и Kubernetes, но ожидания существенно превышают вилку."}
+{"pair_id":"e17592fb28c3","label":2,"rationale":"Junior на ступень ниже, но Kubernetes подтверждён, GitHub Actions заявлен, условия совместимы."}
+{"pair_id":"3b69ea01a1e9","label":2,"rationale":"Junior на ступень ниже с GitHub Actions и Kubernetes в стеке; удалённый формат подходит."}
+{"pair_id":"4b71956eb30b","label":3,"rationale":"Middle с подтверждённым Kubernetes, заявленными GitHub Actions, подходящими ожиданиями и доступной удалёнкой."}
+{"pair_id":"dedc2d89ee7d","label":2,"rationale":"Senior на ступень выше с подтверждённым Kubernetes; GitHub Actions отсутствует, ожидания немного выше вилки."}
+{"pair_id":"9c4c525d5e14","label":1,"rationale":"Middle, но в профиле отсутствуют оба обязательных требования: GitHub Actions и Kubernetes."}
+{"pair_id":"05570920cc06","label":0,"rationale":"Другая специализация: frontend-разработка вместо DevOps/SRE."}
+{"pair_id":"e2732659a0c7","label":1,"rationale":"Senior с подтверждённым Kubernetes, но нет GitHub Actions и ожидания существенно выше вилки."}
+{"pair_id":"a9771cc6722f","label":1,"rationale":"Middle с подтверждённым Kubernetes, но GitHub Actions отсутствует и удалённый формат недоступен."}
+{"pair_id":"09015f363f20","label":2,"rationale":"Middle с Kubernetes в стеке и удалённым форматом; GitHub Actions отсутствует, ожидания подходят."}
+{"pair_id":"6967a68e39e1","label":1,"rationale":"Senior с Kubernetes, но GitHub Actions отсутствует и ожидания существенно превышают вилку."}
+{"pair_id":"f196c1f9dbf7","label":1,"rationale":"Junior ниже уровня; GitHub Actions заявлен, но Kubernetes отсутствует в стеке и тесте."}

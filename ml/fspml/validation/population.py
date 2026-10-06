@@ -11,10 +11,12 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass, field
 from datetime import date, timedelta
+from functools import lru_cache
 
 import numpy as np
+import yaml
 
-from ..catalog import get_catalog
+from ..catalog import DATA_DIR, get_catalog
 from ..matching.scoring import FspAchievement
 from ..nlp.skills import get_dictionary
 
@@ -98,6 +100,33 @@ def _sample_techs(rng: random.Random, spec: str, k: int) -> set[str]:
     return out
 
 
+@lru_cache(maxsize=1)
+def _archetypes() -> dict[str, list[dict]]:
+    raw = yaml.safe_load((DATA_DIR / "stack_archetypes.yaml").read_text(encoding="utf-8"))
+    out: dict[str, list[dict]] = {}
+    for a in raw["archetypes"]:
+        out.setdefault(a["spec"], []).append(a)
+    return out
+
+
+def _archetype_techs(
+    rng: random.Random, spec: str, g_idx: int, *, need: bool = False
+) -> tuple[str, set[str]]:
+    """Реалистичный стек: архетип специализации (data/stack_archetypes.yaml) + вероятностный набор.
+
+    core — почти всегда, common — часто, optional — иногда; с ростом грейда стек шире.
+    """
+    arch = _archetypes()[spec]
+    a = rng.choices(arch, [x["share"] for x in arch])[0]
+    p_core, p_common, p_opt = (0.95, 0.55, 0.25) if need else (0.9, 0.45 + 0.05 * g_idx, 0.12 + 0.05 * g_idx)
+    techs = {t for t in a["core"] if rng.random() < p_core}
+    techs |= {t for t in a["common"] if rng.random() < p_common}
+    techs |= {t for t in a["optional"] if rng.random() < p_opt}
+    if not techs:
+        techs.add(a["core"][0])
+    return a["id"], techs
+
+
 def _fsp_history(rng: random.Random, practical: float, spec: str) -> list[FspAchievement] | None:
     cat = get_catalog()
     if rng.random() > 0.4:  # у ~60% истории ФСП нет
@@ -164,7 +193,10 @@ ABOUT = {
 }
 
 
-def make_candidates(n: int = 1000, seed: int = 7, stuffing_rate: float = 0.3) -> list[TrueCandidate]:
+def make_candidates(
+    n: int = 1000, seed: int = 7, stuffing_rate: float = 0.3, *, realistic: bool = False
+) -> list[TrueCandidate]:
+    """realistic=True — стек из архетипов (реальные связки технологий) вместо независимой выборки."""
     rng = random.Random(seed)
     cat = get_catalog()
     specs, shares = zip(*SPEC_SHARE.items())
@@ -186,7 +218,20 @@ def make_candidates(n: int = 1000, seed: int = 7, stuffing_rate: float = 0.3) ->
             stack = [lang]
         bp = cat.blueprint(spec, stack)
         skill_theta = {s: theta + rng.gauss(0, 0.45) for s in bp}
-        techs = _sample_techs(rng, spec, rng.randint(4, 8) + g_idx)
+        if realistic:
+            _, techs = _archetype_techs(rng, spec, g_idx)
+            if spec_obj.stack_languages:  # языковой навык теста — по реальному стеку
+                lang = (
+                    "python"
+                    if "Python" in techs
+                    else "javascript"
+                    if techs & {"JavaScript", "TypeScript", "Node.js"}
+                    else lang
+                )
+                bp = cat.blueprint(spec, [lang])
+                skill_theta = {s_: theta + rng.gauss(0, 0.45) for s_ in bp}
+        else:
+            techs = _sample_techs(rng, spec, rng.randint(4, 8) + g_idx)
         if lang == "python":
             techs.add("Python")
         elif lang == "javascript":
@@ -249,7 +294,7 @@ def make_candidates(n: int = 1000, seed: int = 7, stuffing_rate: float = 0.3) ->
     return out
 
 
-def make_needs(n: int = 30, seed: int = 11) -> list[TrueNeed]:
+def make_needs(n: int = 30, seed: int = 11, *, realistic: bool = False) -> list[TrueNeed]:
     rng = random.Random(seed)
     cat = get_catalog()
     specs, shares = zip(*SPEC_SHARE.items())
@@ -257,11 +302,15 @@ def make_needs(n: int = 30, seed: int = 11) -> list[TrueNeed]:
     for i in range(n):
         spec = rng.choices(specs, shares)[0]
         grade = rng.choices(["junior", "middle", "senior", "lead"], [0.25, 0.4, 0.28, 0.07])[0]
-        techs = _sample_techs(rng, spec, rng.randint(4, 7))
+        if realistic:
+            arch_id, techs = _archetype_techs(rng, spec, 0, need=True)
+            core = set(next(a for a in _archetypes()[spec] if a["id"] == arch_id)["core"])
+        else:
+            techs, core = _sample_techs(rng, spec, rng.randint(4, 7)), set()
         skills = {}
         must = []
-        for t in techs:
-            imp = 1.0 if rng.random() < 0.65 else 0.45
+        for t in sorted(techs):  # порядок множества строк зависит от PYTHONHASHSEED
+            imp = 1.0 if (t in core or rng.random() < 0.65) else 0.45
             skills[t] = imp
             if imp >= 0.6:
                 must.append(t)

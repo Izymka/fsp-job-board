@@ -1,0 +1,53 @@
+{"pair_id":"aad5a5eeafa6","label":2,"rationale":"Middle frontend, заявлены TypeScript, CSS и Vue; Webpack не указан, офис подходит."}
+{"pair_id":"2ea861e35e19","label":1,"rationale":"Стек полностью заявлен, но кандидат рассматривает только удалённую работу вместо офиса."}
+{"pair_id":"bf82df826917","label":1,"rationale":"Middle frontend и офис подходят, но отсутствуют TypeScript и Vue среди обязательных требований."}
+{"pair_id":"73b93c87c18d","label":0,"rationale":"Другая специализация: DevOps/SRE вместо frontend-разработки."}
+{"pair_id":"45a21af13398","label":1,"rationale":"Нет Vue, а формат кандидата только удалённый, несовместимый с офисной вакансией."}
+{"pair_id":"cbd87b65b2b6","label":1,"rationale":"Заявлены TypeScript и Vue, но нет Webpack; формат без офиса и низкие результаты теста."}
+{"pair_id":"480b42396d40","label":0,"rationale":"Отсутствует большинство обязательного стека: TypeScript, CSS, Webpack и Vue."}
+{"pair_id":"3e06ab63a7e2","label":2,"rationale":"Senior на ступень выше, обязательный стек заявлен и подтверждён, офис возможен; ожидания слегка выше вилки."}
+{"pair_id":"51c7a4ebe35b","label":1,"rationale":"Стек покрыт, но резюме Junior и кандидат выбирает только удалённый формат."}
+{"pair_id":"ee965fa5bccc","label":1,"rationale":"Подтверждены базовые frontend-навыки, но не заявлены Vue и Webpack."}
+{"pair_id":"76ecfe83ce87","label":1,"rationale":"Технически близок, но ожидания от 390 тысяч существенно выше максимума вилки."}
+{"pair_id":"143f75b309ed","label":0,"rationale":"Другая специализация: DevOps/SRE вместо frontend-разработки."}
+{"pair_id":"54dcf71d1230","label":1,"rationale":"Junior на ступень ниже, не заявлены CSS и Vue, формат без офиса."}
+{"pair_id":"d695997bbd6d","label":1,"rationale":"Есть CSS, TypeScript и Vue, но нет Webpack; кандидат не готов к офисному формату."}
+{"pair_id":"ae07f6c47834","label":1,"rationale":"Офис возможен, но ожидания от 300 тысяч выше вилки и не заявлены CSS с TypeScript."}
+{"pair_id":"0df4c5dea278","label":1,"rationale":"Middle и офис подходят, но отсутствуют CSS, Vue и Webpack в заявленном стеке."}
+{"pair_id":"2f82823eb96a","label":1,"rationale":"Все требования заявлены и офис подходит, но тест показал лишь частичные знания по ключевым навыкам."}
+{"pair_id":"3ec41f945640","label":0,"rationale":"Ожидания от 450 тысяч значительно выше вилки вакансии."}
+{"pair_id":"eb8171a8c206","label":1,"rationale":"Junior на ступень ниже, ключевые навыки в тесте лишь частичные, офис не подходит."}
+{"pair_id":"59c44661bf2b","label":0,"rationale":"Lead отличается от Middle больше чем на ступень и ожидает существенно больше вилки."}
+{"pair_id":"89cc65b2b1b8","label":1,"rationale":"Middle и офис подходят, но отсутствуют обязательные TypeScript, Vue и Webpack."}
+{"pair_id":"39c7daa803cf","label":1,"rationale":"Офис возможен, но большинство обязательного стека не заявлено, результаты по нему частичные."}
+{"pair_id":"f7d28720c2fe","label":0,"rationale":"Lead отличается от Middle больше чем на ступень, ожидания значительно выше вилки."}
+{"pair_id":"4e729c0e4ab9","label":1,"rationale":"Есть TypeScript и CSS, но не заявлены Vue и Webpack; подтверждение JavaScript частичное."}
+{"pair_id":"889233f02f04","label":1,"rationale":"Не заявлены TypeScript и Webpack, а формат кандидата не включает офис."}
+{"pair_id":"f5017d11741a","label":3,"rationale":"Middle frontend: обязательный стек заявлен, TypeScript и CSS подтверждены, офис и ожидания совместимы."}
+{"pair_id":"c895a112777b","label":2,"rationale":"Middle, офис и ожидания подходят; подтверждён базовый стек, но Vue не указан."}
+{"pair_id":"c4a8fd7299d5","label":1,"rationale":"Junior на ступень ниже; стек заявлен, но React и TypeScript подтверждены лишь частично."}
+{"pair_id":"24768b818253","label":0,"rationale":"Lead отличается от Middle больше чем на ступень и имеет ожидания выше вилки."}
+{"pair_id":"050873eb7e00","label":1,"rationale":"Ожидания от 380 тысяч существенно выше вилки; также не заявлены TypeScript и Vue."}
+{"pair_id":"2ebf94f95cf0","label":1,"rationale":"Уровень и офис подходят, но в заявленном стеке отсутствуют TypeScript, Vue и Webpack."}
+{"pair_id":"23dd6cac97b0","label":0,"rationale":"Lead отличается от Middle больше чем на ступень и ожидает зарплату выше вилки."}
+{"pair_id":"ab7d9479a6ae","label":1,"rationale":"Подтверждены базовые навыки, но отсутствуют CSS, Vue и Webpack; формат только удалённый."}
+{"pair_id":"b3e802375dbc","label":3,"rationale":"Middle frontend, обязательный стек заявлен и подтверждён; офисный формат и ожидания совместимы."}
+{"pair_id":"aa101a75628d","label":0,"rationale":"Lead отличается от Middle больше чем на ступень, ожидания от 400 тысяч выше вилки."}
+{"pair_id":"96e78bdebb1f","label":1,"rationale":"Ожидания от 310 тысяч выше вилки; также не заявлены CSS, TypeScript и Vue."}
+{"pair_id":"2b2750cab072","label":2,"rationale":"Junior на ступень ниже, но подтверждён ключевой стек, заявлены TypeScript, Vue и Webpack, офис возможен."}
+{"pair_id":"bc04d5b0c8a9","label":1,"rationale":"Стек близок, но TypeScript не заявлен и кандидат рассматривает только удалённую работу."}
+{"pair_id":"707e2b6e0c12","label":1,"rationale":"Ожидания от 310 тысяч выше вилки; также не заявлены Vue и Webpack."}
+{"pair_id":"24d604da9640","label":1,"rationale":"Junior на ступень ниже, не заявлены TypeScript и Vue, формат не включает офис."}
+{"pair_id":"96357de66ba6","label":1,"rationale":"Middle и офис подходят, но отсутствуют обязательные TypeScript и Webpack."}
+{"pair_id":"c346513bdf98","label":1,"rationale":"Senior на ступень выше, но ожидания от 380 тысяч значительно выше вилки и стек неполный."}
+{"pair_id":"0fe19cfb0668","label":1,"rationale":"Middle и офис подходят, но не заявлены TypeScript, Vue и Webpack."}
+{"pair_id":"6eef0c06405a","label":1,"rationale":"Полный стек и офис есть, но Senior и ожидания от 380 тысяч заметно выше вилки."}
+{"pair_id":"afe4c3244ee9","label":1,"rationale":"Junior на ступень ниже; офис подходит, но отсутствуют CSS и Vue среди обязательных требований."}
+{"pair_id":"2b19509b79c5","label":1,"rationale":"Junior на ступень ниже, React подтверждён лишь частично и не заявлен CSS."}
+{"pair_id":"cf305b07ec1e","label":1,"rationale":"Junior на ступень ниже; заявлены CSS, TypeScript и Webpack, но отсутствует Vue."}
+{"pair_id":"1650d906d5cc","label":1,"rationale":"Middle и офис подходят, но не заявлены Vue и Webpack."}
+{"pair_id":"ae5401461b50","label":1,"rationale":"Есть CSS, Vue и Webpack, но TypeScript отсутствует в заявленном и подтверждённом стеке."}
+{"pair_id":"d49a1e46100c","label":1,"rationale":"Офис и уровень подходят, но не заявлены CSS, Vue и Webpack; ключевые тесты частичные."}
+{"pair_id":"33597b994b8c","label":1,"rationale":"Junior на ступень ниже, отсутствуют CSS и Vue в заявленном стеке."}
+{"pair_id":"03915c5e4a58","label":2,"rationale":"Middle frontend, офис и ожидания подходят; CSS, Vue и Webpack заявлены, но TypeScript не указан."}
+{"pair_id":"667deedac45f","label":1,"rationale":"Middle и офис подходят, но не заявлены обязательные CSS и Vue."}

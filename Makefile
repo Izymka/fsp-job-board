@@ -1,4 +1,4 @@
-.PHONY: help up kc-demo down logs ps test lint fmt validate validate-quick seed reset dev-backend dev-registry dev-frontend
+.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick seed reset dev-backend dev-registry dev-frontend
 
 help:
 	@echo "make up            — весь стек в Docker (http://localhost)"
@@ -43,6 +43,22 @@ validate:
 
 validate-quick:
 	uv run python -m fspml.validation --out docs --quick
+
+# Бенчмарк подбора (docs/bench.md): пул пар → LLM-асессор и эксперты → метрики
+bench-build:
+	uv run --all-packages --extra bench python -m fspml.bench build
+
+bench-estimate:
+	uv run python -m fspml.bench estimate
+
+bench-judge:
+	uv run python -m fspml.bench judge
+
+bench-label:
+	uv run python -m fspml.bench label
+
+bench-eval:
+	uv run python -m fspml.bench eval
 
 seed:
 	docker compose exec backend python -m app.seed

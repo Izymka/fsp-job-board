@@ -1,0 +1,61 @@
+{"pair_id":"e3b3a5983c83","label":2,"rationale":"Middle, подтверждены Python, SQL и REST; опыт и условия подходят, PostgreSQL и Docker не заявлены."}
+{"pair_id":"66dde4db6984","label":1,"rationale":"Junior с 0,6 года опыта; подтверждены Python и SQL, но уровень и стаж ниже требований."}
+{"pair_id":"267570d32147","label":1,"rationale":"Junior с сильными Python, SQL и REST, но удалённый формат несовместим с гибридом."}
+{"pair_id":"6d81d2877497","label":2,"rationale":"Middle с опытом Python, FastAPI, PostgreSQL и Kafka; обязательные Python тестом не подтверждён."}
+{"pair_id":"3e77b96c457b","label":1,"rationale":"Middle и SQL подтверждены, но Python не заявлен, а формат только офис или удалённо."}
+{"pair_id":"69f4e74a26ad","label":1,"rationale":"Junior с Python, SQL, FastAPI и PostgreSQL, но недостаточный уровень и только удалённый формат."}
+{"pair_id":"0ac9378ea9cc","label":2,"rationale":"Middle с подтверждёнными Python, SQL и REST, Redis; условия подходят, PostgreSQL не указан."}
+{"pair_id":"659c7b637ea5","label":1,"rationale":"Грейд Junior, хотя опыт достаточен; подтверждены Python и SQL, но нет PostgreSQL и REST."}
+{"pair_id":"927729c3d77f","label":1,"rationale":"Senior/Lead с сильными базовыми навыками, но ожидания выше вилки и нет гибридного формата."}
+{"pair_id":"1f24c8afe664","label":2,"rationale":"Middle с подтверждёнными Python, SQL и REST, FastAPI и Redis; условия совместимы, PostgreSQL не указан."}
+{"pair_id":"225619c02e0c","label":1,"rationale":"Есть PostgreSQL, Redis, Kafka и REST, но Python отсутствует в тесте и стеке; грейд Junior."}
+{"pair_id":"22db5f4d1b3f","label":2,"rationale":"Senior на ступень выше с подтверждёнными Python, SQL и REST, PostgreSQL; ожидания от верхней границы вилки."}
+{"pair_id":"5811cae917ec","label":2,"rationale":"Middle с подтверждёнными Python и SQL; опыт подходит, но PostgreSQL, Docker и Redis не заявлены."}
+{"pair_id":"7c949798f22a","label":1,"rationale":"Junior при требовании Middle; подтверждены Python, SQL и REST, но доступен только офис."}
+{"pair_id":"74f0fa526ed0","label":3,"rationale":"Middle с подтверждёнными Python, SQL и REST, опытом PostgreSQL и asyncio; стаж и гибридный формат подходят."}
+{"pair_id":"061eeaf4eae7","label":1,"rationale":"Senior с Python и REST, но ожидания существенно выше вилки; SQL подтверждён лишь частично."}
+{"pair_id":"f34d91a52c57","label":1,"rationale":"Middle, но опыт 1,4 года и Python подтверждён частично; доступен только офис."}
+{"pair_id":"99e81a732a59","label":1,"rationale":"Middle с подтверждёнными Python и SQL, но ожидания существенно превышают вилку вакансии."}
+{"pair_id":"f4c3bae50d60","label":1,"rationale":"Сильный Senior с Python, SQL, REST и FastAPI, однако зарплатные ожидания существенно выше вилки."}
+{"pair_id":"1f966c9b69a0","label":2,"rationale":"Middle с подтверждёнными Python и SQL, микросервисами и gRPC; нет подтверждения HTTP, REST и PostgreSQL."}
+{"pair_id":"47dbfd2c7727","label":2,"rationale":"Middle с PostgreSQL и подтверждёнными SQL; Python и HTTP частично подтверждены, условия подходят."}
+{"pair_id":"f533807e6ec5","label":2,"rationale":"Middle/Senior с подтверждёнными Python, SQL и REST, PostgreSQL и Kafka; ожидания близки к верхней границе."}
+{"pair_id":"5c7dc57d9597","label":1,"rationale":"Junior с 0,4 года опыта; подтверждены Python, SQL и REST, но уровень существенно ниже вакансии."}
+{"pair_id":"5c11ab84e7a0","label":1,"rationale":"Junior/Intern с 1,9 года опыта; подтверждены Python, SQL и REST, но уровень ниже Middle."}
+{"pair_id":"51e76e458162","label":0,"rationale":"Junior без Python в стеке и без подтверждения Python; отсутствует большинство ключевых требований."}
+{"pair_id":"b0864f4b3c3f","label":2,"rationale":"Senior на ступень выше с подтверждёнными Python, SQL и REST, PostgreSQL; гибрид и ожидания подходят."}
+{"pair_id":"93edebf9a5ec","label":3,"rationale":"Middle с подтверждёнными Python, SQL и REST, опытом PostgreSQL, Redis, Kafka и asyncio; условия подходят."}
+{"pair_id":"54042188c71f","label":1,"rationale":"Senior/Lead без Python в тесте и стеке; ожидания выше вилки, несмотря на REST и Kafka."}
+{"pair_id":"657a730d58f9","label":1,"rationale":"Junior с 1,6 года опыта; есть Python и SQL, но нет подтверждения HTTP и REST."}
+{"pair_id":"c2147ad0dfec","label":1,"rationale":"Middle с Python и SQL, но доступен только офис, без подтверждения HTTP и REST."}
+{"pair_id":"0edb2e8d7e36","label":0,"rationale":"Другая специализация: мобильная разработка вместо Python backend."}
+{"pair_id":"290adeaf9959","label":2,"rationale":"Middle с подтверждёнными Python, SQL и REST, опытом Kafka; нет PostgreSQL, Redis и Docker."}
+{"pair_id":"368e256afb40","label":1,"rationale":"Middle, но Python и HTTP подтверждены частично, PostgreSQL не указан; профиль с заметными пробелами."}
+{"pair_id":"4a4398038eea","label":1,"rationale":"Middle с Python, но нет подтверждения HTTP, REST и PostgreSQL; доступен только офис или удалённо."}
+{"pair_id":"b441c424ab03","label":1,"rationale":"Ожидания существенно выше вилки и только удалённый формат; Python отсутствует в стеке и тесте."}
+{"pair_id":"0b93a46bbe55","label":1,"rationale":"Middle с 1,5 года опыта, ниже требования; есть Python и SQL, но PostgreSQL не указан."}
+{"pair_id":"4c3f8ade4b3d","label":1,"rationale":"Senior/Lead с Python и Django, но ожидания почти вдвое выше максимума вилки."}
+{"pair_id":"bcc888d869e8","label":0,"rationale":"Другая специализация: Frontend-разработка вместо Python backend."}
+{"pair_id":"0842968fe87f","label":1,"rationale":"Middle без Python в тесте и стеке; есть SQL, REST и Redis, но ключевой язык не подтверждён."}
+{"pair_id":"f5c5fbecaa29","label":1,"rationale":"Middle, но SQL, HTTP и REST подтверждены частично; PostgreSQL и Redis не заявлены."}
+{"pair_id":"f0f4e407e2ac","label":2,"rationale":"Senior на ступень выше с подтверждёнными Python, SQL и REST; гибрид и ожидания от 310 тысяч подходят."}
+{"pair_id":"2623438af42a","label":1,"rationale":"Middle с релевантным стеком, но Python, SQL, HTTP и REST подтверждены лишь частично."}
+{"pair_id":"5f96b23d0b5e","label":1,"rationale":"Middle с FastAPI и PostgreSQL, но Python отсутствует в тесте и заявленном стеке."}
+{"pair_id":"948ac335fba8","label":2,"rationale":"Middle с подтверждёнными Python, SQL и REST, опытом PostgreSQL; отсутствуют Redis, Kafka и Docker."}
+{"pair_id":"67e3f1a1a0e6","label":1,"rationale":"Senior с Python и SQL, но только офисный формат и нет заявленного PostgreSQL или REST."}
+{"pair_id":"85017fb4c06f","label":1,"rationale":"Junior с 1,1 года опыта; подтверждены Python и SQL, но уровень и стаж ниже требований."}
+{"pair_id":"766e425ddac3","label":0,"rationale":"Junior без Python в стеке и без подтверждения Python; отсутствует ключевой навык вакансии."}
+{"pair_id":"54eff41e4467","label":1,"rationale":"Middle с Python, но ключевые SQL, HTTP и REST подтверждены частично; гибрид недоступен."}
+{"pair_id":"d33751f72d13","label":1,"rationale":"Senior/Lead с сильным backend-стеком, но ожидания выше вилки и Python не заявлен."}
+{"pair_id":"bdcc1af6aafe","label":1,"rationale":"Junior с 1,7 года опыта; есть Python, FastAPI, Kafka и Redis, но уровень ниже Middle."}
+{"pair_id":"666f307fe9bf","label":1,"rationale":"Грейд Junior при вакансии Middle; подтверждены Python, SQL и REST, но только удалённый формат."}
+{"pair_id":"7982eb5e222d","label":1,"rationale":"Senior/Lead с сильными Python, SQL и REST, но ожидания существенно выше вилки и только удалённо."}
+{"pair_id":"ddc7e37ba7f2","label":0,"rationale":"Junior без Python в тесте и стеке; отсутствуют ключевые требования Python и HTTP/REST."}
+{"pair_id":"35ed7c386d3b","label":1,"rationale":"Middle с Python, SQL и REST, но доступен только офис и PostgreSQL не указан."}
+{"pair_id":"25af602dcd58","label":2,"rationale":"Middle с подтверждёнными Python, SQL и REST, опытом Kafka; условия совместимы, PostgreSQL не указан."}
+{"pair_id":"7466a55614fa","label":1,"rationale":"Middle с Python и SQL, но только офисный формат; нет подтверждённых HTTP и REST."}
+{"pair_id":"cb3568be57ce","label":2,"rationale":"Middle с Python, FastAPI и asyncio; ожидания и гибрид подходят, но HTTP, REST и PostgreSQL не подтверждены."}
+{"pair_id":"112aeb9b69c3","label":1,"rationale":"Middle по грейду, но всего 0,5 года опыта и только удалённый формат."}
+{"pair_id":"67e68e6bbc53","label":1,"rationale":"Junior без Python в тесте и стеке; есть PostgreSQL, но уровень и ключевой навык не подходят."}
+{"pair_id":"ddb810961d2b","label":1,"rationale":"Грейд Junior; подтверждены Python и SQL, но нет HTTP, REST, PostgreSQL и опыта уровня Middle."}
+{"pair_id":"cea4d4aa74dd","label":1,"rationale":"Senior с подтверждёнными Python, SQL и REST, но ожидания существенно выше максимума вилки."}

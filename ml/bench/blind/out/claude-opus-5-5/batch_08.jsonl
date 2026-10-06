@@ -1,0 +1,99 @@
+{"pair_id": "d005d1a14535", "label": 1, "rationale": "QA Middle, сильный тест, но SQL не показан, ожидания от 250 тыс. выше вилки более чем на 15%."}
+{"pair_id": "a3066456d19c", "label": 1, "rationale": "Senior QA с полным стеком, но ожидания от 340 тыс. намного выше вилки 190 тыс."}
+{"pair_id": "79eceb01c8d7", "label": 0, "rationale": "Backend-разработчик Junior, другая специализация."}
+{"pair_id": "92ca0f8a8180", "label": 2, "rationale": "Сильный Junior QA: HTTP, SQL, тест-дизайн подтверждены, 2.5 года, Postman/pytest; уровень на ступень ниже, вилка подходит."}
+{"pair_id": "45f5c9d9094b", "label": 1, "rationale": "QA Middle, ключевые навыки подтверждены, но ожидания от 280 тыс. сильно выше вилки."}
+{"pair_id": "e31a7c7c0113", "label": 2, "rationale": "QA Middle, Git/HTTP/SQL/Python подтверждены, вилка и гибрид подходят; низкий перцентиль теста, нет Postman/pytest."}
+{"pair_id": "7d76f6a89f1d", "label": 2, "rationale": "Senior QA, все требования подтверждены, ожидания в вилке; уровень выше на ступень, предпочитает офис."}
+{"pair_id": "39ab0e007095", "label": 1, "rationale": "Senior QA, подходит по навыкам, но ожидания от 310 тыс. значительно выше вилки."}
+{"pair_id": "a6800ea4462b", "label": 1, "rationale": "QA Middle, но все навыки по тесту лишь частично, 3-й перцентиль; условия подходят."}
+{"pair_id": "ba9df220824b", "label": 1, "rationale": "Junior QA с 1.3 года опыта при требовании от 2 лет; навыки подтверждены, но уровень ниже."}
+{"pair_id": "1ac087aca659", "label": 1, "rationale": "Junior QA, опыт 0.6 года, SQL не показан; уровень ниже требуемого."}
+{"pair_id": "671c0949a682", "label": 1, "rationale": "QA Middle, навыки подтверждены, но ожидания от 280 тыс. сильно выше вилки, гибрид не указан."}
+{"pair_id": "256b0bff4ed5", "label": 2, "rationale": "QA Middle, HTTP и тест-дизайн подтверждены, Postman/pytest; SQL не показан, условия подходят."}
+{"pair_id": "c2aa4ad6bbf5", "label": 1, "rationale": "QA Middle, всё подтверждено, но только удалёнка при гибриде в Томске, низкий перцентиль, давняя активность."}
+{"pair_id": "c8b4c7db217c", "label": 1, "rationale": "Senior QA с сильным тестом, но ожидания от 220 тыс. выше вилки более чем на 15%."}
+{"pair_id": "8695318a0dbb", "label": 1, "rationale": "QA Middle, HTTP/SQL подтверждены, но ожидания от 220 тыс. выше вилки >15%, гибрид не указан."}
+{"pair_id": "b4159817b253", "label": 1, "rationale": "Junior QA, 7-й перцентиль, SQL и тест-дизайн подтверждены лишь частично."}
+{"pair_id": "8ebe77b8df60", "label": 1, "rationale": "Senior QA с хорошим тестом, но ожидания от 220 тыс. выше вилки более чем на 15%."}
+{"pair_id": "564d2f83566f", "label": 1, "rationale": "Senior/Lead QA, ожидания от 280 тыс. сильно выше вилки, гибрид не указан."}
+{"pair_id": "e4992adbbc88", "label": 1, "rationale": "Junior QA, SQL не показан, ожидания от 220 тыс. выше вилки, гибрид не указан."}
+{"pair_id": "205eb169d167", "label": 3, "rationale": "QA Middle, HTTP/SQL/тест-дизайн подтверждены, Postman, pytest, JMeter, Allure; ожидания в вилке, готов к офису."}
+{"pair_id": "2816379302f2", "label": 1, "rationale": "Сильный QA Middle, но ожидания от 350 тыс. почти вдвое выше вилки."}
+{"pair_id": "f7915495ac6a", "label": 1, "rationale": "Senior/Lead QA, ожидания от 350 тыс. значительно выше вилки."}
+{"pair_id": "05eee1e00fc5", "label": 1, "rationale": "Senior QA, HTTP и SQL частично, ожидания от 310 тыс. сильно выше вилки."}
+{"pair_id": "a278c63fabed", "label": 1, "rationale": "QA Middle, SQL подтверждён, но HTTP частично, 12-й перцентиль, нет Postman/pytest."}
+{"pair_id": "3165c3891f36", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "dc72b7e18086", "label": 2, "rationale": "Junior QA с 100-м перцентилем, 2.5 года, Postman/pytest; SQL не показан, условия подходят."}
+{"pair_id": "370309337c31", "label": 3, "rationale": "QA Middle, HTTP/SQL/тест-дизайн подтверждены, полный стек, ожидания на верхней границе вилки, гибрид."}
+{"pair_id": "13a1f65faf8a", "label": 2, "rationale": "QA Middle, HTTP и тест-дизайн подтверждены, Postman/pytest; SQL не показан, условия подходят."}
+{"pair_id": "ea6f2f36671c", "label": 1, "rationale": "Senior QA, ожидания от 320 тыс. значительно выше вилки."}
+{"pair_id": "4fdfc66ffebf", "label": 1, "rationale": "Junior QA со средним тестом, SQL не показан; уровень ниже, условия подходят."}
+{"pair_id": "14ac62468ade", "label": 2, "rationale": "QA Middle, 85-й перцентиль, HTTP и тест-дизайн подтверждены; SQL не показан, вилка подходит."}
+{"pair_id": "77d5977ec770", "label": 1, "rationale": "Junior QA с 1.7 года опыта при требовании от 2 лет; навыки подтверждены."}
+{"pair_id": "89496b77e63c", "label": 2, "rationale": "QA Middle, 88-й перцентиль, Postman/pytest; SQL не показан, вилка и гибрид подходят."}
+{"pair_id": "9ab353b73211", "label": 3, "rationale": "QA Middle, HTTP/SQL/тест-дизайн подтверждены, Postman, pytest, JMeter, Allure; вилка и гибрид подходят."}
+{"pair_id": "11bb892a6cb5", "label": 1, "rationale": "Junior QA, опыт 1.9 года, SQL не показан; уровень ниже."}
+{"pair_id": "5762b7863278", "label": 1, "rationale": "Junior QA, опыт 1.4 года при требовании от 2 лет."}
+{"pair_id": "262f15c89ac6", "label": 1, "rationale": "Senior QA, ожидания от 270 тыс. значительно выше вилки."}
+{"pair_id": "a457fd534604", "label": 2, "rationale": "Сильный Junior QA, 2.9 года, Postman/pytest; SQL не показан, вилка и гибрид подходят."}
+{"pair_id": "28ef6ad1537c", "label": 2, "rationale": "QA Middle, 94-й перцентиль, Postman/pytest; SQL не показан, условия подходят."}
+{"pair_id": "8050bbd86aa6", "label": 1, "rationale": "Junior QA, опыт 0.9 года; уровень ниже требуемого."}
+{"pair_id": "e4ad55f0f7e2", "label": 1, "rationale": "Junior QA, опыт 0.6 года, 13-й перцентиль."}
+{"pair_id": "3b93e22c5209", "label": 2, "rationale": "QA Middle, HTTP/SQL подтверждены, полный стек; ожидания немного выше вилки, только офис."}
+{"pair_id": "3aebadb6f037", "label": 1, "rationale": "Junior QA, опыт 1.9 года, SQL не показан."}
+{"pair_id": "6ef60f1b20ab", "label": 3, "rationale": "QA Middle, Git/HTTP/SQL/Python подтверждены, Postman/pytest, 3.9 года; вилка и гибрид подходят."}
+{"pair_id": "3ec1af2b33eb", "label": 1, "rationale": "QA Middle, навыки подтверждены, но ожидания от 310 тыс. сильно выше вилки."}
+{"pair_id": "39c4c1869700", "label": 2, "rationale": "QA Middle, все требования подтверждены, вилка подходит; 15-й перцентиль, гибрид не указан."}
+{"pair_id": "c0d8217fa6af", "label": 1, "rationale": "Junior QA, опыт 0.8 года при требовании от 2 лет."}
+{"pair_id": "34342677852f", "label": 0, "rationale": "Junior QA, опыт 0.1 года, 2-й перцентиль, ключевые навыки лишь частично."}
+{"pair_id": "9d141ea62494", "label": 1, "rationale": "Senior/Lead QA, ожидания от 290 тыс. значительно выше вилки."}
+{"pair_id": "36cccdebc855", "label": 0, "rationale": "Системный аналитик, другая специализация, слабый тест."}
+{"pair_id": "619aec2c509e", "label": 2, "rationale": "DS Middle, pandas и Python подтверждены; нет dbt и Jupyter, ожидания немного выше вилки."}
+{"pair_id": "a467fb9ec5a9", "label": 1, "rationale": "Senior DS, ожидания от 390 тыс. значительно выше вилки, гибрид не указан."}
+{"pair_id": "6b57d9605b2b", "label": 3, "rationale": "DS Middle, pandas/Python подтверждены, Jupyter и dbt в стеке; вилка и гибрид подходят."}
+{"pair_id": "6e7fd38c8797", "label": 1, "rationale": "Senior DS, ожидания от 400 тыс. значительно выше вилки, давняя активность."}
+{"pair_id": "fe98fb39b630", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены, Jupyter; нет dbt, условия подходят."}
+{"pair_id": "788fb97fb811", "label": 2, "rationale": "DS Middle, 100-й перцентиль, pandas подтверждён; нет Jupyter и dbt, ожидания на верхней границе."}
+{"pair_id": "b52c9e103bc5", "label": 1, "rationale": "Senior DS, ожидания от 340 тыс. значительно выше вилки."}
+{"pair_id": "5230bad44f8d", "label": 0, "rationale": "Junior DS, все навыки частично, 8-й перцентиль, только удалёнка."}
+{"pair_id": "77d091ffd8f4", "label": 1, "rationale": "Senior/Lead DS, ожидания от 440 тыс. значительно выше вилки."}
+{"pair_id": "971466e79797", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены; нет Jupyter и dbt, вилка и гибрид подходят."}
+{"pair_id": "8838c4441010", "label": 1, "rationale": "Junior DS, все навыки частично, 4-й перцентиль; dbt и pandas заявлены."}
+{"pair_id": "c7634f5455a3", "label": 1, "rationale": "DS Middle, сильный тест, pandas и Jupyter; нет dbt, только удалёнка при гибриде."}
+{"pair_id": "2f3688e1a3bb", "label": 1, "rationale": "DS Middle, Python подтверждён, но pandas, Jupyter и dbt не показаны."}
+{"pair_id": "6c960ba072be", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены; нет Jupyter и dbt, вилка подходит, готов к офису."}
+{"pair_id": "43f8b57b70df", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены, ожидания ниже вилки; нет Jupyter и dbt, малый опыт."}
+{"pair_id": "fa31a4e0b3cb", "label": 1, "rationale": "Senior DS, Python частично, ожидания от 410 тыс. значительно выше вилки."}
+{"pair_id": "20d153ee7d94", "label": 1, "rationale": "Senior/Lead DS, ожидания от 360 тыс. значительно выше вилки."}
+{"pair_id": "0a992c503fde", "label": 3, "rationale": "DS Middle, Python подтверждён, Jupyter и dbt в стеке, 84-й перцентиль; вилка и гибрид подходят."}
+{"pair_id": "b97bf13338b1", "label": 1, "rationale": "DS Middle с подходящим стеком, но ожидания от 410 тыс. значительно выше вилки."}
+{"pair_id": "9c5a883fa087", "label": 1, "rationale": "DS Middle, pandas/Python подтверждены, но ожидания от 290 тыс. выше вилки >15%."}
+{"pair_id": "0ac42c851ad6", "label": 1, "rationale": "DS Middle, Python подтверждён, но нет pandas, Jupyter, dbt; ожидания выше вилки."}
+{"pair_id": "3dc0a64ace5a", "label": 1, "rationale": "DS Middle со стеком Jupyter/dbt, но 18-й перцентиль и ожидания от 310 тыс. выше вилки."}
+{"pair_id": "2dcb7d385b46", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены, Jupyter; нет dbt, ожидания немного выше вилки."}
+{"pair_id": "e422918ecaa6", "label": 0, "rationale": "QA-инженер, другая специализация."}
+{"pair_id": "3c9e4cbff4cf", "label": 1, "rationale": "Senior DS, ожидания от 390 тыс. значительно выше вилки."}
+{"pair_id": "761ce42155a3", "label": 1, "rationale": "DS Middle, 6-й перцентиль, dbt и pandas в стеке; ожидания выше вилки, нет Jupyter."}
+{"pair_id": "908438ec8aeb", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены; нет Jupyter и dbt, вилка и гибрид подходят."}
+{"pair_id": "d724b32e858b", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены, Jupyter; нет dbt, предпочитает офис."}
+{"pair_id": "1da4ae34c66b", "label": 1, "rationale": "DS Middle, pandas и Python частично, 8-й перцентиль, нет Jupyter и dbt."}
+{"pair_id": "11eb034d7468", "label": 1, "rationale": "Junior DS, pandas подтверждён, dbt и Python в стеке; уровень ниже, Python не проверен."}
+{"pair_id": "79fe6297f115", "label": 1, "rationale": "Senior DS, ожидания от 340 тыс. значительно выше вилки, только офис."}
+{"pair_id": "8ef585c48933", "label": 1, "rationale": "DS Middle, Python подтверждён, Jupyter; нет pandas и dbt, только удалёнка."}
+{"pair_id": "be9b4cc755e3", "label": 3, "rationale": "DS Middle, pandas/Python подтверждены, dbt в стеке; вилка и гибрид подходят."}
+{"pair_id": "6331f7e4805a", "label": 1, "rationale": "Senior/Lead DS, ожидания от 410 тыс. значительно выше вилки."}
+{"pair_id": "79ec0b3b3488", "label": 1, "rationale": "Senior/Lead DS, ожидания от 560 тыс. более чем вдвое выше вилки, только офис."}
+{"pair_id": "5258cc92106d", "label": 1, "rationale": "Senior/Lead DS, ожидания от 390 тыс. значительно выше вилки."}
+{"pair_id": "fc6cae419f47", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены, Jupyter; нет dbt, ожидания немного выше вилки."}
+{"pair_id": "a4dffe719c6f", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены; нет Jupyter и dbt, вилка и гибрид подходят."}
+{"pair_id": "8f9ccfeff467", "label": 1, "rationale": "Сильный Junior DS, но Python, Jupyter, dbt не показаны, ожидания выше вилки."}
+{"pair_id": "26428f1fc8b2", "label": 1, "rationale": "Senior DS, ожидания от 340 тыс. выше вилки, только удалёнка."}
+{"pair_id": "22d8ccaf8489", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены; нет Jupyter и dbt, условия подходят."}
+{"pair_id": "3b7c01c0b928", "label": 2, "rationale": "DS Middle, pandas/Python подтверждены, Jupyter; нет dbt, вилка и гибрид подходят."}
+{"pair_id": "269d02635978", "label": 1, "rationale": "DS Middle, 14-й перцентиль, нет Jupyter и dbt, только удалёнка."}
+{"pair_id": "0bed917781bb", "label": 1, "rationale": "DS Middle, dbt в стеке, но Python, pandas, Jupyter не показаны."}
+{"pair_id": "f1fa397325c4", "label": 1, "rationale": "Junior DS, pandas подтверждён; Python, Jupyter, dbt не показаны, уровень ниже."}
+{"pair_id": "28cf2cfb7f92", "label": 1, "rationale": "DS Middle, pandas/Python и Jupyter есть, но 4-й перцентиль, статистика не подтверждена, нет dbt."}
+{"pair_id": "9617828105d7", "label": 1, "rationale": "DS Middle, сильный тест, pandas в стеке; Python, Jupyter, dbt не показаны."}
+{"pair_id": "85bcbf70bce5", "label": 1, "rationale": "DS Middle с подходящим стеком, но ожидания от 440 тыс. значительно выше вилки."}

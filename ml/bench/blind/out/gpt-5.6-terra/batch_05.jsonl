@@ -1,0 +1,52 @@
+{"pair_id":"e7409c42cc77","label":1,"rationale":"Senior и офис подходят, SQL подтверждён; NLP отсутствует, pandas подтверждён лишь частично, scikit-learn только заявлен."}
+{"pair_id":"8c68151cc4c4","label":1,"rationale":"Профиль ML и стек близки, но уровень Middle и доступен только гибридный формат вместо офиса."}
+{"pair_id":"c6b99569fd3a","label":1,"rationale":"Senior, pandas и SQL подтверждены, scikit-learn заявлен; не указан NLP и офисный формат не подходит."}
+{"pair_id":"4e9b3423b0d1","label":1,"rationale":"Senior и офис подходят, SQL подтверждён, NLP заявлен; pandas частичный, scikit-learn не указан."}
+{"pair_id":"b75746623262","label":1,"rationale":"Middle на ступень ниже; SQL, NLP и scikit-learn есть, но pandas не указан."}
+{"pair_id":"00f2561c0544","label":1,"rationale":"Сильный Lead-профиль и навыки, но ожидания существенно выше вилки и нет офиса."}
+{"pair_id":"557e0b61d0cb","label":1,"rationale":"ML-стек близок, SQL подтверждён, но Middle и только гибридный формат не подходят офисной вакансии."}
+{"pair_id":"453d77de0339","label":2,"rationale":"Опыт и резюме Senior, заявлены pandas, NLP, SQL и scikit-learn; грейд платформы Middle, SQL не подтверждён."}
+{"pair_id":"d6fd8a49a7e9","label":1,"rationale":"Senior, SQL и NLP есть, офис возможен; pandas частичный и scikit-learn не указан, ожидания на верхней границе."}
+{"pair_id":"4c9223471c1f","label":1,"rationale":"Senior, pandas и SQL подтверждены, NLP заявлен; scikit-learn отсутствует и кандидат не выбирает офис."}
+{"pair_id":"5608f3d4f09e","label":1,"rationale":"Сильный Senior-профиль с pandas и NLP, но SQL не подтверждён, scikit-learn отсутствует, ожидания выше вилки."}
+{"pair_id":"c4f3dbf3ec3f","label":1,"rationale":"Все базовые навыки подтверждены, NLP и scikit-learn заявлены; Middle и гибридный формат не подходят."}
+{"pair_id":"bb5ab29e1111","label":1,"rationale":"Требуемые навыки подтверждены или заявлены, но грейд Middle и нет офисного формата."}
+{"pair_id":"5ab3722c241a","label":1,"rationale":"Есть SQL, pandas и scikit-learn, но Middle, нет офиса и ожидания заметно выше вилки."}
+{"pair_id":"d783f18f84a3","label":1,"rationale":"Senior, офис и базовые навыки подтверждены; NLP и scikit-learn не указаны."}
+{"pair_id":"867433c01ed8","label":0,"rationale":"Другая специализация: backend-разработка вместо Data Science / ML."}
+{"pair_id":"c0acbb854e5e","label":1,"rationale":"Базовые навыки подтверждены, но Middle, отсутствуют NLP и scikit-learn, офиса нет."}
+{"pair_id":"3ae50c2a6ba2","label":1,"rationale":"Есть scikit-learn и офисный формат, но Middle, NLP отсутствует, статистика подтверждена лишь частично."}
+{"pair_id":"cf92afd94dd6","label":1,"rationale":"Senior и офис подходят, NLP заявлен; ключевые ML, pandas, Python и SQL подтверждены только частично, scikit-learn отсутствует."}
+{"pair_id":"ce7e5ecf0bec","label":2,"rationale":"Резюме Senior, SQL, NLP и scikit-learn есть; Middle по тесту и pandas не указаны."}
+{"pair_id":"5308dea663f6","label":1,"rationale":"Есть SQL, NLP и офис, но Middle, слабые результаты по pandas и Python, scikit-learn отсутствует."}
+{"pair_id":"9832a26d37ad","label":2,"rationale":"Все базовые навыки подтверждены, NLP и scikit-learn заявлены, офис возможен; уровень Middle на ступень ниже."}
+{"pair_id":"b50b4d367a61","label":1,"rationale":"Senior с сильными базовыми навыками, NLP и scikit-learn; нет офисного формата, ожидания близки к пределу вилки."}
+{"pair_id":"0952c2ed79ba","label":1,"rationale":"Senior, pandas и SQL подтверждены, но NLP и scikit-learn отсутствуют, доступен только гибрид."}
+{"pair_id":"731359df15e4","label":1,"rationale":"Senior и офис подходят, SQL подтверждён; pandas и NLP заявлены, scikit-learn отсутствует."}
+{"pair_id":"ecc9a09ce4e4","label":2,"rationale":"Резюме Senior, NLP, pandas и scikit-learn заявлены, офис возможен; грейд платформы Middle."}
+{"pair_id":"bbc371514719","label":1,"rationale":"Senior с сильным тестом и pandas, NLP заявлен; SQL и scikit-learn отсутствуют, ожидания выше вилки."}
+{"pair_id":"7382a9a66059","label":1,"rationale":"Senior и базовые навыки подтверждены, но NLP и scikit-learn не указаны, ожидания существенно выше вилки."}
+{"pair_id":"334c3e29d129","label":1,"rationale":"Senior и полный требуемый стек, но кандидат выбирает только удалённую работу вместо офиса."}
+{"pair_id":"322b87147553","label":1,"rationale":"Резюме Senior, NLP и scikit-learn заявлены, но грейд Middle и офисный формат недоступен."}
+{"pair_id":"b2854e9d49b8","label":1,"rationale":"Lead на ступень выше, SQL и scikit-learn есть, но нет NLP, ожидания значительно выше вилки и офиса нет."}
+{"pair_id":"e4ba0bbe5bdc","label":1,"rationale":"Senior, NLP и scikit-learn заявлены, но SQL не подтверждён и нет офисного формата."}
+{"pair_id":"5d034e73bbf5","label":1,"rationale":"Lead с подтверждённой базой, но отсутствуют NLP и scikit-learn, ожидания значительно выше вилки."}
+{"pair_id":"e60844ea9ff9","label":0,"rationale":"Другая специализация: backend-разработка вместо Data Science / ML."}
+{"pair_id":"cb2f78119745","label":1,"rationale":"Базовые навыки и scikit-learn есть, но Middle, NLP отсутствует и профиль заявлен только для офиса/гибрида."}
+{"pair_id":"68a912ff0658","label":1,"rationale":"Lead, NLP и базовые навыки сильные, но scikit-learn отсутствует и кандидат выбирает только удалённый формат."}
+{"pair_id":"dc369c3a1e2d","label":1,"rationale":"Middle при Senior-вакансии; SQL подтверждён, но pandas, NLP и scikit-learn не указаны."}
+{"pair_id":"84f07e7ad262","label":2,"rationale":"Резюме Senior, полный требуемый стек и офис есть; грейд платформы Middle и ожидания немного выше вилки."}
+{"pair_id":"1ecd7b690259","label":1,"rationale":"Middle, офис и NLP подходят, SQL подтверждён; pandas и scikit-learn отсутствуют."}
+{"pair_id":"113b9e214ed3","label":2,"rationale":"Senior на ступень ниже, но есть сбор требований, продуктовый анализ и UML, формат гибридный; отсутствует Excel."}
+{"pair_id":"ac9a2248d0cb","label":0,"rationale":"Другая специализация и Junior/Intern вместо Lead-аналитика."}
+{"pair_id":"450d55571f87","label":1,"rationale":"Senior, Excel, UML и продуктовый анализ есть, но сбор требований не указан; уровень на ступень ниже."}
+{"pair_id":"f9d4a1900d6d","label":1,"rationale":"Lead в резюме и гибрид подходят, но из обязательных указан только UML; нет сбора требований, продуктового анализа и Excel."}
+{"pair_id":"fc7bdb1bcf08","label":1,"rationale":"Есть сбор требований и продуктовый анализ, но нет UML и Excel, а гибридный формат недоступен."}
+{"pair_id":"35597a7ad8c7","label":2,"rationale":"Все обязательные навыки заявлены, гибрид доступен; Senior на ступень ниже и тестовые результаты по аналитическим навыкам частичные."}
+{"pair_id":"bfcdd926dca2","label":2,"rationale":"Резюме Lead, есть сбор требований, продуктовый анализ и UML, формат гибридный; не указан Excel."}
+{"pair_id":"4aee03117f61","label":2,"rationale":"Резюме Lead, заявлены все обязательные навыки и гибридный формат; категория Senior на ступень ниже."}
+{"pair_id":"db0866d671a0","label":2,"rationale":"Резюме Lead, сбор требований, продуктовый анализ, UML и Excel заявлены; гибрид и вилка совместимы."}
+{"pair_id":"c99d6a33a1a1","label":0,"rationale":"Другая специализация: Frontend-разработка вместо системного / бизнес-анализа."}
+{"pair_id":"da5d05d590d3","label":1,"rationale":"Резюме Lead, сбор требований и продуктовый анализ есть, но отсутствуют UML и Excel, доступна только удалёнка."}
+{"pair_id":"7d1adf659af7","label":1,"rationale":"Резюме Lead и почти полный стек, но гибрид не подходит и ожидания выше верхней границы вилки."}
+{"pair_id":"118221ad3f33","label":3,"rationale":"Резюме Lead, все обязательные навыки заявлены, формат гибридный и ожидания покрываются вилкой."}

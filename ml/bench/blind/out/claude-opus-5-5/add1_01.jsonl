@@ -1,0 +1,49 @@
+{"pair_id": "cd3bf4dd149c", "label": 2, "rationale": "Middle-мобильщик, Kotlin и Android в стеке, мобильные платформы подтверждены; ожидания 310 тыс. немного выше вилки."}
+{"pair_id": "1287a03e396a", "label": 1, "rationale": "Junior, есть Compose, Swift, Android, нет React Native; ожидания 190 тыс. выше вилки более чем на 15%."}
+{"pair_id": "422226580638", "label": 2, "rationale": "Сильный Senior, REST и SQL подтверждены; FastAPI и MS SQL нет, но есть близкие Flask/Django и Oracle; вилка подходит."}
+{"pair_id": "6c3a3ae81ac3", "label": 2, "rationale": "Junior, CSS подтверждён, Tailwind и Svelte в стеке, нет Next.js; слабый тест; условия подходят."}
+{"pair_id": "4f0d6e7b895c", "label": 3, "rationale": "Junior, CSS и React подтверждены, Next.js и Tailwind в стеке, нет Svelte; вилка и гибрид подходят, активно ищет."}
+{"pair_id": "414b0ca9a7ea", "label": 1, "rationale": "Svelte, Tailwind, CSS есть, нет Next.js; ожидания 150 тыс. выше вилки более чем на 15%."}
+{"pair_id": "0b93c03c3da9", "label": 2, "rationale": "Грейд на ступень выше, но опыт малый; pandas подтверждён, Spark и scikit-learn в стеке; вилка подходит."}
+{"pair_id": "05bb044467d9", "label": 1, "rationale": "Middle, нет scikit-learn и Spark; ожидания 180 тыс. сильно выше вилки 140 тыс."}
+{"pair_id": "23c19e5d4bbf", "label": 1, "rationale": "Junior, pandas и статистика подтверждены, Spark есть; ожидания 170 тыс. выше вилки более чем на 15%."}
+{"pair_id": "19768b302aeb", "label": 2, "rationale": "Middle backend, SQL и HTTP подтверждены, FastAPI, PostgreSQL, gRPC в стеке; Python тестом не проверен; условия подходят."}
+{"pair_id": "53f1f82d4887", "label": 1, "rationale": "Python и SQL подтверждены, FastAPI есть, но опыт 1.1 года при требовании от 2 лет, нет PostgreSQL."}
+{"pair_id": "748b26fa163b", "label": 0, "rationale": "Есть только Django и Spring из шести обязательных; ожидания 310 тыс. значительно выше вилки 240 тыс."}
+{"pair_id": "94877525b9c0", "label": 1, "rationale": "Есть Django и Scala, нет Spring, Rust, Flask, Microservices; вилка и формат подходят."}
+{"pair_id": "9f272996e7a5", "label": 1, "rationale": "Есть Django и Rust, нет Scala, Spring, Flask, Microservices; ожидания чуть выше вилки."}
+{"pair_id": "401c2247b6bf", "label": 3, "rationale": "Middle DevOps, CI/CD и shell подтверждены, AWS и Bash в стеке, нет Yandex Cloud; вилка и удалёнка подходят."}
+{"pair_id": "93fe4f0f9606", "label": 1, "rationale": "Yandex Cloud и CI/CD есть, нет AWS; только гибрид при удалённой вакансии, ожидания выше вилки."}
+{"pair_id": "d08741387621", "label": 2, "rationale": "Весь обязательный стек заявлен, TypeScript подтверждён; слабый тест, офис не указан в формате; вилка подходит."}
+{"pair_id": "784b9f7ea509", "label": 2, "rationale": "Все обязательные навыки есть, CSS и TS подтверждены, офис подходит; ожидания 280 тыс. немного выше вилки."}
+{"pair_id": "c833e9103db0", "label": 1, "rationale": "MySQL и RabbitMQ есть, нет DDD и System design, архитектура подтверждена лишь частично; слабый тест."}
+{"pair_id": "4669bcd16113", "label": 2, "rationale": "Сильный Middle DS, Python подтверждён, нет R; вилка и гибрид подходят."}
+{"pair_id": "260ca839719f", "label": 2, "rationale": "Middle DS, Python в стеке, ML и статистика подтверждены, нет R; условия подходят."}
+{"pair_id": "d297daec43d5", "label": 2, "rationale": "Senior, Spring и Gin (Go) в стеке, Python подтверждён; нет FastAPI и Redis; вилка подходит."}
+{"pair_id": "9a5d7188d149", "label": 1, "rationale": "Spring, Redis, Gin есть, нет FastAPI; ожидания 450 тыс. сильно выше вилки 390 тыс."}
+{"pair_id": "794b119c1074", "label": 1, "rationale": "Django и Celery есть, нет Java и Go; ожидания 280 тыс. выше вилки."}
+{"pair_id": "31c4efa290e0", "label": 2, "rationale": "Redux и Vue есть, нет Svelte; ожидания 240 тыс. немного выше вилки; удалёнка подходит."}
+{"pair_id": "466eeebacf8e", "label": 3, "rationale": "Junior, Node.js, DDD, aiohttp, JavaScript подтверждён; нет Rust; вилка и удалёнка подходят, ищет работу."}
+{"pair_id": "6355ba929d66", "label": 1, "rationale": "Middle вместо Junior, asyncio и DDD есть, нет Rust; ожидания 170 тыс. выше вилки более чем на 15%."}
+{"pair_id": "1e31daf873ae", "label": 2, "rationale": "Junior, DDD, aiohttp, Express есть, нет Rust; вилка и формат подходят."}
+{"pair_id": "8425b1538b40", "label": 2, "rationale": "Junior, Node.js, DDD, aiohttp есть, нет Rust; слабый тест, JS частично; условия подходят."}
+{"pair_id": "a32af630c54d", "label": 3, "rationale": "Middle DevOps, Kubernetes и CI/CD подтверждены, GitLab CI близок к GitHub Actions; вилка и удалёнка подходят."}
+{"pair_id": "da6d0ba3bf7d", "label": 1, "rationale": "Kubernetes и GitLab CI есть, но только гибрид при удалённой вакансии и ожидания выше вилки."}
+{"pair_id": "4b4fdb63ccab", "label": 1, "rationale": "Стажёр без опыта, ELK и SRE есть, shell подтверждён; нет Kubernetes и Nginx."}
+{"pair_id": "2290f82636f1", "label": 1, "rationale": "Junior, Kubernetes лишь частично, SRE и shell есть; нет Nginx и ELK; условия подходят."}
+{"pair_id": "1fe59ffc6d02", "label": 1, "rationale": "Есть только Python; нет Jupyter, dbt, pandas; вилка и формат подходят."}
+{"pair_id": "e614b9a6c4c2", "label": 2, "rationale": "CSS, JS подтверждены, Next.js и Storybook есть; нет MobX и Svelte; ожидания чуть выше вилки."}
+{"pair_id": "e36a8c611720", "label": 1, "rationale": "CSS, JS, Storybook есть, нет MobX, Next.js, Svelte; ожидания 240 тыс. заметно выше вилки."}
+{"pair_id": "0db64da91e28", "label": 0, "rationale": "Есть лишь SRE и Terraform, нет ArgoCD, Ansible, ELK; только удалёнка при офисной вакансии."}
+{"pair_id": "945da4b1b04f", "label": 1, "rationale": "ArgoCD, ELK, SRE, Terraform есть; ожидания 320 тыс. сильно выше вилки, гибрид вместо офиса."}
+{"pair_id": "bac1ebd2ea41", "label": 1, "rationale": "ArgoCD, Ansible, SRE есть, нет ELK и Terraform; офис не в формате, ожидания выше вилки."}
+{"pair_id": "133449593f39", "label": 2, "rationale": "Сильный Junior QA, нет Selenium, но есть Playwright; вилка на границе, удалёнка подходит."}
+{"pair_id": "baf2a511c1c6", "label": 3, "rationale": "Junior QA, Selenium, автотесты, JMeter в стеке, тест-дизайн подтверждён; вилка и удалёнка подходят."}
+{"pair_id": "f4fd9858000c", "label": 1, "rationale": "Сильный аналитик, User Story, UML, SQL есть; ожидания 270 тыс. выше вилки более чем на 15%."}
+{"pair_id": "97f8756be924", "label": 2, "rationale": "Middle аналитик, UML, User Story, SQL подтверждён, A/B вместо статистики; ожидания немного выше вилки."}
+{"pair_id": "ea9722ee5d93", "label": 1, "rationale": "Профиль отлично подходит, SQL и метрики подтверждены; ожидания 310 тыс. выше вилки 260 тыс. более чем на 15%."}
+{"pair_id": "9ac2581ec242", "label": 1, "rationale": "Senior вместо Middle, стек подходит, но Python и HTTP частично; ожидания 220 тыс. выше вилки более чем на 15%."}
+{"pair_id": "c4221ff52387", "label": 1, "rationale": "Junior, Cassandra и Elasticsearch есть, нет OAuth 2.0 и Spring; вилка подходит."}
+{"pair_id": "5d77baccb073", "label": 0, "rationale": "Middle вместо Junior, есть только Cassandra, нет OAuth и Spring; ожидания выше вилки на 21%."}
+{"pair_id": "073d15131750", "label": 1, "rationale": "pandas и SQL подтверждены, нет Computer vision, Airflow, scikit-learn; ожидания выше вилки на 21%."}
+{"pair_id": "2d61575bc9a6", "label": 1, "rationale": "Middle вместо Junior, pandas, SQL, scikit-learn есть, нет CV и Airflow; ожидания 180 тыс. сильно выше вилки."}

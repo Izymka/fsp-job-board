@@ -1,0 +1,30 @@
+{"pair_id": "a2817835241b", "label": 0, "rationale": "Backend Middle совпадает, но нет ни одного обязательного: Java, Go, Django отсутствуют; стек Python/Laravel/Rust."}
+{"pair_id": "432c04e08985", "label": 2, "rationale": "QA Junior совпадает; Selenium нет, но есть близкий Playwright и автотесты; удалёнка и вилка подходят."}
+{"pair_id": "8e491b4df7bf", "label": 2, "rationale": "Грейд Junior при Middle-вакансии, опыт 1.8 года; но сильный тест, SQL/HTTP/тест-дизайн подтверждены, Postman, pytest, Allure, JMeter есть."}
+{"pair_id": "01d714e14588", "label": 2, "rationale": "Frontend Middle; есть Redux и Svelte, нет Vue; TypeScript подтверждён; ожидания ниже вилки, удалёнка подходит."}
+{"pair_id": "19576b664cc0", "label": 0, "rationale": "Junior backend, сильный тест, но из обязательных только DDD; нет asyncio, Node.js, Rust."}
+{"pair_id": "a250cd569760", "label": 1, "rationale": "Junior backend, есть DDD и Node.js; нет asyncio и Rust; вилка и удалёнка совпадают, опыт 0.9 года."}
+{"pair_id": "869ca1eb7a75", "label": 1, "rationale": "DevOps Junior, Kubernetes и shell подтверждены, Bash есть; нет Nginx, ELK, SRE — значимые пробелы."}
+{"pair_id": "74c1176b2f14", "label": 1, "rationale": "Intern при Junior-вакансии; статистика подтверждена, но нет pandas, scikit-learn, Spark (лишь Hadoop)."}
+{"pair_id": "7794324be43f", "label": 2, "rationale": "Intern, но 100-й перцентиль; статистика и pandas подтверждены, ML подтверждено; Spark частично через Hadoop/Scala."}
+{"pair_id": "4ac879870533", "label": 3, "rationale": "Системный аналитик Middle, 2.8 года; BPMN, UML, user stories, ТЗ; SQL, метрики, REST подтверждены; вилка и удалёнка совпадают."}
+{"pair_id": "2175cefe43cf", "label": 2, "rationale": "Аналитик Middle, SQL, метрики, требования подтверждены; BPMN, ТЗ, интеграции есть; нет UML, тест слабоват."}
+{"pair_id": "2addc4f2d0bf", "label": 0, "rationale": "Middle на Senior-вакансию, из обязательных только Go; нет FastAPI, Spring, Redis."}
+{"pair_id": "4e39dedb5fd9", "label": 0, "rationale": "Из шести обязательных есть только Flask; ожидания выше вилки."}
+{"pair_id": "4f9bfddd9296", "label": 0, "rationale": "Нет Scala, Django, Spring, Rust, Flask, Microservices; опыт 1.1 года при Middle."}
+{"pair_id": "cee8e1f2f3ca", "label": 2, "rationale": "Фронтенд, CSS подтверждён, Svelte есть, React близок к Next.js; нет Tailwind; вилка и гибрид подходят."}
+{"pair_id": "7d60ac2ba1cd", "label": 2, "rationale": "Senior backend, REST и Python подтверждены, MySQL близок к MS SQL; нет FastAPI; Elasticsearch плюс; условия совпадают."}
+{"pair_id": "4488950ba9fc", "label": 2, "rationale": "Все обязательные и плюсы в стеке, но Middle 3.7 года на Junior-вакансию; ожидания на верхней границе вилки."}
+{"pair_id": "651842c255ab", "label": 1, "rationale": "Mobile Junior, есть Swift и Android; нет React Native и Jetpack Compose; условия подходят."}
+{"pair_id": "325e3b85d345", "label": 1, "rationale": "Есть iOS и Kotlin; нет React Native, Coroutines, Room; условия подходят."}
+{"pair_id": "07e23508600d", "label": 1, "rationale": "pandas, SQL подтверждены, scikit-learn есть; нет Computer vision и Airflow; грейд Middle, ожидания чуть выше вилки."}
+{"pair_id": "1d88fe3bebd3", "label": 1, "rationale": "Middle на Senior; NLP, SQL есть, ML подтверждено; вакансия офисная, кандидат только гибрид/удалёнка."}
+{"pair_id": "b1ee1b649ad1", "label": 2, "rationale": "Senior, DDD и архитектура подтверждены, MS SQL близок к MySQL; нет RabbitMQ; вилка и гибрид подходят."}
+{"pair_id": "5e713db0a5c7", "label": 2, "rationale": "DS Middle, Python подтверждён, dbt есть; Jupyter и pandas явно не указаны; ожидания на верхней границе вилки."}
+{"pair_id": "ef0ef5c38cdd", "label": 3, "rationale": "Senior 7 лет, React, TypeScript, JS, HTML/CSS, HTTP подтверждены; Storybook, GraphQL есть; нет Redux; вилка и удалёнка совпадают."}
+{"pair_id": "e834442c86de", "label": 1, "rationale": "Навыки подходят и подтверждены, но Middle на Junior-вакансию и ожидания от 180 тыс. выше вилки до 160 тыс."}
+{"pair_id": "c629caa942ad", "label": 2, "rationale": "Python, pandas/NumPy, статистика подтверждены; CatBoost, A/B, Airflow есть; опыт 0.3 года чуть меньше требуемого."}
+{"pair_id": "d00997dbdaab", "label": 1, "rationale": "Python, R, статистика есть; нет TensorFlow и Deep learning — ключевых требований; условия подходят."}
+{"pair_id": "706986cb3418", "label": 3, "rationale": "Аналитик Middle, User Story, статистика, SQL подтверждён, моделирование подтверждено; BPMN, сбор требований плюсы; нет явно UML."}
+{"pair_id": "16bde423bb58", "label": 2, "rationale": "Сильный тест, SQL и User Story есть; нет статистики и UML; ожидания в пределах вилки."}
+{"pair_id": "0de86e51b2d1", "label": 1, "rationale": "SQL подтверждён, но нет User Story, UML, статистики; слабый тест; ожидания ниже вилки."}

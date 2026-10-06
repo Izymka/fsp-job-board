@@ -11,10 +11,16 @@ dependencies = [
     "scikit-learn>=1.5",
     "pdfplumber>=0.11",
     "pandas>=2.2",
+    "httpx>=0.27",
+    "lightgbm>=4.7.0",
 ]
 
 [project.optional-dependencies]
 embeddings = ["sentence-transformers>=3.2"]
+# Бенчмарк подбора: сильные нейросетевые бейзлайны (FRIDA, Qwen3-Embedding, bge-reranker-v2-m3)
+bench = ["sentence-transformers>=3.2"]
+# Калибровка заданий на локальных LLM-респондентах (только Apple Silicon, офлайн)
+calib = ["mlx-lm>=0.28; sys_platform == 'darwin' and platform_machine == 'arm64'"]
 validation = [
     "matplotlib>=3.9",
     "fpdf2>=2.8",

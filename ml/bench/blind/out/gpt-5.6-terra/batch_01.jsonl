@@ -1,0 +1,61 @@
+{"pair_id":"b9f0192ccbe6","label":1,"rationale":"Backend-профиль близок, но отсутствуют OAuth 2.0, Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"41e67e98ce50","label":1,"rationale":"Смежный backend и заявлен Spring, но уровень Intern и не заявлены OAuth 2.0 с Cassandra."}
+{"pair_id":"e78f1935a30c","label":1,"rationale":"Backend-опыт есть, но не заявлены Spring и Cassandra; ожидания существенно выше вилки, формат только офис."}
+{"pair_id":"0f65cde9f0b0","label":1,"rationale":"Уровень и удалённый формат подходят, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"00ae7e5e287c","label":1,"rationale":"Backend Junior, но обязательные OAuth 2.0, Spring и Cassandra не заявлены."}
+{"pair_id":"8c8354987b05","label":1,"rationale":"Заявлены Cassandra и OAuth 2.0, но нет Spring; ожидания выше вилки и указан только гибрид."}
+{"pair_id":"e633f0c81639","label":2,"rationale":"Backend Junior с Cassandra и Spring; не заявлен OAuth 2.0, но зарплата и удалённый формат совместимы."}
+{"pair_id":"4af468e1884d","label":1,"rationale":"Подходит по направлению и условиям, заявлен OAuth 2.0, но нет Spring и Cassandra."}
+{"pair_id":"0699c3b51084","label":1,"rationale":"Есть Cassandra, но не заявлены OAuth 2.0 и Spring; указан только гибридный формат."}
+{"pair_id":"0b336428df52","label":1,"rationale":"Заявлен OAuth 2.0, но отсутствуют Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"6bb2a34fb6b9","label":1,"rationale":"Заявлены OAuth 2.0 и Spring, но нет Cassandra; ожидания выше вилки и удалённый формат не указан."}
+{"pair_id":"c72d0daf20e7","label":1,"rationale":"Backend-профиль есть, но кандидат Intern, нет обязательных технологий и указан только офис."}
+{"pair_id":"ad9b56edde8b","label":1,"rationale":"Заявлен Spring и удалённый формат, но не заявлены OAuth 2.0 и Cassandra."}
+{"pair_id":"3665fb8b7f17","label":1,"rationale":"Есть OAuth 2.0, но нет Spring и Cassandra; ожидания заметно выше вилки."}
+{"pair_id":"e6c7d67d2b88","label":1,"rationale":"Заявлены Cassandra и OAuth 2.0, но нет Spring; указан только гибридный формат."}
+{"pair_id":"61786269f9a3","label":1,"rationale":"Backend-опыт есть, но не заявлены OAuth 2.0, Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"0cb7b918bc49","label":1,"rationale":"Подходит по уровню и формату, но не заявлены все три обязательные технологии."}
+{"pair_id":"dbb90727e840","label":1,"rationale":"Backend-профиль есть, но OAuth 2.0, Spring и Cassandra не заявлены; ожидания выше вилки."}
+{"pair_id":"a832f2946a3f","label":1,"rationale":"Заявлен Spring, но отсутствуют OAuth 2.0 и Cassandra; ожидания выше вилки."}
+{"pair_id":"ed83cb3eb1d1","label":1,"rationale":"Backend-кандидат, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"575c879c0571","label":1,"rationale":"Заявлены Spring и OAuth 2.0, но нет Cassandra; ожидания выше вилки и формат только офис."}
+{"pair_id":"71a553f5bdfd","label":1,"rationale":"Есть OAuth 2.0, но не заявлены Spring и Cassandra; ожидания выше вилки и формат только офис."}
+{"pair_id":"4f468319021d","label":1,"rationale":"Подходит по направлению, но OAuth 2.0, Spring и Cassandra не заявлены; ожидания выше вилки."}
+{"pair_id":"c24d02587ba3","label":0,"rationale":"Другая специализация: frontend-разработка вместо backend-разработки."}
+{"pair_id":"eeb38218406a","label":1,"rationale":"Backend-опыт есть, но не заявлены OAuth 2.0, Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"be70d0c5a7b0","label":1,"rationale":"Заявлен Spring, но отсутствуют OAuth 2.0 и Cassandra."}
+{"pair_id":"a7e74b2641b4","label":1,"rationale":"Backend Junior, но не заявлены OAuth 2.0, Spring и Cassandra; удалённый формат не указан."}
+{"pair_id":"ccd09e1bee71","label":1,"rationale":"Заявлен Spring, но не заявлены OAuth 2.0 и Cassandra."}
+{"pair_id":"92796ed0a9d1","label":1,"rationale":"Подходит по уровню и удалённому формату, но обязательные OAuth 2.0, Spring и Cassandra не заявлены."}
+{"pair_id":"95c1ac12fa58","label":1,"rationale":"Backend-профиль и удалённый формат есть, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"dd9a85bde0a0","label":1,"rationale":"Backend-опыт есть, но обязательные OAuth 2.0, Spring и Cassandra не заявлены; ожидания выше вилки."}
+{"pair_id":"ef946714dee5","label":1,"rationale":"Подходит по уровню, но не заявлены OAuth 2.0, Spring и Cassandra; указан гибридный формат."}
+{"pair_id":"26272e6d128c","label":1,"rationale":"Заявлен OAuth 2.0, но отсутствуют Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"caa40a47a588","label":1,"rationale":"Backend Junior, но не заявлены OAuth 2.0, Spring и Cassandra; указан только офис."}
+{"pair_id":"99030790c26f","label":1,"rationale":"Backend-профиль есть, но отсутствуют OAuth 2.0, Spring и Cassandra; указан только офис."}
+{"pair_id":"5c27af63373c","label":1,"rationale":"Backend-профиль есть, но обязательные OAuth 2.0, Spring и Cassandra не заявлены."}
+{"pair_id":"15b2652fa184","label":1,"rationale":"Подходит по направлению и уровню, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"87d5a76a0d15","label":0,"rationale":"Уровень Senior отличается от требуемого Junior более чем на ступень; ожидания также выше вилки."}
+{"pair_id":"f9b75b42b1e8","label":1,"rationale":"Backend Junior, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"c4b6f0370277","label":0,"rationale":"Уровень Senior отличается от требуемого Junior более чем на ступень; ожидания выше вилки."}
+{"pair_id":"bc65ffa326c3","label":1,"rationale":"Заявлены Cassandra и OAuth 2.0, но нет Spring; ожидания выше вилки и указан гибрид."}
+{"pair_id":"db785578ac74","label":1,"rationale":"Заявлен Spring, но отсутствуют OAuth 2.0 и Cassandra."}
+{"pair_id":"a953d328ea15","label":1,"rationale":"Заявлены OAuth 2.0 и Spring, но Cassandra не заявлена; ожидания выше вилки."}
+{"pair_id":"5c4b7131cf86","label":1,"rationale":"Backend Junior, но не заявлены OAuth 2.0, Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"28595936e8a5","label":1,"rationale":"Backend Junior, но обязательные OAuth 2.0, Spring и Cassandra не заявлены."}
+{"pair_id":"257c4f761562","label":0,"rationale":"Другая специализация: frontend-разработка вместо backend-разработки."}
+{"pair_id":"0c971200596e","label":1,"rationale":"Заявлен Spring, но отсутствуют OAuth 2.0 и Cassandra; ожидания выше вилки."}
+{"pair_id":"0554934f2d14","label":1,"rationale":"Заявлена Cassandra, но отсутствуют OAuth 2.0 и Spring."}
+{"pair_id":"f6976c1a3ca3","label":1,"rationale":"Заявлены OAuth 2.0 и Spring, но нет Cassandra; указан только офис."}
+{"pair_id":"ee581be6c36f","label":1,"rationale":"Backend Junior с удалённым форматом, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"b65d37351357","label":1,"rationale":"Backend-опыт есть, но не заявлены OAuth 2.0, Spring и Cassandra; ожидания выше вилки."}
+{"pair_id":"6cef38513e37","label":0,"rationale":"Уровень Senior отличается от Junior более чем на ступень; ожидания также выше вилки."}
+{"pair_id":"e36f25f5fc4f","label":1,"rationale":"Заявлена Cassandra, но не заявлены OAuth 2.0 и Spring."}
+{"pair_id":"04668d17f125","label":1,"rationale":"Заявлены Cassandra, OAuth 2.0 и Spring, но ожидания существенно выше вилки."}
+{"pair_id":"fadc4f63948b","label":1,"rationale":"Кандидат Intern, но заявлены OAuth 2.0 и Spring; Cassandra не заявлена."}
+{"pair_id":"4538994af7e4","label":1,"rationale":"Заявлена Cassandra, но отсутствуют OAuth 2.0 и Spring."}
+{"pair_id":"1516953975ec","label":0,"rationale":"Уровень Lead отличается от требуемого Junior более чем на ступень; ожидания выше вилки."}
+{"pair_id":"8ee06bad3b24","label":1,"rationale":"Backend-профиль есть, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"ef3dddf942c1","label":1,"rationale":"Кандидат Intern, заявлены OAuth 2.0 и Spring, но нет Cassandra и указан только офис."}
+{"pair_id":"6955b053f836","label":1,"rationale":"Backend Junior, но не заявлены OAuth 2.0, Spring и Cassandra."}
+{"pair_id":"1ec863e76e06","label":1,"rationale":"Кандидат Intern, но обязательные OAuth 2.0, Spring и Cassandra не заявлены."}

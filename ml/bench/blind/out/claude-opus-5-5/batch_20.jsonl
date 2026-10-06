@@ -1,0 +1,100 @@
+{"pair_id": "7ae9ef673e35", "label": 2, "rationale": "DS Junior, статистика подтверждена, pandas в стеке; нет scikit-learn и Spark; вилка и удалёнка подходят."}
+{"pair_id": "db885acbe0bc", "label": 0, "rationale": "Middle, ожидания от 180 тыс. выше вилки более чем на 15%; нет scikit-learn."}
+{"pair_id": "f4063312e4dc", "label": 0, "rationale": "Middle с ожиданиями от 250 тыс., нет scikit-learn и Spark."}
+{"pair_id": "3656e376a9fc", "label": 0, "rationale": "DevOps Intern — другая специализация."}
+{"pair_id": "5616d44dd38f", "label": 1, "rationale": "Intern со слабым тестом, хотя pandas, scikit-learn и Spark в стеке; условия подходят."}
+{"pair_id": "079e68efd3fe", "label": 1, "rationale": "Junior, статистика, pandas, scikit-learn подтверждены/заявлены, но ожидания от 270 тыс. вдвое выше вилки."}
+{"pair_id": "f6685d36623c", "label": 0, "rationale": "Middle, ожидания от 240 тыс., только гибрид при удалённой вакансии."}
+{"pair_id": "8734889e37ec", "label": 1, "rationale": "Junior со слабым тестом, статистика и pandas лишь частично; scikit-learn есть, Spark нет."}
+{"pair_id": "6f4dd0385145", "label": 0, "rationale": "Middle, статистика не подтверждена тестом, ожидания от 230 тыс., удалёнку не рассматривает."}
+{"pair_id": "6d61762f10be", "label": 1, "rationale": "Junior, статистика, pandas, Spark; но формат только офис при удалённой вакансии."}
+{"pair_id": "b6d50bf28515", "label": 1, "rationale": "Junior, все обязательные закрыты, но удалёнку не рассматривает."}
+{"pair_id": "5e0c44857922", "label": 0, "rationale": "Middle, только офис, ожидания от 210 тыс.; нет pandas, scikit-learn, Spark."}
+{"pair_id": "a2f19d1557b3", "label": 0, "rationale": "Middle с ожиданиями от 230 тыс., значительно выше вилки."}
+{"pair_id": "44190d778eed", "label": 1, "rationale": "Junior, статистика и pandas подтверждены, но ожидания от 230 тыс. сильно выше вилки."}
+{"pair_id": "67c22396d21e", "label": 0, "rationale": "Ожидания от 300 тыс. вдвое выше вилки, только гибрид."}
+{"pair_id": "13328ee4cfe1", "label": 0, "rationale": "Middle, только статистика из обязательных, ожидания от 220 тыс."}
+{"pair_id": "37a0a817fd98", "label": 0, "rationale": "Middle, ожидания от 190 тыс. выше вилки более чем на 15%; нет Spark."}
+{"pair_id": "5a9432fb89b6", "label": 0, "rationale": "Middle, ожидания от 210 тыс.; нет scikit-learn и Spark."}
+{"pair_id": "5ddafd02edc2", "label": 2, "rationale": "Intern, но статистика и pandas подтверждены, Spark есть; вилка и удалёнка подходят."}
+{"pair_id": "c4d763c6cfe9", "label": 0, "rationale": "Ожидания от 210 тыс. выше вилки, удалёнку не рассматривает."}
+{"pair_id": "e94adb38ad5b", "label": 1, "rationale": "Junior, все обязательные закрыты, но ожидания от 310 тыс. вдвое выше вилки."}
+{"pair_id": "5e9529c933b6", "label": 0, "rationale": "Intern со слабым тестом, обязательные навыки отсутствуют."}
+{"pair_id": "85c95b0b8797", "label": 0, "rationale": "Middle, ожидания от 220 тыс.; нет pandas и scikit-learn."}
+{"pair_id": "51fd15930fbb", "label": 0, "rationale": "Middle с ожиданиями от 290 тыс., вдвое выше вилки."}
+{"pair_id": "1e0470649335", "label": 0, "rationale": "Middle, ожидания от 170 тыс., только гибрид при удалённой вакансии."}
+{"pair_id": "922e34cbca56", "label": 0, "rationale": "Middle, только статистика из обязательных, ожидания от 230 тыс."}
+{"pair_id": "45e1cadcfed3", "label": 3, "rationale": "Junior, статистика и pandas подтверждены тестом, Spark в стеке; ожидания в вилке, удалёнка."}
+{"pair_id": "e55a1533da69", "label": 0, "rationale": "Intern, только офис при удалённой вакансии; нет scikit-learn и Spark."}
+{"pair_id": "ff9d482662fc", "label": 2, "rationale": "Intern, но все обязательные закрыты, статистика и pandas подтверждены; условия подходят."}
+{"pair_id": "e8b0a88d9072", "label": 0, "rationale": "Middle с ожиданиями от 410 тыс., далеко за вилкой."}
+{"pair_id": "ed72cdca2a09", "label": 2, "rationale": "Junior, статистика и pandas подтверждены; нет scikit-learn и Spark; вилка и удалёнка подходят."}
+{"pair_id": "9c17f9866606", "label": 0, "rationale": "Middle со слабым тестом, ожидания от 270 тыс., только гибрид."}
+{"pair_id": "fd5fce8dae59", "label": 0, "rationale": "Middle, ожидания от 200 тыс. выше вилки более чем на 15%."}
+{"pair_id": "697dd767ddfc", "label": 1, "rationale": "Junior, статистика и pandas в стеке, но тест очень слабый; нет scikit-learn и Spark."}
+{"pair_id": "bd4fbde86d80", "label": 0, "rationale": "Middle с ожиданиями от 440 тыс., далеко за вилкой."}
+{"pair_id": "86d4c34e40c1", "label": 0, "rationale": "Middle, ожидания от 220 тыс., удалёнку не рассматривает."}
+{"pair_id": "b72632f5fd5b", "label": 1, "rationale": "Junior, статистика и Spark, но ожидания от 220 тыс. сильно выше вилки."}
+{"pair_id": "cf22ae625588", "label": 0, "rationale": "Middle, ожидания от 180 тыс., удалёнку не рассматривает."}
+{"pair_id": "7227be4aca95", "label": 0, "rationale": "Middle, только статистика, удалёнку не рассматривает."}
+{"pair_id": "a1082a57c40a", "label": 0, "rationale": "Middle с ожиданиями от 370 тыс., далеко за вилкой."}
+{"pair_id": "834327f09849", "label": 2, "rationale": "Junior, статистика и pandas подтверждены; нет scikit-learn и Spark; вилка и удалёнка подходят."}
+{"pair_id": "5af9f5ea95c4", "label": 1, "rationale": "Junior, все обязательные закрыты, но ожидания от 190 тыс. выше вилки на 36%."}
+{"pair_id": "47dbdcb2b5f1", "label": 0, "rationale": "Middle, ожидания от 240 тыс., только гибрид."}
+{"pair_id": "7dc7a68d70ec", "label": 1, "rationale": "Intern, статистика и pandas подтверждены; нет scikit-learn и Spark."}
+{"pair_id": "8c3b19ed8ec2", "label": 0, "rationale": "Middle с ожиданиями от 310 тыс., слабый тест."}
+{"pair_id": "66e574b1dd92", "label": 1, "rationale": "Junior, тест слабый и частичный; из обязательных только pandas."}
+{"pair_id": "32f05648e131", "label": 0, "rationale": "Middle/Lead с ожиданиями от 280 тыс., вдвое выше вилки."}
+{"pair_id": "d5b881455462", "label": 0, "rationale": "Ожидания от 230 тыс. выше вилки, только гибрид."}
+{"pair_id": "bef6b8704fe3", "label": 0, "rationale": "Backend Senior — другая специализация."}
+{"pair_id": "f971b03e2ffd", "label": 2, "rationale": "Junior с сильным тестом, статистика подтверждена, scikit-learn есть; нет pandas и Spark."}
+{"pair_id": "6918f417983c", "label": 0, "rationale": "Senior с ожиданиями от 500 тыс., далеко за вилкой."}
+{"pair_id": "6dab6a922dc8", "label": 2, "rationale": "DevOps Middle, CI/CD подтверждён, Yandex Cloud есть; нет AWS и Bash; условия подходят."}
+{"pair_id": "004276d00c87", "label": 1, "rationale": "Middle, AWS, Bash, CI/CD, но ожидания от 430 тыс. сильно выше вилки."}
+{"pair_id": "7b95cba68d12", "label": 2, "rationale": "Middle, CI/CD подтверждён, Bash; нет облаков; вилка и удалёнка подходят."}
+{"pair_id": "21ff880ce69b", "label": 0, "rationale": "Senior/Lead с ожиданиями от 420 тыс."}
+{"pair_id": "70bf960e9ca6", "label": 0, "rationale": "Junior, только офис при удалённой вакансии."}
+{"pair_id": "d89776776735", "label": 2, "rationale": "Middle, AWS и CI/CD подтверждён; ожидания в вилке, удалёнка; тест слабоват."}
+{"pair_id": "244df0bdbf59", "label": 0, "rationale": "Junior, удалёнку не рассматривает."}
+{"pair_id": "cc43ad8964c6", "label": 3, "rationale": "Middle, CI/CD подтверждён, Yandex Cloud и Bash; ожидания в вилке, удалёнка."}
+{"pair_id": "26cf64054a40", "label": 3, "rationale": "Middle, AWS, Yandex Cloud, CI/CD подтверждён, сильный тест; вилка и удалёнка подходят."}
+{"pair_id": "f7ee15cbd5a4", "label": 2, "rationale": "Senior, все обязательные закрыты, CI/CD подтверждён; ожидания немного выше вилки."}
+{"pair_id": "8965fdccd68f", "label": 1, "rationale": "Middle, все обязательные в стеке, но ожидания от 370 тыс. выше вилки на 32%."}
+{"pair_id": "c30e8b11c411", "label": 1, "rationale": "Middle, Yandex Cloud, Bash, CI/CD; ожидания от 330 тыс. выше вилки более чем на 15%."}
+{"pair_id": "db5c72b472ef", "label": 3, "rationale": "Middle, AWS, Bash, CI/CD подтверждён; ожидания в вилке, удалёнка."}
+{"pair_id": "4d51431838d8", "label": 1, "rationale": "Junior без опыта, Bash и Yandex Cloud; уровень ниже требуемого."}
+{"pair_id": "c10a61a4e3dd", "label": 1, "rationale": "Middle, AWS, Bash, CI/CD, но удалёнку не рассматривает."}
+{"pair_id": "97bf32b272ab", "label": 2, "rationale": "Middle, Yandex Cloud, CI/CD подтверждён; нет AWS и Bash; условия подходят."}
+{"pair_id": "38ec7bf18d5d", "label": 0, "rationale": "Backend Intern — другая специализация."}
+{"pair_id": "493494f26707", "label": 0, "rationale": "Junior с очень слабым тестом, только офис при удалённой вакансии."}
+{"pair_id": "fcd91f3ba148", "label": 0, "rationale": "Junior, только CI/CD, формат только гибрид."}
+{"pair_id": "92a8c91d4a03", "label": 2, "rationale": "Middle, AWS и CI/CD; ожидания на верхней границе вилки, удалёнка."}
+{"pair_id": "4697203ec17a", "label": 0, "rationale": "Senior со слабым тестом, ожидания от 330 тыс."}
+{"pair_id": "449f30e70cd6", "label": 0, "rationale": "Очень слабый тест, только гибрид при удалённой вакансии."}
+{"pair_id": "59eb55fa7833", "label": 1, "rationale": "Middle, Bash и CI/CD подтверждён, но удалёнку не рассматривает."}
+{"pair_id": "c9a8b17e69d3", "label": 1, "rationale": "Middle, условия подходят, но из обязательных только CI/CD."}
+{"pair_id": "e05d05fa4799", "label": 1, "rationale": "Junior со слабым тестом, Yandex Cloud и GitLab CI; условия подходят."}
+{"pair_id": "ce621025313e", "label": 1, "rationale": "Middle, AWS, Yandex Cloud, CI/CD, но ожидания от 370 тыс. сильно выше вилки."}
+{"pair_id": "ae33f137259a", "label": 2, "rationale": "Middle, AWS и CI/CD подтверждён; нет Yandex Cloud и Bash; условия подходят."}
+{"pair_id": "7c9e9dd5d642", "label": 0, "rationale": "Senior с ожиданиями от 540 тыс."}
+{"pair_id": "d8634375f8f2", "label": 1, "rationale": "Middle, AWS, Yandex Cloud, CI/CD, но ожидания от 380 тыс. сильно выше вилки."}
+{"pair_id": "4d566d589547", "label": 2, "rationale": "Senior, AWS, Yandex Cloud, CI/CD подтверждён; ожидания немного выше вилки, удалёнка."}
+{"pair_id": "5be34e3c812b", "label": 1, "rationale": "Junior, Yandex Cloud, Bash, CI/CD подтверждён; уровень ниже требуемого."}
+{"pair_id": "f98593fb315b", "label": 2, "rationale": "Middle, Yandex Cloud, CI/CD подтверждён; нет AWS и Bash; условия подходят."}
+{"pair_id": "c4b57e4af018", "label": 0, "rationale": "Senior, ожидания от 350 тыс. выше вилки на 25%."}
+{"pair_id": "eff132371d13", "label": 1, "rationale": "Middle, слабый тест, из обязательных только CI/CD (частично)."}
+{"pair_id": "fc5ea9dff0b5", "label": 1, "rationale": "Junior, Bash и CI/CD-инструменты; уровень ниже, облаков нет."}
+{"pair_id": "c7693db58612", "label": 1, "rationale": "Middle, все обязательные в стеке, но ожидания от 360 тыс. выше вилки на 29%."}
+{"pair_id": "3f3695b6ae5f", "label": 0, "rationale": "Senior со слабым тестом, ожидания от 440 тыс., только гибрид."}
+{"pair_id": "2636663492ca", "label": 1, "rationale": "Junior, Bash и CI/CD подтверждён; облаков нет, уровень ниже."}
+{"pair_id": "85b4853d5796", "label": 0, "rationale": "Senior/Lead, ожидания от 350 тыс. выше вилки на 25%."}
+{"pair_id": "1630d733cbd2", "label": 2, "rationale": "Senior, AWS, Yandex Cloud, CI/CD подтверждён; ожидания в вилке, удалёнка."}
+{"pair_id": "56c731af40c1", "label": 0, "rationale": "Ожидания от 450 тыс., из обязательных только CI/CD."}
+{"pair_id": "0bbe32fc753e", "label": 0, "rationale": "Ожидания от 430 тыс., удалёнку не рассматривает."}
+{"pair_id": "bccc0ca33be0", "label": 0, "rationale": "Senior/Lead с ожиданиями от 480 тыс."}
+{"pair_id": "4144c9f78a6a", "label": 2, "rationale": "Junior с сильным тестом, AWS, Yandex Cloud, CI/CD; ожидания в вилке, удалёнка."}
+{"pair_id": "3bf3c88a4385", "label": 0, "rationale": "Ожидания от 410 тыс., удалёнку не рассматривает."}
+{"pair_id": "37d4f26297f2", "label": 0, "rationale": "Junior с очень слабым тестом, только AWS."}
+{"pair_id": "21c6c4634b66", "label": 0, "rationale": "Системный аналитик — другая специализация."}
+{"pair_id": "154a813e86aa", "label": 1, "rationale": "Middle, все обязательные закрыты, но удалёнку не рассматривает."}
+{"pair_id": "f4846935a3f3", "label": 1, "rationale": "Middle с сильным тестом, все обязательные, но удалёнку не рассматривает."}

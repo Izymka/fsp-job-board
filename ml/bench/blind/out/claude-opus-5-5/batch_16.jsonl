@@ -1,0 +1,53 @@
+{"pair_id": "4c323266c8d7", "label": 1, "rationale": "Middle с 10-м перцентилем, SQL частично; стек FastAPI/MS SQL заявлен, но удалёнку не рассматривает."}
+{"pair_id": "d5638c2050c8", "label": 1, "rationale": "Senior, SQL и HTTP подтверждены, Laravel; нет FastAPI и MS SQL, ожидания от 470 тыс. выше вилки >15%."}
+{"pair_id": "933aaaa61ea1", "label": 1, "rationale": "Senior, Python/SQL/REST подтверждены, Flask и PostgreSQL близки; но формат только гибрид/офис при удалёнке."}
+{"pair_id": "ad8d51f753c6", "label": 2, "rationale": "Сильный Middle (96-й перцентиль), FastAPI и MS SQL в стеке, SQL подтверждён; вилка и удалёнка подходят, уровень ниже."}
+{"pair_id": "17c4dc7612e1", "label": 1, "rationale": "Lead, Python/SQL подтверждены, но нет FastAPI и MS SQL, только гибрид при удалённой вакансии."}
+{"pair_id": "cf7ace80b891", "label": 2, "rationale": "Middle, REST и SQL подтверждены, FastAPI и MS SQL в стеке, победы ФСП; уровень на ступень ниже, условия подходят."}
+{"pair_id": "83b9b497fd0f", "label": 1, "rationale": "Middle, Python/REST/SQL подтверждены, FastAPI; нет MS SQL, только гибрид при удалённой вакансии."}
+{"pair_id": "042101720692", "label": 3, "rationale": "Senior, Python/REST/SQL/архитектура подтверждены, MS SQL и Laravel в стеке; вилка и удалёнка подходят, FastAPI заменим Flask."}
+{"pair_id": "7258b67efa03", "label": 1, "rationale": "Lead с 14-м перцентилем, HTTP частично, нет MS SQL; ожидания на 15% выше вилки."}
+{"pair_id": "1e717c5f31a7", "label": 0, "rationale": "Системный аналитик, другая специализация."}
+{"pair_id": "26469468fd27", "label": 0, "rationale": "Системный аналитик, другая специализация."}
+{"pair_id": "2d6b5b8653cf", "label": 1, "rationale": "Senior, навыки подтверждены, FastAPI; нет MS SQL, ожидания выше вилки, удалёнку не рассматривает."}
+{"pair_id": "66a7331b363d", "label": 1, "rationale": "Middle с 1.5 года опыта и 13-м перцентилем, MS SQL в стеке; нет FastAPI, удалёнку не рассматривает."}
+{"pair_id": "65d161fb46df", "label": 1, "rationale": "Сильный Senior, Python/REST/SQL подтверждены, Laravel; нет FastAPI и MS SQL, только гибрид."}
+{"pair_id": "45f09a82dd20", "label": 1, "rationale": "Стек FastAPI/MS SQL/REST полностью заявлен, но Middle с 1.1 года опыта для Senior-позиции."}
+{"pair_id": "ed4238aa834a", "label": 1, "rationale": "Lead, REST и SQL подтверждены, но нет FastAPI, Python и MS SQL; только офис."}
+{"pair_id": "e73ee2173fef", "label": 1, "rationale": "Middle, Python и MS SQL; ожидания от 510 тыс. сильно выше вилки, только гибрид."}
+{"pair_id": "9254218dd7b6", "label": 1, "rationale": "Middle, Laravel и Elasticsearch, но нет FastAPI, MS SQL, REST не подтверждён; уровень ниже."}
+{"pair_id": "9b1d463e355a", "label": 1, "rationale": "Lead, Python и SQL частично, нет FastAPI и MS SQL; удалёнку не рассматривает."}
+{"pair_id": "5d37584e7323", "label": 2, "rationale": "Senior, FastAPI/Python/REST в стеке, SQL подтверждён, HTTP частично; нет MS SQL, вилка и удалёнка подходят."}
+{"pair_id": "264ef5e2a9f6", "label": 1, "rationale": "Middle с 16-м перцентилем, Python и SQL частично, нет FastAPI и MS SQL."}
+{"pair_id": "8c71d62faf12", "label": 1, "rationale": "По опыту Junior (1.8 года), нет FastAPI и MS SQL; уровень значительно ниже."}
+{"pair_id": "5e869b7686a1", "label": 1, "rationale": "Senior, все навыки подтверждены, FastAPI; но нет MS SQL и удалёнку не рассматривает."}
+{"pair_id": "5eac26ff7a97", "label": 0, "rationale": "Middle с 7-м перцентилем, навыки частично, нет FastAPI, MS SQL и Python."}
+{"pair_id": "2e13310fef98", "label": 1, "rationale": "Senior, Laravel/Elasticsearch и PostgreSQL, но нет FastAPI, HTTP/REST частично; условия подходят."}
+{"pair_id": "4ed0e3291c6a", "label": 3, "rationale": "Senior, Python/REST/SQL/архитектура подтверждены, MS SQL в стеке; вилка и удалёнка подходят, FastAPI не указан."}
+{"pair_id": "1981bc99b933", "label": 1, "rationale": "Senior, FastAPI, но HTTP/REST частично, нет MS SQL, давняя активность."}
+{"pair_id": "f7ab0fd6d5d6", "label": 1, "rationale": "Сильный Senior/Lead с MS SQL, но ожидания от 550 тыс. значительно выше вилки."}
+{"pair_id": "a3ac3673444d", "label": 1, "rationale": "Middle, MS SQL и Elasticsearch, но нет FastAPI и Python, REST не подтверждён."}
+{"pair_id": "ce3192faa0df", "label": 1, "rationale": "Middle, FastAPI и PostgreSQL, но только офис при удалённой вакансии."}
+{"pair_id": "21f02de59701", "label": 1, "rationale": "Lead с 100-м перцентилем, но нет FastAPI и MS SQL, только офис."}
+{"pair_id": "bf9bb2242004", "label": 2, "rationale": "Сильный Middle, FastAPI/Python/Elasticsearch; нет MS SQL, уровень ниже, вилка и удалёнка подходят."}
+{"pair_id": "9483a00fd3ca", "label": 1, "rationale": "Middle с 23-м перцентилем, REST/Laravel/Elasticsearch, но нет FastAPI и MS SQL."}
+{"pair_id": "1b00d3374dc6", "label": 2, "rationale": "Сильный Middle (100-й перцентиль), FastAPI и Laravel; нет MS SQL, ожидания на верхней границе, удалёнка."}
+{"pair_id": "bd5c9f3e5d5b", "label": 1, "rationale": "Senior, REST и SQL подтверждены, но нет FastAPI, Python и MS SQL."}
+{"pair_id": "de242b21ee1e", "label": 2, "rationale": "Middle, FastAPI и Elasticsearch, SQL подтверждён; нет MS SQL, ожидания на верхней границе вилки."}
+{"pair_id": "28f4b5eedd29", "label": 2, "rationale": "Middle, REST и SQL подтверждены, FastAPI, MS SQL, Laravel в стеке; уровень на ступень ниже, условия подходят."}
+{"pair_id": "3c5be1fe8159", "label": 1, "rationale": "Middle с 30-м перцентилем, Python и PostgreSQL, но нет FastAPI и MS SQL."}
+{"pair_id": "143a82a31601", "label": 0, "rationale": "Middle без FastAPI, MS SQL и REST, только офис при удалённой вакансии."}
+{"pair_id": "03aa09e3849c", "label": 1, "rationale": "Middle, Python/SQL подтверждены, REST; нет FastAPI и MS SQL."}
+{"pair_id": "64f425903d15", "label": 2, "rationale": "Middle, Python/SQL подтверждены, FastAPI и MySQL, призы ФСП; ожидания немного выше вилки."}
+{"pair_id": "e3fcbb01fb6d", "label": 1, "rationale": "Senior с MS SQL и подтверждённым Python, но ожидания от 590 тыс. сильно выше вилки."}
+{"pair_id": "bc9f30655198", "label": 1, "rationale": "Middle, Python/SQL подтверждены, Laravel; нет FastAPI и MS SQL."}
+{"pair_id": "67acdc9d1386", "label": 1, "rationale": "Senior, REST/SQL подтверждены, Laravel и PostgreSQL; нет FastAPI и Python."}
+{"pair_id": "4728021e9740", "label": 2, "rationale": "Lead, REST/SQL подтверждены, Python и MySQL; нет FastAPI, ожидания немного выше вилки, удалёнка."}
+{"pair_id": "ae28fc6c0945", "label": 3, "rationale": "Senior 91-й перцентиль, Python/REST/SQL подтверждены, FastAPI в стеке; вилка и удалёнка подходят."}
+{"pair_id": "0e39537cb401", "label": 1, "rationale": "Middle, FastAPI/REST/Laravel, но нет MS SQL и удалёнку не рассматривает."}
+{"pair_id": "a8cec4946571", "label": 1, "rationale": "Middle с 2.4 года опыта, нет FastAPI и MS SQL; уровень ниже."}
+{"pair_id": "c9987bed5c8b", "label": 3, "rationale": "Senior, Python/REST/SQL/архитектура подтверждены, MS SQL в стеке; вилка и удалёнка подходят."}
+{"pair_id": "a8b72880e1af", "label": 1, "rationale": "Middle с 2.7 года опыта, FastAPI и PostgreSQL; уровень ниже Senior."}
+{"pair_id": "4920d7cdf707", "label": 1, "rationale": "Senior с 12-м перцентилем, HTTP/REST частично, нет FastAPI и MS SQL."}
+{"pair_id": "fdf69f0144b2", "label": 2, "rationale": "Сильный Senior, Python/REST/SQL подтверждены; нет FastAPI и MS SQL, ожидания на 15% выше вилки."}
+{"pair_id": "2d13003f4a64", "label": 2, "rationale": "Senior, все навыки подтверждены, победы ФСП; нет FastAPI и MS SQL, вилка и удалёнка подходят."}

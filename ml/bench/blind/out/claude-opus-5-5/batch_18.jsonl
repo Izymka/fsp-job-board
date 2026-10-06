@@ -1,0 +1,100 @@
+{"pair_id": "50ad205a180f", "label": 2, "rationale": "Middle-аналитик с SQL и метриками по тесту, BPMN, UML, OpenAPI, интеграции; ожидания на 8% выше вилки."}
+{"pair_id": "cd5cf8e5da04", "label": 1, "rationale": "Сильный Middle-аналитик, требования закрыты, ожидания в вилке, но только офис при удалённой вакансии."}
+{"pair_id": "288d8f8df71b", "label": 2, "rationale": "Middle-аналитик, SQL и метрики подтверждены, ожидания в вилке; нет BPMN, UML, OpenAPI, слабый тест."}
+{"pair_id": "d7606964162d", "label": 1, "rationale": "Senior-аналитик, ожидания выше вилки и только гибрид при удалённой вакансии."}
+{"pair_id": "a2b13cd13889", "label": 3, "rationale": "Middle-аналитик, SQL и метрики подтверждены, BPMN, OpenAPI, ТЗ, опыт 2.1 года, ожидания в вилке, удалёнка."}
+{"pair_id": "5c70eb90f773", "label": 2, "rationale": "Middle-аналитик с BPMN, user stories и интеграциями, ожидания в вилке; SQL подтверждён частично, слабый тест."}
+{"pair_id": "e222b272cb4b", "label": 3, "rationale": "Middle-аналитик, SQL и метрики подтверждены, OpenAPI, user stories, интеграции, ожидания в вилке, удалёнка."}
+{"pair_id": "90e021af1e35", "label": 3, "rationale": "Middle-аналитик с полным стеком (BPMN, UML, OpenAPI, SQL, метрики), ожидания в вилке, удалёнка."}
+{"pair_id": "5e38cc4603df", "label": 2, "rationale": "Middle-аналитик, 84-й перцентиль, BPMN, UML, SQL подтверждён, ожидания в вилке; только гибрид."}
+{"pair_id": "203062bcc1a2", "label": 1, "rationale": "Junior-аналитик с опытом 1.3 года при требовании от 2 лет; стек полный, ожидания ниже вилки."}
+{"pair_id": "d7dc1ed4e6dc", "label": 1, "rationale": "Senior/Lead-аналитик, ожидания от 410 тыс. значительно выше вилки 260 тыс."}
+{"pair_id": "1c86112f9828", "label": 1, "rationale": "Сильный Middle-аналитик, но ожидания от 350 тыс. сильно выше вилки, нет удалёнки."}
+{"pair_id": "1b16d373fa91", "label": 1, "rationale": "Middle-аналитик с полным стеком, но очень слабый тест, SQL и метрики подтверждены лишь частично, нет удалёнки."}
+{"pair_id": "8a5e26e28891", "label": 1, "rationale": "Junior-аналитик с опытом 1 год, слабый тест, нет удалёнки."}
+{"pair_id": "2b4957824860", "label": 2, "rationale": "Middle-аналитик с полным стеком, ожидания в вилке; гибрид/офис вместо удалёнки."}
+{"pair_id": "fa32b81813f4", "label": 2, "rationale": "Middle-аналитик с полным стеком, удалёнка, ожидания в вилке; слабый тест, SQL частично."}
+{"pair_id": "4102c508419f", "label": 3, "rationale": "Middle-аналитик, SQL и метрики подтверждены, OpenAPI, UML, user stories, интеграции, ожидания в вилке, удалёнка."}
+{"pair_id": "04cf03ccfa6d", "label": 0, "rationale": "Backend-разработчик — другая специализация."}
+{"pair_id": "eb454e535f1c", "label": 1, "rationale": "Сильный аналитик, но ожидания от 310 тыс. выше вилки и только офис."}
+{"pair_id": "55766be8f185", "label": 1, "rationale": "Сильный аналитик, но ожидания от 380 тыс. значительно выше вилки."}
+{"pair_id": "dcf10e20ab14", "label": 2, "rationale": "Опытный Middle-аналитик, SQL, UML, ТЗ, метрики подтверждены; ожидания немного выше вилки, давняя активность."}
+{"pair_id": "07f05bc61e27", "label": 1, "rationale": "Senior-аналитик со слабым тестом, ожидания выше вилки, нет удалёнки."}
+{"pair_id": "017cd8ea3002", "label": 1, "rationale": "Junior-аналитик с опытом 1 год при требовании от 2 лет, давно неактивен."}
+{"pair_id": "8f60effe9d9a", "label": 2, "rationale": "Опытный Middle-аналитик, BPMN, UML, SQL, метрики, ожидания в вилке; нет удалёнки."}
+{"pair_id": "04d6bf93a3c2", "label": 2, "rationale": "Middle-аналитик, SQL и метрики подтверждены, OpenAPI, UML; ожидания на 8% выше вилки."}
+{"pair_id": "b948649de5ff", "label": 3, "rationale": "Middle-аналитик, SQL и метрики подтверждены, OpenAPI, UML, ТЗ, ожидания в вилке, удалёнка."}
+{"pair_id": "c45a86a5b1e1", "label": 2, "rationale": "Грейд Junior, но опыт 3.6 года, BPMN, OpenAPI, user stories, ожидания в вилке, удалёнка."}
+{"pair_id": "7baad149ab99", "label": 1, "rationale": "Опыт 1.3 года при требовании от 2 лет, очень слабый тест."}
+{"pair_id": "79427d8830e3", "label": 1, "rationale": "Middle-аналитик с подходящим стеком, но только офис при удалённой вакансии."}
+{"pair_id": "380233ee0a54", "label": 2, "rationale": "Middle-аналитик с полным стеком, 80-й перцентиль, ожидания ниже вилки; нет удалёнки."}
+{"pair_id": "550f3dccd376", "label": 1, "rationale": "Middle-аналитик с очень слабым тестом, SQL и метрики подтверждены лишь частично."}
+{"pair_id": "df6eb0402514", "label": 2, "rationale": "Junior с сильным тестом, SQL, OpenAPI, UML, ТЗ, опыт 1.7 года; ожидания ниже вилки, удалёнка."}
+{"pair_id": "d87769d8d27c", "label": 2, "rationale": "Senior-аналитик со 100-м перцентилем и полным стеком, ожидания на границе вилки; уровень выше."}
+{"pair_id": "95e5fccea3e0", "label": 3, "rationale": "Middle-аналитик, BPMN, UML, OpenAPI, интеграции, SQL и метрики подтверждены, ожидания в вилке, удалёнка."}
+{"pair_id": "8220388ef70d", "label": 3, "rationale": "Middle-аналитик с полным стеком, опыт 3.6 года, ожидания ниже вилки, удалёнка."}
+{"pair_id": "08ea05d96039", "label": 1, "rationale": "Senior/Lead-аналитик, ожидания от 390 тыс. значительно выше вилки."}
+{"pair_id": "76ea213dcbef", "label": 3, "rationale": "Middle-аналитик, BPMN, UML, OpenAPI, интеграции, SQL и метрики подтверждены, ожидания в вилке, удалёнка."}
+{"pair_id": "bf5d6b357871", "label": 1, "rationale": "Senior-аналитик, ожидания от 350 тыс. значительно выше вилки."}
+{"pair_id": "44d76a0eb95e", "label": 1, "rationale": "Middle/Lead-аналитик, ожидания от 340 тыс. на 30% выше вилки."}
+{"pair_id": "8f56fb6cabfc", "label": 1, "rationale": "Сильный Junior, но опыт 1.1 года при требовании от 2 лет."}
+{"pair_id": "02862ed8140b", "label": 1, "rationale": "Сильный Middle-аналитик, но ожидания выше вилки и только гибрид."}
+{"pair_id": "0dab55ccbdc3", "label": 1, "rationale": "Junior с опытом 1.4 года при требовании от 2 лет, средний тест."}
+{"pair_id": "6e601948c0a4", "label": 1, "rationale": "Middle-аналитик с полным стеком, но тест на 2-м перцентиле, SQL подтверждён частично."}
+{"pair_id": "679607b0040b", "label": 1, "rationale": "Junior со 100-м перцентилем, но опыт 1.1 года при требовании от 2 лет."}
+{"pair_id": "be83e3d46756", "label": 1, "rationale": "Middle-аналитик, ожидания от 300 тыс. более чем на 15% выше вилки."}
+{"pair_id": "1b7bbb3da752", "label": 1, "rationale": "Опытный аналитик, но слабый тест, SQL частично, нет удалёнки."}
+{"pair_id": "6a937900a7f6", "label": 1, "rationale": "Junior с опытом 1.7 года, только офис при удалённой вакансии."}
+{"pair_id": "86499f434312", "label": 0, "rationale": "Data Science — другая специализация."}
+{"pair_id": "df3784c6ec2e", "label": 2, "rationale": "Middle-аналитик с BPMN, UML, SQL, user stories, интеграциями, ожидания в вилке; нет удалёнки."}
+{"pair_id": "32b9c380d345", "label": 2, "rationale": "Сильный Junior с полным стеком, опыт 1.7 года, ожидания ниже вилки; давно неактивен."}
+{"pair_id": "6a9aecd0b8cd", "label": 2, "rationale": "Junior с полным стеком, опыт 1.9 года, удалёнка; уровень ниже Middle."}
+{"pair_id": "f7d0c5830f89", "label": 1, "rationale": "Junior с опытом 1.4 года при требовании от 2 лет, слабый тест."}
+{"pair_id": "7ddad9f0ab06", "label": 1, "rationale": "Senior/Lead-аналитик, ожидания от 420 тыс. значительно выше вилки."}
+{"pair_id": "845e66c3a7fc", "label": 1, "rationale": "Middle с CV, Airflow, SQL, но без pandas и scikit-learn, ожидания от 220 тыс. сильно выше вилки."}
+{"pair_id": "5e8ed275912d", "label": 0, "rationale": "Стажёр с очень слабым тестом, нет Computer vision, Airflow, scikit-learn."}
+{"pair_id": "559a2ef4c504", "label": 1, "rationale": "Middle с pandas, scikit-learn, SQL, без CV и Airflow, ожидания от 240 тыс. сильно выше вилки."}
+{"pair_id": "ab7c2e012a70", "label": 1, "rationale": "Стажёр со слабым тестом, нет Computer vision и Airflow."}
+{"pair_id": "2b43e7c6efc4", "label": 1, "rationale": "Junior с pandas и SQL, но без CV, Airflow, scikit-learn; только офис."}
+{"pair_id": "9a3a2bd29943", "label": 0, "rationale": "Middle без CV, pandas и scikit-learn, ожидания от 230 тыс. сильно выше вилки."}
+{"pair_id": "199da7871750", "label": 0, "rationale": "Стажёр без CV, Airflow, SQL и scikit-learn — большинство требований отсутствует."}
+{"pair_id": "03be9ba1b55a", "label": 2, "rationale": "Junior с Airflow, SQL, scikit-learn, ожидания ниже вилки; нет CV, слабый частичный тест, только удалёнка."}
+{"pair_id": "19e5fff2615c", "label": 1, "rationale": "Middle/Senior с полным стеком, но ожидания от 440 тыс. несопоставимы с вилкой."}
+{"pair_id": "6d123a9ad0d4", "label": 0, "rationale": "Middle без CV, pandas и scikit-learn, ожидания от 280 тыс. вдвое выше вилки."}
+{"pair_id": "2d6bf48b3e11", "label": 1, "rationale": "Junior с pandas и сильным тестом, но без CV, Airflow, SQL и scikit-learn."}
+{"pair_id": "c133d8f91794", "label": 1, "rationale": "Middle с scikit-learn, pandas, SQL, без CV и Airflow, ожидания от 290 тыс. сильно выше."}
+{"pair_id": "8b2ff3bfb5b6", "label": 1, "rationale": "Middle/Senior с pandas, SQL, scikit-learn, без CV и Airflow, ожидания от 330 тыс."}
+{"pair_id": "06f7a35be5a4", "label": 1, "rationale": "Сильный Junior с CV и scikit-learn, ожидания в вилке, но нет Airflow, pandas, SQL."}
+{"pair_id": "af181964f85a", "label": 0, "rationale": "Backend Lead — другая специализация и уровень."}
+{"pair_id": "d0ed523a27a0", "label": 1, "rationale": "Middle с очень слабым тестом, нет Airflow, ожидания от 230 тыс. сильно выше вилки."}
+{"pair_id": "61ab95c56ddf", "label": 1, "rationale": "Junior с очень слабым тестом, только pandas из обязательных, только удалёнка."}
+{"pair_id": "ecfe6928445b", "label": 0, "rationale": "Middle/Senior без CV, Airflow, pandas и scikit-learn, ожидания сильно выше вилки."}
+{"pair_id": "f7291204b891", "label": 1, "rationale": "Сильный Middle с scikit-learn, pandas, SQL, без CV и Airflow, ожидания от 190 тыс."}
+{"pair_id": "67dbf8d696a3", "label": 2, "rationale": "Стажёр со всем обязательным стеком и финалом ФСП, условия подходят; уровень на ступень ниже."}
+{"pair_id": "ebb8e0e6d8a6", "label": 1, "rationale": "Стажёр с опытом 0.1 года и слабым частичным тестом, только удалёнка."}
+{"pair_id": "d73e9b008219", "label": 2, "rationale": "Стажёр с 93-м перцентилем, CV, pandas, SQL, ожидания в вилке; нет Airflow и scikit-learn."}
+{"pair_id": "d98b081f460b", "label": 1, "rationale": "Junior со всем стеком, но ожидания от 190 тыс. на 36% выше вилки."}
+{"pair_id": "08598dcbcf1c", "label": 1, "rationale": "Junior с pandas и SQL, ожидания в вилке, но без CV, Airflow, scikit-learn."}
+{"pair_id": "bf21b37ec9e0", "label": 0, "rationale": "Backend-разработчик — другая специализация."}
+{"pair_id": "bc39db828977", "label": 1, "rationale": "Сильный Middle с CV, pandas, scikit-learn, SQL, но ожидания от 370 тыс. несопоставимы с вилкой."}
+{"pair_id": "26a44313ae18", "label": 3, "rationale": "Junior с Airflow, pandas, scikit-learn, SQL, ожидания в вилке, гибрид; нет только CV."}
+{"pair_id": "7999327294e5", "label": 1, "rationale": "Middle почти со всем стеком, но ожидания от 240 тыс. сильно выше вилки."}
+{"pair_id": "608ef4415df5", "label": 1, "rationale": "Middle со слабым тестом, без CV и scikit-learn, ожидания от 210 тыс. выше вилки."}
+{"pair_id": "5b1d02a331bc", "label": 1, "rationale": "Сильный Middle с Airflow, pandas, SQL, без CV и scikit-learn, ожидания от 250 тыс."}
+{"pair_id": "0c1cbac7ff12", "label": 0, "rationale": "Middle без CV, Airflow и pandas, ожидания от 320 тыс. несопоставимы с вилкой."}
+{"pair_id": "0d5ed95249ac", "label": 1, "rationale": "Junior с scikit-learn и pandas, без CV, Airflow, SQL; ожидания от 210 тыс. сильно выше."}
+{"pair_id": "b2bd760c38bf", "label": 1, "rationale": "Junior с CV, pandas, scikit-learn, SQL, но ожидания от 220 тыс. на 57% выше вилки."}
+{"pair_id": "e32a5e2ede2e", "label": 0, "rationale": "Middle без CV, Airflow, pandas и scikit-learn, ожидания выше вилки."}
+{"pair_id": "048aee6e2ec2", "label": 1, "rationale": "Middle с Airflow, pandas, SQL, без CV и scikit-learn, ожидания от 180 тыс. выше вилки."}
+{"pair_id": "30e02787e4b8", "label": 1, "rationale": "Middle/Senior с scikit-learn, pandas, SQL, без CV и Airflow, ожидания от 290 тыс."}
+{"pair_id": "0ff350e68ad6", "label": 0, "rationale": "Middle без CV, Airflow, pandas, scikit-learn, ожидания выше вилки, только офис."}
+{"pair_id": "bf4734f2703c", "label": 1, "rationale": "Junior со слабым тестом, pandas и частично SQL, без CV, Airflow, scikit-learn."}
+{"pair_id": "efd5b52863fb", "label": 1, "rationale": "Junior с pandas и SQL по тесту, ожидания в вилке, но без CV, Airflow, scikit-learn."}
+{"pair_id": "8d69a759521c", "label": 1, "rationale": "Стажёр с CV, Airflow, pandas, SQL, но уровень ниже, средний тест, только офис."}
+{"pair_id": "f72c34696daa", "label": 1, "rationale": "Middle с Airflow, pandas, scikit-learn, SQL, без CV; ожидания на 21% выше вилки."}
+{"pair_id": "e0e71b9fe763", "label": 1, "rationale": "Junior с CV, pandas, scikit-learn, SQL, но ожидания от 230 тыс. сильно выше вилки."}
+{"pair_id": "649b0d9b355b", "label": 0, "rationale": "Junior только с SQL из обязательных, ожидания от 220 тыс. сильно выше вилки."}
+{"pair_id": "b24fb75c6869", "label": 0, "rationale": "Middle/Lead без CV и Airflow, ожидания от 430 тыс. втрое выше вилки Junior."}
+{"pair_id": "cf44f1edbee9", "label": 1, "rationale": "Junior с CV, pandas, SQL, но ожидания от 300 тыс. более чем вдвое выше вилки."}
+{"pair_id": "1b76b0b5b2a6", "label": 1, "rationale": "Middle/Lead с CV, scikit-learn, pandas, без Airflow и SQL, ожидания от 280 тыс."}
+{"pair_id": "8d71dd4ce0fe", "label": 1, "rationale": "Middle со слабым тестом, без CV и Airflow, ожидания от 220 тыс., только удалёнка."}

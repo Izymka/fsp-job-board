@@ -418,6 +418,159 @@ def score_candidate(
     )
 
 
+# ------------------------------------------------------------------------------- версия 2
+#
+# Анализ ошибок v1 на бенчмарке (docs/bench.md): треть мест в top-10 занимали кандидаты, которых
+# судьи отвергали из-за одного жёсткого расхождения — несовместимый формат, ожидания сильно выше
+# вилки, не тот уровень, не закрыты обязательные навыки. В аддитивной формуле такой провал
+# перекрывается достоинствами в других компонентах («ИЛИ»), а решение рекрутера устроено как «И».
+# Поэтому в v2 условия, уровень и обязательные навыки — мультипликативные «ворота», навыки
+# засчитываются частично через граф смежности технологий, а ФСП не компенсирует пробелы
+# в обязательных требованиях.
+
+
+@dataclass(frozen=True)
+class WeightsV2:
+    fit: float = 0.55  # соответствие навыкам
+    profile: float = 0.30  # сила профиля
+    freshness: float = 0.15
+    must_share: float = 0.8  # доля обязательных требований внутри соответствия
+    must_importance: float = 0.6  # важность, с которой технология считается обязательной
+    # ворота (множители 0..1)
+    gate_format_soft: float = 0.85  # гибрид против офиса/удалёнки
+    gate_format_hard: float = 0.45  # офис против удалёнки
+    gate_salary_slack: float = 0.15  # ожидания выше вилки до 15% — без штрафа
+    gate_salary_slope: float = 1.6
+    gate_salary_floor: float = 0.25
+    gate_grade_lower: float = 0.65  # кандидат на ступень ниже
+    gate_grade_higher: float = 0.8  # на ступень выше: переплата и риск ухода
+    gate_must_threshold: float = 0.5  # ниже — дополнительный штраф за пробелы в обязательном
+    use_graph: bool = True
+    fsp_needs_must: bool = True  # ФСП учитывается пропорционально покрытию обязательного
+
+
+DEFAULT_WEIGHTS_V2 = WeightsV2()
+
+
+def tech_credit(
+    c: CandidateFeatures, tech: str, cut: float | None = None, use_graph: bool = True
+) -> tuple[float, str, str | None]:
+    """Зачёт требования `tech`: прямой (как в v1) или через смежную технологию из графа.
+
+    Возвращает (0..1, источник, смежная технология или None).
+    """
+    from ..nlp.skills import get_skill_graph
+
+    value, src = skill_evidence(c, tech, DEFAULT_WEIGHTS, cut=cut)
+    via = None
+    for other, share in get_skill_graph().get(tech, ()) if use_graph else ():
+        if other in c.claimed:
+            ev, _ = skill_evidence(c, other, DEFAULT_WEIGHTS, cut=cut)
+            if share * ev > value:
+                value, src, via = share * ev, "graph", other
+    return value, src, via
+
+
+def _gate_salary(c: CandidateFeatures, need: Need, w: WeightsV2) -> float:
+    top = need.salary_to or need.salary_from
+    if not top or not c.salary_from or c.salary_from <= top:
+        return 1.0
+    gap = (c.salary_from - top) / c.salary_from
+    if gap <= w.gate_salary_slack:
+        return 1.0
+    return max(w.gate_salary_floor, 1.0 - w.gate_salary_slope * (gap - w.gate_salary_slack))
+
+
+def score_candidate_v2(
+    c: CandidateFeatures,
+    need: Need,
+    today: date,
+    *,
+    w: WeightsV2 = DEFAULT_WEIGHTS_V2,
+    adjacent: bool = False,
+    catalog: Catalog | None = None,
+    percentile: float | None = None,
+) -> Scored:
+    catalog = catalog or get_catalog()
+    # причины, вилка и прочие пояснения — общие с v1
+    base_v1 = score_candidate(c, need, today, adjacent=adjacent, catalog=catalog, percentile=percentile)
+    reasons = [r for r in base_v1.reasons if not r.text.startswith("Не подтверждено")]
+
+    cut = catalog.grade(need.grade).cut
+    must_num = must_den = plus_num = plus_den = 0.0
+    missing: list[str] = []
+    via_graph: list[str] = []
+    for tech, imp in need.skills.items():
+        value, _, via = tech_credit(c, tech, cut, w.use_graph)
+        if imp >= w.must_importance:
+            must_num += imp * value
+            must_den += imp
+            if value < 0.5:
+                missing.append(tech)
+        else:
+            plus_num += imp * value
+            plus_den += imp
+        if via and value >= 0.3:
+            via_graph.append(f"{tech} ← {via}")
+    must_cov = must_num / must_den if must_den else (plus_num / plus_den if plus_den else 0.5)
+    plus_cov = plus_num / plus_den if plus_den else must_cov
+    fit = w.must_share * must_cov + (1 - w.must_share) * plus_cov
+
+    _, ps_parts = profile_strength(c, today, DEFAULT_WEIGHTS, catalog)
+    # ФСП усиливает профиль, но не компенсирует пробелы в обязательных требованиях
+    ps = (
+        DEFAULT_WEIGHTS.ps_test * ps_parts["test"]
+        + DEFAULT_WEIGHTS.ps_fsp * ps_parts["fsp"] * (must_cov if w.fsp_needs_must else 1.0)
+        + DEFAULT_WEIGHTS.ps_tasks * ps_parts["tasks"]
+    )
+    fresh = freshness(c, today)
+
+    fmt = format_fit(c, need.work_format)
+    gates = {
+        "format": 1.0 if fmt >= 0.8 else (w.gate_format_soft if fmt >= 0.5 else w.gate_format_hard),
+        "salary": _gate_salary(c, need, w),
+        "grade": 1.0,
+        "must": 1.0 if must_cov >= w.gate_must_threshold else 0.5 + must_cov,
+    }
+    if adjacent and c.grade:
+        lower = catalog.grade_index(c.grade) < catalog.grade_index(need.grade)
+        gates["grade"] = w.gate_grade_lower if lower else w.gate_grade_higher
+    g = math.prod(gates.values())
+
+    raw = {"need_fit": w.fit * fit, "profile": w.profile * ps, "freshness": w.freshness * fresh}
+    components = {k: round(v * g, 4) for k, v in raw.items()}
+    total = sum(raw.values()) * g
+
+    if via_graph:
+        reasons.append(Reason("neutral", "Смежный опыт: " + ", ".join(via_graph[:3])))
+    if missing:
+        reasons.append(Reason("negative", "Не закрыто из обязательного: " + ", ".join(missing[:4])))
+    if gates["salary"] < 1.0:
+        reasons.append(Reason("negative", "Ожидания по ЗП заметно выше вилки"))
+    if gates["grade"] < 1.0 and catalog.grade_index(c.grade) > catalog.grade_index(need.grade):
+        reasons.append(Reason("neutral", "Уровень выше требуемого: возможна переплата"))
+
+    return Scored(
+        candidate_id=c.id,
+        score=round(total, 4),
+        profile_strength=base_v1.profile_strength,
+        components=components,
+        details={
+            "need_fit": fit,
+            "must_coverage": must_cov,
+            "plus_coverage": plus_cov,
+            "profile_v2": ps,
+            "freshness": fresh,
+            **{f"gate_{k}": v for k, v in gates.items()},
+            **ps_parts,
+        },
+        reasons=reasons,
+        missing=missing,
+        adjacent=adjacent,
+        salary_fit=base_v1.salary_fit,
+    )
+
+
 def rank(
     candidates: Iterable[CandidateFeatures],
     need: Need,
@@ -425,6 +578,8 @@ def rank(
     *,
     w: Weights = DEFAULT_WEIGHTS,
     catalog: Catalog | None = None,
+    version: int = 1,
+    w2: WeightsV2 = DEFAULT_WEIGHTS_V2,
 ) -> list[Scored]:
     catalog = catalog or get_catalog()
     pool = []
@@ -445,7 +600,12 @@ def rank(
         peers = by_cat.get((c.specialization, c.grade))
         if c.theta is not None and peers and len(peers) >= 5:
             pct = float(np.searchsorted(peers, c.theta, side="right")) / len(peers)
-        out.append(score_candidate(c, need, today, w=w, adjacent=adj, catalog=catalog, percentile=pct))
+        if version == 2:
+            out.append(
+                score_candidate_v2(c, need, today, w=w2, adjacent=adj, catalog=catalog, percentile=pct)
+            )
+        else:
+            out.append(score_candidate(c, need, today, w=w, adjacent=adj, catalog=catalog, percentile=pct))
     out.sort(key=lambda s: (-s.score, s.candidate_id))
     return out
 

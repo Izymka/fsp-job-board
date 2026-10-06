@@ -1,0 +1,65 @@
+{"pair_id":"e6470102cbb3","label":1,"rationale":"Грейд выше, Selenium заявлен, но ожидания значительно превышают вилку"}
+{"pair_id":"6a335a276639","label":1,"rationale":"Junior с заявленным Selenium, но зарплатные ожидания значительно выше вилки"}
+{"pair_id":"016087730ceb","label":1,"rationale":"Junior и Selenium заявлен, но доступен только гибридный формат"}
+{"pair_id":"2f79f25c393f","label":3,"rationale":"Junior, Selenium заявлен и отмечен в опыте, ожидания и удалённый формат совместимы"}
+{"pair_id":"8f040a2bc3e9","label":3,"rationale":"Junior с Selenium в опыте, ожидания укладываются в вилку, доступна удалёнка"}
+{"pair_id":"4301b6de428f","label":1,"rationale":"Грейд выше, Selenium отсутствует, ожидания высокие и нет удалённого формата"}
+{"pair_id":"7685341081c4","label":1,"rationale":"Грейд выше и ожидания значительно превышают вилку, несмотря на Selenium"}
+{"pair_id":"a03c1f55306d","label":1,"rationale":"Junior, но Selenium отсутствует и доступен только офисный формат"}
+{"pair_id":"a1ae01bc6827","label":1,"rationale":"Selenium заявлен, но грейд выше и ожидания значительно выше вилки"}
+{"pair_id":"0ad2be0c9eea","label":1,"rationale":"Selenium заявлен, но ожидания многократно выше вилки для Junior-вакансии"}
+{"pair_id":"38fbe69a3a09","label":2,"rationale":"Junior с заявленным Selenium, удалёнкой и низкими ожиданиями; опыт минимален"}
+{"pair_id":"0964fc91b54f","label":1,"rationale":"Junior с Selenium, но минимальные ожидания существенно превышают вилку"}
+{"pair_id":"d5b2e5459990","label":1,"rationale":"Junior и Selenium заявлен, но ожидания высокие и удалёнка недоступна"}
+{"pair_id":"a5c4ac430e4b","label":1,"rationale":"Intern на ступень ниже, Selenium отсутствует и нет удалённого формата"}
+{"pair_id":"590af0785936","label":1,"rationale":"Junior с Selenium, но зарплатные ожидания значительно выше вилки"}
+{"pair_id":"a73d51873c9c","label":1,"rationale":"Junior, однако обязательный Selenium отсутствует и нет удалённого формата"}
+{"pair_id":"3960796ae238","label":2,"rationale":"Intern на ступень ниже с Selenium и доступной удалёнкой; профиль сильнее уровня"}
+{"pair_id":"c2da0596085d","label":1,"rationale":"Junior с Selenium, но ожидания существенно выше вилки"}
+{"pair_id":"fb5fac11cf18","label":2,"rationale":"Junior с Selenium, удалёнкой и близкими ожиданиями; тестовый результат низкий"}
+{"pair_id":"323d553530dd","label":1,"rationale":"Junior с заявленным Selenium, но ожидания значительно превышают вилку"}
+{"pair_id":"8dc4f9c371f3","label":1,"rationale":"Junior с Selenium, но доступен только офисный формат"}
+{"pair_id":"e524c2bb8fbf","label":3,"rationale":"Junior с Selenium в опыте, ожидания в вилке и доступна удалёнка"}
+{"pair_id":"427292504402","label":3,"rationale":"Junior с Selenium, подходящими ожиданиями и доступной удалённой работой"}
+{"pair_id":"293f5ee8d40a","label":1,"rationale":"Грейд выше, а ожидания существенно превышают вилку, несмотря на полный стек"}
+{"pair_id":"0c22e5511edc","label":1,"rationale":"Профиль заметно выше Junior, Selenium отсутствует, ожидания значительно выше вилки"}
+{"pair_id":"e918245af727","label":1,"rationale":"Грейд и ожидания выше вакансии, доступен только офисный формат"}
+{"pair_id":"a27f14e6a9cf","label":1,"rationale":"Junior с Selenium, но ожидания значительно выше вилки и нет удалёнки"}
+{"pair_id":"9eeae3ebec6f","label":1,"rationale":"Категория Junior, но резюме Intern и доступен только офисный формат"}
+{"pair_id":"a9fed16cfbd6","label":0,"rationale":"Другая специализация: frontend-разработка вместо QA"}
+{"pair_id":"c2f95d554dd8","label":1,"rationale":"Junior с Selenium, но доступен только офисный формат и ожидания выше вилки"}
+{"pair_id":"b96d3300b63b","label":3,"rationale":"Junior с полным стеком, совместимыми ожиданиями и возможностью удалённой работы"}
+{"pair_id":"2a3307780814","label":1,"rationale":"Грейд выше Junior и зарплатные ожидания значительно превышают вилку"}
+{"pair_id":"4a0b42657b1e","label":1,"rationale":"Middle-кандидат с ожиданиями существенно выше вилки Junior-вакансии"}
+{"pair_id":"90225df33e9f","label":1,"rationale":"Грейд выше и ожидания многократно превышают вилку"}
+{"pair_id":"8471df3cc655","label":1,"rationale":"Грейд выше, ожидания высокие, удалённый формат недоступен"}
+{"pair_id":"2f565575b4fc","label":1,"rationale":"Грейд и ожидания выше вакансии, доступен только гибрид или офис"}
+{"pair_id":"18b5a77648f6","label":3,"rationale":"Junior с Selenium, совместимыми ожиданиями и возможностью удалённой работы"}
+{"pair_id":"f2e86a373cdd","label":3,"rationale":"Junior с Selenium и автотестами, ожидания в вилке, удалёнка доступна"}
+{"pair_id":"850808831060","label":1,"rationale":"Junior с сильным стеком, но зарплатные ожидания значительно выше вилки"}
+{"pair_id":"d0095d82b47d","label":3,"rationale":"Junior с Selenium в опыте, ожидания на верхней границе вилки, удалёнка доступна"}
+{"pair_id":"f6efb630be82","label":2,"rationale":"Junior с релевантным QA-стеком и удалёнкой, но обязательный Selenium отсутствует"}
+{"pair_id":"331249eb8fad","label":1,"rationale":"Junior с полным стеком, но доступен только офисный формат"}
+{"pair_id":"33e3da73cc14","label":1,"rationale":"Junior с Selenium, но ожидания высокие и нет удалённого формата"}
+{"pair_id":"3d79a8647af2","label":1,"rationale":"Junior со стеком QA, но доступен только офисный формат"}
+{"pair_id":"1f2013af5c2b","label":1,"rationale":"Junior с Selenium и подходящими ожиданиями, но нет удалённого формата"}
+{"pair_id":"0d02972c696d","label":1,"rationale":"Middle-кандидат с ожиданиями существенно выше вилки Junior-вакансии"}
+{"pair_id":"762a16dcae1b","label":0,"rationale":"Другая специализация: frontend-разработка вместо QA"}
+{"pair_id":"fcf528a78289","label":2,"rationale":"Senior на ступень ниже, GitLab CI и безопасность есть, но GitHub Actions отсутствует"}
+{"pair_id":"ae8e68ac5653","label":2,"rationale":"Senior на ступень ниже, есть GitHub Actions и безопасность, но отсутствует GitLab CI"}
+{"pair_id":"7c6868d34890","label":0,"rationale":"Другая специализация: системный аналитик вместо DevOps"}
+{"pair_id":"9870c25a7f0f","label":3,"rationale":"Lead с GitLab CI, GitHub Actions и безопасностью; условия совместимы"}
+{"pair_id":"aba467900c89","label":2,"rationale":"Lead по резюме, GitHub Actions и безопасность есть, но GitLab CI отсутствует"}
+{"pair_id":"606319dedaf0","label":1,"rationale":"Lead с безопасностью, но отсутствуют GitLab CI и GitHub Actions, ожидания выше вилки"}
+{"pair_id":"3af922ad9b0f","label":2,"rationale":"Lead с GitLab CI и безопасностью, но GitHub Actions отсутствует"}
+{"pair_id":"5c93d74030d9","label":1,"rationale":"Senior на ступень ниже, GitLab CI отсутствует и удалёнка недоступна"}
+{"pair_id":"0cce098b402c","label":1,"rationale":"Lead по резюме, но отсутствуют оба обязательных инструмента GitLab CI и GitHub Actions"}
+{"pair_id":"5f9eab1961c4","label":2,"rationale":"Lead по резюме, GitHub Actions и безопасность есть, но GitLab CI отсутствует"}
+{"pair_id":"d65e87495d2e","label":2,"rationale":"Lead по резюме с GitLab CI и безопасностью, но GitHub Actions отсутствует"}
+{"pair_id":"a629dbfcbd4c","label":1,"rationale":"Senior на ступень ниже, отсутствуют GitLab CI и GitHub Actions, ожидания выше вилки"}
+{"pair_id":"276adf302ce5","label":2,"rationale":"Senior на ступень ниже с GitLab CI и безопасностью, но без GitHub Actions"}
+{"pair_id":"4071b0dcdee6","label":2,"rationale":"Lead с GitHub Actions, но отсутствует GitLab CI и безопасность подтверждена лишь частично"}
+{"pair_id":"36d12129acfd","label":2,"rationale":"Senior на ступень ниже, GitHub Actions есть, но отсутствуют GitLab CI и безопасность"}
+{"pair_id":"3577fe454f23","label":0,"rationale":"Другая специализация: Data Science вместо DevOps"}
+{"pair_id":"a8cb55d1850e","label":1,"rationale":"Senior на ступень ниже; отсутствуют GitLab CI и GitHub Actions"}
+{"pair_id":"a4a16d7643cb","label":3,"rationale":"Lead по резюме с обоими CI-инструментами и безопасностью, условия совместимы"}

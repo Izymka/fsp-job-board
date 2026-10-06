@@ -1,0 +1,53 @@
+{"pair_id": "aad5a5eeafa6", "label": 2, "rationale": "Middle frontend, CSS подтверждён тестом, TypeScript и Vue заявлены; нет Webpack. Вилка и офис подходят."}
+{"pair_id": "2ea861e35e19", "label": 1, "rationale": "Middle, закрыты все обязательные навыки и плюсы, но работает только удалённо при офисной вакансии."}
+{"pair_id": "bf82df826917", "label": 1, "rationale": "Middle, есть CSS и Webpack, но нет TypeScript и Vue; условия совместимы."}
+{"pair_id": "73b93c87c18d", "label": 0, "rationale": "DevOps/SRE, другая специализация."}
+{"pair_id": "45a21af13398", "label": 1, "rationale": "Middle, TypeScript и CSS подтверждены, Webpack есть, нет Vue; только удалёнка при офисном формате."}
+{"pair_id": "cbd87b65b2b6", "label": 1, "rationale": "Middle, 5-й перцентиль, CSS и TypeScript лишь частично; нет Webpack; только гибрид."}
+{"pair_id": "480b42396d40", "label": 0, "rationale": "Нет ни одного обязательного навыка: TypeScript, CSS, Webpack, Vue отсутствуют; только плюсовые технологии."}
+{"pair_id": "3e06ab63a7e2", "label": 2, "rationale": "Senior, TypeScript и CSS подтверждены, Vue и Webpack заявлены; ожидания немного выше вилки (~8%)."}
+{"pair_id": "51c7a4ebe35b", "label": 1, "rationale": "Middle, все обязательные навыки закрыты, TS и CSS подтверждены; только удалённо при офисной вакансии."}
+{"pair_id": "ee965fa5bccc", "label": 1, "rationale": "Middle, CSS подтверждён, TS частично; нет Vue и Webpack. Условия подходят."}
+{"pair_id": "76ecfe83ce87", "label": 1, "rationale": "Middle, TS и CSS подтверждены, Vue есть, нет Webpack; ожидания от 390 тыс. сильно выше вилки."}
+{"pair_id": "143f75b309ed", "label": 0, "rationale": "DevOps Junior, другая специализация."}
+{"pair_id": "54dcf71d1230", "label": 1, "rationale": "Junior, есть TypeScript и Webpack, нет CSS и Vue; только гибрид при офисном формате."}
+{"pair_id": "d695997bbd6d", "label": 1, "rationale": "Middle, TS и CSS подтверждены, Vue есть, нет Webpack; офис не рассматривает."}
+{"pair_id": "ae07f6c47834", "label": 1, "rationale": "Сильный Middle, Vue и Webpack есть, но нет TypeScript и CSS; ожидания выше вилки более чем на 15%."}
+{"pair_id": "0df4c5dea278", "label": 1, "rationale": "Middle, TS и CSS подтверждены, но нет Vue и Webpack."}
+{"pair_id": "2f82823eb96a", "label": 1, "rationale": "Стек полностью совпадает, но все навыки по тесту лишь частично, 1-й перцентиль, давно неактивен."}
+{"pair_id": "3ec41f945640", "label": 1, "rationale": "Middle, все обязательные навыки, TS и CSS подтверждены; ожидания от 450 тыс. значительно выше вилки."}
+{"pair_id": "eb8171a8c206", "label": 0, "rationale": "Junior 3-й перцентиль, нет TypeScript и Webpack, офис не рассматривает."}
+{"pair_id": "59c44661bf2b", "label": 0, "rationale": "Senior/Lead без TypeScript, Vue и Webpack, ожидания от 420 тыс. несовместимы."}
+{"pair_id": "89cc65b2b1b8", "label": 1, "rationale": "Middle, есть CSS и все плюсы, но нет TypeScript, Vue, Webpack; условия подходят."}
+{"pair_id": "39c7daa803cf", "label": 1, "rationale": "Middle 7-й перцентиль, CSS и TS только частично, Vue есть, Webpack нет."}
+{"pair_id": "f7d28720c2fe", "label": 1, "rationale": "Senior, TS и CSS подтверждены, Vue есть, нет Webpack; ожидания от 460 тыс. сильно выше вилки."}
+{"pair_id": "4e729c0e4ab9", "label": 1, "rationale": "Middle, TS и CSS подтверждены, нет Vue и Webpack; условия совместимы."}
+{"pair_id": "889233f02f04", "label": 0, "rationale": "Низкий перцентиль, CSS и TS частично, нет Webpack; офис не рассматривает."}
+{"pair_id": "f5017d11741a", "label": 3, "rationale": "Middle, TS и CSS подтверждены, Vue, Webpack и все плюсы заявлены; вилка и формат подходят."}
+{"pair_id": "c895a112777b", "label": 2, "rationale": "Middle, 100-й перцентиль, CSS, TS, Webpack заявлены, нет Vue; вилка и офис подходят."}
+{"pair_id": "c4a8fd7299d5", "label": 1, "rationale": "Junior с опытом 0.6 года, стек совпадает, но React и TS частично; уровень ниже."}
+{"pair_id": "24768b818253", "label": 0, "rationale": "Senior/Lead без TypeScript и Vue, ожидания от 360 тыс., офис не рассматривает."}
+{"pair_id": "050873eb7e00", "label": 0, "rationale": "Нет Vue, ожидания от 380 тыс. сильно выше вилки, офис не рассматривает."}
+{"pair_id": "2ebf94f95cf0", "label": 1, "rationale": "Middle, TS и CSS подтверждены, но нет Vue и Webpack."}
+{"pair_id": "23dd6cac97b0", "label": 0, "rationale": "Senior/Lead без CSS, Vue, Webpack; ожидания от 300 тыс."}
+{"pair_id": "ab7d9479a6ae", "label": 0, "rationale": "Нет Vue и Webpack, только удалёнка при офисной вакансии."}
+{"pair_id": "b3e802375dbc", "label": 3, "rationale": "Middle, TS и CSS подтверждены, Vue, Webpack и плюсы заявлены; вилка и офис подходят, ищет работу."}
+{"pair_id": "aa101a75628d", "label": 1, "rationale": "Senior/Lead, TS, CSS, Webpack есть, нет Vue; ожидания от 400 тыс. сильно выше вилки."}
+{"pair_id": "96e78bdebb1f", "label": 1, "rationale": "Middle, TS и CSS подтверждены, Webpack есть, нет Vue; ожидания выше вилки на ~19%."}
+{"pair_id": "2b2750cab072", "label": 2, "rationale": "Junior, но TS и CSS подтверждены, Vue, Webpack и плюсы заявлены; условия подходят."}
+{"pair_id": "bc04d5b0c8a9", "label": 1, "rationale": "Middle, все обязательные закрыты, сильные ФСП, но только удалённо при офисной вакансии."}
+{"pair_id": "707e2b6e0c12", "label": 1, "rationale": "Middle, CSS подтверждён, TS есть, нет Vue и Webpack; ожидания от 310 тыс. выше вилки."}
+{"pair_id": "24d604da9640", "label": 0, "rationale": "Junior без TypeScript и Vue, только гибрид."}
+{"pair_id": "96357de66ba6", "label": 1, "rationale": "Middle, CSS и Vue есть, нет TypeScript и Webpack; условия подходят."}
+{"pair_id": "c346513bdf98", "label": 0, "rationale": "Senior без Vue и Webpack, ожидания от 380 тыс. значительно выше вилки."}
+{"pair_id": "0fe19cfb0668", "label": 1, "rationale": "Middle, только CSS из обязательных; нет TypeScript, Vue, Webpack; условия подходят."}
+{"pair_id": "6eef0c06405a", "label": 1, "rationale": "Senior, полный стек и победы ФСП, но ожидания от 380 тыс. сильно выше вилки."}
+{"pair_id": "afe4c3244ee9", "label": 1, "rationale": "Junior, есть TypeScript и Webpack, нет CSS и Vue; уровень ниже."}
+{"pair_id": "2b19509b79c5", "label": 1, "rationale": "Junior/Intern, TS и CSS подтверждены, стек совпадает, но уровень ниже и перцентиль низкий."}
+{"pair_id": "cf305b07ec1e", "label": 1, "rationale": "Junior, CSS, TS, Webpack заявлены, нет Vue; уровень ниже Middle."}
+{"pair_id": "1650d906d5cc", "label": 1, "rationale": "Middle, CSS подтверждён, TS есть, нет Vue и Webpack; условия подходят."}
+{"pair_id": "ae5401461b50", "label": 2, "rationale": "Middle 97-й перцентиль, CSS, Vue, Webpack есть, нет TypeScript; вилка и офис подходят."}
+{"pair_id": "d49a1e46100c", "label": 1, "rationale": "Middle 11-й перцентиль, CSS и TS частично, нет Vue и Webpack."}
+{"pair_id": "33597b994b8c", "label": 1, "rationale": "Junior с опытом 0.9 года, TS и CSS подтверждены, Webpack есть, нет Vue."}
+{"pair_id": "03915c5e4a58", "label": 2, "rationale": "Middle, CSS подтверждён, Vue и Webpack есть, нет TypeScript; условия подходят."}
+{"pair_id": "667deedac45f", "label": 2, "rationale": "Middle, CSS подтверждён, TS и Webpack есть, нет Vue; вилка и офис подходят."}

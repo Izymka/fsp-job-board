@@ -1,0 +1,95 @@
+{"pair_id":"3093f993d806","label":1,"rationale":"Все требуемые технологии заявлены, но ожидания существенно выше вилки."}
+{"pair_id":"5e36598f1179","label":0,"rationale":"Другая специализация: backend вместо frontend."}
+{"pair_id":"b94eb941e03d","label":1,"rationale":"Junior, отсутствует Svelte, а Vue и Redux только заявлены."}
+{"pair_id":"b29aca294ae1","label":2,"rationale":"Middle с Svelte и Vue; отсутствует Redux, но условия совместимы."}
+{"pair_id":"73ec68bbb4a2","label":1,"rationale":"Есть Svelte, но отсутствуют Redux и Vue."}
+{"pair_id":"e80bdb58a686","label":3,"rationale":"Middle, все обязательные технологии заявлены, тест сильный, условия подходят."}
+{"pair_id":"33c731c1b9e1","label":1,"rationale":"Нет Vue, ключевые навыки тестом подтверждены лишь частично, формат без удалёнки."}
+{"pair_id":"ec48752ead7e","label":1,"rationale":"Нет Vue; ожидания выше вилки и формат без удалённой работы."}
+{"pair_id":"335fc6ab07a1","label":1,"rationale":"Нет Redux, ожидания выше вилки и гибридный формат не подходит."}
+{"pair_id":"28003b643a99","label":1,"rationale":"Стек полный, но ожидания сильно выше вилки и только офис."}
+{"pair_id":"f2b83999d6c1","label":3,"rationale":"Все обязательные технологии заявлены, ключевой стек тестом подтверждён, удалёнка и вилка подходят."}
+{"pair_id":"a887056ed7fc","label":1,"rationale":"Junior и нет Svelte; доступен только офис."}
+{"pair_id":"f921292e1656","label":3,"rationale":"Middle с полным обязательным стеком, сильным тестом и подходящими условиями."}
+{"pair_id":"a411c0085816","label":1,"rationale":"Junior, отсутствуют Redux и Vue, формат только офисный."}
+{"pair_id":"d2b351f6775a","label":3,"rationale":"Middle с Redux, Svelte и Vue; удалёнка и зарплатные ожидания подходят."}
+{"pair_id":"fc7d43331035","label":1,"rationale":"Junior, ожидания заметно выше вилки, хотя стек заявлен."}
+{"pair_id":"91172685a206","label":1,"rationale":"Подходящий стек, но ожидания существенно выше вилки."}
+{"pair_id":"994cec7ad4fa","label":3,"rationale":"Middle с полным стеком, подтверждёнными базовыми навыками и подходящей удалёнкой."}
+{"pair_id":"b0f793d976db","label":1,"rationale":"Нет Svelte и Vue, доступен только офис."}
+{"pair_id":"0857662738de","label":2,"rationale":"Redux и Svelte заявлены, но отсутствует Vue; условия подходят."}
+{"pair_id":"a758ab7d31b9","label":3,"rationale":"Все обязательные технологии заявлены, сильные базовые навыки подтверждены, условия совместимы."}
+{"pair_id":"bf4348dc6d20","label":1,"rationale":"Полный стек, но ожидания выше вилки и нет удалённого формата."}
+{"pair_id":"0371b236e067","label":1,"rationale":"Полный стек заявлен, но зарплатные ожидания существенно выше вилки."}
+{"pair_id":"c3790e6eb5f9","label":1,"rationale":"Есть обязательный стек, но ожидания значительно выше вилки."}
+{"pair_id":"05deeeab35f5","label":1,"rationale":"Нет Svelte и Vue; несмотря на Redux, обязательный стек неполный."}
+{"pair_id":"ce766a3e2e0f","label":1,"rationale":"Есть Redux и Svelte, но отсутствует Vue, JavaScript подтверждён частично."}
+{"pair_id":"c4e9a9908227","label":1,"rationale":"Есть Redux и Svelte, но нет Vue; ожидания намного выше вилки."}
+{"pair_id":"00065e251310","label":2,"rationale":"Redux и Svelte заявлены, отсутствует Vue; условия по зарплате и формату подходят."}
+{"pair_id":"fce26bd107cc","label":1,"rationale":"Junior с неполным обязательным стеком: нет Svelte и Vue."}
+{"pair_id":"e3c2ec3d06a7","label":1,"rationale":"Junior, не заявлены все три обязательные технологии."}
+{"pair_id":"95250e12598d","label":1,"rationale":"Нет Redux, офисный формат несовместим с удалённой вакансией."}
+{"pair_id":"0a532fc6c745","label":1,"rationale":"Есть Svelte, но нет Redux и Vue; ожидания выше вилки."}
+{"pair_id":"32b0d71ba2a5","label":1,"rationale":"Обязательный стек полный, но ожидания более чем вдвое выше вилки."}
+{"pair_id":"7f75e5a369ec","label":1,"rationale":"Junior и ожидания существенно выше вилки; доступен только гибрид."}
+{"pair_id":"f0fab3092487","label":1,"rationale":"Стек полный, но формат только офисный и тест слабый по ключевым навыкам."}
+{"pair_id":"a6e01bdf5ce1","label":1,"rationale":"Нет Vue, доступен офис или удалёнка; обязательный стек неполный."}
+{"pair_id":"52db588d89b5","label":1,"rationale":"Полный стек, но Senior ожидает значительно выше вилки."}
+{"pair_id":"4958f7deb030","label":1,"rationale":"Junior, отсутствует Svelte; несмотря на подходящую зарплату, стек неполный."}
+{"pair_id":"be905ab920c1","label":1,"rationale":"Нет Svelte и Vue, обязательный стек закрыт лишь частично."}
+{"pair_id":"971c662a0c90","label":1,"rationale":"Нет Svelte и Vue, хотя Redux заявлен и условия частично подходят."}
+{"pair_id":"8023a8ef4027","label":1,"rationale":"Нет Svelte и Vue, ожидания существенно выше вилки."}
+{"pair_id":"d7154b2c1306","label":2,"rationale":"Есть Vue, но отсутствуют Redux и Svelte; ожидания и форматы совместимы."}
+{"pair_id":"51aaa7825d48","label":0,"rationale":"Другая специализация: Data Science вместо frontend."}
+{"pair_id":"6d1e036cbe19","label":1,"rationale":"Полный стек, но Senior ожидает существенно выше вилки."}
+{"pair_id":"f923d3131e0a","label":2,"rationale":"Redux и Svelte заявлены, отсутствует Vue; зарплата и форматы подходят."}
+{"pair_id":"919cdc31a819","label":1,"rationale":"Есть Redux, но нет Svelte и Vue."}
+{"pair_id":"52b9447ea0da","label":1,"rationale":"Нет Redux и Svelte, ключевые навыки тестом подтверждены лишь частично."}
+{"pair_id":"3113677c7cd6","label":1,"rationale":"Junior, нет Svelte, а React подтверждён только частично."}
+{"pair_id":"745e77b133bc","label":2,"rationale":"Redux и Svelte заявлены, отсутствует Vue; ожидания и удалёнка подходят."}
+{"pair_id":"76dcc4b37f2e","label":1,"rationale":"Полный стек заявлен, но ожидания существенно выше вилки."}
+{"pair_id":"082ef5014d28","label":2,"rationale":"Есть Svelte и Vue, но отсутствует Redux; условия формально совместимы."}
+{"pair_id":"27caa10b3db8","label":1,"rationale":"Есть Redux и Svelte, но нет Vue; ожидания значительно выше вилки."}
+{"pair_id":"66c17ce37df8","label":2,"rationale":"Есть Ansible, ELK и Terraform, но отсутствуют ArgoCD и SRE."}
+{"pair_id":"0b998efc2941","label":1,"rationale":"Есть ArgoCD и Terraform, но нет Ansible, ELK, SRE; ожидания выше вилки."}
+{"pair_id":"b6d618240fa3","label":1,"rationale":"Есть ELK и SRE, но нет ArgoCD, Ansible, Terraform; нет офисного формата."}
+{"pair_id":"b4e5d7316500","label":1,"rationale":"Есть Ansible, SRE и Terraform, но отсутствуют ArgoCD и ELK; без офиса."}
+{"pair_id":"2d3c37b05c41","label":1,"rationale":"Есть ArgoCD и SRE, но отсутствуют Ansible, ELK и Terraform."}
+{"pair_id":"fa2c9a879290","label":1,"rationale":"Есть ArgoCD, ELK, Terraform, но отсутствуют Ansible и SRE; ожидания высоки."}
+{"pair_id":"4d6ed9e2a558","label":1,"rationale":"Есть ArgoCD, ELK и SRE, но нет Ansible и Terraform; ожидания высоки."}
+{"pair_id":"f3ce65d7cc25","label":1,"rationale":"Есть Ansible, ArgoCD и ELK, но отсутствуют SRE и Terraform."}
+{"pair_id":"bdbcf17424c6","label":1,"rationale":"Есть ArgoCD, Ansible, SRE, Terraform, но нет ELK; ожидания выше вилки."}
+{"pair_id":"7b2505191598","label":1,"rationale":"Есть ArgoCD и ELK, но отсутствуют Ansible, SRE и Terraform."}
+{"pair_id":"80f8484abde3","label":1,"rationale":"Почти полный стек без SRE, но ожидания существенно выше вилки."}
+{"pair_id":"0c81c509e46c","label":1,"rationale":"Есть Ansible, SRE и Terraform, но нет ArgoCD и ELK; ожидания высоки."}
+{"pair_id":"ad7489694e9f","label":1,"rationale":"Все кроме ELK заявлены, но ожидания существенно выше вилки."}
+{"pair_id":"35a1ecc994f4","label":0,"rationale":"Другая специализация: Data Science вместо DevOps."}
+{"pair_id":"ae932f2b33b8","label":1,"rationale":"Есть ArgoCD и Terraform, но отсутствуют Ansible, ELK и SRE."}
+{"pair_id":"db1bcb2ea28f","label":2,"rationale":"Есть Ansible, ELK и Terraform; отсутствуют ArgoCD и SRE, условия подходят."}
+{"pair_id":"2aa3cd3b8a79","label":1,"rationale":"Есть ArgoCD, SRE и Terraform, но нет Ansible и ELK; ожидания высоки."}
+{"pair_id":"38fcaa716ed5","label":1,"rationale":"Из обязательного стека заявлен только SRE; ожидания намного выше вилки."}
+{"pair_id":"648c19c4c305","label":1,"rationale":"Junior, нет ArgoCD, ELK и SRE; формат без офиса."}
+{"pair_id":"de3f1e6917d4","label":0,"rationale":"Junior и отсутствует большинство обязательных технологий."}
+{"pair_id":"04bdd5ba4948","label":0,"rationale":"Junior, не заявлены обязательные ArgoCD, Ansible, ELK, SRE, Terraform."}
+{"pair_id":"60155f6161bc","label":0,"rationale":"Не заявлена ни одна обязательная технология вакансии."}
+{"pair_id":"b6c1ff67a3b5","label":1,"rationale":"Почти полный стек без SRE, но ожидания существенно выше вилки."}
+{"pair_id":"c13d677a6477","label":1,"rationale":"Есть Ansible и Terraform, но отсутствуют ArgoCD, ELK и SRE; ожидания высоки."}
+{"pair_id":"2bafa07c3da0","label":3,"rationale":"Middle с полным обязательным стеком, тестовыми базовыми навыками и совместимыми условиями."}
+{"pair_id":"9ade29c25b78","label":0,"rationale":"Другая специализация: backend вместо DevOps."}
+{"pair_id":"22ce55c80723","label":1,"rationale":"Есть Ansible и Terraform, но отсутствуют ArgoCD, ELK, SRE; ожидания выше вилки."}
+{"pair_id":"fe513fc85879","label":1,"rationale":"Из обязательного стека заявлен только SRE; удалёнка и ожидания не подходят."}
+{"pair_id":"f7e86d24f789","label":1,"rationale":"Есть Ansible и SRE, но нет ArgoCD, ELK и Terraform; ожидания высоки."}
+{"pair_id":"5dac691e67ec","label":1,"rationale":"Junior, нет ELK и SRE, хотя часть обязательного стека заявлена."}
+{"pair_id":"d9d19b0cb108","label":1,"rationale":"Нет Terraform и доступна только удалёнка при офисной вакансии."}
+{"pair_id":"d5be1ab35faf","label":1,"rationale":"Полный обязательный стек, но ожидания значительно выше вилки."}
+{"pair_id":"13075f4b45e1","label":1,"rationale":"Junior с одним ArgoCD из обязательного стека и ожиданиями выше вилки."}
+{"pair_id":"813b737cc059","label":1,"rationale":"Junior с полным стеком, но доступен только удалённый формат."}
+{"pair_id":"aeae29bbd0c9","label":1,"rationale":"Есть Ansible, но отсутствуют ArgoCD, ELK, SRE, Terraform; ожидания высоки."}
+{"pair_id":"cc4ecf9a8e18","label":1,"rationale":"Есть Ansible, ArgoCD, ELK, но нет SRE и Terraform; нет офиса."}
+{"pair_id":"944625c0477a","label":1,"rationale":"Есть ArgoCD, Ansible, ELK, но отсутствуют SRE и Terraform; ожидания высоки."}
+{"pair_id":"904a7e9cda7c","label":1,"rationale":"Есть ArgoCD и Terraform, но отсутствуют Ansible, ELK, SRE; нет офиса."}
+{"pair_id":"30bc9a8e1914","label":0,"rationale":"Отсутствует большинство обязательных технологий, ожидания значительно выше вилки."}
+{"pair_id":"ff212e7c187d","label":1,"rationale":"Полный обязательный стек, но Senior ожидает существенно выше вилки."}
+{"pair_id":"67c42b80f7f2","label":1,"rationale":"Junior, отсутствуют SRE и Terraform, формат без офиса."}
+{"pair_id":"289ea746a7b1","label":1,"rationale":"Полный обязательный стек, но ожидания существенно выше вилки."}
+{"pair_id":"e08c86a8e5d1","label":1,"rationale":"Есть Ansible, ELK и SRE, но нет ArgoCD и Terraform; ожидания высоки."}

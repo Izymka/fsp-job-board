@@ -1,0 +1,58 @@
+{"pair_id": "c39b440a6224", "label": 1, "rationale": "Java и Celery есть, тест 90-й перцентиль, но Go и Django не заявлены — половина обязательных требований отсутствует"}
+{"pair_id": "a34dafb729cc", "label": 1, "rationale": "Django заявлен, Gin частично закрывает Go; Java нет, тест 11-й перцентиль слабый"}
+{"pair_id": "585ca90d9a28", "label": 1, "rationale": "Go и Celery есть, но Java и Django отсутствуют; тест 8-й перцентиль, ожидания на верхней границе вилки"}
+{"pair_id": "391201530d86", "label": 0, "rationale": "Нет ни Java, ни Go, ни Django; тест 1-й перцентиль — ключевые требования вакансии не закрыты"}
+{"pair_id": "633ca1322ab0", "label": 1, "rationale": "Java только через Spring, Go и Django отсутствуют; тест средний, условия совместимы"}
+{"pair_id": "342e72dc2dc4", "label": 0, "rationale": "Нет Java, Go и Django; ключевые обязательные технологии вакансии не закрыты"}
+{"pair_id": "40eb5b35afa9", "label": 1, "rationale": "Senior, Go есть, Java и Django нет; ожидания от 330 тыс. выше вилки более чем на 15%"}
+{"pair_id": "10aa2ba25225", "label": 1, "rationale": "Django и Go закрыты, Java отсутствует; ожидания от 360 тыс. значительно выше вилки"}
+{"pair_id": "bc1b4b35a00e", "label": 1, "rationale": "Java есть, Go и Django отсутствуют; тест 12-й перцентиль — слабый результат"}
+{"pair_id": "7cde81551254", "label": 0, "rationale": "Junior, тест 1-й перцентиль, ни Java, ни Go, ни Django"}
+{"pair_id": "bd8e1b98cc0c", "label": 1, "rationale": "Java и Go заявлены, но грейд Junior ниже вакансии; Django нет, тест 54-й перцентиль"}
+{"pair_id": "b6efab7aec4a", "label": 1, "rationale": "Из обязательных только Django; Java и Go отсутствуют, тест средний"}
+{"pair_id": "4919e7bbad55", "label": 1, "rationale": "Junior, из обязательных только Django; Java и Go не заявлены"}
+{"pair_id": "27f9c3eaea2b", "label": 1, "rationale": "Java и достижения ФСП есть, но Go и Django отсутствуют; ожидания немного выше вилки"}
+{"pair_id": "aa21d7158395", "label": 1, "rationale": "Junior, Django и Gin частично; Java нет, уровень ниже вакансии"}
+{"pair_id": "c91a5587496f", "label": 1, "rationale": "Java только через Spring, Go и Django нет; тест 4-й перцентиль слабый"}
+{"pair_id": "27e163dbbd25", "label": 1, "rationale": "Django и Gin есть, Java нет; ожидания от 390 тыс. значительно выше вилки"}
+{"pair_id": "ee62a11a0568", "label": 1, "rationale": "Java и Go закрыты, Django нет; ожидания от 320 тыс. выше вилки более чем на 15%"}
+{"pair_id": "adeb12ae5391", "label": 1, "rationale": "Senior, Django есть, Java и Go нет; ожидания 590 тыс. кратно выше вилки"}
+{"pair_id": "0178ec108df5", "label": 1, "rationale": "Senior, из обязательных только Django; ожидания от 460 тыс. значительно выше вилки"}
+{"pair_id": "50dd68ad1647", "label": 0, "rationale": "Frontend-специализация против backend-вакансии"}
+{"pair_id": "cc399855bb9a", "label": 2, "rationale": "Django и Go закрыты, достижения ФСП; Java нет, но вилка и условия подходят"}
+{"pair_id": "773ef8d33329", "label": 1, "rationale": "Java и Go есть, Django нет; тест 7-й перцентиль слабый, ожидания на верхней границе вилки"}
+{"pair_id": "35a65dd431e4", "label": 1, "rationale": "Только Go из обязательных; Java и Django нет, ожидания от 370 тыс. выше вилки"}
+{"pair_id": "4fea0d4378ce", "label": 1, "rationale": "Java только через Spring; Go и Django отсутствуют, тест слабый"}
+{"pair_id": "dcf75d5e1c22", "label": 1, "rationale": "Java только через Spring, Go и Django нет; тест 19-й перцентиль"}
+{"pair_id": "ee5cd8d7012b", "label": 2, "rationale": "Senior, Django и Go закрыты, Java через Spring; вилка и формат совместимы"}
+{"pair_id": "47b126cb5f86", "label": 3, "rationale": "Все обязательные — Java, Go, Django — в стеке, грейд Middle, вилка и формат подходят"}
+{"pair_id": "314b251f2b79", "label": 1, "rationale": "Сильный тест, но Java только через Spring; Go и Django не заявлены"}
+{"pair_id": "4df89462ca08", "label": 2, "rationale": "Django и Go закрыты, Java нет; вилка и формат подходят"}
+{"pair_id": "621bc3b68cce", "label": 1, "rationale": "Java и Go есть, Django нет; формат только удалённый, ожидания выше вилки"}
+{"pair_id": "130b020f0db7", "label": 0, "rationale": "Нет Java, Go и Django; ключевые обязательные требования вакансии отсутствуют"}
+{"pair_id": "a21ff1b840a2", "label": 0, "rationale": "Frontend-специализация не соответствует backend-вакансии; ожидания кратно выше вилки"}
+{"pair_id": "4eabeb8c52bb", "label": 1, "rationale": "Только Java из обязательных, тест слабый; Go и Django отсутствуют"}
+{"pair_id": "35d83b8381f5", "label": 1, "rationale": "Senior, Java через Spring; Go и Django нет, ожидания от 390 тыс. выше вилки"}
+{"pair_id": "89637d0183cc", "label": 1, "rationale": "Go только через Gin; Java и Django отсутствуют, тест средний"}
+{"pair_id": "d775785085e6", "label": 1, "rationale": "Java есть, Go и Django нет; вилка и формат совместимы"}
+{"pair_id": "c2d32c1b1251", "label": 1, "rationale": "Java и Go закрыты, но тест 20-й перцентиль слабый; Django отсутствует"}
+{"pair_id": "41429dc3edd9", "label": 1, "rationale": "Сильный тест и Django, но Java и Go не заявлены"}
+{"pair_id": "00913521c3a2", "label": 1, "rationale": "Только Go, слабый тест; ожидания от 400 тыс. значительно выше вилки"}
+{"pair_id": "afe34fc15482", "label": 2, "rationale": "Java и Django закрыты, грейд Junior ниже на ступень; вилка и формат подходят"}
+{"pair_id": "05e5b17f413f", "label": 0, "rationale": "Junior, нет Java, Go и Django; формат только удалённый"}
+{"pair_id": "1e76d614cc14", "label": 0, "rationale": "Senior, но Java, Go и Django отсутствуют; ожидания кратно выше вилки"}
+{"pair_id": "f8d42049d811", "label": 2, "rationale": "Java и Django закрыты, достижение ФСП; вилка и формат подходят, кандидат активно ищет"}
+{"pair_id": "a87ac838acde", "label": 1, "rationale": "Junior, только Go; Java и Django отсутствуют, тест 8-й перцентиль"}
+{"pair_id": "9dadf65402b9", "label": 1, "rationale": "Senior, Go только через Gin; Java и Django нет, ожидания выше вилки"}
+{"pair_id": "7861396b826c", "label": 1, "rationale": "Только Django из обязательных; Java и Go отсутствуют"}
+{"pair_id": "13885095784d", "label": 1, "rationale": "Senior, только Django; Java и Go нет, ожидания выше вилки"}
+{"pair_id": "34b0831131ef", "label": 1, "rationale": "Django и Gin есть, Java нет; формат только удалённый, ожидания кратно выше вилки"}
+{"pair_id": "c20dd78d55e5", "label": 1, "rationale": "Только Java из обязательных; Go и Django нет, ожидания выше вилки"}
+{"pair_id": "fdc0cde4c061", "label": 1, "rationale": "Только Django; Java и Go отсутствуют"}
+{"pair_id": "9880fed4a1ad", "label": 1, "rationale": "Senior, Django и Gin, Java нет; удалённый формат и ожидания кратно выше вилки"}
+{"pair_id": "fbf57b2c19a0", "label": 1, "rationale": "Только Django; Java и Go нет, ожидания выше вилки более чем на 15%"}
+{"pair_id": "03a4b0934c40", "label": 1, "rationale": "Только Go из обязательных; Java и Django отсутствуют"}
+{"pair_id": "47f4c5e90fc1", "label": 1, "rationale": "Junior, только Go; Java и Django не заявлены"}
+{"pair_id": "f456d1a1a676", "label": 1, "rationale": "Django и Go есть, но тест 6-й перцентиль слабый и опыт мал"}
+{"pair_id": "fdf3defc1187", "label": 2, "rationale": "Java и Django закрыты, Go нет; вилка и формат совместимы"}
+{"pair_id": "3b6bf34e2fc2", "label": 1, "rationale": "Только Django, тест 15-й перцентиль слабый; Java и Go отсутствуют"}

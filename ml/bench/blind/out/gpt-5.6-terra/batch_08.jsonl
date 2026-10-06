@@ -1,0 +1,99 @@
+{"pair_id":"d005d1a14535","label":1,"rationale":"QA-профиль и стек близки, но ожидания существенно выше вилки."}
+{"pair_id":"a3066456d19c","label":1,"rationale":"Сильный QA-профиль, но зарплатные ожидания значительно выше вилки."}
+{"pair_id":"79eceb01c8d7","label":0,"rationale":"Другая специализация: backend-разработка вместо QA."}
+{"pair_id":"92ca0f8a8180","label":1,"rationale":"QA Junior на ступень ниже, хотя подтверждены ключевые знания."}
+{"pair_id":"45f5c9d9094b","label":1,"rationale":"Подходящий QA-стек, но ожидания заметно превышают вилку."}
+{"pair_id":"e31a7c7c0113","label":2,"rationale":"Middle QA, подтверждены Git, HTTP, Python, SQL и тест-дизайн; условия подходят."}
+{"pair_id":"7d76f6a89f1d","label":3,"rationale":"Подтверждены все ключевые навыки, релевантный QA-опыт и подходящие ожидания."}
+{"pair_id":"39ab0e007095","label":1,"rationale":"Сильный QA-профиль, но ожидания существенно выше вилки."}
+{"pair_id":"a6800ea4462b","label":1,"rationale":"Релевантный стек, однако ключевые навыки теста подтверждены лишь частично."}
+{"pair_id":"ba9df220824b","label":1,"rationale":"Junior-грейд и небольшой опыт для middle-вакансии, несмотря на тесты."}
+{"pair_id":"1ac087aca659","label":1,"rationale":"Junior с опытом менее года; не соответствует требуемому уровню."}
+{"pair_id":"671c0949a682","label":1,"rationale":"Релевантные навыки, но зарплатные ожидания заметно выше вилки."}
+{"pair_id":"256b0bff4ed5","label":2,"rationale":"Middle QA с релевантным опытом и стеком; условия совместимы."}
+{"pair_id":"c2aa4ad6bbf5","label":1,"rationale":"Подтверждены навыки, но удалённый формат не совпадает с гибридом вакансии."}
+{"pair_id":"c8b4c7db217c","label":1,"rationale":"Сильный QA, однако ожидания выше вилки и уровень Lead избыточен."}
+{"pair_id":"8695318a0dbb","label":1,"rationale":"Релевантный QA-профиль, но ожидания выходят за верхнюю границу вилки."}
+{"pair_id":"b4159817b253","label":1,"rationale":"Junior-грейд и частичные SQL, тест-дизайн для middle-вакансии."}
+{"pair_id":"8ebe77b8df60","label":1,"rationale":"Сильные навыки, но зарплатные ожидания существенно выше вилки."}
+{"pair_id":"564d2f83566f","label":1,"rationale":"Сильный Lead QA, но ожидания значительно выше вилки."}
+{"pair_id":"e4992adbbc88","label":1,"rationale":"Junior-грейд и ожидания выше вилки при требуемом middle."}
+{"pair_id":"205eb169d167","label":2,"rationale":"Middle QA с подтверждёнными HTTP, SQL и тест-дизайном; условия подходят."}
+{"pair_id":"2816379302f2","label":1,"rationale":"Сильный профиль, но ожидания существенно превышают вилку."}
+{"pair_id":"f7915495ac6a","label":1,"rationale":"Релевантный QA, но зарплатные ожидания значительно выше вилки."}
+{"pair_id":"05eee1e00fc5","label":1,"rationale":"Частично подтверждены HTTP и SQL, а ожидания выше вилки."}
+{"pair_id":"a278c63fabed","label":2,"rationale":"Middle QA, подтверждены Git, Python, SQL и тест-дизайн; условия подходят."}
+{"pair_id":"3165c3891f36","label":0,"rationale":"Другая специализация: frontend-разработка вместо QA."}
+{"pair_id":"dc72b7e18086","label":1,"rationale":"Junior-грейд ниже вакансии, хотя стек и опыт релевантны."}
+{"pair_id":"370309337c31","label":2,"rationale":"Релевантный middle QA-опыт, стек и зарплатные ожидания совместимы."}
+{"pair_id":"13a1f65faf8a","label":2,"rationale":"Middle QA с релевантным стеком и совместимыми ожиданиями."}
+{"pair_id":"ea6f2f36671c","label":1,"rationale":"Релевантный senior QA, но ожидания существенно превышают вилку."}
+{"pair_id":"4fdfc66ffebf","label":1,"rationale":"Junior-грейд ниже вакансии, несмотря на релевантный стек."}
+{"pair_id":"14ac62468ade","label":2,"rationale":"Релевантный middle QA, ожидания почти укладываются в вилку."}
+{"pair_id":"77d5977ec770","label":1,"rationale":"Junior-грейд и опыт менее двух лет для middle-вакансии."}
+{"pair_id":"89496b77e63c","label":2,"rationale":"Middle QA с релевантным стеком и подходящими условиями."}
+{"pair_id":"9ab353b73211","label":2,"rationale":"Middle QA, подтверждены HTTP, SQL и тест-дизайн; условия приемлемы."}
+{"pair_id":"11bb892a6cb5","label":1,"rationale":"Junior с опытом менее двух лет, ниже требуемого уровня."}
+{"pair_id":"5762b7863278","label":1,"rationale":"Junior-грейд и опыт 1,4 года недостаточны для middle."}
+{"pair_id":"262f15c89ac6","label":1,"rationale":"Сильный senior QA, но ожидания существенно превышают вилку."}
+{"pair_id":"a457fd534604","label":1,"rationale":"Junior-грейд ниже вакансии, хотя стек релевантен."}
+{"pair_id":"28ef6ad1537c","label":2,"rationale":"Middle QA с сильным тестом, стеком и совместимыми ожиданиями."}
+{"pair_id":"8050bbd86aa6","label":1,"rationale":"Junior и опыт менее года для позиции middle QA."}
+{"pair_id":"e4ad55f0f7e2","label":1,"rationale":"Junior-грейд и опыт 0,6 года недостаточны для middle."}
+{"pair_id":"3b93e22c5209","label":2,"rationale":"Middle QA с подтверждёнными ключевыми навыками и подходящими условиями."}
+{"pair_id":"3aebadb6f037","label":1,"rationale":"Junior-грейд и опыт 1,9 года ниже требований middle."}
+{"pair_id":"6ef60f1b20ab","label":2,"rationale":"Релевантный middle QA, подтверждены ключевые навыки и формат подходит."}
+{"pair_id":"3ec1af2b33eb","label":1,"rationale":"Релевантный профиль, но ожидания существенно выше вилки."}
+{"pair_id":"39c4c1869700","label":2,"rationale":"Middle QA с подтверждёнными ключевыми навыками и совместимыми условиями."}
+{"pair_id":"c0d8217fa6af","label":1,"rationale":"Junior и опыт 0,8 года для middle-позиции."}
+{"pair_id":"34342677852f","label":1,"rationale":"Junior с минимальным опытом и частично подтверждёнными ключевыми навыками."}
+{"pair_id":"9d141ea62494","label":1,"rationale":"Сильный QA-профиль, но ожидания существенно выше вилки."}
+{"pair_id":"36cccdebc855","label":0,"rationale":"Другая специализация: системный аналитик вместо Data Science."}
+{"pair_id":"619aec2c509e","label":1,"rationale":"Есть Python и pandas, но нет Jupyter и dbt, ожидания выше вилки."}
+{"pair_id":"a467fb9ec5a9","label":1,"rationale":"Релевантные навыки, но senior-уровень и ожидания значительно выше вилки."}
+{"pair_id":"6b57d9605b2b","label":2,"rationale":"Middle DS с Jupyter, dbt, Python и подтверждённым pandas; формат подходит."}
+{"pair_id":"6e7fd38c8797","label":0,"rationale":"Ожидания значительно выше вилки, нет Jupyter и dbt."}
+{"pair_id":"fe98fb39b630","label":1,"rationale":"Есть Jupyter, Python и pandas, но отсутствует dbt."}
+{"pair_id":"788fb97fb811","label":1,"rationale":"Сильный DS-профиль, но нет Jupyter и dbt, ожидания выше вилки."}
+{"pair_id":"b52c9e103bc5","label":1,"rationale":"Senior с ожиданиями выше вилки; не заявлены dbt и Python."}
+{"pair_id":"5230bad44f8d","label":0,"rationale":"Junior, удалённый формат и отсутствуют ключевые Jupyter, dbt, Python."}
+{"pair_id":"77d091ffd8f4","label":0,"rationale":"Ожидания резко выше вилки и не заявлены Python, Jupyter, dbt."}
+{"pair_id":"971466e79797","label":1,"rationale":"Middle DS с сильным тестом, но не заявлены обязательные Jupyter и dbt."}
+{"pair_id":"8838c4441010","label":0,"rationale":"Junior, несовместимый формат и ключевые требования подтверждены лишь частично."}
+{"pair_id":"c7634f5455a3","label":1,"rationale":"Есть Jupyter и pandas, но удалённый формат и не заявлены Python, dbt."}
+{"pair_id":"2f3688e1a3bb","label":1,"rationale":"Подтверждён Python, но нет Jupyter, dbt и ожидания выше вилки."}
+{"pair_id":"6c960ba072be","label":1,"rationale":"Сильный тест, но нет Jupyter, dbt и гибридного формата."}
+{"pair_id":"43f8b57b70df","label":1,"rationale":"Подтверждены базовые навыки, но отсутствуют Jupyter и dbt."}
+{"pair_id":"fa31a4e0b3cb","label":1,"rationale":"Senior с ожиданиями значительно выше вилки и без dbt."}
+{"pair_id":"20d153ee7d94","label":1,"rationale":"Senior с ожиданиями выше вилки; не заявлен dbt."}
+{"pair_id":"0a992c503fde","label":2,"rationale":"Middle DS с Jupyter, dbt, Python и подходящим гибридным форматом."}
+{"pair_id":"b97bf13338b1","label":1,"rationale":"Сильный профиль, но ожидания существенно выше вилки и нет dbt."}
+{"pair_id":"9c5a883fa087","label":1,"rationale":"Подтверждены базовые навыки, но ожидания выше вилки и нет Jupyter, dbt."}
+{"pair_id":"0ac42c851ad6","label":1,"rationale":"Ожидания выше вилки, не заявлены pandas, Jupyter и dbt."}
+{"pair_id":"3dc0a64ace5a","label":1,"rationale":"Есть Jupyter и dbt, но ожидания выше вилки, SQL и статистика частичны."}
+{"pair_id":"2dcb7d385b46","label":1,"rationale":"Сильный тест, но ожидания выше вилки и отсутствует dbt."}
+{"pair_id":"e422918ecaa6","label":0,"rationale":"Другая специализация: QA вместо Data Science."}
+{"pair_id":"3c9e4cbff4cf","label":1,"rationale":"Senior с существенно завышенными ожиданиями и без Jupyter, dbt."}
+{"pair_id":"761ce42155a3","label":1,"rationale":"Есть dbt, но ожидания выше вилки, SQL и статистика частичны."}
+{"pair_id":"908438ec8aeb","label":1,"rationale":"Сильный тест, но отсутствуют обязательные Jupyter, dbt и Python в стеке."}
+{"pair_id":"d724b32e858b","label":2,"rationale":"Middle DS с Jupyter, Python, pandas и подходящими ожиданиями."}
+{"pair_id":"1da4ae34c66b","label":1,"rationale":"Ожидания выше вилки, Python и pandas подтверждены лишь частично, нет dbt."}
+{"pair_id":"11eb034d7468","label":1,"rationale":"Junior-грейд ниже вакансии, хотя заявлены Python и dbt."}
+{"pair_id":"79fe6297f115","label":1,"rationale":"Senior с ожиданиями значительно выше вилки и без Jupyter, dbt."}
+{"pair_id":"8ef585c48933","label":1,"rationale":"Релевантный профиль, но удалённый формат и не заявлен dbt."}
+{"pair_id":"be9b4cc755e3","label":1,"rationale":"Есть dbt и сильный тест, но не заявлены Jupyter и Python."}
+{"pair_id":"6331f7e4805a","label":1,"rationale":"Senior с завышенными ожиданиями, несмотря на Jupyter и dbt."}
+{"pair_id":"79ec0b3b3488","label":1,"rationale":"Senior с ожиданиями далеко выше вилки и офисным форматом."}
+{"pair_id":"5258cc92106d","label":1,"rationale":"Senior с завышенными ожиданиями; не заявлены Jupyter, dbt, Python."}
+{"pair_id":"fc6cae419f47","label":1,"rationale":"Сильный профиль, но ожидания выше вилки и отсутствует dbt."}
+{"pair_id":"a4dffe719c6f","label":1,"rationale":"Подтверждены базовые навыки, но отсутствуют обязательные Jupyter и dbt."}
+{"pair_id":"8f9ccfeff467","label":1,"rationale":"Junior-грейд и ожидания выше вилки; отсутствуют Jupyter, dbt, Python."}
+{"pair_id":"26428f1fc8b2","label":1,"rationale":"Senior с ожиданиями выше вилки и удалённым форматом."}
+{"pair_id":"22d8ccaf8489","label":2,"rationale":"Middle DS с сильным подтверждённым стеком и совместимыми условиями."}
+{"pair_id":"3b7c01c0b928","label":2,"rationale":"Middle DS с Jupyter, Python и подходящими условиями; dbt не заявлен."}
+{"pair_id":"269d02635978","label":1,"rationale":"Подходящий уровень, но удалённый формат и отсутствуют Jupyter, dbt."}
+{"pair_id":"0bed917781bb","label":2,"rationale":"Middle DS с dbt и релевантным стеком; условия совместимы."}
+{"pair_id":"f1fa397325c4","label":1,"rationale":"Junior-грейд ниже вакансии, несмотря на релевантный стек."}
+{"pair_id":"28cf2cfb7f92","label":1,"rationale":"Статистика не подтверждена, нет dbt; требования закрыты неполно."}
+{"pair_id":"9617828105d7","label":1,"rationale":"Не заявлены обязательные Jupyter, dbt и Python."}
+{"pair_id":"85bcbf70bce5","label":2,"rationale":"Middle DS с сильным подтверждённым стеком и совместимыми условиями."}

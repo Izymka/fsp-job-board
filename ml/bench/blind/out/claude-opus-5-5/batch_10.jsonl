@@ -1,0 +1,59 @@
+{"pair_id": "ae5a0fb1796f", "label": 1, "rationale": "Грейд Middle, слабый тест, нет Jetpack Compose и Swift, только удалёнка при гибридной вакансии."}
+{"pair_id": "cce4be6dc797", "label": 1, "rationale": "Junior со всем обязательным стеком, но ожидания от 240 тыс. сильно выше вилки 160 тыс."}
+{"pair_id": "229390a743ae", "label": 3, "rationale": "Junior, 87-й перцентиль, весь обязательный стек, ожидания в вилке, гибрид подходит."}
+{"pair_id": "85f0aac1850f", "label": 1, "rationale": "Junior со слабым тестом, нет Jetpack Compose и Swift, только офис, давно неактивен."}
+{"pair_id": "255833bfa357", "label": 1, "rationale": "Middle со всем стеком, но уровень выше, ожидания выше вилки и только удалёнка."}
+{"pair_id": "26a978f69a17", "label": 1, "rationale": "Middle с очень слабым тестом, ожидания от 290 тыс. почти вдвое выше вилки."}
+{"pair_id": "ab7b76efc8fe", "label": 1, "rationale": "Middle/Senior, большая часть стека есть, но ожидания от 220 тыс. сильно выше вилки."}
+{"pair_id": "7f85e3591731", "label": 1, "rationale": "Junior со всем стеком, но ожидания от 280 тыс. значительно выше вилки."}
+{"pair_id": "ce9d6fade699", "label": 1, "rationale": "Middle без React Native и Jetpack Compose, ожидания от 190 тыс. выше вилки."}
+{"pair_id": "86dcc23dc3b2", "label": 1, "rationale": "Сильный Middle/Senior без React Native, ожидания от 340 тыс. более чем вдвое выше вилки."}
+{"pair_id": "3184ac76a2cc", "label": 1, "rationale": "Middle со слабым тестом, нет Swift, ожидания от 210 тыс. выше вилки."}
+{"pair_id": "69ac8ab9d717", "label": 2, "rationale": "Junior, весь обязательный стек заявлен, ожидания в вилке, гибрид; слабый и частичный тест."}
+{"pair_id": "e9140273179d", "label": 1, "rationale": "Middle со всем стеком, но ожидания от 190 тыс. выше вилки, слабый тест."}
+{"pair_id": "020a1d2c3c48", "label": 1, "rationale": "Middle без Jetpack Compose, ожидания от 270 тыс. значительно выше вилки."}
+{"pair_id": "dc3c54af300e", "label": 0, "rationale": "QA-инженер — другая специализация."}
+{"pair_id": "5cd5166dab30", "label": 2, "rationale": "Стажёр с сильным тестом и всем стеком, ожидания ниже вилки; уровень ниже, только удалёнка."}
+{"pair_id": "34b56f8f24ad", "label": 3, "rationale": "Junior со всем обязательным стеком, ожидания в вилке, гибрид, финалист ФСП."}
+{"pair_id": "5f2029fac924", "label": 2, "rationale": "Junior со всем стеком, ожидания в вилке; только офис при гибридной вакансии — мягкое расхождение."}
+{"pair_id": "1b0e16cba8fe", "label": 1, "rationale": "Junior без React Native и Swift, закрыта лишь половина обязательных требований."}
+{"pair_id": "07b562284937", "label": 2, "rationale": "Junior, 100-й перцентиль, Android, Compose, React Native, ожидания в вилке; нет Swift, нет гибрида."}
+{"pair_id": "fdfa9908bfea", "label": 2, "rationale": "Junior, 93-й перцентиль, Compose и React Native, ожидания в вилке, участник ФСП; нет Swift."}
+{"pair_id": "e7cb440ce6dc", "label": 1, "rationale": "Middle с очень слабым тестом, ожидания от 210 тыс. выше вилки, давно неактивен."}
+{"pair_id": "4dbc19365d03", "label": 1, "rationale": "Junior со всем стеком, но ожидания от 220 тыс. сильно выше вилки, только офис."}
+{"pair_id": "5b2f6adb536d", "label": 0, "rationale": "Middle/Senior без Compose, ожидания от 420 тыс. несопоставимы с вилкой, только удалёнка."}
+{"pair_id": "f382c5242dfd", "label": 1, "rationale": "Сильный Junior с почти всем стеком, но ожидания от 200 тыс. на 25% выше вилки."}
+{"pair_id": "349245cb9962", "label": 1, "rationale": "Junior со всем стеком, но ожидания от 270 тыс. значительно выше вилки."}
+{"pair_id": "3cc332815137", "label": 2, "rationale": "Junior с Android, React Native, Swift, ожидания в вилке; нет Compose, слабый тест, только офис."}
+{"pair_id": "21166158423f", "label": 1, "rationale": "Junior с очень слабым частичным тестом, нет React Native и Swift."}
+{"pair_id": "d19382fe5219", "label": 3, "rationale": "Junior с Compose, React Native, Swift, ожидания в вилке, гибрид подходит."}
+{"pair_id": "6a481e603c5c", "label": 1, "rationale": "Сильный Middle без Compose, ожидания от 260 тыс. значительно выше вилки."}
+{"pair_id": "76ba4f977cb7", "label": 1, "rationale": "Junior без React Native и Swift, ожидания от 180 тыс. выше вилки."}
+{"pair_id": "0d381abb3840", "label": 0, "rationale": "Frontend-разработчик — другая специализация."}
+{"pair_id": "32ac0ae9dddd", "label": 1, "rationale": "Middle со всем стеком, но ожидания от 290 тыс. почти вдвое выше вилки."}
+{"pair_id": "1369834b01d8", "label": 1, "rationale": "Middle со слабым тестом, нет Swift и Android, ожидания от 210 тыс. выше вилки."}
+{"pair_id": "e41aecf7d66c", "label": 2, "rationale": "Middle со всем стеком и хорошим тестом, ожидания ниже вилки; уровень на ступень выше, нет гибрида."}
+{"pair_id": "1687568efce7", "label": 1, "rationale": "Сильный Middle со всем стеком, но ожидания от 200 тыс. выше вилки, только удалёнка."}
+{"pair_id": "29efbddbdd68", "label": 1, "rationale": "Middle без Compose, ожидания от 230 тыс. выше вилки, только удалёнка."}
+{"pair_id": "48d5d0e84b6f", "label": 1, "rationale": "Junior с Compose, но без React Native, Swift и явного Android; условия подходят."}
+{"pair_id": "1018d89be705", "label": 2, "rationale": "Junior со всем стеком, ожидания в вилке, гибрид; слабый частичный тест."}
+{"pair_id": "34dd08b88d9d", "label": 1, "rationale": "Middle со всем стеком, но ожидания от 270 тыс. значительно выше вилки."}
+{"pair_id": "45cb2704da63", "label": 1, "rationale": "Junior с очень слабым тестом, нет React Native и Compose."}
+{"pair_id": "be5a2b4a4a5c", "label": 3, "rationale": "Junior со всем обязательным стеком, ожидания ниже вилки, гибрид подходит."}
+{"pair_id": "051adcdf7ce9", "label": 1, "rationale": "Сильный Middle со всем стеком, но ожидания от 260 тыс. значительно выше вилки."}
+{"pair_id": "3cc1e0b69de7", "label": 1, "rationale": "Стажёр со средним тестом и минимальным опытом, уровень ниже Junior, давно неактивен."}
+{"pair_id": "c1cfb4569b99", "label": 1, "rationale": "Junior с React Native и Swift, но без Android и Compose, опыт 0.1 года."}
+{"pair_id": "fe2b79b5155f", "label": 1, "rationale": "Стажёр со всем стеком заявленно, но уровень ниже, только офис, давно неактивен."}
+{"pair_id": "4887218e5112", "label": 1, "rationale": "Senior-аналитик без A/B-тестирования и продуктового анализа, только продуктовые метрики."}
+{"pair_id": "51fe34f242e4", "label": 0, "rationale": "Мобильный разработчик — другая специализация."}
+{"pair_id": "686acf92825a", "label": 2, "rationale": "Senior-аналитик, 85-й перцентиль, A/B и продуктовый анализ, ожидания в вилке; уровень на ступень ниже Lead."}
+{"pair_id": "3a996c9666dd", "label": 2, "rationale": "Senior-аналитик со 100-м перцентилем, A/B и продуктовый анализ, ожидания ниже вилки; грейд ниже Lead."}
+{"pair_id": "bf1632261c73", "label": 2, "rationale": "Опытный Senior-аналитик с продуктовым анализом, ожидания в вилке; нет A/B-тестирования."}
+{"pair_id": "d407f27afc2c", "label": 2, "rationale": "Senior-аналитик с A/B и продуктовым анализом, ожидания ниже вилки; только гибрид, уровень ниже."}
+{"pair_id": "fb23bcb89986", "label": 0, "rationale": "Frontend-разработчик — другая специализация."}
+{"pair_id": "79f7a8716017", "label": 1, "rationale": "Senior-аналитик со стеком A/B и продуктового анализа, но очень слабый частичный тест."}
+{"pair_id": "f9e8439f25c3", "label": 2, "rationale": "Senior-аналитик с A/B и продуктовым анализом, ожидания в вилке, удалёнка; грейд ниже Lead."}
+{"pair_id": "535e9c5b070e", "label": 1, "rationale": "Senior-аналитик со слабым тестом, без A/B-тестирования, нет удалёнки."}
+{"pair_id": "20e39efe97a6", "label": 1, "rationale": "Senior-аналитик без A/B и продуктового анализа, слабый тест, нет удалёнки."}
+{"pair_id": "78c73f086e1e", "label": 2, "rationale": "Сильный Senior-аналитик с A/B и продуктовым анализом, ожидания в вилке, удалёнка; грейд подтверждён Senior."}
+{"pair_id": "a4bdf34c021e", "label": 2, "rationale": "Senior-аналитик с продуктовым анализом, ожидания в вилке, удалёнка; нет A/B-тестирования."}

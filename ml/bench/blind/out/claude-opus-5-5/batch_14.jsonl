@@ -1,0 +1,58 @@
+{"pair_id": "c39b440a6224", "label": 1, "rationale": "Middle backend, есть Java и Celery, но нет Go и Django; условия совместимы."}
+{"pair_id": "a34dafb729cc", "label": 1, "rationale": "Middle 11-й перцентиль, Django и Gin (частично Go), нет Java; условия подходят."}
+{"pair_id": "585ca90d9a28", "label": 0, "rationale": "Из обязательных только Go, слабый тест, только гибрид при офисной вакансии."}
+{"pair_id": "391201530d86", "label": 0, "rationale": "Нет Java, Go, Django; 1-й перцентиль, навыки по тесту в основном частично."}
+{"pair_id": "633ca1322ab0", "label": 1, "rationale": "Middle, Python подтверждён, Spring частично закрывает Java; нет Go и Django."}
+{"pair_id": "342e72dc2dc4", "label": 0, "rationale": "Python/FastAPI-разработчик без Java, Go и Django."}
+{"pair_id": "40eb5b35afa9", "label": 0, "rationale": "Senior, только Go из обязательных, ожидания от 330 тыс., только гибрид."}
+{"pair_id": "10aa2ba25225", "label": 0, "rationale": "Senior/Lead, Django и Go есть, но ожидания от 360 тыс. и офис не рассматривает."}
+{"pair_id": "bc1b4b35a00e", "label": 1, "rationale": "Middle с опытом 1.4 года, Java и Celery есть, нет Go и Django; слабый тест."}
+{"pair_id": "7cde81551254", "label": 0, "rationale": "Junior, 1-й перцентиль, нет ни Java, ни Go, ни Django."}
+{"pair_id": "bd8e1b98cc0c", "label": 1, "rationale": "Junior с опытом 0.7 года, Go и Java заявлены, нет Django; уровень ниже."}
+{"pair_id": "b6efab7aec4a", "label": 1, "rationale": "Middle, Django и Python подтверждены, нет Java и Go; условия подходят."}
+{"pair_id": "4919e7bbad55", "label": 0, "rationale": "Junior, из обязательных только Django, нет Java и Go."}
+{"pair_id": "27f9c3eaea2b", "label": 1, "rationale": "Senior, Java есть, нет Go и Django; ожидания немного выше вилки."}
+{"pair_id": "aa21d7158395", "label": 0, "rationale": "Junior с опытом 0.7 года, нет Java, только гибрид."}
+{"pair_id": "c91a5587496f", "label": 0, "rationale": "4-й перцентиль, нет Go и Django, Java только через Spring."}
+{"pair_id": "27e163dbbd25", "label": 0, "rationale": "Senior, ожидания от 390 тыс., только гибрид, нет Java."}
+{"pair_id": "ee62a11a0568", "label": 1, "rationale": "Middle, Go и Java есть, нет Django; ожидания от 320 тыс. выше вилки более чем на 15%."}
+{"pair_id": "adeb12ae5391", "label": 0, "rationale": "Senior/Lead с ожиданиями от 590 тыс., нет Java и Go."}
+{"pair_id": "0178ec108df5", "label": 0, "rationale": "Senior, ожидания от 460 тыс., из обязательных только Django."}
+{"pair_id": "50dd68ad1647", "label": 0, "rationale": "Frontend Junior, другая специализация."}
+{"pair_id": "cc399855bb9a", "label": 3, "rationale": "Middle 82-й перцентиль, Django, Go, Celery, Python подтверждён; вилка и офис подходят; нет только Java."}
+{"pair_id": "773ef8d33329", "label": 1, "rationale": "Middle 7-й перцентиль, Go и Java есть, нет Django; ожидания на верхней границе вилки."}
+{"pair_id": "35a65dd431e4", "label": 0, "rationale": "Ожидания от 370 тыс., только гибрид, нет Java и Django."}
+{"pair_id": "4fea0d4378ce", "label": 1, "rationale": "Middle, Go и Spring (частично Java), нет Django; условия подходят."}
+{"pair_id": "dcf75d5e1c22", "label": 0, "rationale": "Нет Go, Django и Java (только Spring), слабый тест."}
+{"pair_id": "ee5cd8d7012b", "label": 2, "rationale": "Senior, Django и Go есть, Spring частично Java; ожидания чуть выше вилки, офис подходит."}
+{"pair_id": "47b126cb5f86", "label": 1, "rationale": "Все обязательные стеки заявлены, вилка подходит, но офис не рассматривает."}
+{"pair_id": "314b251f2b79", "label": 1, "rationale": "Middle 98-й перцентиль, Python подтверждён, Spring частично Java; нет Go и Django."}
+{"pair_id": "4df89462ca08", "label": 3, "rationale": "Middle, Django и Go, Python подтверждён тестом; вилка и офис подходят, ищет работу; нет Java."}
+{"pair_id": "621bc3b68cce", "label": 0, "rationale": "Ожидания от 360 тыс. и только удалённо при офисной вакансии."}
+{"pair_id": "130b020f0db7", "label": 0, "rationale": "Нет Java, Go и Django, только Celery из плюсов."}
+{"pair_id": "a21ff1b840a2", "label": 0, "rationale": "Frontend, другая специализация."}
+{"pair_id": "4eabeb8c52bb", "label": 1, "rationale": "Middle, Java есть, нет Go и Django; ожидания немного выше вилки."}
+{"pair_id": "35d83b8381f5", "label": 0, "rationale": "Senior, ожидания от 390 тыс., офис не рассматривает, нет Go и Django."}
+{"pair_id": "89637d0183cc", "label": 1, "rationale": "Middle, Go есть, нет Java и Django; условия подходят."}
+{"pair_id": "d775785085e6", "label": 2, "rationale": "Middle, Django и Java есть, нет Go; вилка и офис подходят."}
+{"pair_id": "c2d32c1b1251", "label": 1, "rationale": "Java, Go, Django заявлены, Python подтверждён, но только гибрид при офисной вакансии."}
+{"pair_id": "41429dc3edd9", "label": 1, "rationale": "Middle, только Django из обязательных; условия в целом совместимы."}
+{"pair_id": "00913521c3a2", "label": 0, "rationale": "Ожидания от 400 тыс., 10-й перцентиль, только Go из обязательных."}
+{"pair_id": "afe34fc15482", "label": 1, "rationale": "Junior, Django, Java и Celery заявлены, нет Go; уровень ниже Middle."}
+{"pair_id": "05e5b17f413f", "label": 0, "rationale": "Junior без Java, Go и Django, только удалённо."}
+{"pair_id": "1e76d614cc14", "label": 0, "rationale": "Senior/Lead без Java, Go, Django; ожидания от 380 тыс."}
+{"pair_id": "f8d42049d811", "label": 3, "rationale": "Middle, Django и Java (Spring), Python подтверждён; вилка и офис подходят; нет только Go."}
+{"pair_id": "a87ac838acde", "label": 0, "rationale": "Junior/Intern 8-й перцентиль, только Go из обязательных."}
+{"pair_id": "9dadf65402b9", "label": 0, "rationale": "Senior/Lead с ожиданиями от 410 тыс., нет Java, Go, Django."}
+{"pair_id": "7861396b826c", "label": 1, "rationale": "Middle, Django и Celery есть, нет Java и Go; условия подходят."}
+{"pair_id": "13885095784d", "label": 0, "rationale": "Senior/Lead, ожидания от 390 тыс., только Django из обязательных."}
+{"pair_id": "34b0831131ef", "label": 0, "rationale": "Ожидания от 400 тыс., только удалённо."}
+{"pair_id": "c20dd78d55e5", "label": 0, "rationale": "Ожидания от 380 тыс., офис не рассматривает, только Java из обязательных."}
+{"pair_id": "fdc0cde4c061", "label": 1, "rationale": "Middle, Django и Python подтверждены, нет Java и Go."}
+{"pair_id": "9880fed4a1ad", "label": 0, "rationale": "Senior/Lead с ожиданиями от 550 тыс., только удалённо."}
+{"pair_id": "fbf57b2c19a0", "label": 1, "rationale": "Middle, Django и Gin, нет Java; ожидания выше вилки ~19%, давно неактивен."}
+{"pair_id": "03a4b0934c40", "label": 2, "rationale": "Middle, Django, Go, Celery есть, нет Java; ожидания чуть выше вилки, офис подходит."}
+{"pair_id": "47f4c5e90fc1", "label": 0, "rationale": "Junior, только Go, только гибрид."}
+{"pair_id": "f456d1a1a676", "label": 1, "rationale": "Стек закрывает Java, Go, Django, но опыт 0.6 года и 6-й перцентиль."}
+{"pair_id": "fdf3defc1187", "label": 3, "rationale": "Middle, Django и Java, Python подтверждён; вилка и офис подходят; нет только Go."}
+{"pair_id": "3b6bf34e2fc2", "label": 1, "rationale": "Middle 15-й перцентиль, только Django из обязательных."}

@@ -1,0 +1,55 @@
+{"pair_id": "6094bb284fbc", "label": 0, "rationale": "Из шести обязательных только Django, только офис при удалённой вакансии."}
+{"pair_id": "7a4f6711808a", "label": 1, "rationale": "Flask и Microservices, остальных нет; опыт 0.5 года; условия подходят."}
+{"pair_id": "a24a1864eefe", "label": 0, "rationale": "Junior без обязательных навыков, только офис."}
+{"pair_id": "4dfd57cdf13e", "label": 1, "rationale": "Flask, Microservices, Spring; нет удалёнки, ожидания от верхней границы вилки."}
+{"pair_id": "c9408f20e37a", "label": 2, "rationale": "Middle, Django, Microservices, Spring, REST; вилка и удалёнка подходят; тест слабый."}
+{"pair_id": "9709c3e2cd45", "label": 0, "rationale": "Только Flask, ожидания 290 тыс., давно неактивен."}
+{"pair_id": "a059026c5b64", "label": 1, "rationale": "Flask, Microservices, Spring, но тест очень слабый и нет удалёнки."}
+{"pair_id": "fc5f0f4089a8", "label": 1, "rationale": "Django, Flask, Microservices; ожидания выше вилки, тест слабоват."}
+{"pair_id": "73e9eede06a6", "label": 0, "rationale": "Только Flask из обязательных, нет удалёнки."}
+{"pair_id": "7a67188acb4d", "label": 0, "rationale": "Senior/Lead с ожиданиями 390 тыс."}
+{"pair_id": "c3c3a5da141c", "label": 1, "rationale": "Django, Rust, Spring, но только офис при удалённой вакансии."}
+{"pair_id": "1b6752d51c74", "label": 0, "rationale": "Системный аналитик, другая специализация."}
+{"pair_id": "a2d2f4845d96", "label": 0, "rationale": "Senior с ожиданиями 330 тыс., только гибрид."}
+{"pair_id": "c1a84f1bfda3", "label": 0, "rationale": "Из обязательных только Flask, большинства ключевых навыков нет."}
+{"pair_id": "5d780e9b6bdd", "label": 1, "rationale": "Rust, Scala, Spring, но только офис и тест слабый."}
+{"pair_id": "02ec323186dc", "label": 1, "rationale": "Четыре навыка заявлены, но Junior с опытом 0.7 года, только гибрид."}
+{"pair_id": "dc2766428464", "label": 0, "rationale": "Обязательных навыков нет, ожидания выше вилки."}
+{"pair_id": "46d81ebf7e9d", "label": 1, "rationale": "Django, Scala, Spring, но Junior со слабым тестом."}
+{"pair_id": "f8596547861c", "label": 0, "rationale": "Junior, из обязательных только Microservices."}
+{"pair_id": "8c2f5a6307ee", "label": 1, "rationale": "Middle, Django и Spring; остальных нет; условия подходят."}
+{"pair_id": "687a7845b3c3", "label": 0, "rationale": "Junior с тестом 4-й перцентиль, неактивен 96 дней."}
+{"pair_id": "e286d7d2553d", "label": 0, "rationale": "Senior, только Scala, ожидания 290 тыс., только офис."}
+{"pair_id": "6dae9540d34a", "label": 0, "rationale": "Ожидания 400 тыс., обязательных навыков почти нет."}
+{"pair_id": "ec247ff505e4", "label": 0, "rationale": "Senior с ожиданиями 390 тыс."}
+{"pair_id": "734c81cd800c", "label": 0, "rationale": "Senior/Lead с ожиданиями 590 тыс."}
+{"pair_id": "64d19397d6c1", "label": 0, "rationale": "Junior без обязательных навыков."}
+{"pair_id": "9cd0087b40a5", "label": 3, "rationale": "Middle 82-й перцентиль, Django, Flask, Microservices, Rust; вилка и удалёнка подходят."}
+{"pair_id": "d59c9295bfda", "label": 2, "rationale": "Сильный Middle, Flask, Microservices, Spring; ожидания чуть выше вилки."}
+{"pair_id": "b50989c53be3", "label": 0, "rationale": "Только Flask, ожидания 370 тыс., только гибрид."}
+{"pair_id": "9d0aac09f488", "label": 0, "rationale": "Flask и Rust, но ожидания 270 тыс. и только офис."}
+{"pair_id": "d1edb002be4f", "label": 1, "rationale": "Flask и Spring, остальных нет; условия подходят."}
+{"pair_id": "1c1a143b6e01", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "742712f2647e", "label": 1, "rationale": "Senior, Django, Flask, Spring, но ожидания 310 тыс."}
+{"pair_id": "dfc247700f50", "label": 0, "rationale": "Scala и Spring, нет удалёнки, ожидания от 230 тыс."}
+{"pair_id": "9f4e9a41c088", "label": 0, "rationale": "Lead с ожиданиями 470 тыс."}
+{"pair_id": "28116ce8ed94", "label": 1, "rationale": "Junior по тесту, Django и Rust; ожидания выше вилки."}
+{"pair_id": "c49307174547", "label": 1, "rationale": "Сильный Middle, но из обязательных только Django и Microservices."}
+{"pair_id": "7a5d79209b04", "label": 0, "rationale": "Senior/Lead с ожиданиями 380 тыс."}
+{"pair_id": "27f30c52c266", "label": 0, "rationale": "Из обязательных только Rust."}
+{"pair_id": "9a5ad0698918", "label": 0, "rationale": "Только Scala, нет удалёнки."}
+{"pair_id": "a1c47f0239b6", "label": 1, "rationale": "Django, Flask, Spring, но тест 2-й перцентиль и только офис."}
+{"pair_id": "4c54f72e5ba9", "label": 0, "rationale": "Senior с ожиданиями 460 тыс."}
+{"pair_id": "aabc958b52e8", "label": 3, "rationale": "Middle, Django, Flask, Rust, Spring, REST; вилка и удалёнка подходят; призёр ФСП."}
+{"pair_id": "9f1b46a497f2", "label": 0, "rationale": "Слабый тест, ожидания выше вилки, только гибрид."}
+{"pair_id": "9feb0cae6b53", "label": 0, "rationale": "Junior с опытом 0.8 года, только Rust и Spring."}
+{"pair_id": "9ca9add8be8f", "label": 0, "rationale": "Lead с ожиданиями 550 тыс."}
+{"pair_id": "1950be310696", "label": 0, "rationale": "Слабый тест, из обязательных только Django."}
+{"pair_id": "955e92263f74", "label": 2, "rationale": "Middle, Django, Scala, Spring; удалёнка подходит, ожидания чуть выше."}
+{"pair_id": "75316a91f6fb", "label": 2, "rationale": "Middle, Django, Flask, Microservices; вилка и удалёнка подходят."}
+{"pair_id": "783fa38889e6", "label": 0, "rationale": "Lead с ожиданиями 360 тыс."}
+{"pair_id": "5c21b90a9047", "label": 0, "rationale": "Ожидания 360 тыс., обязательных навыков нет."}
+{"pair_id": "b8f9590c32d8", "label": 1, "rationale": "Django и Scala, остальных нет; ожидания от верхней границы."}
+{"pair_id": "d1ebdd9bda79", "label": 2, "rationale": "Django, Flask, Microservices; удалёнка подходит; тест слабый, ожидания чуть выше."}
+{"pair_id": "16a116d24e52", "label": 0, "rationale": "Rust и Spring, ожидания 250 тыс., нет удалёнки."}
+{"pair_id": "69f2047c32ca", "label": 1, "rationale": "Junior, Flask, Scala, Spring; нет удалёнки."}

@@ -1,0 +1,61 @@
+{"pair_id": "085e9b7f4aaf", "label": 1, "rationale": "Junior и удалёнка совпадают; из обязательных только Node.js, нет asyncio, DDD и Rust, вилка чуть ниже ожиданий"}
+{"pair_id": "f81813b5cb84", "label": 1, "rationale": "Junior, есть asyncio, вилка в диапазоне; нет Node.js, DDD и Rust, формат офис несовместим с удалённой вакансией"}
+{"pair_id": "34758c276279", "label": 0, "rationale": "Frontend-разработка уровня Intern: другая специализация, грейд ниже, обязательные backend-навыки отсутствуют полностью"}
+{"pair_id": "34f5533b3063", "label": 1, "rationale": "Из обязательных только Node.js; нет asyncio, DDD и Rust, гибрид не подходит, ожидания 240 тыс. сильно выше вилки"}
+{"pair_id": "b12b6b546a6b", "label": 1, "rationale": "Есть asyncio и Rust, удалёнка допустима; нет Node.js и DDD, ожидания 280 тыс. намного выше вилки 140 тыс."}
+{"pair_id": "70f94a93ab67", "label": 1, "rationale": "DDD и Node.js заявлены, тест 100-й перцентиль; нет asyncio и Rust, нет удалёнки, вилка ниже ожиданий"}
+{"pair_id": "46b3e012c002", "label": 1, "rationale": "Формат и вилка подходят, кандидат ищет работу; из обязательных только Node.js, нет asyncio, DDD и Rust"}
+{"pair_id": "be385a983466", "label": 1, "rationale": "Node.js и Rust заявлены, тест 85-й перцентиль; нет asyncio и DDD, гибрид вместо удалёнки, ожидания 200 тыс."}
+{"pair_id": "0a764e82fb58", "label": 1, "rationale": "Закрыты asyncio, Node.js и DDD, удалёнка подходит; нет Rust, ожидания 240 тыс. почти вдвое выше вилки"}
+{"pair_id": "cc850b4bb82b", "label": 1, "rationale": "Node.js и Rust есть; нет asyncio и DDD, гибрид несовместим с удалёнкой, ожидания 190 тыс. выше вилки"}
+{"pair_id": "1d5d8a29da69", "label": 1, "rationale": "Грейд Intern ниже вакансии; из обязательных только Node.js и близкий aiohttp, нет DDD и Rust; условия подходят"}
+{"pair_id": "b16a1edc1262", "label": 2, "rationale": "Есть Node.js, Rust и System design, удалёнка, вилка и активный поиск, достижения ФСП; грейд Intern, тест 22-й перцентиль"}
+{"pair_id": "6ae3ceef1ad2", "label": 1, "rationale": "Из обязательных только Node.js, нет asyncio, DDD и Rust; ожидания 360 тыс. многократно выше вилки"}
+{"pair_id": "e9638b65dc22", "label": 1, "rationale": "Есть Node.js и близкий асинхронный стек; нет asyncio, DDD и Rust, ожидания 240 тыс. сильно выше вилки"}
+{"pair_id": "89992da528ec", "label": 1, "rationale": "Закрыты DDD и asyncio, удалёнка; нет Node.js и Rust, ожидания 190 тыс. выше вилки более чем на 15%"}
+{"pair_id": "19d20dfd0698", "label": 1, "rationale": "Удалёнка и вилка совместимы, есть достижение ФСП; из обязательных только Node.js, тест слабый"}
+{"pair_id": "362496cbeb2a", "label": 1, "rationale": "Из обязательных только Node.js; нет asyncio, DDD и Rust, ожидания 380 тыс. намного выше вилки"}
+{"pair_id": "f321c2d2a338", "label": 1, "rationale": "Грейд Intern, тест 15-й перцентиль; есть DDD и Node.js, нет asyncio и Rust, гибрид не подходит"}
+{"pair_id": "cb0e721518e3", "label": 1, "rationale": "Вилка и форматы подходят; обязательные asyncio, Node.js, DDD и Rust не заявлены, лишь близкие aiohttp и C++"}
+{"pair_id": "c7e9dd89f5cb", "label": 1, "rationale": "Обязательные навыки прямо не заявлены, только близкие Express, System design и C++; вилка почти совпадает"}
+{"pair_id": "e60838d71a49", "label": 2, "rationale": "Junior, удалёнка и вилка полностью подходят, есть Node.js и Rust; нет asyncio и DDD, давняя активность"}
+{"pair_id": "53ee3756e7e5", "label": 1, "rationale": "Закрыты Node.js, Rust и asyncio; нет DDD, только офис вместо удалёнки, ожидания 270 тыс. выше вилки"}
+{"pair_id": "af2684d46a73", "label": 1, "rationale": "Из обязательных только Node.js, нет asyncio, DDD и Rust; формат офис несовместим с удалённой вакансией"}
+{"pair_id": "4000dcabed7b", "label": 1, "rationale": "Есть asyncio и Node.js, удалёнка; нет DDD и Rust, ожидания 370 тыс. намного выше вилки"}
+{"pair_id": "011351877f12", "label": 1, "rationale": "Есть asyncio и Node.js, условия совместимы; нет DDD и Rust, тест 10-й перцентиль — навыки не подтверждены"}
+{"pair_id": "aab426715913", "label": 1, "rationale": "Есть DDD и Node.js; нет asyncio и Rust, гибрид и офис без удалёнки, ожидания 240 тыс. выше вилки"}
+{"pair_id": "1e14334b7484", "label": 1, "rationale": "Есть Node.js и Rust, удалёнка и вилка подходят; нет asyncio и DDD, тест 15-й перцентиль слабый"}
+{"pair_id": "3a12bb971cb4", "label": 1, "rationale": "Из обязательных только Node.js; нет asyncio, DDD и Rust, гибрид без удалёнки, ожидания 210 тыс. выше вилки"}
+{"pair_id": "19f46113d0de", "label": 1, "rationale": "Есть Rust, удалёнка; нет asyncio, Node.js и DDD, ожидания 220 тыс. заметно выше вилки"}
+{"pair_id": "1de6059e6ecc", "label": 1, "rationale": "Есть asyncio, тест 87-й перцентиль; нет Node.js, DDD и Rust, только офис, ожидания 280 тыс. выше вилки"}
+{"pair_id": "e51e218a9c18", "label": 1, "rationale": "Высокий тест, удалёнка и вилка подходят; из обязательных только Node.js, нет asyncio, DDD и Rust"}
+{"pair_id": "0dc8071d0294", "label": 2, "rationale": "Junior, удалёнка и вилка подходят, есть Rust и близкий aiohttp; нет asyncio, Node.js и DDD"}
+{"pair_id": "d34a436a1bb8", "label": 1, "rationale": "Грейд Junior, удалёнка и вилка подходят; обязательные не заявлены, только близкие NestJS и Go"}
+{"pair_id": "5055a7ddd11b", "label": 1, "rationale": "Есть Node.js и Rust, тест 84-й перцентиль; нет asyncio и DDD, гибрид несовместим с удалённой вакансией"}
+{"pair_id": "e451ebfb4b4a", "label": 1, "rationale": "Грейд Intern, из обязательных только Node.js; нет asyncio, DDD и Rust, вилка и формат подходят"}
+{"pair_id": "8a3e52368ede", "label": 1, "rationale": "Есть DDD и Rust, удалёнка; нет asyncio и Node.js, ожидания 170 тыс. выше вилки более чем на 15%"}
+{"pair_id": "b1d31a58aea6", "label": 1, "rationale": "Из обязательных только Node.js и близкий Go; нет asyncio и DDD, ожидания выше вилки, тест средний"}
+{"pair_id": "f47ecc0935bb", "label": 2, "rationale": "Есть DDD, Node.js и близкий Go, удалёнка и вилка подходят, достижение ФСП; грейд Intern, тест 39-й перцентиль"}
+{"pair_id": "7fc18fe7767c", "label": 1, "rationale": "Из обязательных только Node.js; нет asyncio, DDD и Rust, ожидания 250 тыс. почти вдвое выше вилки"}
+{"pair_id": "06ccd4c936b9", "label": 2, "rationale": "Junior, удалёнка и вилка подходят, есть asyncio и Rust; нет Node.js и DDD, тест 38-й перцентиль"}
+{"pair_id": "4dfceda439e0", "label": 0, "rationale": "Системный аналитик, другая специализация; backend-обязательные asyncio, Node.js, DDD и Rust отсутствуют"}
+{"pair_id": "d1319d21f7d6", "label": 1, "rationale": "Условия совместимы, но тест 14-й перцентиль; обязательные не заявлены, только близкие NestJS, Express и C++"}
+{"pair_id": "895e6929725a", "label": 1, "rationale": "Из обязательных только Node.js и близкий Go; нет asyncio и DDD, ожидания 360 тыс. выше вилки"}
+{"pair_id": "bd8a65a239da", "label": 1, "rationale": "Есть Node.js и Rust, удалёнка; нет asyncio и DDD, тест 6-й перцентиль — навыки слабо подтверждены"}
+{"pair_id": "8077b490e2b2", "label": 3, "rationale": "Junior подтверждён, закрыты asyncio, Node.js и Rust, удалёнка и вилка совместимы, активно ищет; нет DDD"}
+{"pair_id": "f59070039a89", "label": 1, "rationale": "Есть Node.js и Rust, удалёнка, достижения ФСП; нет asyncio и DDD, ожидания 210 тыс. выше вилки"}
+{"pair_id": "91582af7636b", "label": 2, "rationale": "Junior подтверждён, удалёнка, вилка полностью подходит, есть asyncio, Node.js и System design; нет DDD и Rust"}
+{"pair_id": "831e4237cae6", "label": 1, "rationale": "Есть Node.js и близкий Go, достижения ФСП; нет asyncio и DDD, тест 7-й перцентиль, ожидания выше вилки"}
+{"pair_id": "e9c8a4aecb67", "label": 1, "rationale": "Есть asyncio и Node.js, тест 73-й перцентиль; нет DDD и Rust, гибрид без удалёнки, ожидания 350 тыс."}
+{"pair_id": "73f485214daf", "label": 1, "rationale": "Есть Node.js и Rust, тест 92-й перцентиль; нет asyncio и DDD, только офис, ожидания 260 тыс. выше вилки"}
+{"pair_id": "59c85a996723", "label": 1, "rationale": "Есть Node.js и Rust, удалёнка, вилка почти подходит; нет asyncio и DDD, тест 4-й перцентиль очень слабый"}
+{"pair_id": "bf7e2ad124a6", "label": 1, "rationale": "Закрыты DDD, Node.js и Rust, но формат гибрид без удалёнки; нет asyncio, тест 64-й перцентиль"}
+{"pair_id": "4ba5a47756ec", "label": 1, "rationale": "Из обязательных только Node.js; нет asyncio, DDD и Rust, ожидания 200 тыс. выше вилки"}
+{"pair_id": "e5348c84f71f", "label": 1, "rationale": "Тест 100-й перцентиль, удалёнка; из обязательных только Node.js, нет asyncio, DDD и Rust, ожидания 400 тыс."}
+{"pair_id": "e80888627711", "label": 0, "rationale": "Ни один обязательный навык не заявлен; нет удалёнки, ожидания 240 тыс. вдвое выше вилки — не подходит"}
+{"pair_id": "2f36dc1ec73a", "label": 1, "rationale": "Закрыты DDD, Node.js, asyncio и близкий Go; нет удалёнки, ожидания 370 тыс. намного выше вилки"}
+{"pair_id": "6a0dcfb7e167", "label": 1, "rationale": "Есть Node.js, Rust и System design, тест 91-й перцентиль; нет asyncio, гибрид без удалёнки, ожидания 200 тыс."}
+{"pair_id": "43f5c37c4ddb", "label": 1, "rationale": "Есть Node.js, близкие aiohttp и Go; нет asyncio, DDD и Rust, гибрид несовместим с удалёнкой"}
+{"pair_id": "2d4a2037958c", "label": 0, "rationale": "Обязательные asyncio, Node.js, DDD и Rust не заявлены, только близкий C++; ожидания 250 тыс. выше вилки"}
+{"pair_id": "5d2bcd2de797", "label": 1, "rationale": "Есть DDD, Node.js и близкий NestJS; нет asyncio и Rust, ожидания 260 тыс. намного выше вилки"}
+{"pair_id": "b370f0e8809f", "label": 1, "rationale": "Закрыты DDD, Node.js и asyncio, вилка подходит; нет Rust, формат офис несовместим с удалённой вакансией"}

@@ -57,8 +57,8 @@ SPEC_TITLE_CUES = {
 }
 
 GRADE_CUES = [
-    ("lead", [r"\blead\b", r"тимлид", r"техлид", r"руководител", r"ведущ\w+ разработчик", r"head of"]),
-    ("senior", [r"senior", r"сеньор", r"старш\w+"]),
+    ("lead", [r"\blead\b", r"тимлид", r"техлид", r"руководител", r"head of"]),
+    ("senior", [r"senior", r"сеньор", r"старш\w+", r"ведущ\w+"]),  # «ведущий» на рынке ≈ senior
     ("middle", [r"middle", r"мидл"]),
     ("junior", [r"junior", r"джун", r"младш\w+"]),
     ("intern", [r"стаж[её]р", r"intern", r"стажировк", r"практикант"]),
@@ -262,7 +262,7 @@ def parse_need(text: str, title: str = "") -> ParsedNeed:
         explanation.append(f"Грейд {cat.grade(grade).name}: {grade_reason}")
 
     need = ParsedNeed(
-        skills=dict(sorted(importance.items(), key=lambda x: -x[1])),
+        skills=dict(sorted(importance.items(), key=lambda x: (-x[1], x[0]))),  # детерминированный порядок
         must=sorted(must),
         plus=sorted(plus),
         specialization=spec,

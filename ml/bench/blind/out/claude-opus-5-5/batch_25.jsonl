@@ -1,0 +1,51 @@
+{"pair_id": "8b80ecb992ae", "label": 1, "rationale": "Сильный Junior, Python подтверждён, но нет R и уровень ниже Middle."}
+{"pair_id": "60b190cff7a8", "label": 1, "rationale": "R и scikit-learn есть, но Python не заявлен и не подтверждён тестом."}
+{"pair_id": "d5f11e4cb749", "label": 2, "rationale": "Сильный Middle, Python, R, Spark; формат только удалённо при гибридной вакансии."}
+{"pair_id": "45a847a2c528", "label": 1, "rationale": "Junior, Python, Spark, scikit-learn; нет R; уровень ниже."}
+{"pair_id": "963b934178eb", "label": 2, "rationale": "Middle, Python подтверждён, scikit-learn; нет R; вилка и гибрид подходят."}
+{"pair_id": "b62f88d7cb51", "label": 0, "rationale": "Системный аналитик, другая специализация."}
+{"pair_id": "e6f66d3432d8", "label": 3, "rationale": "Middle, Python подтверждён, R, Spark; вилка и гибрид подходят."}
+{"pair_id": "64ea924862d6", "label": 0, "rationale": "Senior/Lead с ожиданиями 360 тыс."}
+{"pair_id": "f7da73aa6017", "label": 1, "rationale": "Python, R, scikit-learn, но ожидания на 16% выше вилки."}
+{"pair_id": "b210ca73ae9e", "label": 3, "rationale": "Middle 100-й перцентиль, Python и R; ожидания на верхней границе, гибрид подходит."}
+{"pair_id": "1e188e60cf69", "label": 1, "rationale": "Python, R, Spark, scikit-learn, но ожидания 310 тыс. и слабый тест."}
+{"pair_id": "374f0f05ef12", "label": 2, "rationale": "Middle, Python, R, scikit-learn; только офис, ожидания частично выше."}
+{"pair_id": "57abf3737f23", "label": 0, "rationale": "Lead с ожиданиями 560 тыс., только офис."}
+{"pair_id": "e46fe3a6b06c", "label": 3, "rationale": "Middle, Python, R, Spark, scikit-learn; вилка и гибрид подходят."}
+{"pair_id": "d5658c05aad5", "label": 1, "rationale": "Python подтверждён, но нет R, тест слабый."}
+{"pair_id": "94fb5c4aebc0", "label": 1, "rationale": "Junior с опытом 0.8 года, Python есть, R нет."}
+{"pair_id": "24b983d76f31", "label": 2, "rationale": "Junior, Python, R, Spark; уровень ниже; условия подходят."}
+{"pair_id": "52c602842f4e", "label": 1, "rationale": "Python подтверждён, Spark; нет R; неактивен 60 дней."}
+{"pair_id": "680fd025630d", "label": 0, "rationale": "Senior с ожиданиями 390 тыс."}
+{"pair_id": "1c7a7d9f9c53", "label": 1, "rationale": "Spark и scikit-learn, но нет ни Python, ни R."}
+{"pair_id": "dc93d0736aed", "label": 0, "rationale": "Junior с опытом 0.3 года, слабый тест, нет R."}
+{"pair_id": "75c2975a4d74", "label": 2, "rationale": "Сильный Middle, Python подтверждён; нет R; только офис."}
+{"pair_id": "d9df3d57d07c", "label": 0, "rationale": "Слабый тест, Python частично, нет R, ожидания выше вилки."}
+{"pair_id": "fdcc4eea10b9", "label": 3, "rationale": "Middle, Python, R, scikit-learn; вилка и гибрид подходят."}
+{"pair_id": "c69d0389b17e", "label": 1, "rationale": "Python, Spark, scikit-learn; нет R; ожидания выше вилки."}
+{"pair_id": "ed00ced99b8a", "label": 1, "rationale": "Python подтверждён, Spark; нет R; тест слабый."}
+{"pair_id": "274994b50314", "label": 2, "rationale": "Сильный Middle, Python, scikit-learn; нет R; гибрид подходит."}
+{"pair_id": "1c82e21b962d", "label": 0, "rationale": "Lead с ожиданиями 390 тыс."}
+{"pair_id": "2bec02b2baa2", "label": 1, "rationale": "Опыт 0.6 года, нет R, давно неактивен."}
+{"pair_id": "da12735cf591", "label": 1, "rationale": "Python, R, scikit-learn, но ожидания 450 тыс. сильно выше вилки."}
+{"pair_id": "14138e29c54f", "label": 0, "rationale": "Нет Python и R, ожидания 320 тыс."}
+{"pair_id": "fa15c00ea8ef", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "0ba8bbba7020", "label": 0, "rationale": "Junior с ожиданиями 300 тыс., Python не указан."}
+{"pair_id": "8bf9dfb2539c", "label": 0, "rationale": "Senior/Lead с ожиданиями 390 тыс."}
+{"pair_id": "77b2c15ba196", "label": 0, "rationale": "Senior с ожиданиями 340 тыс., нет R."}
+{"pair_id": "25b1e7a4a707", "label": 3, "rationale": "Middle, Python и R; вилка и гибрид подходят."}
+{"pair_id": "0a931597372a", "label": 0, "rationale": "Lead с ожиданиями 430 тыс."}
+{"pair_id": "5ced623725a5", "label": 0, "rationale": "Lead с ожиданиями 440 тыс., Python и R не указаны."}
+{"pair_id": "3ff88bc40d79", "label": 2, "rationale": "Python и R есть, условия подходят, но тест очень слабый."}
+{"pair_id": "ef4f218cb080", "label": 2, "rationale": "Middle, Python подтверждён; нет R; вилка и гибрид подходят."}
+{"pair_id": "b992ad644ed8", "label": 2, "rationale": "Python, R, scikit-learn; ожидания на 12% выше вилки."}
+{"pair_id": "73040c8f20a2", "label": 2, "rationale": "Middle, Python подтверждён, scikit-learn; нет R; условия подходят."}
+{"pair_id": "f55984646ee1", "label": 1, "rationale": "Junior по тесту, нет R, ожидания выше вилки."}
+{"pair_id": "fe9a9c910b9b", "label": 3, "rationale": "Middle, Python, R, scikit-learn; гибрид, ожидания на верхней границе; есть ФСП."}
+{"pair_id": "f07216e0430c", "label": 1, "rationale": "Python подтверждён, нет R, ожидания 280 тыс."}
+{"pair_id": "6e376bd2d767", "label": 2, "rationale": "Python, R, scikit-learn; тест слабый, только удалённо."}
+{"pair_id": "f00a0632c2d7", "label": 1, "rationale": "Junior, Python и Spark, нет R; ожидания частично выше."}
+{"pair_id": "2fc84b76f393", "label": 0, "rationale": "Lead с ожиданиями 400 тыс."}
+{"pair_id": "dd3788ab8ddb", "label": 1, "rationale": "R есть, но Python не заявлен и не подтверждён тестом."}
+{"pair_id": "b5b5a8820e8b", "label": 2, "rationale": "Middle, Python подтверждён; нет R; вилка и гибрид подходят."}
+{"pair_id": "5a9ad88203ea", "label": 0, "rationale": "Senior с ожиданиями 340 тыс., только удалённо."}

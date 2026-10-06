@@ -1,0 +1,59 @@
+{"pair_id":"ae5a0fb1796f","label":1,"rationale":"Уровень выше, заявлены Android и React Native, но нет Jetpack Compose и Swift; удалённый формат не совпадает с гибридным."}
+{"pair_id":"cce4be6dc797","label":1,"rationale":"Junior и весь обязательный стек заявлены, но зарплатные ожидания существенно выше вилки вакансии."}
+{"pair_id":"229390a743ae","label":3,"rationale":"Junior с сильным тестом, полным обязательным стеком, опытом публикации, подходящими ожиданиями и гибридным форматом."}
+{"pair_id":"85f0aac1850f","label":1,"rationale":"Есть Android и React Native, но отсутствуют Jetpack Compose и Swift; кандидат рассматривает только офис, не гибрид."}
+{"pair_id":"255833bfa357","label":1,"rationale":"Сильный мобильный профиль и весь стек, но Middle с ожиданиями выше вилки и только удалённым форматом."}
+{"pair_id":"26a978f69a17","label":1,"rationale":"Полный стек заявлен, но Middle ожидает зарплату значительно выше вилки вакансии."}
+{"pair_id":"ab7b76efc8fe","label":1,"rationale":"Подтверждённый Middle с React Native и Compose, но резюме Senior и ожидания существенно выше вилки."}
+{"pair_id":"7f85e3591731","label":1,"rationale":"Навыки и категория Junior подходят, но резюме Senior и ожидания значительно выше вилки."}
+{"pair_id":"ce9d6fade699","label":1,"rationale":"Есть Android и Swift, но не заявлены React Native и Jetpack Compose; ожидания выше вилки."}
+{"pair_id":"86dcc23dc3b2","label":1,"rationale":"Есть Android, Compose и Swift, но отсутствует React Native; Senior и зарплатные ожидания намного выше вилки."}
+{"pair_id":"3184ac76a2cc","label":1,"rationale":"Android, Compose и React Native заявлены, но нет Swift; Middle ожидает больше вилки."}
+{"pair_id":"69ac8ab9d717","label":3,"rationale":"Junior с полным обязательным стеком, подходящими ожиданиями и гибридным форматом; низкий тест создаёт лишь небольшое сомнение."}
+{"pair_id":"e9140273179d","label":1,"rationale":"Middle с полным обязательным стеком, но ожидания по зарплате выше максимума вилки."}
+{"pair_id":"020a1d2c3c48","label":1,"rationale":"Заявлены Android, React Native и Swift, но нет Jetpack Compose; ожидания Middle выше вилки."}
+{"pair_id":"dc3c54af300e","label":0,"rationale":"Специализация кандидата — QA, а вакансия требует мобильную разработку."}
+{"pair_id":"5cd5166dab30","label":1,"rationale":"Intern с полным стеком и хорошим тестом, но уровень ниже Junior и кандидат рассматривает только удалённую работу."}
+{"pair_id":"34b56f8f24ad","label":3,"rationale":"Junior с полным обязательным стеком, опытом публикации, подходящими ожиданиями и гибридным форматом."}
+{"pair_id":"5f2029fac924","label":1,"rationale":"Стек и Junior подходят, но кандидат рассматривает только офис, что несовместимо с гибридным форматом."}
+{"pair_id":"1b0e16cba8fe","label":1,"rationale":"Есть Android и Compose, но отсутствуют React Native и Swift; профиль закрывает меньшинство обязательного стека."}
+{"pair_id":"07b562284937","label":1,"rationale":"Сильный Junior с Android, Compose и React Native, но без Swift и без гибридного формата."}
+{"pair_id":"fdfa9908bfea","label":1,"rationale":"Junior с React Native и Compose, но отсутствуют Android и Swift среди обязательных навыков."}
+{"pair_id":"e7cb440ce6dc","label":1,"rationale":"Полный стек заявлен, но Middle ожидает выше вилки; низкий тест дополнительно снижает уверенность."}
+{"pair_id":"4dbc19365d03","label":1,"rationale":"Полный стек заявлен, но ожидания значительно выше вилки и доступен только офисный формат."}
+{"pair_id":"5b2f6adb536d","label":1,"rationale":"Есть Android и React Native, но Senior с ожиданиями многократно выше вилки и только удалённым форматом."}
+{"pair_id":"f382c5242dfd","label":1,"rationale":"Есть Compose, React Native и Swift, но отсутствует Android; ожидания выше вилки."}
+{"pair_id":"349245cb9962","label":1,"rationale":"Полный обязательный стек заявлен, но ожидания Junior существенно выше вилки."}
+{"pair_id":"3cc332815137","label":1,"rationale":"Есть Android, React Native и Swift, но не заявлен Jetpack Compose; только офисный формат не подходит."}
+{"pair_id":"21166158423f","label":1,"rationale":"Есть Android и Compose, но отсутствуют React Native и Swift; только удалённый формат не совпадает с гибридным."}
+{"pair_id":"d19382fe5219","label":1,"rationale":"Есть Compose, React Native и Swift, но отсутствует Android среди обязательных технологий."}
+{"pair_id":"6a481e603c5c","label":1,"rationale":"Middle с React Native и Swift, но без Android и Compose; зарплатные ожидания выше вилки."}
+{"pair_id":"76ba4f977cb7","label":1,"rationale":"Есть Android и Compose, но отсутствуют React Native и Swift; ожидания выше вилки."}
+{"pair_id":"0d381abb3840","label":0,"rationale":"Специализация кандидата — frontend-разработка, а вакансия относится к мобильной разработке."}
+{"pair_id":"32ac0ae9dddd","label":1,"rationale":"Полный мобильный стек заявлен, но Middle ожидает зарплату значительно выше вилки Junior-вакансии."}
+{"pair_id":"1369834b01d8","label":1,"rationale":"Есть Compose и React Native, но отсутствуют Android и Swift; ожидания выше вилки и нет гибрида."}
+{"pair_id":"e41aecf7d66c","label":1,"rationale":"Полный стек заявлен, но Middle с ожиданиями ниже вилки и без доступного гибридного формата."}
+{"pair_id":"1687568efce7","label":1,"rationale":"Полный стек заявлен, но подтверждённый Middle ожидает выше вилки и рассматривает только удалённую работу."}
+{"pair_id":"29efbddbdd68","label":1,"rationale":"Есть Android, React Native и Swift, но не заявлен Jetpack Compose; ожидания выше вилки."}
+{"pair_id":"48d5d0e84b6f","label":1,"rationale":"Категория Junior, но резюме Intern; есть Compose, но отсутствуют Android, React Native и Swift."}
+{"pair_id":"1018d89be705","label":3,"rationale":"Junior с полным обязательным стеком, опытом публикации, совместимыми ожиданиями и доступным гибридным форматом."}
+{"pair_id":"34dd08b88d9d","label":1,"rationale":"Есть Compose, React Native и Swift, но нет Android; Middle ожидает значительно выше вилки."}
+{"pair_id":"45cb2704da63","label":1,"rationale":"Есть Android, но отсутствуют React Native и Jetpack Compose; низкий тест мобильных платформ добавляет сомнения."}
+{"pair_id":"be5a2b4a4a5c","label":2,"rationale":"Подтверждённый Junior с полным стеком и гибридным форматом, но резюме указывает уровень Intern и малый опыт."}
+{"pair_id":"051adcdf7ce9","label":1,"rationale":"Полный стек заявлен, но резюме Senior и ожидания существенно выше вилки Junior-вакансии."}
+{"pair_id":"3cc1e0b69de7","label":1,"rationale":"Intern с React Native, Compose и Swift, но без Android; уровень ниже Junior."}
+{"pair_id":"c1cfb4569b99","label":1,"rationale":"Категория Junior, но резюме Intern и отсутствуют Android с Jetpack Compose; закрыта лишь часть стека."}
+{"pair_id":"fe2b79b5155f","label":1,"rationale":"Подтверждённый Intern с полным стеком, но уровень ниже Junior и доступен только офисный формат."}
+{"pair_id":"4887218e5112","label":1,"rationale":"Senior близок по специализации, но не заявлены обязательные A/B-тестирование и продуктовый анализ."}
+{"pair_id":"51fe34f242e4","label":0,"rationale":"Кандидат специализируется на мобильной разработке, а вакансия требует системного или бизнес-аналитика."}
+{"pair_id":"686acf92825a","label":2,"rationale":"Senior с A/B-тестированием и продуктовым анализом; уровень на ступень ниже Lead, удалённый формат и вилка совместимы."}
+{"pair_id":"3a996c9666dd","label":3,"rationale":"Lead с полным обязательным стеком, сильным тестом, доступным удалённым форматом и совместимыми условиями."}
+{"pair_id":"bf1632261c73","label":2,"rationale":"Lead с продуктовым анализом и подходящей вилкой, но A/B-тестирование не заявлено; удалённый формат доступен."}
+{"pair_id":"d407f27afc2c","label":1,"rationale":"Есть оба обязательных навыка, но Senior вместо Lead и кандидат рассматривает только гибридный формат, не удалённый."}
+{"pair_id":"fb23bcb89986","label":0,"rationale":"Специализация кандидата — frontend-разработка, а вакансия предназначена для системного или бизнес-аналитика."}
+{"pair_id":"79f7a8716017","label":2,"rationale":"Senior заявляет оба обязательных навыка и доступен удалённо; уровень ниже Lead, а несколько профильных тестов частично подтверждены."}
+{"pair_id":"f9e8439f25c3","label":3,"rationale":"Lead с A/B-тестированием, продуктовым анализом, совместимой вилкой и доступным удалённым форматом."}
+{"pair_id":"535e9c5b070e","label":1,"rationale":"Senior заявляет продуктовый анализ, но без A/B-тестирования и не рассматривает удалённый формат."}
+{"pair_id":"20e39efe97a6","label":1,"rationale":"Lead по резюме, но не заявлены оба обязательных навыка и доступен лишь гибридный или офисный формат."}
+{"pair_id":"78c73f086e1e","label":3,"rationale":"Lead с обоими обязательными навыками, сильным тестом, подходящими ожиданиями и возможностью удалённой работы."}
+{"pair_id":"a4bdf34c021e","label":2,"rationale":"Lead с продуктовым анализом, удалённым форматом и подтверждёнными профильными навыками, но A/B-тестирование не заявлено."}

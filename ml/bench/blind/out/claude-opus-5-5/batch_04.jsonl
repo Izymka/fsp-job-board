@@ -1,0 +1,95 @@
+{"pair_id": "3093f993d806", "label": 1, "rationale": "Frontend Middle, Redux/Vue/Svelte в стеке, но ожидания от 390 тыс. намного выше вилки 220 тыс."}
+{"pair_id": "5e36598f1179", "label": 0, "rationale": "Backend Junior — другая специализация, нет Vue и Svelte."}
+{"pair_id": "b94eb941e03d", "label": 1, "rationale": "Junior вместо Middle, слабый тест, есть Redux и Vue, нет Svelte; условия подходят."}
+{"pair_id": "b29aca294ae1", "label": 2, "rationale": "Frontend Middle, Vue и Svelte есть, Redux нет; вилка и удалёнка подходят, тест слабоват."}
+{"pair_id": "73ec68bbb4a2", "label": 1, "rationale": "Middle, условия подходят, но из обязательных только Svelte, нет Redux и Vue."}
+{"pair_id": "e80bdb58a686", "label": 3, "rationale": "Middle, Redux/Vue/Svelte и TypeScript, тест подтвердил ключевой фронтенд; вилка и удалёнка подходят, призовые ФСП."}
+{"pair_id": "33c731c1b9e1", "label": 1, "rationale": "Middle, Redux и Svelte есть, Vue нет; только гибрид при удалённой вакансии, тест слабый."}
+{"pair_id": "ec48752ead7e", "label": 1, "rationale": "Middle, Redux и Svelte, без Vue; формат гибрид/офис не совпадает с удалёнкой."}
+{"pair_id": "335fc6ab07a1", "label": 0, "rationale": "Нет Redux, ожидания 290 тыс. сильно выше вилки, только гибрид при удалённой вакансии."}
+{"pair_id": "28003b643a99", "label": 0, "rationale": "Senior, ожидания от 400 тыс. вдвое выше вилки, только офис; Vue нет."}
+{"pair_id": "f2b83999d6c1", "label": 2, "rationale": "Middle, все обязательные и бонусные в стеке, TS подтверждён; тест слабый, ожидания на верхней границе."}
+{"pair_id": "a887056ed7fc", "label": 0, "rationale": "Junior, только офис при удалённой вакансии, нет Svelte."}
+{"pair_id": "f921292e1656", "label": 3, "rationale": "Middle, Redux/Vue/Svelte и MobX, тест подтверждён полностью; вилка и удалёнка совпадают, сильные достижения ФСП."}
+{"pair_id": "a411c0085816", "label": 0, "rationale": "Junior, только Svelte из обязательных, формат только офис."}
+{"pair_id": "d2b351f6775a", "label": 3, "rationale": "Middle, Redux/Vue/Svelte и TS, хороший тест; ожидания в вилке, удалёнка."}
+{"pair_id": "fc7d43331035", "label": 0, "rationale": "Junior, ожидания от 260 тыс. выше вилки более чем на 15%."}
+{"pair_id": "91172685a206", "label": 0, "rationale": "Senior, ожидания от 280 тыс. значительно выше вилки 220 тыс."}
+{"pair_id": "994cec7ad4fa", "label": 1, "rationale": "Middle, весь стек совпадает, но ожидания от 280 тыс. выше вилки более чем на 15%."}
+{"pair_id": "b0f793d976db", "label": 0, "rationale": "Из обязательных только Redux, формат только офис."}
+{"pair_id": "0857662738de", "label": 2, "rationale": "Middle, Redux и Svelte, без Vue; тест подтверждён, вилка и удалёнка подходят."}
+{"pair_id": "a758ab7d31b9", "label": 3, "rationale": "Middle, Redux/Vue/Svelte, хороший тест; ожидания в вилке, удалёнка, достижения ФСП."}
+{"pair_id": "bf4348dc6d20", "label": 1, "rationale": "Middle, все обязательные в стеке, но формат гибрид/офис при удалённой вакансии."}
+{"pair_id": "0371b236e067", "label": 1, "rationale": "Middle, Redux и Svelte без Vue; ожидания от 310 тыс. значительно выше вилки."}
+{"pair_id": "c3790e6eb5f9", "label": 1, "rationale": "Middle с отличным тестом и полным стеком, но ожидания от 300 тыс. сильно выше вилки."}
+{"pair_id": "05deeeab35f5", "label": 1, "rationale": "Middle, условия подходят, но нет Vue и Svelte, только Redux."}
+{"pair_id": "ce766a3e2e0f", "label": 2, "rationale": "Middle, Redux и Svelte без Vue; вилка и удалёнка подходят, тест слабоват."}
+{"pair_id": "c4e9a9908227", "label": 0, "rationale": "Senior с ожиданиями от 360 тыс., далеко за вилкой; нет Vue."}
+{"pair_id": "00065e251310", "label": 2, "rationale": "Middle, Redux, Svelte, MobX, TS, без Vue; ожидания на границе вилки, удалёнка подходит."}
+{"pair_id": "fce26bd107cc", "label": 0, "rationale": "Junior со слабым тестом, из обязательных только Redux."}
+{"pair_id": "e3c2ec3d06a7", "label": 0, "rationale": "Junior без Redux, Vue и Svelte."}
+{"pair_id": "95250e12598d", "label": 1, "rationale": "Middle, Vue и Svelte без Redux; очень слабый тест, только офис при удалённой вакансии."}
+{"pair_id": "0a532fc6c745", "label": 0, "rationale": "Senior, только Svelte из обязательных, ожидания от 300 тыс. выше вилки."}
+{"pair_id": "32b0d71ba2a5", "label": 0, "rationale": "Senior с ожиданиями от 460 тыс. — вдвое выше вилки."}
+{"pair_id": "7f75e5a369ec", "label": 0, "rationale": "Junior, ожидания 290 тыс. выше вилки, только гибрид при удалённой вакансии."}
+{"pair_id": "f0fab3092487", "label": 1, "rationale": "Middle, все обязательные в стеке, но тест слабый и формат только офис."}
+{"pair_id": "a6e01bdf5ce1", "label": 3, "rationale": "Middle, Redux/Vue/Svelte и MobX, хороший тест; ожидания в вилке, удалёнка."}
+{"pair_id": "52db588d89b5", "label": 0, "rationale": "Senior с ожиданиями от 380 тыс., далеко за вилкой."}
+{"pair_id": "4958f7deb030", "label": 1, "rationale": "Junior вместо Middle, Redux и Vue без Svelte; условия подходят."}
+{"pair_id": "be905ab920c1", "label": 1, "rationale": "Middle, только Redux из обязательных, нет Vue и Svelte; условия подходят."}
+{"pair_id": "971c662a0c90", "label": 1, "rationale": "Сильный Middle, но из обязательных только Redux; условия подходят."}
+{"pair_id": "8023a8ef4027", "label": 0, "rationale": "Нет Vue и Svelte, ожидания от 340 тыс. значительно выше вилки."}
+{"pair_id": "d7154b2c1306", "label": 1, "rationale": "Middle, из обязательных только Vue; условия подходят."}
+{"pair_id": "51aaa7825d48", "label": 0, "rationale": "Data Science — другая специализация."}
+{"pair_id": "6d1e036cbe19", "label": 0, "rationale": "Senior с ожиданиями от 380 тыс., нет Vue."}
+{"pair_id": "f923d3131e0a", "label": 2, "rationale": "Middle, Redux, Svelte, TS, без Vue; тест подтверждён, вилка и удалёнка подходят."}
+{"pair_id": "919cdc31a819", "label": 1, "rationale": "Middle, только Redux из обязательных; условия подходят."}
+{"pair_id": "52b9447ea0da", "label": 0, "rationale": "Очень слабый тест, только Vue из обязательных, формат только гибрид."}
+{"pair_id": "3113677c7cd6", "label": 0, "rationale": "Junior, нет Svelte, формат гибрид/офис при удалённой вакансии."}
+{"pair_id": "745e77b133bc", "label": 2, "rationale": "Middle, Redux и Svelte без Vue; ожидания в пределах вилки, удалёнка."}
+{"pair_id": "76dcc4b37f2e", "label": 1, "rationale": "Middle с полным стеком, но ожидания от 280 тыс. выше вилки более чем на 15%."}
+{"pair_id": "082ef5014d28", "label": 2, "rationale": "Middle, Vue, Svelte, MobX, TS, без Redux; вилка и удалёнка подходят."}
+{"pair_id": "27caa10b3db8", "label": 0, "rationale": "Senior с ожиданиями от 420 тыс., нет Vue."}
+{"pair_id": "66c17ce37df8", "label": 2, "rationale": "DevOps Middle, Ansible, ELK, Terraform; нет ArgoCD и SRE; вилка и офис подходят."}
+{"pair_id": "0b998efc2941", "label": 0, "rationale": "Только ArgoCD и Terraform из пяти, ожидания от 430 тыс. сильно выше вилки."}
+{"pair_id": "b6d618240fa3", "label": 0, "rationale": "Только ELK и SRE из обязательных, офис не рассматривает."}
+{"pair_id": "b4e5d7316500", "label": 1, "rationale": "Middle, Ansible, SRE, Terraform; но офис не рассматривает, нет ArgoCD и ELK."}
+{"pair_id": "2d3c37b05c41", "label": 1, "rationale": "Middle, условия подходят, но только ArgoCD и SRE из пяти обязательных."}
+{"pair_id": "fa2c9a879290", "label": 0, "rationale": "Senior, ожидания от 350 тыс., офис не рассматривает."}
+{"pair_id": "4d6ed9e2a558", "label": 0, "rationale": "Senior, ожидания от 350 тыс. значительно выше вилки 260 тыс."}
+{"pair_id": "f3ce65d7cc25", "label": 2, "rationale": "Middle, Ansible, ArgoCD, ELK, Bash; нет SRE и Terraform; вилка и офис подходят."}
+{"pair_id": "bdbcf17424c6", "label": 0, "rationale": "Senior, четыре из пяти обязательных, но ожидания от 320 тыс. выше вилки."}
+{"pair_id": "7b2505191598", "label": 1, "rationale": "Middle, условия подходят, но из обязательных только ArgoCD и ELK."}
+{"pair_id": "80f8484abde3", "label": 1, "rationale": "Middle, четыре из пяти обязательных, но ожидания от 360 тыс. сильно выше вилки."}
+{"pair_id": "0c81c509e46c", "label": 0, "rationale": "Senior, ожидания от 430 тыс., офис не рассматривает."}
+{"pair_id": "ad7489694e9f", "label": 1, "rationale": "Middle, четыре из пяти обязательных, но ожидания от 410 тыс. сильно выше вилки."}
+{"pair_id": "35a1ecc994f4", "label": 0, "rationale": "Data Science — другая специализация."}
+{"pair_id": "ae932f2b33b8", "label": 1, "rationale": "Middle, условия подходят, но только ArgoCD и Terraform из обязательных, тест слабый."}
+{"pair_id": "db1bcb2ea28f", "label": 2, "rationale": "Middle, Ansible, ELK, Terraform; нет ArgoCD и SRE; вилка и офис подходят."}
+{"pair_id": "2aa3cd3b8a79", "label": 0, "rationale": "Senior, ожидания от 540 тыс., офис не рассматривает."}
+{"pair_id": "38fcaa716ed5", "label": 0, "rationale": "Senior, только SRE из обязательных, ожидания от 500 тыс."}
+{"pair_id": "648c19c4c305", "label": 0, "rationale": "Junior со слабым тестом, только гибрид при офисной вакансии."}
+{"pair_id": "de3f1e6917d4", "label": 0, "rationale": "Junior, только SRE из пяти обязательных."}
+{"pair_id": "04bdd5ba4948", "label": 0, "rationale": "Junior со слабым тестом, ни одного обязательного навыка."}
+{"pair_id": "60155f6161bc", "label": 0, "rationale": "Нет ни одного из обязательных навыков (ArgoCD, Ansible, ELK, SRE, Terraform)."}
+{"pair_id": "b6c1ff67a3b5", "label": 1, "rationale": "Middle, четыре из пяти обязательных, но ожидания от 370 тыс. сильно выше вилки."}
+{"pair_id": "c13d677a6477", "label": 0, "rationale": "Только Ansible и Terraform, ожидания от 350 тыс. значительно выше вилки."}
+{"pair_id": "2bafa07c3da0", "label": 3, "rationale": "Middle, все пять обязательных в стеке, ключевые DevOps-навыки подтверждены тестом; вилка и офис подходят."}
+{"pair_id": "9ade29c25b78", "label": 0, "rationale": "Backend Junior — другая специализация."}
+{"pair_id": "22ce55c80723", "label": 1, "rationale": "Middle, только Ansible и Terraform, слабый тест; ожидания чуть выше вилки."}
+{"pair_id": "fe513fc85879", "label": 0, "rationale": "Senior, только SRE из обязательных, только удалёнка при офисной вакансии."}
+{"pair_id": "f7e86d24f789", "label": 0, "rationale": "Только Ansible и SRE, ожидания от 450 тыс. сильно выше вилки."}
+{"pair_id": "5dac691e67ec", "label": 1, "rationale": "Junior вместо Middle; Ansible, ArgoCD, Terraform; условия подходят."}
+{"pair_id": "d9d19b0cb108", "label": 1, "rationale": "Middle, четыре из пяти обязательных, но только удалёнка при офисной вакансии."}
+{"pair_id": "d5be1ab35faf", "label": 0, "rationale": "Senior/Lead с ожиданиями от 480 тыс., далеко за вилкой."}
+{"pair_id": "13075f4b45e1", "label": 0, "rationale": "Junior, только ArgoCD из обязательных, ожидания 280 тыс. выше вилки."}
+{"pair_id": "813b737cc059", "label": 0, "rationale": "Junior, только удалёнка при офисной вакансии, хотя стек полный."}
+{"pair_id": "aeae29bbd0c9", "label": 0, "rationale": "Только Ansible из обязательных, ожидания от 370 тыс."}
+{"pair_id": "cc4ecf9a8e18", "label": 1, "rationale": "Middle, Ansible, ArgoCD, ELK; только удалёнка при офисной вакансии."}
+{"pair_id": "944625c0477a", "label": 0, "rationale": "Senior, ожидания от 310 тыс. выше вилки; нет SRE и Terraform."}
+{"pair_id": "904a7e9cda7c", "label": 0, "rationale": "Очень слабый тест, только ArgoCD и Terraform, формат только гибрид."}
+{"pair_id": "30bc9a8e1914", "label": 0, "rationale": "Senior без обязательных навыков, ожидания от 440 тыс."}
+{"pair_id": "ff212e7c187d", "label": 0, "rationale": "Senior/Lead с ожиданиями от 420 тыс., далеко за вилкой."}
+{"pair_id": "67c42b80f7f2", "label": 0, "rationale": "Junior, только гибрид при офисной вакансии."}
+{"pair_id": "289ea746a7b1", "label": 1, "rationale": "Middle, все обязательные в стеке, но ожидания от 330 тыс. выше вилки на 27%."}
+{"pair_id": "e08c86a8e5d1", "label": 0, "rationale": "Senior, ожидания от 310 тыс., нет ArgoCD и Terraform."}

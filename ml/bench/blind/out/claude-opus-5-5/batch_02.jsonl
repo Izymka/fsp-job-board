@@ -1,0 +1,65 @@
+{"pair_id": "e6470102cbb3", "label": 1, "rationale": "QA Middle на Junior-вакансию, Selenium есть, но ожидания от 170 тыс. значительно выше вилки 100 тыс."}
+{"pair_id": "6a335a276639", "label": 1, "rationale": "Junior QA с сильным тестом и Selenium, но ожидания от 160 тыс. сильно выше вилки."}
+{"pair_id": "016087730ceb", "label": 2, "rationale": "Junior QA, Selenium в стеке, ожидания в вилке; формат только гибрид при удалённой вакансии — мягкое расхождение."}
+{"pair_id": "2f79f25c393f", "label": 2, "rationale": "Junior QA, Selenium, удалёнка, ожидания на верхней границе вилки; слабый перцентиль теста, давняя активность."}
+{"pair_id": "8f040a2bc3e9", "label": 3, "rationale": "Junior QA, работал с Selenium, удалёнка, ожидания от 100 тыс. на границе вилки, хороший тест."}
+{"pair_id": "4301b6de428f", "label": 0, "rationale": "Middle без Selenium, ожидания от 200 тыс. вдвое выше вилки, только гибрид, давно неактивен."}
+{"pair_id": "7685341081c4", "label": 1, "rationale": "QA Middle с Selenium, но ожидания от 180 тыс. сильно выше вилки, слабый тест."}
+{"pair_id": "a03c1f55306d", "label": 1, "rationale": "Junior QA без Selenium (только Playwright), формат только офис при удалённой вакансии."}
+{"pair_id": "a1ae01bc6827", "label": 1, "rationale": "Middle QA с Selenium, ожидания от 220 тыс. более чем вдвое выше вилки."}
+{"pair_id": "0ad2be0c9eea", "label": 1, "rationale": "Сильный Middle QA с Selenium, но ожидания от 350 тыс. несопоставимы с вилкой Junior."}
+{"pair_id": "38fbe69a3a09", "label": 2, "rationale": "Junior QA, Selenium в стеке, ожидания ниже вилки, удалёнка подходит; очень слабый тест и минимальный опыт."}
+{"pair_id": "0964fc91b54f", "label": 1, "rationale": "Junior QA с Selenium, но ожидания от 130 тыс. на 30% выше вилки."}
+{"pair_id": "d5b2e5459990", "label": 1, "rationale": "Junior QA, слабый тест, ожидания от 170 тыс. сильно выше вилки, только гибрид."}
+{"pair_id": "a5c4ac430e4b", "label": 0, "rationale": "Стажёр без Selenium и автотестов на UI, формат без удалёнки — обязательное требование не закрыто."}
+{"pair_id": "590af0785936", "label": 1, "rationale": "Junior QA с Selenium и опытом, но ожидания от 180 тыс. сильно выше вилки."}
+{"pair_id": "a73d51873c9c", "label": 1, "rationale": "Junior QA без Selenium (Playwright частично засчитывается), только гибрид при удалённой вакансии."}
+{"pair_id": "3960796ae238", "label": 2, "rationale": "Стажёр со 100-м перцентилем и Selenium в стеке, ожидания ниже вилки, удалёнка подходит; уровень на ступень ниже."}
+{"pair_id": "c2da0596085d", "label": 1, "rationale": "Junior QA с Selenium, но ожидания от 170 тыс. сильно выше вилки."}
+{"pair_id": "fb5fac11cf18", "label": 2, "rationale": "Junior QA с Selenium, удалёнка, ожидания на 10% выше вилки; слабый перцентиль теста."}
+{"pair_id": "323d553530dd", "label": 1, "rationale": "Junior QA с Selenium, ожидания от 220 тыс. более чем вдвое выше вилки."}
+{"pair_id": "8dc4f9c371f3", "label": 1, "rationale": "Junior QA с Selenium и ожиданиями в вилке, но только офис при удалённой вакансии, слабый тест."}
+{"pair_id": "e524c2bb8fbf", "label": 3, "rationale": "Junior QA, работал с Selenium, ожидания в вилке, удалёнка подходит."}
+{"pair_id": "427292504402", "label": 3, "rationale": "Junior QA, Selenium в стеке, ожидания в вилке, удалёнка, хороший тест и участие в ФСП."}
+{"pair_id": "293f5ee8d40a", "label": 1, "rationale": "Middle QA с Selenium, ожидания от 180 тыс. сильно выше вилки Junior."}
+{"pair_id": "0c22e5511edc", "label": 0, "rationale": "Уровень Lead по резюме, нет Selenium, ожидания от 250 тыс. несопоставимы с вилкой."}
+{"pair_id": "e918245af727", "label": 0, "rationale": "Middle/Senior QA, ожидания от 280 тыс., только офис — условия полностью несовместимы с вакансией."}
+{"pair_id": "a27f14e6a9cf", "label": 1, "rationale": "Junior QA с Selenium, но ожидания от 210 тыс. вдвое выше вилки, только гибрид."}
+{"pair_id": "9eeae3ebec6f", "label": 1, "rationale": "Junior QA с Selenium, ожидания в пределах, но только офис при удалённой вакансии."}
+{"pair_id": "a9fed16cfbd6", "label": 0, "rationale": "Frontend Senior — другая специализация и уровень."}
+{"pair_id": "c2f95d554dd8", "label": 1, "rationale": "Junior QA с Selenium, но только офис при удалённой вакансии и ожидания выше вилки."}
+{"pair_id": "b96d3300b63b", "label": 3, "rationale": "Junior QA, 93-й перцентиль, Selenium, ожидания в вилке, любой формат, достижения ФСП."}
+{"pair_id": "2a3307780814", "label": 1, "rationale": "Middle QA с Selenium, ожидания от 170 тыс. сильно выше вилки."}
+{"pair_id": "4a0b42657b1e", "label": 1, "rationale": "Middle QA с Selenium, ожидания от 180 тыс. сильно выше вилки."}
+{"pair_id": "90225df33e9f", "label": 1, "rationale": "Middle QA с Selenium, ожидания от 310 тыс. втрое выше вилки, слабый тест."}
+{"pair_id": "8471df3cc655", "label": 1, "rationale": "Middle QA с Selenium, ожидания от 180 тыс. сильно выше вилки, нет удалёнки."}
+{"pair_id": "2f565575b4fc", "label": 0, "rationale": "Middle/Senior без Selenium, ожидания от 250 тыс., нет удалёнки."}
+{"pair_id": "18b5a77648f6", "label": 2, "rationale": "Junior QA, работал с Selenium, удалёнка, ожидания на верхней границе вилки; слабый перцентиль теста."}
+{"pair_id": "f2e86a373cdd", "label": 3, "rationale": "Junior QA, работал с Selenium, ожидания в вилке, любой формат, хороший тест."}
+{"pair_id": "850808831060", "label": 1, "rationale": "Сильный Junior QA с Selenium и ФСП, но ожидания от 190 тыс. почти вдвое выше вилки."}
+{"pair_id": "d0095d82b47d", "label": 3, "rationale": "Junior QA, работал с Selenium, 83-й перцентиль, удалёнка, ожидания на границе вилки."}
+{"pair_id": "f6efb630be82", "label": 2, "rationale": "Junior QA без Selenium, но с Playwright; ожидания в вилке, удалёнка, участник ФСП."}
+{"pair_id": "331249eb8fad", "label": 1, "rationale": "Junior QA с Selenium, но только офис при удалённой вакансии."}
+{"pair_id": "33e3da73cc14", "label": 1, "rationale": "Junior QA с Selenium, ожидания от 180 тыс. сильно выше вилки, нет удалёнки."}
+{"pair_id": "3d79a8647af2", "label": 1, "rationale": "Junior QA с Selenium, ожидания в вилке, но только офис при удалённой вакансии."}
+{"pair_id": "1f2013af5c2b", "label": 2, "rationale": "Junior QA с Selenium, ожидания в вилке, хороший тест; гибрид/офис вместо удалёнки — мягкое расхождение."}
+{"pair_id": "0d02972c696d", "label": 1, "rationale": "Сильный Middle QA с Selenium, но ожидания от 190 тыс. почти вдвое выше вилки."}
+{"pair_id": "762a16dcae1b", "label": 0, "rationale": "Frontend-разработчик — другая специализация, нет Selenium."}
+{"pair_id": "fcf528a78289", "label": 2, "rationale": "DevOps Senior, GitLab CI и безопасность подтверждены, ожидания ниже вилки, удалёнка; нет GitHub Actions, уровень ниже."}
+{"pair_id": "ae8e68ac5653", "label": 2, "rationale": "Сильный DevOps Senior, GitHub Actions, безопасность подтверждена, Yandex Cloud, ожидания в вилке; нет GitLab CI."}
+{"pair_id": "7c6868d34890", "label": 0, "rationale": "Системный аналитик — другая специализация."}
+{"pair_id": "9870c25a7f0f", "label": 2, "rationale": "DevOps Senior/Lead, все обязательные навыки в стеке, ожидания в вилке; слабый тест, безопасность подтверждена частично."}
+{"pair_id": "aba467900c89", "label": 2, "rationale": "DevOps Senior, GitHub Actions и ИБ, безопасность подтверждена, ожидания в вилке; нет GitLab CI, уровень ниже Lead."}
+{"pair_id": "606319dedaf0", "label": 1, "rationale": "DevOps Lead с ИБ, но нет GitLab CI и GitHub Actions (только Jenkins), CI/CD частично, ожидания выше вилки."}
+{"pair_id": "3af922ad9b0f", "label": 3, "rationale": "DevOps Lead, GitLab CI, ИБ и Yandex Cloud, безопасность подтверждена, ожидания в вилке, удалёнка."}
+{"pair_id": "5c93d74030d9", "label": 1, "rationale": "DevOps Senior с GitHub Actions и ИБ, но очень слабый тест, CI/CD частично, только гибрид."}
+{"pair_id": "0cce098b402c", "label": 2, "rationale": "Опытный DevOps Senior, ИБ подтверждена, Yandex Cloud, ожидания в вилке; нет конкретных GitLab CI/GitHub Actions."}
+{"pair_id": "5f9eab1961c4", "label": 2, "rationale": "DevOps Senior, GitHub Actions, безопасность подтверждена тестом, ожидания в вилке; нет GitLab CI."}
+{"pair_id": "d65e87495d2e", "label": 2, "rationale": "DevOps Senior, GitLab CI, ИБ, Yandex Cloud, хороший тест, ожидания ниже вилки; нет GitHub Actions."}
+{"pair_id": "a629dbfcbd4c", "label": 1, "rationale": "DevOps Senior с ИБ, но без GitLab CI и GitHub Actions, ожидания выше вилки."}
+{"pair_id": "276adf302ce5", "label": 2, "rationale": "DevOps Senior, GitLab CI и ИБ, безопасность подтверждена, достижения ФСП; ожидания чуть выше вилки, нет GitHub Actions."}
+{"pair_id": "4071b0dcdee6", "label": 2, "rationale": "DevOps Lead с GitHub Actions, ожидания в вилке; нет GitLab CI и ИБ, безопасность подтверждена частично."}
+{"pair_id": "36d12129acfd", "label": 2, "rationale": "DevOps Senior с GitHub Actions, безопасность подтверждена, ожидания в вилке; слабый тест, нет GitLab CI."}
+{"pair_id": "3577fe454f23", "label": 0, "rationale": "Data Science / ML — другая специализация."}
+{"pair_id": "a8cb55d1850e", "label": 1, "rationale": "DevOps Senior с ИБ и призёр ФСП по ИБ, но без GitLab CI и GitHub Actions."}
+{"pair_id": "a4a16d7643cb", "label": 2, "rationale": "DevOps Senior/Lead, GitLab CI, GitHub Actions и ИБ, безопасность подтверждена, ожидания в вилке; грейд подтверждён Senior."}

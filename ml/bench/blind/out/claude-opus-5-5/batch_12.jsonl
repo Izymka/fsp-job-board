@@ -1,0 +1,61 @@
+{"pair_id": "085e9b7f4aaf", "label": 1, "rationale": "Backend Junior, удалёнка; из обязательных только Node.js, ожидания чуть выше вилки."}
+{"pair_id": "f81813b5cb84", "label": 0, "rationale": "Из обязательных только asyncio, формат только офис при удалённой вакансии."}
+{"pair_id": "34758c276279", "label": 0, "rationale": "Frontend Intern — другая специализация."}
+{"pair_id": "34f5533b3063", "label": 0, "rationale": "Только Node.js, ожидания от 240 тыс. сильно выше вилки, только гибрид."}
+{"pair_id": "b12b6b546a6b", "label": 1, "rationale": "Junior, Rust и asyncio есть, но ожидания от 280 тыс. вдвое выше вилки."}
+{"pair_id": "70f94a93ab67", "label": 1, "rationale": "Junior, DDD и Node.js, сильный тест; но удалёнку не рассматривает, нет Rust и asyncio."}
+{"pair_id": "46b3e012c002", "label": 1, "rationale": "Junior, условия подходят, но из обязательных только Node.js."}
+{"pair_id": "be385a983466", "label": 0, "rationale": "Ожидания от 200 тыс. выше вилки, только гибрид; нет DDD и asyncio."}
+{"pair_id": "0a764e82fb58", "label": 1, "rationale": "Junior, DDD, Node.js, asyncio, архитектура подтверждена; но ожидания от 240 тыс. сильно выше вилки."}
+{"pair_id": "cc850b4bb82b", "label": 0, "rationale": "Ожидания от 190 тыс. выше вилки, только гибрид; нет DDD и asyncio."}
+{"pair_id": "1d5d8a29da69", "label": 1, "rationale": "Junior, условия подходят, но из обязательных только Node.js."}
+{"pair_id": "b16a1edc1262", "label": 2, "rationale": "Junior, Node.js и Rust, архитектура подтверждена тестом; вилка и удалёнка подходят."}
+{"pair_id": "6ae3ceef1ad2", "label": 0, "rationale": "Middle с ожиданиями от 360 тыс., только Node.js из обязательных."}
+{"pair_id": "e9638b65dc22", "label": 0, "rationale": "Только Node.js, ожидания от 240 тыс. сильно выше вилки."}
+{"pair_id": "89992da528ec", "label": 1, "rationale": "Junior, DDD и asyncio, удалёнка; ожидания от 190 тыс. выше вилки более чем на 15%."}
+{"pair_id": "19d20dfd0698", "label": 1, "rationale": "Junior, условия подходят, но из обязательных только Node.js."}
+{"pair_id": "362496cbeb2a", "label": 0, "rationale": "Middle с ожиданиями от 380 тыс., только Node.js."}
+{"pair_id": "f321c2d2a338", "label": 0, "rationale": "Intern, только гибрид при удалённой вакансии; DDD и Node.js есть."}
+{"pair_id": "cb0e721518e3", "label": 0, "rationale": "Нет ни Node.js, ни DDD, ни Rust; asyncio только косвенно через aiohttp."}
+{"pair_id": "c7e9dd89f5cb", "label": 0, "rationale": "Нет ни одного обязательного навыка."}
+{"pair_id": "e60838d71a49", "label": 2, "rationale": "Junior, Node.js и Rust; вилка и удалёнка подходят, нет DDD и asyncio."}
+{"pair_id": "53ee3756e7e5", "label": 0, "rationale": "Middle, ожидания от 270 тыс., только офис при удалённой вакансии."}
+{"pair_id": "af2684d46a73", "label": 0, "rationale": "Только Node.js, формат только офис."}
+{"pair_id": "4000dcabed7b", "label": 0, "rationale": "Middle с ожиданиями от 370 тыс., далеко за вилкой."}
+{"pair_id": "011351877f12", "label": 2, "rationale": "Junior, Node.js и asyncio, вилка и удалёнка подходят; тест слабоват, нет DDD и Rust."}
+{"pair_id": "aab426715913", "label": 0, "rationale": "Middle, ожидания от 240 тыс., удалёнку не рассматривает."}
+{"pair_id": "1e14334b7484", "label": 2, "rationale": "Junior, Node.js и Rust, архитектура подтверждена; вилка и удалёнка подходят."}
+{"pair_id": "3a12bb971cb4", "label": 0, "rationale": "Middle, только Node.js, ожидания от 210 тыс., только гибрид."}
+{"pair_id": "19f46113d0de", "label": 0, "rationale": "Только Rust из обязательных, ожидания от 220 тыс. сильно выше вилки."}
+{"pair_id": "1de6059e6ecc", "label": 0, "rationale": "Middle, ожидания от 280 тыс., только офис."}
+{"pair_id": "e51e218a9c18", "label": 1, "rationale": "Junior, условия подходят, но из обязательных только Node.js."}
+{"pair_id": "0dc8071d0294", "label": 1, "rationale": "Junior, условия подходят, есть Rust и aiohttp; нет Node.js и DDD."}
+{"pair_id": "d34a436a1bb8", "label": 0, "rationale": "Нет ни одного обязательного навыка."}
+{"pair_id": "5055a7ddd11b", "label": 1, "rationale": "Junior, Node.js и Rust, но формат только гибрид при удалённой вакансии."}
+{"pair_id": "e451ebfb4b4a", "label": 1, "rationale": "Junior, условия подходят, но из обязательных только Node.js."}
+{"pair_id": "8a3e52368ede", "label": 0, "rationale": "Middle, ожидания от 170 тыс. выше вилки; из обязательных DDD и Rust."}
+{"pair_id": "b1d31a58aea6", "label": 1, "rationale": "Junior, условия подходят, но из обязательных только Node.js."}
+{"pair_id": "f47ecc0935bb", "label": 2, "rationale": "Junior, DDD и Node.js; вилка и удалёнка подходят, нет Rust и asyncio."}
+{"pair_id": "7fc18fe7767c", "label": 0, "rationale": "Middle с ожиданиями от 250 тыс., только Node.js."}
+{"pair_id": "06ccd4c936b9", "label": 2, "rationale": "Junior, Rust и asyncio, архитектура подтверждена; вилка и удалёнка подходят."}
+{"pair_id": "4dfceda439e0", "label": 0, "rationale": "Системный аналитик — другая специализация."}
+{"pair_id": "d1319d21f7d6", "label": 1, "rationale": "Junior, слабый тест, из обязательных только Node.js; условия подходят."}
+{"pair_id": "895e6929725a", "label": 0, "rationale": "Middle с ожиданиями от 360 тыс., только Node.js."}
+{"pair_id": "bd8a65a239da", "label": 1, "rationale": "Junior, Node.js и Rust, условия подходят, но тест очень слабый."}
+{"pair_id": "8077b490e2b2", "label": 3, "rationale": "Junior, Node.js, Rust, asyncio, хороший тест; ожидания в вилке, удалёнка."}
+{"pair_id": "f59070039a89", "label": 0, "rationale": "Middle, ожидания от 210 тыс. выше вилки на 50%."}
+{"pair_id": "91582af7636b", "label": 2, "rationale": "Junior, Node.js и asyncio; вилка и удалёнка подходят, нет DDD и Rust."}
+{"pair_id": "831e4237cae6", "label": 0, "rationale": "Middle со слабым тестом, ожидания от 260 тыс., только Node.js."}
+{"pair_id": "e9c8a4aecb67", "label": 0, "rationale": "Middle, ожидания от 350 тыс., только гибрид."}
+{"pair_id": "73f485214daf", "label": 0, "rationale": "Middle, ожидания от 260 тыс., только офис."}
+{"pair_id": "59c85a996723", "label": 1, "rationale": "Junior, Node.js и Rust, удалёнка; очень слабый тест, давно неактивен."}
+{"pair_id": "bf7e2ad124a6", "label": 1, "rationale": "Junior, DDD, Node.js, Rust; но формат только гибрид при удалённой вакансии."}
+{"pair_id": "4ba5a47756ec", "label": 0, "rationale": "Middle, только Node.js, ожидания от 200 тыс. выше вилки."}
+{"pair_id": "e5348c84f71f", "label": 0, "rationale": "Middle с ожиданиями от 400 тыс., только Node.js."}
+{"pair_id": "e80888627711", "label": 0, "rationale": "Нет обязательных навыков, ожидания от 240 тыс."}
+{"pair_id": "2f36dc1ec73a", "label": 0, "rationale": "Middle, ожидания от 370 тыс., только гибрид."}
+{"pair_id": "6a0dcfb7e167", "label": 0, "rationale": "Middle, ожидания от 200 тыс., только гибрид."}
+{"pair_id": "43f5c37c4ddb", "label": 0, "rationale": "Только Node.js, формат только гибрид при удалённой вакансии."}
+{"pair_id": "2d4a2037958c", "label": 0, "rationale": "Middle без обязательных навыков, ожидания от 250 тыс."}
+{"pair_id": "5d2bcd2de797", "label": 0, "rationale": "Только DDD, ожидания от 260 тыс. сильно выше вилки."}
+{"pair_id": "b370f0e8809f", "label": 1, "rationale": "Junior, DDD, Node.js, asyncio; но только офис при удалённой вакансии, давно неактивен."}

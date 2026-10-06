@@ -1,0 +1,23 @@
+{
+  "n_candidates": 700,
+  "n_needs": 30,
+  "n_synthetic": 30,
+  "systems": [
+    "ours",
+    "bm25",
+    "test_only",
+    "random",
+    "dense_frida",
+    "dense_qwen3",
+    "hybrid_rrf",
+    "rerank_bge"
+  ],
+  "pool_depth": 10,
+  "n_pairs": 1257,
+  "pairs_by_kind": {
+    "pooled": 1083,
+    "random": 114,
+    "control": 60
+  },
+  "elapsed_sec": 690.3
+}

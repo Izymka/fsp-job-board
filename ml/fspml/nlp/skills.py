@@ -132,3 +132,16 @@ def get_dictionary() -> SkillDictionary:
     soft = {row[0]: tuple(row[1]) for row in raw["soft_skills"]}
     roles = {row[0]: (tuple(row[1]), row[2]) for row in raw["roles"]}
     return SkillDictionary(techs=techs, soft=soft, roles=roles)
+
+
+@lru_cache(maxsize=1)
+def get_skill_graph() -> dict[str, tuple[tuple[str, float], ...]]:
+    """Граф частичного зачёта (`data/skill_graph.yaml`): требование → ((чем владеет кандидат, доля), …)."""
+    path = DATA_DIR / "skill_graph.yaml"
+    if not path.exists():
+        return {}
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    out: dict[str, list[tuple[str, float]]] = {}
+    for e in raw.get("edges", []):
+        out.setdefault(e["to"], []).append((e["from"], float(e["w"])))
+    return {k: tuple(v) for k, v in out.items()}

@@ -1,0 +1,92 @@
+{"pair_id": "43849706cce6", "label": 2, "rationale": "Middle, мобильные платформы подтверждены, Kotlin, Compose, Room заявлены; Android явно не указан; условия подходят."}
+{"pair_id": "458f18fe3f4b", "label": 1, "rationale": "Kotlin и Android заявлены, но 3-й перцентиль, навыки частично, удалёнка не указана."}
+{"pair_id": "f23c039fdcc2", "label": 1, "rationale": "Junior с 1.5 годами опыта, Kotlin и Android не указаны, только Flutter/Compose."}
+{"pair_id": "b6426ef3f8ba", "label": 1, "rationale": "Kotlin и Android заявлены, но 6-й перцентиль, мобильные платформы частично, неактивен 81 день."}
+{"pair_id": "33c8b2e040e2", "label": 1, "rationale": "Senior без Kotlin, ожидания значительно выше вилки, только офис при удалёнке, давно неактивен."}
+{"pair_id": "f33ba6a7bc22", "label": 1, "rationale": "Сильный Senior, но ожидания от 420 тыс. сильно выше вилки, удалёнка не указана."}
+{"pair_id": "44ba0783514c", "label": 1, "rationale": "Junior с 0.6 года опыта; Kotlin и Android заявлены, условия подходят."}
+{"pair_id": "d98ee90e74bf", "label": 1, "rationale": "Senior с полным стеком, но ожидания от 490 тыс. значительно выше вилки."}
+{"pair_id": "48be23a8a891", "label": 1, "rationale": "Senior, 27-й перцентиль, Kotlin не указан, ожидания чуть выше вилки."}
+{"pair_id": "7c393ea9ccb6", "label": 2, "rationale": "Middle, Kotlin и Android заявлены, все тесты подтверждены, условия подходят; невысокий перцентиль."}
+{"pair_id": "728a06d03cbc", "label": 3, "rationale": "Middle, Kotlin и Android, все разделы теста подтверждены, ожидания в вилке, удалёнка подходит."}
+{"pair_id": "692d274f53eb", "label": 3, "rationale": "Middle 100-й перцентиль, Kotlin и Android, ожидания в вилке, удалённо."}
+{"pair_id": "3754ed7fba68", "label": 1, "rationale": "Kotlin и Android есть, но ожидания от 360 тыс. выше вилки более чем на 15%."}
+{"pair_id": "a3d9442ba49b", "label": 2, "rationale": "Middle, Kotlin и Android, тест в основном подтверждён, условия подходят; невысокий перцентиль, давно неактивен."}
+{"pair_id": "186696f88f4d", "label": 3, "rationale": "Middle 97-й перцентиль, Kotlin и Android, ожидания в вилке, удалёнка подходит."}
+{"pair_id": "6ef7d279adc5", "label": 1, "rationale": "Kotlin и Android есть, но ожидания от 360 тыс. выше вилки более чем на 15%."}
+{"pair_id": "7500768bf0db", "label": 1, "rationale": "Senior с ожиданиями от 420 тыс. значительно выше вилки, только гибрид."}
+{"pair_id": "f1b09c548b49", "label": 1, "rationale": "Сильный Middle с Kotlin, но Android не указан и удалёнка отсутствует в формате."}
+{"pair_id": "a1cea8f6e583", "label": 2, "rationale": "Junior на ступень ниже, но 100-й перцентиль, 3.6 года опыта, Kotlin и Android, условия подходят."}
+{"pair_id": "910706b8dd96", "label": 1, "rationale": "Kotlin не указан, ожидания от 440 тыс. сильно выше вилки."}
+{"pair_id": "549816093bb2", "label": 2, "rationale": "Middle, Kotlin и Android, условия подходят, достижения ФСП; низкий перцентиль теста."}
+{"pair_id": "8fd40b31b917", "label": 2, "rationale": "Middle, Kotlin и Android, 75-й перцентиль, условия подходят; опыт всего 1.3 года."}
+{"pair_id": "ca2da7361643", "label": 1, "rationale": "Senior с полным стеком, но ожидания от 390 тыс. значительно выше вилки."}
+{"pair_id": "ba1051dbd4c5", "label": 1, "rationale": "Senior, ожидания от 390 тыс. значительно выше вилки, давно неактивен."}
+{"pair_id": "c8f1c725400c", "label": 3, "rationale": "Middle 81-й перцентиль, Kotlin и Android, ожидания ниже вилки, удалённо."}
+{"pair_id": "1d8bedb610a0", "label": 1, "rationale": "Kotlin и Android явно не указаны, только смежные Compose и Coroutines."}
+{"pair_id": "9a56643b6b78", "label": 2, "rationale": "Senior на ступень выше, Kotlin и Android, ожидания в вилке, удалёнка подходит."}
+{"pair_id": "e83f9056a39c", "label": 1, "rationale": "Senior, ожидания от 400 тыс. значительно выше вилки."}
+{"pair_id": "328ca383edc8", "label": 2, "rationale": "Middle, Kotlin и Android, тест подтверждён, условия подходят; низкий перцентиль."}
+{"pair_id": "b0a8f33038d2", "label": 2, "rationale": "Middle 88-й перцентиль, Android есть, Kotlin не указан (Java, Coroutines), условия подходят."}
+{"pair_id": "2fab44f94a0e", "label": 3, "rationale": "Middle 84-й перцентиль, Kotlin и Android, ожидания в вилке, удалёнка подходит."}
+{"pair_id": "6b96710b69fd", "label": 1, "rationale": "Junior с 1.8 года опыта, только офис при удалённой вакансии."}
+{"pair_id": "f5dbc28ca928", "label": 1, "rationale": "Kotlin не указан, ожидания от 420 тыс. значительно выше вилки."}
+{"pair_id": "f1e62e11f6ca", "label": 3, "rationale": "Middle, Kotlin и Android, ожидания в вилке, удалёнка подходит, участие в ФСП."}
+{"pair_id": "ff9adb0800b3", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "8e0c0488cdef", "label": 2, "rationale": "Junior на ступень ниже, но 87-й перцентиль, Kotlin и Android, условия подходят."}
+{"pair_id": "92228b4e0a1e", "label": 2, "rationale": "Middle, Kotlin, Compose, Room, тест подтверждён, условия подходят; Android явно не указан."}
+{"pair_id": "b35133ee37e3", "label": 1, "rationale": "Kotlin и Android есть, но только офис при удалённой вакансии."}
+{"pair_id": "ecc8dd32c63d", "label": 1, "rationale": "Kotlin есть, Android не указан, ожидания выше вилки, удалёнка не указана."}
+{"pair_id": "d5b140ac2652", "label": 2, "rationale": "Middle, Kotlin и Android, тест подтверждён, условия подходят; низкий перцентиль."}
+{"pair_id": "c40219aca1ae", "label": 2, "rationale": "Middle, Android есть, Kotlin не указан, тест подтверждён, условия подходят."}
+{"pair_id": "d3c92b3bde4e", "label": 1, "rationale": "Junior, 27-й перцентиль; Kotlin и Android заявлены, условия подходят."}
+{"pair_id": "cc20ef084fb6", "label": 1, "rationale": "Junior без Kotlin, удалёнка не указана."}
+{"pair_id": "f5ad8a82993c", "label": 0, "rationale": "Data Science, другая специализация."}
+{"pair_id": "5f345a6ad4c8", "label": 0, "rationale": "Из обязательных только Spring, Middle с 9-м перцентилем."}
+{"pair_id": "73c1bba253c2", "label": 2, "rationale": "Senior, Spring и Redis есть, Python близок к FastAPI; нет Go; вилка и удалёнка подходят."}
+{"pair_id": "c94a904b4976", "label": 0, "rationale": "Нет FastAPI, Spring, Redis; ожидания от 550 тыс. сильно выше вилки."}
+{"pair_id": "dd6f73c3c04c", "label": 0, "rationale": "Middle, из обязательных только Spring, удалёнка не указана."}
+{"pair_id": "f481dbccd3ab", "label": 0, "rationale": "Middle, из обязательных только Spring; нет FastAPI, Redis, Go."}
+{"pair_id": "f858da615925", "label": 0, "rationale": "Из обязательных только Go, только офис при удалённой вакансии."}
+{"pair_id": "44b765bc722c", "label": 1, "rationale": "Senior с Go, SQLAlchemy, Microservices, но нет FastAPI, Spring, Redis; только гибрид."}
+{"pair_id": "e4974d1d339f", "label": 0, "rationale": "Только Redis из обязательных, ожидания от 570 тыс. сильно выше вилки."}
+{"pair_id": "0014fd3354e1", "label": 0, "rationale": "Нет ни одного обязательного навыка, только гибрид, ожидания выше вилки."}
+{"pair_id": "454952cf9082", "label": 0, "rationale": "Data Science, другая специализация."}
+{"pair_id": "e25052bfb627", "label": 2, "rationale": "FastAPI, Spring, Go заявлены, нет Redis; Middle на ступень ниже; вилка и удалёнка подходят."}
+{"pair_id": "271233506082", "label": 0, "rationale": "Из обязательных только FastAPI, 14-й перцентиль, ожидания выше вилки более чем на 15%."}
+{"pair_id": "f657171ad41b", "label": 0, "rationale": "Middle, только FastAPI из обязательных, только офис."}
+{"pair_id": "73114a8a6519", "label": 0, "rationale": "Middle без обязательных навыков, только офис."}
+{"pair_id": "340b7653474e", "label": 1, "rationale": "Senior, Spring и Gin (Go), нет FastAPI и Redis; удалёнка не указана."}
+{"pair_id": "1330f4c89cc8", "label": 0, "rationale": "Нет ни одного обязательного навыка, уровень ниже."}
+{"pair_id": "528c0a6ee3d5", "label": 1, "rationale": "Middle, FastAPI и Spring есть, нет Redis и Go; ожидания чуть выше вилки."}
+{"pair_id": "af2e18c840c7", "label": 1, "rationale": "Middle, FastAPI и Go есть, нет Spring и Redis; ожидания выше вилки."}
+{"pair_id": "50529b8c3de1", "label": 0, "rationale": "Из обязательных только Go, слабый тест, удалёнка не указана, ожидания выше вилки."}
+{"pair_id": "791c182946bd", "label": 0, "rationale": "Нет ни одного обязательного навыка (FastAPI, Spring, Redis, Go)."}
+{"pair_id": "8b87bc2bfb04", "label": 0, "rationale": "Middle без обязательных навыков."}
+{"pair_id": "13a51b637753", "label": 0, "rationale": "Опыт 1.8 года, из обязательных только Redis."}
+{"pair_id": "c2ef643f83b4", "label": 2, "rationale": "Senior, FastAPI, Spring, Go заявлены, нет Redis; условия подходят; невысокий перцентиль, давно неактивен."}
+{"pair_id": "5d6fbcfb2155", "label": 0, "rationale": "Нет обязательных навыков, ожидания от 470 тыс. сильно выше вилки."}
+{"pair_id": "9008ce0cb059", "label": 1, "rationale": "Lead, Spring и Redis есть, нет FastAPI и Go; ожидания выше вилки."}
+{"pair_id": "6fafdaced352", "label": 2, "rationale": "Senior 91-й перцентиль, FastAPI и Spring, нет Redis и Go; ожидания на границе вилки, удалёнка подходит."}
+{"pair_id": "87ae0ef82f49", "label": 1, "rationale": "Middle, FastAPI и Go есть, нет Spring и Redis; ожидания частично выше вилки."}
+{"pair_id": "6c7bbd41828a", "label": 0, "rationale": "Системный аналитик, другая специализация."}
+{"pair_id": "dcf08c3017ec", "label": 1, "rationale": "Senior, Go и Microservices, нет FastAPI, Spring, Redis; 12-й перцентиль."}
+{"pair_id": "ac23692f7704", "label": 0, "rationale": "Middle, 10-й перцентиль, удалёнка не указана; только FastAPI и Go."}
+{"pair_id": "063fdd604fc0", "label": 0, "rationale": "Middle, из обязательных только Spring."}
+{"pair_id": "ddf3c23b6edc", "label": 0, "rationale": "Middle, из обязательных только FastAPI."}
+{"pair_id": "96767408f239", "label": 1, "rationale": "Senior с Go и достижениями ФСП, но нет FastAPI, Spring, Redis."}
+{"pair_id": "8656bfa9a101", "label": 1, "rationale": "Senior, FastAPI, Spring, Microservices, нет Redis и Go; удалёнка не указана."}
+{"pair_id": "35100fd88e42", "label": 1, "rationale": "Middle, Spring и Redis есть, нет FastAPI и Go; ожидания выше вилки."}
+{"pair_id": "6ae8efb46eb8", "label": 0, "rationale": "Нет ни одного обязательного навыка."}
+{"pair_id": "4da432474b02", "label": 2, "rationale": "Senior, FastAPI и Redis, нет Spring и Go; вилка и удалёнка подходят, достижения ФСП."}
+{"pair_id": "1ff249fc1467", "label": 0, "rationale": "Нет ни одного обязательного навыка, ожидания выше вилки."}
+{"pair_id": "a2d117031e00", "label": 0, "rationale": "Middle, только FastAPI, только гибрид при удалённой вакансии."}
+{"pair_id": "ac9b894e1c26", "label": 0, "rationale": "Нет обязательных навыков, только SQLAlchemy из плюсов."}
+{"pair_id": "1a8873179368", "label": 0, "rationale": "Из обязательных только Go, только офис при удалённой вакансии."}
+{"pair_id": "58e33f3fa29e", "label": 0, "rationale": "Опыт 1.5 года, только Redis, удалёнка не указана."}
+{"pair_id": "d9cbdb8952e8", "label": 1, "rationale": "Middle, FastAPI и Gin, нет Spring и Redis; ожидания выше вилки."}
+{"pair_id": "b4b2e4d08063", "label": 1, "rationale": "Senior, Spring и Microservices, нет FastAPI, Redis, Go; условия подходят."}
+{"pair_id": "a607c63e4388", "label": 1, "rationale": "Middle, FastAPI и Spring, нет Redis и Go, только гибрид."}
+{"pair_id": "0ab649715353", "label": 1, "rationale": "FastAPI, Spring, Redis есть, но ожидания выше вилки более 15% и удалёнка не указана."}
+{"pair_id": "638a026ab679", "label": 0, "rationale": "Middle, 8-й перцентиль, только гибрид; из обязательных FastAPI и Go."}
+{"pair_id": "d4fb297a0fac", "label": 1, "rationale": "Сильный Senior с Go, но нет FastAPI, Spring, Redis."}

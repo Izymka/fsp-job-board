@@ -227,3 +227,8 @@ frontend/dist/
 
 # Техническая документация ведётся локально
 docs/
+
+# Бенчмарк подбора: кэш ответов LLM (данные и результаты коммитятся)
+ml/bench/cache/
+ml/bench*/data/state.pkl
+ml/bench/calib/

@@ -1,0 +1,98 @@
+{"pair_id": "31f26529ec1e", "label": 2, "rationale": "Middle, User Story и статистика, SQL частично; нет UML; вилка и удалёнка подходят."}
+{"pair_id": "c412a65cc733", "label": 1, "rationale": "Junior, User Story и SQL подтверждены; нет UML и статистики; удалёнка не выбрана."}
+{"pair_id": "17c15f7b5d95", "label": 1, "rationale": "Junior со слабым тестом, User Story и SQL; нет UML, статистики; нет удалёнки."}
+{"pair_id": "484ac59a69fd", "label": 2, "rationale": "Middle, SQL и User Story подтверждены; нет UML и статистики; условия подходят."}
+{"pair_id": "e0b9c88aa411", "label": 1, "rationale": "Все навыки заявлены, но Junior с опытом 0.7 года и слабым тестом."}
+{"pair_id": "a1f1483c4c55", "label": 2, "rationale": "Senior с сильным тестом, UML, User Story, SQL; ожидания чуть выше вилки; нет статистики."}
+{"pair_id": "966ec4aee7d7", "label": 1, "rationale": "Senior, навыки есть кроме статистики, но ожидания на 22% выше и только гибрид."}
+{"pair_id": "6a037d9d705c", "label": 0, "rationale": "Слабый тест, SQL частично, нет User Story, UML, статистики."}
+{"pair_id": "efc471ea6c98", "label": 0, "rationale": "Senior с ожиданиями 360 тыс. и без удалёнки."}
+{"pair_id": "7449849131f5", "label": 2, "rationale": "Middle, UML и SQL подтверждены; нет User Story и статистики; условия подходят."}
+{"pair_id": "91fcd6c49129", "label": 3, "rationale": "Middle, UML, User Story, SQL подтверждены; вилка и удалёнка подходят; нет только статистики."}
+{"pair_id": "7ac1a460486a", "label": 1, "rationale": "Middle, UML заявлен, SQL частично по тесту; нет User Story и статистики."}
+{"pair_id": "dd5459daa2ac", "label": 1, "rationale": "UML и SQL, но нет User Story и статистики; только офис, ожидания на границе."}
+{"pair_id": "69ee2b97a0cf", "label": 2, "rationale": "Junior, UML, SQL, статистика; нет User Story; условия подходят, есть ФСП."}
+{"pair_id": "65c4d340ec65", "label": 3, "rationale": "Middle 76-й перцентиль, UML, User Story, SQL; условия подходят; финалист ФСП."}
+{"pair_id": "a19cbafdac21", "label": 2, "rationale": "Junior с сильным тестом, UML, User Story, SQL; уровень ниже; условия подходят."}
+{"pair_id": "16af8d686c49", "label": 2, "rationale": "Middle 80-й перцентиль, SQL, UML, User Story; нет удалёнки в формате."}
+{"pair_id": "c9ff27bf46cd", "label": 0, "rationale": "Senior с ожиданиями 410 тыс., несовместимо с вилкой."}
+{"pair_id": "02d41f742aed", "label": 2, "rationale": "Middle, User Story и SQL; нет UML и статистики; условия подходят."}
+{"pair_id": "044f5ced9b56", "label": 2, "rationale": "Middle, SQL, UML, User Story; тест слабоват, ожидания на верхней границе вилки."}
+{"pair_id": "6a68ce7b3aef", "label": 0, "rationale": "Senior/Lead с ожиданиями 420 тыс."}
+{"pair_id": "99d6fafba49c", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "d23327f547bd", "label": 1, "rationale": "Сильный Middle, SQL, UML, статистика, но ожидания 350 тыс. и без удалёнки."}
+{"pair_id": "329cb4d46bb3", "label": 2, "rationale": "Junior с сильным тестом, SQL, UML, User Story; уровень ниже; удалёнка подходит."}
+{"pair_id": "764d073e546d", "label": 0, "rationale": "QA-инженер, другая специализация."}
+{"pair_id": "960768391ba5", "label": 2, "rationale": "Middle, SQL, UML, User Story; нет удалёнки; ожидания на верхней границе."}
+{"pair_id": "78356a9cd867", "label": 2, "rationale": "Junior, все обязательные навыки заявлены, сильный тест; уровень ниже Middle."}
+{"pair_id": "093d4f39550d", "label": 2, "rationale": "Junior, все обязательные навыки; тест средний, уровень на ступень ниже."}
+{"pair_id": "4b24e9710b68", "label": 1, "rationale": "Только SQL по тесту, нет User Story, UML, статистики; без удалёнки."}
+{"pair_id": "c2a4cf1ddca4", "label": 1, "rationale": "Навыки заявлены, но тест очень слабый; нет удалёнки."}
+{"pair_id": "363ad507d295", "label": 1, "rationale": "Все навыки заявлены, но тест 2-й перцентиль, SQL и требования частично."}
+{"pair_id": "850599497297", "label": 2, "rationale": "Сильный Middle, SQL, UML, User Story; только офис при удалённой вакансии."}
+{"pair_id": "a96ffe6228bf", "label": 2, "rationale": "Junior 100-й перцентиль, UML, User Story, SQL; уровень ниже; условия подходят."}
+{"pair_id": "e2fed76015db", "label": 2, "rationale": "Middle, все обязательные навыки; ожидания начинаются с верхней границы вилки."}
+{"pair_id": "82f61cc494eb", "label": 1, "rationale": "Сильный Middle, но ожидания 310 тыс. и только гибрид."}
+{"pair_id": "08cf058e2256", "label": 1, "rationale": "SQL, UML, User Story, но ожидания 280 тыс. на 22% выше вилки."}
+{"pair_id": "85fae646f91a", "label": 3, "rationale": "Middle, SQL, UML, User Story подтверждены; вилка и удалёнка подходят."}
+{"pair_id": "fb22c7e73d14", "label": 1, "rationale": "UML и SQL, нет User Story и статистики; без удалёнки."}
+{"pair_id": "3fdfa2c371c8", "label": 0, "rationale": "Senior со слабым тестом, ожидания 310 тыс., без удалёнки."}
+{"pair_id": "567debad5a22", "label": 1, "rationale": "Сильный Junior, UML, User Story, SQL, но уровень ниже и только офис."}
+{"pair_id": "1b12689f219a", "label": 0, "rationale": "Senior/Lead с ожиданиями 390 тыс."}
+{"pair_id": "6aeb87273941", "label": 2, "rationale": "Middle, все обязательные навыки; ожидания чуть выше вилки, без удалёнки."}
+{"pair_id": "d5aafe1cce45", "label": 1, "rationale": "SQL, UML, статистика, но ожидания 310 тыс. на 35% выше вилки."}
+{"pair_id": "10bfa1df5fd9", "label": 0, "rationale": "Только UML, ожидания 380 тыс., давно неактивен."}
+{"pair_id": "2956b5f720b3", "label": 0, "rationale": "Senior с ожиданиями 350 тыс., несовместимо с вилкой."}
+{"pair_id": "a1d28cae77f8", "label": 1, "rationale": "Все навыки есть, но ожидания 340 тыс. почти на 50% выше вилки."}
+{"pair_id": "34ff9a7b605d", "label": 1, "rationale": "Слабый тест, только UML и SQL, опыт 1.3 года."}
+{"pair_id": "a5e8279c47fb", "label": 3, "rationale": "Middle, UML, User Story, SQL подтверждены; вилка и удалёнка подходят."}
+{"pair_id": "61d89d874ff3", "label": 3, "rationale": "Middle, UML, User Story, статистика, SQL; вилка и удалёнка подходят."}
+{"pair_id": "dbed97b769e5", "label": 1, "rationale": "Только SQL из обязательных; нет UML, User Story, статистики."}
+{"pair_id": "938f848d2aa3", "label": 1, "rationale": "UML и SQL, слабый тест, только офис."}
+{"pair_id": "ebd88a8a292f", "label": 0, "rationale": "Ожидания 310 тыс., только офис, нет User Story и статистики."}
+{"pair_id": "aeaea0602670", "label": 1, "rationale": "Junior, только Room; нет React Native, Kotlin, iOS, Coroutines."}
+{"pair_id": "0097e72ad129", "label": 0, "rationale": "Senior с ожиданиями 420 тыс., только удалённо."}
+{"pair_id": "9579b97fd4b9", "label": 0, "rationale": "Middle со слабым тестом, ожидания 210 тыс., без гибрида."}
+{"pair_id": "e16e38468888", "label": 1, "rationale": "Навыки почти все, но ожидания на 36% выше вилки."}
+{"pair_id": "f37e18b166ee", "label": 0, "rationale": "Senior с ожиданиями 340 тыс."}
+{"pair_id": "296a8ce1a420", "label": 0, "rationale": "Middle со слабым тестом, ожидания 230 тыс."}
+{"pair_id": "e688dcd618c2", "label": 2, "rationale": "Junior, все обязательные навыки, вилка и гибрид подходят; тест слабый."}
+{"pair_id": "05b735b80912", "label": 1, "rationale": "Все навыки, но Middle, ожидания выше вилки, только удалённо."}
+{"pair_id": "aa625006b0e1", "label": 2, "rationale": "Junior, Coroutines, React Native, iOS; нет Kotlin и Room; условия подходят."}
+{"pair_id": "654eedd77e85", "label": 0, "rationale": "Сильный Middle, но ожидания 260 тыс. почти вдвое выше вилки."}
+{"pair_id": "5174f6771a55", "label": 3, "rationale": "Junior 87-й перцентиль, все обязательные навыки, гибрид и вилка подходят."}
+{"pair_id": "528f9eab0510", "label": 1, "rationale": "Middle, Kotlin, React Native, Room; ожидания на 36% выше вилки."}
+{"pair_id": "493c03366c3e", "label": 2, "rationale": "Intern, все навыки заявлены, гибрид подходит; уровень ниже Junior."}
+{"pair_id": "84a19d8e7a98", "label": 1, "rationale": "Все навыки, но ожидания 220 тыс. и только офис."}
+{"pair_id": "2de1d8466036", "label": 3, "rationale": "Junior, все обязательные навыки, гибрид и вилка подходят; финалист ФСП."}
+{"pair_id": "eecf0c466462", "label": 2, "rationale": "Junior, Coroutines, Room, iOS; нет React Native и Kotlin; условия подходят."}
+{"pair_id": "3edac833eb17", "label": 1, "rationale": "Coroutines, Room, iOS заявлены, но тест очень слабый."}
+{"pair_id": "99e5663093f5", "label": 0, "rationale": "Intern, из обязательных только Room, давно неактивен."}
+{"pair_id": "87adc25f6ffe", "label": 2, "rationale": "Junior, все обязательные навыки; опыт мал, тест средний; условия подходят."}
+{"pair_id": "5877d7fad6fa", "label": 0, "rationale": "Только React Native, слабый тест, давно неактивен."}
+{"pair_id": "52146f04924b", "label": 3, "rationale": "Junior 100-й перцентиль, все обязательные навыки, ожидания в вилке."}
+{"pair_id": "01e4e8a6e524", "label": 1, "rationale": "React Native и iOS, нет Kotlin, Coroutines, Room; только удалённо."}
+{"pair_id": "04eb443f2383", "label": 0, "rationale": "Middle с ожиданиями 270 тыс."}
+{"pair_id": "cb16f1cba400", "label": 2, "rationale": "Middle с сильным тестом, все навыки, ожидания ниже вилки; уровень выше."}
+{"pair_id": "66d6895eac6b", "label": 0, "rationale": "Middle с ожиданиями 230 тыс., только удалённо."}
+{"pair_id": "9710c205166d", "label": 1, "rationale": "Coroutines, Kotlin, iOS, но тест 3-й перцентиль и только удалённо."}
+{"pair_id": "9bea703a04c2", "label": 0, "rationale": "Middle со слабым тестом, ожидания 210 тыс., давно неактивен."}
+{"pair_id": "513e04773926", "label": 0, "rationale": "Middle с ожиданиями 270 тыс."}
+{"pair_id": "830f9f801f0c", "label": 0, "rationale": "Middle со слабым тестом, ожидания 290 тыс."}
+{"pair_id": "d690da1de057", "label": 2, "rationale": "Junior, React Native, Room, iOS; нет Kotlin и Coroutines; вилка подходит."}
+{"pair_id": "268d1e7635be", "label": 0, "rationale": "Middle с ожиданиями 290 тыс."}
+{"pair_id": "9f350dd25d9c", "label": 2, "rationale": "Junior 93-й перцентиль, React Native, Room, iOS; нет Kotlin, Coroutines."}
+{"pair_id": "20aecc7f9309", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "5112a26503a8", "label": 1, "rationale": "Junior, почти все навыки, но ожидания 240 тыс."}
+{"pair_id": "deb1e4e28069", "label": 0, "rationale": "Middle с ожиданиями 260 тыс."}
+{"pair_id": "827c9de951c8", "label": 2, "rationale": "Intern, все навыки заявлены, ожидания низкие; уровень ниже."}
+{"pair_id": "dd45f9a7345f", "label": 0, "rationale": "Только React Native и Room, ожидания 270 тыс."}
+{"pair_id": "875251dff7fd", "label": 2, "rationale": "Junior, все навыки заявлены, вилка и гибрид подходят; тест слабый."}
+{"pair_id": "c92899621c1b", "label": 0, "rationale": "Middle с ожиданиями 440 тыс."}
+{"pair_id": "d284070d9365", "label": 2, "rationale": "Junior, все обязательные навыки, вилка подходит; только офис."}
+{"pair_id": "7aeec4edb9d1", "label": 1, "rationale": "Все навыки, сильный тест, но ожидания 200 тыс. и только удалённо."}
+{"pair_id": "4d1708207335", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "4882d82a0d2d", "label": 1, "rationale": "Intern, все навыки заявлены, но только удалённо при гибридной вакансии."}
+{"pair_id": "31a60499660d", "label": 0, "rationale": "Intern, из обязательных только Coroutines."}
+{"pair_id": "928b89749673", "label": 1, "rationale": "Middle, Coroutines, Room, iOS; ожидания на 36% выше вилки."}
+{"pair_id": "a0085c8c300b", "label": 1, "rationale": "Сильный Junior, большинство навыков, но ожидания 200 тыс. сильно выше вилки."}

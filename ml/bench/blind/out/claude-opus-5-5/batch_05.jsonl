@@ -1,0 +1,52 @@
+{"pair_id": "e7409c42cc77", "label": 1, "rationale": "Senior DS, условия подходят, но NLP нет, pandas лишь частично, тест на 11-м перцентиле."}
+{"pair_id": "8c68151cc4c4", "label": 1, "rationale": "Middle вместо Senior, только гибрид при офисной вакансии; навыки близкие, тест сильный."}
+{"pair_id": "c6b99569fd3a", "label": 2, "rationale": "Senior, pandas и SQL подтверждены, scikit-learn заявлен; нет NLP, офис не указан, вилка подходит."}
+{"pair_id": "4e9b3423b0d1", "label": 2, "rationale": "Senior, SQL подтверждён, NLP заявлен, pandas частично; офис и вилка совпадают; scikit-learn не указан."}
+{"pair_id": "b75746623262", "label": 1, "rationale": "Middle на Senior, pandas не указан; SQL подтверждён, NLP и scikit-learn заявлены, условия подходят."}
+{"pair_id": "00f2561c0544", "label": 1, "rationale": "Lead с полным стеком, но ожидания от 500 тыс. выше вилки более чем на 15%, только гибрид."}
+{"pair_id": "557e0b61d0cb", "label": 1, "rationale": "Middle с 2.5 годами опыта, pandas не указан, только гибрид при офисной вакансии."}
+{"pair_id": "453d77de0339", "label": 2, "rationale": "Грейд Middle на ступень ниже, но pandas подтверждён, NLP, SQL, scikit-learn заявлены; вилка и офис подходят."}
+{"pair_id": "d6fd8a49a7e9", "label": 2, "rationale": "Senior, SQL подтверждён, NLP заявлен, pandas частично; ожидания на верхней границе вилки, офис возможен."}
+{"pair_id": "4c9223471c1f", "label": 2, "rationale": "Сильный Senior, pandas и SQL подтверждены, NLP заявлен, достижения ФСП; только гибрид, scikit-learn не указан."}
+{"pair_id": "5608f3d4f09e", "label": 1, "rationale": "Сильный кандидат, но ожидания от 560 тыс. значительно выше вилки; SQL и scikit-learn не указаны."}
+{"pair_id": "c4f3dbf3ec3f", "label": 1, "rationale": "Middle, 37-й перцентиль, требования закрыты, но уровень ниже и только гибрид."}
+{"pair_id": "bb5ab29e1111", "label": 1, "rationale": "Middle с 2.8 годами опыта, навыки подтверждены, но уровень ниже и только гибрид."}
+{"pair_id": "5ab3722c241a", "label": 1, "rationale": "Middle, нет NLP, ожидания выше вилки, офис не указан; несколько расхождений."}
+{"pair_id": "d783f18f84a3", "label": 2, "rationale": "Senior, pandas и SQL подтверждены, условия подходят; NLP и scikit-learn не указаны."}
+{"pair_id": "867433c01ed8", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "c0acbb854e5e", "label": 1, "rationale": "Middle, нет NLP и scikit-learn, офис не указан; базовые навыки подтверждены."}
+{"pair_id": "3ae50c2a6ba2", "label": 0, "rationale": "Опыт 0.6 года на позицию Senior, нет NLP и pandas, давно неактивен."}
+{"pair_id": "cf92afd94dd6", "label": 1, "rationale": "Senior, но ключевые навыки подтверждены лишь частично, 17-й перцентиль, NLP и scikit-learn нет."}
+{"pair_id": "ce7e5ecf0bec", "label": 1, "rationale": "Middle на Senior, pandas не указан; NLP, SQL, scikit-learn есть, офис подходит, достижения ФСП."}
+{"pair_id": "5308dea663f6", "label": 1, "rationale": "Middle, 8-й перцентиль, pandas частично, scikit-learn нет; NLP и SQL есть."}
+{"pair_id": "9832a26d37ad", "label": 2, "rationale": "Middle на ступень ниже, но все обязательные навыки подтверждены или заявлены, офис и вилка подходят."}
+{"pair_id": "b50b4d367a61", "label": 2, "rationale": "Senior, все требования закрыты, ожидания в вилке; офис не указан, давно неактивен."}
+{"pair_id": "0952c2ed79ba", "label": 1, "rationale": "Senior, 22-й перцентиль, нет NLP и scikit-learn, только гибрид, ожидания на границе вилки."}
+{"pair_id": "731359df15e4", "label": 2, "rationale": "Senior, SQL подтверждён, pandas заявлен, условия подходят; NLP и scikit-learn не указаны."}
+{"pair_id": "ecc9a09ce4e4", "label": 2, "rationale": "Middle 92-й перцентиль, все обязательные навыки в стеке, вилка и офис подходят; грейд на ступень ниже."}
+{"pair_id": "bbc371514719", "label": 2, "rationale": "Сильный Senior, pandas подтверждён, NLP заявлен; ожидания немного выше вилки, SQL и scikit-learn не указаны."}
+{"pair_id": "7382a9a66059", "label": 2, "rationale": "Senior, pandas и SQL подтверждены, NLP заявлен; ожидания чуть выше вилки, scikit-learn не указан."}
+{"pair_id": "334c3e29d129", "label": 1, "rationale": "Senior с полным стеком и вилкой, но только удалённо при офисной вакансии."}
+{"pair_id": "322b87147553", "label": 1, "rationale": "Middle, требования закрыты, но уровень ниже и офис не указан."}
+{"pair_id": "b2854e9d49b8", "label": 1, "rationale": "Lead, ожидания выше вилки более чем на 15%, нет NLP, офис не указан."}
+{"pair_id": "e4ba0bbe5bdc", "label": 2, "rationale": "Сильный Senior, все обязательные навыки есть, вилка подходит; офис не указан."}
+{"pair_id": "5d034e73bbf5", "label": 1, "rationale": "Lead, ожидания от 550 тыс. значительно выше вилки, нет NLP и scikit-learn."}
+{"pair_id": "e60844ea9ff9", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "cb2f78119745", "label": 1, "rationale": "Middle, NLP нет, остальные требования подтверждены, условия подходят; уровень ниже."}
+{"pair_id": "68a912ff0658", "label": 1, "rationale": "Lead с подтверждёнными навыками и вилкой в пределах, но только удалённо при офисной вакансии."}
+{"pair_id": "dc369c3a1e2d", "label": 1, "rationale": "Middle, нет pandas, NLP и scikit-learn; подтверждён только SQL."}
+{"pair_id": "84f07e7ad262", "label": 1, "rationale": "Middle, нет NLP, ожидания немного выше вилки; уровень ниже требуемого."}
+{"pair_id": "1ecd7b690259", "label": 1, "rationale": "Middle, нет pandas и scikit-learn; SQL подтверждён, NLP заявлен, офис подходит."}
+{"pair_id": "113b9e214ed3", "label": 2, "rationale": "Senior аналитик, требования подтверждены, сбор требований, продуктовый анализ, UML заявлены; нет Excel."}
+{"pair_id": "ac9a2248d0cb", "label": 0, "rationale": "Junior Data Science, другая специализация и уровень."}
+{"pair_id": "450d55571f87", "label": 2, "rationale": "Senior аналитик, UML, Excel, продуктовый анализ заявлены, требования подтверждены; низкий перцентиль."}
+{"pair_id": "f9d4a1900d6d", "label": 1, "rationale": "Senior, есть UML, но нет Excel, продуктового анализа и сбора требований в стеке."}
+{"pair_id": "fc7bdb1bcf08", "label": 1, "rationale": "Senior, сбор требований есть, но нет UML, Excel и продуктового анализа."}
+{"pair_id": "35597a7ad8c7", "label": 1, "rationale": "Весь стек заявлен, но 8-й перцентиль, требования и метрики подтверждены лишь частично."}
+{"pair_id": "bfcdd926dca2", "label": 2, "rationale": "Senior, 100-й перцентиль, сбор требований, продуктовый анализ, UML; нет Excel, опыт 4.3 года."}
+{"pair_id": "4aee03117f61", "label": 2, "rationale": "Сильный Senior, все обязательные навыки заявлены, тест подтверждён, условия подходят; грейд на ступень ниже."}
+{"pair_id": "db0866d671a0", "label": 3, "rationale": "Опыт 8.7 года, все обязательные навыки, тест подтверждён, ожидания в вилке, гибрид подходит."}
+{"pair_id": "c99d6a33a1a1", "label": 0, "rationale": "Junior frontend-разработчик, другая специализация."}
+{"pair_id": "da5d05d590d3", "label": 1, "rationale": "Нет UML и Excel, только удалённо при гибридной вакансии."}
+{"pair_id": "7d1adf659af7", "label": 3, "rationale": "92-й перцентиль, 7.8 года опыта, все обязательные навыки, ожидания в вилке, гибрид подходит."}
+{"pair_id": "118221ad3f33", "label": 3, "rationale": "Полный стек требований и плюсов, тест подтверждён, ожидания в вилке, гибрид подходит."}
