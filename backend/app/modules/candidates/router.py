@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from ...core.config import get_settings
 from ...core.db import get_db, utcnow
 from ...core.errors import AppError, bad_request, responses
 from ...core.security import require_role
@@ -254,6 +255,7 @@ def survey(body: SurveyIn, user: User = Depends(CandidateUser), db: Session = De
         p.confirmed_at = None
         p.theta = p.theta_se = None
         p.skill_scores = {}
+        p.assessment_summary = None
     p.industries = body.industries
     p.specialization = body.specialization
     p.stack = _normalize_stack(body.stack)
@@ -302,11 +304,13 @@ async def upload_resume(
         raise bad_request("file_too_large", "Файл больше 5 МБ")
     if data[:4] == b"%PDF":
         try:
-            parsed = parse_resume_pdf(data)
+            parsed = parse_resume_pdf(data, llm_fallback=get_settings().resume_llm_fallback)
         except Exception as e:  # noqa: BLE001
             raise bad_request("pdf_unreadable", "Не удалось прочитать PDF") from e
     elif (file.filename or "").lower().endswith(".txt"):
-        parsed = parse_resume_text(data.decode("utf-8", errors="ignore"))
+        parsed = parse_resume_text(
+            data.decode("utf-8", errors="ignore"), llm_fallback=get_settings().resume_llm_fallback
+        )
     else:
         raise bad_request("unsupported_format", "Поддерживается PDF (или .txt)")
     d = parsed.to_dict()
@@ -321,10 +325,12 @@ async def upload_resume(
         "github": d["github"],
         "city": d["city"],
         "about": d["about"],
-        "experience_years": d["experience_years"],
+        "headline": d["headline"],
+        # для подбора важен стаж в IT; общий стаж — в grade_reason
+        "experience_years": d["it_experience_years"] if d["jobs"] else d["experience_years"],
         "soft_skills": d["soft_skills"],
         "experience": [
-            {"title": j["title"], "start": j["start"], "end": j["end"], "description": None}
+            {"title": j["title"], "start": j["start"], "end": j["end"], "description": j["description"]}
             for j in d["jobs"]
         ],
         "stack": d["skills"][:30],

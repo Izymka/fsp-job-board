@@ -7,10 +7,14 @@ import uuid
 from datetime import timedelta
 
 from fspml.assessment import grade_policy as gp
+from fspml.assessment import integrity as integ
+from fspml.assessment import scenarios as scn
 from fspml.assessment.cat import CatPlan, CatResult, Response, estimate
 from fspml.assessment.drift import CusumConfig
 from fspml.assessment.engine import AssessmentEngine, IssuedItem
 from fspml.assessment.irt import ItemParams, prob
+from fspml.assessment.items import instance_seed
+from fspml.assessment.scenario_grader import grade_answer, grade_probe
 from fspml.catalog import get_catalog
 from fspml.nlp.skills import get_dictionary
 from sqlalchemy import func, select
@@ -112,10 +116,24 @@ def plan_for(attempt: Attempt, engine: AssessmentEngine) -> CatPlan:
 def responses_of(db: Session, attempt: Attempt, engine: AssessmentEngine) -> list[Response]:
     items = db.scalars(
         select(AttemptItem)
-        .where(AttemptItem.attempt_id == attempt.id, AttemptItem.answered_at.is_not(None))
+        .where(
+            AttemptItem.attempt_id == attempt.id,
+            AttemptItem.answered_at.is_not(None),
+            AttemptItem.kind == "item",
+        )
         .order_by(AttemptItem.position)
     ).all()
     return [engine.response(it.family_id, bool(it.correct)) for it in items]
+
+
+def answered_items(db: Session, attempt: Attempt) -> list[AttemptItem]:
+    return list(
+        db.scalars(
+            select(AttemptItem)
+            .where(AttemptItem.attempt_id == attempt.id, AttemptItem.answered_at.is_not(None))
+            .order_by(AttemptItem.position)
+        ).all()
+    )
 
 
 def current_item(db: Session, attempt: Attempt) -> AttemptItem | None:
@@ -201,6 +219,73 @@ def _update_family_stats(db: Session, item: AttemptItem, cfg: CusumConfig = Cusu
             reset_engine_cache()
 
 
+def _signals(it: AttemptItem) -> integ.ItemSignals:
+    return integ.ItemSignals(
+        it.tab_switches or 0, it.away_ms or 0, it.paste_attempts or 0, it.copy_attempts or 0
+    )
+
+
+def integrity_report(db: Session, attempt: Attempt, engine: AssessmentEngine) -> integ.IntegrityReport:
+    items = answered_items(db, attempt)
+    resp = responses_of(db, attempt, engine)
+    theta = estimate(resp, engine.config).mean if resp else None
+    return integ.assess(
+        [_signals(it) for it in items],
+        pairs=[(r.params, r.correct) for r in resp],
+        theta=theta,
+    )
+
+
+def scenario_item(db: Session, attempt: Attempt, kind: str = "scenario") -> AttemptItem | None:
+    return db.scalar(
+        select(AttemptItem).where(AttemptItem.attempt_id == attempt.id, AttemptItem.kind == kind)
+    )
+
+
+def scenario_instance(attempt: Attempt, item: AttemptItem) -> scn.ScenarioInstance:
+    """Экземпляр кейса восстанавливается по seed позиции основного задания кейса."""
+    meta = item.meta or {}
+    sc = scn.load_scenarios()[meta["scenario"]]
+    pos = meta.get("main_position", item.position)
+    return sc.instance(instance_seed(get_settings().assessment_secret.encode(), str(attempt.id), pos))
+
+
+def _issue_scenario(db: Session, attempt: Attempt, position: int) -> AttemptItem | None:
+    seed = instance_seed(get_settings().assessment_secret.encode(), str(attempt.id), position)
+    seen = {
+        (it.meta or {}).get("scenario")
+        for it in db.scalars(
+            select(AttemptItem)
+            .join(Attempt, Attempt.id == AttemptItem.attempt_id)
+            .where(Attempt.candidate_id == attempt.candidate_id, AttemptItem.kind == "scenario")
+        ).all()
+    }
+    sc = scn.pick_scenario(attempt.specialization, attempt.grade, seed, exclude={x for x in seen if x})
+    if sc is None:
+        return None
+    it = AttemptItem(
+        attempt_id=attempt.id,
+        position=position,
+        kind="scenario",
+        family_id=f"scn:{sc.id}",
+        skill=sc.skill,
+        meta={"scenario": sc.id, "main_position": position},
+    )
+    db.add(it)
+    db.flush()
+    return it
+
+
+def item_time_limit(engine: AssessmentEngine, item: AttemptItem) -> int:
+    if item.kind == "scenario":
+        sc = scn.load_scenarios().get((item.meta or {}).get("scenario", ""))
+        return sc.time_limit if sc else 900
+    if item.kind == "probe":
+        return scn.PROBE_TIME_LIMIT
+    fam = engine.bank.get(item.family_id)
+    return fam.time_limit if fam else 180
+
+
 def answer(
     db: Session,
     p: CandidateProfile,
@@ -209,6 +294,10 @@ def answer(
     value,
     time_ms: int | None,
     tab_switches: int,
+    *,
+    away_ms: int = 0,
+    paste_attempts: int = 0,
+    copy_attempts: int = 0,
 ) -> CatResult | None:
     if attempt.status != "in_progress":
         raise AppError(409, "attempt_finished", "Попытка уже завершена")
@@ -216,40 +305,141 @@ def answer(
     if item is None or item.position != position:
         raise AppError(409, "wrong_position", "Ответ на это задание уже принят или задание не выдано")
     engine = get_engine(db)
-    inst = engine.regenerate(str(attempt.id), item.position, item.family_id)
-    fam = engine.bank.get(item.family_id)
-    limit = (fam.time_limit if fam else 180) + TIME_GRACE_SEC
+    limit = item_time_limit(engine, item) + TIME_GRACE_SEC
     elapsed = (utcnow() - aware(item.issued_at)).total_seconds()
     timed_out = elapsed > limit
-    item.correct = (not timed_out) and inst.check(value)
-    item.response = {"value": value, "timed_out": timed_out}
     item.answered_at = utcnow()
     item.time_ms = time_ms if time_ms is not None else int(elapsed * 1000)
     item.tab_switches = max(0, int(tab_switches or 0))
-    _update_family_stats(db, item)
-    db.flush()
-    responses = responses_of(db, attempt, engine)
-    nxt = issue_next(db, attempt, engine, responses)
+    item.away_ms = max(0, int(away_ms or 0))
+    item.paste_attempts = max(0, int(paste_attempts or 0))
+    item.copy_attempts = max(0, int(copy_attempts or 0))
     p.last_active_at = utcnow()
-    if nxt is not None:
+
+    if item.kind == "item":
+        inst = engine.regenerate(str(attempt.id), item.position, item.family_id)
+        item.correct = (not timed_out) and inst.check(value)
+        item.response = {"value": value, "timed_out": timed_out}
+        _update_family_stats(db, item)
+    else:
+        text = "" if timed_out or value is None else str(value)[:8000]
+        item.response = {"value": text, "timed_out": timed_out}
+        inst_s = scenario_instance(attempt, item)
+        if item.kind == "scenario":
+            g = grade_answer(inst_s, text)
+            probe_idx = scn.choose_probe(inst_s, g.scores)
+            item.score = scn.total_score(inst_s, g.scores, None)
+            item.meta = {**(item.meta or {}), "grading": g.to_dict(), "probe": probe_idx}
+        else:
+            main = scenario_item(db, attempt)
+            probe = inst_s.probe((item.meta or {}).get("probe", 0))
+            g = grade_probe(inst_s, probe, ((main.response or {}).get("value") if main else "") or "", text)
+            item.score = g.scores.get("probe", 0) / 3
+            item.meta = {**(item.meta or {}), "grading": g.to_dict()}
+    db.flush()
+
+    # Надёжность: систематические уходы со страницы аннулируют попытку сразу
+    report = integrity_report(db, attempt, engine)
+    if report.level == "void":
+        void(db, attempt, report)
         return None
-    return finish(db, p, attempt, engine, responses)
+
+    responses = responses_of(db, attempt, engine)
+    if item.kind == "item":
+        nxt = issue_next(db, attempt, engine, responses)
+        if nxt is not None:
+            return None
+        if scn.needs_scenario(attempt.grade) and scenario_item(db, attempt) is None:
+            if _issue_scenario(db, attempt, position + 1) is not None:
+                return None
+    elif item.kind == "scenario":
+        db.add(
+            AttemptItem(
+                attempt_id=attempt.id,
+                position=position + 1,
+                kind="probe",
+                family_id=item.family_id,
+                skill=item.skill,
+                meta={
+                    "scenario": (item.meta or {})["scenario"],
+                    "main_position": item.position,
+                    "probe": (item.meta or {}).get("probe", 0),
+                },
+            )
+        )
+        db.flush()
+        return None
+    return finish(db, p, attempt, engine, responses, report)
+
+
+def scenario_outcome(db: Session, attempt: Attempt) -> dict | None:
+    main = scenario_item(db, attempt)
+    if main is None or main.answered_at is None:
+        return None
+    probe = scenario_item(db, attempt, "probe")
+    inst = scenario_instance(attempt, main)
+    g = (main.meta or {}).get("grading") or {}
+    scores = {k: int(v) for k, v in (g.get("scores") or {}).items()}
+    pg = ((probe.meta or {}).get("grading") or {}) if probe is not None and probe.answered_at else {}
+    probe_score = (pg.get("scores") or {}).get("probe") if pg else None
+    total = scn.total_score(inst, scores, probe_score)
+    k = scn.category(total)
+    probe_q = inst.probe((main.meta or {}).get("probe", 0)) if probe is not None else None
+    return {
+        "scenario_id": inst.scenario.id,
+        "title": inst.scenario.title,
+        "grade": inst.scenario.grade,
+        "category": k,
+        "category_title": scn.CATEGORY_TITLES[k],
+        "total": round(total, 3),
+        "method": g.get("method", "keywords"),
+        "comment": g.get("comment"),
+        "criteria": [
+            {
+                "id": c.id,
+                "title": c.title,
+                "score": scores.get(c.id, 0),
+                "evidence": (g.get("evidence") or {}).get(c.id, ""),
+            }
+            for c in inst.criteria
+        ],
+        "probe": (
+            {
+                "question": probe_q.text,
+                "score": probe_score,
+                "evidence": (pg.get("evidence") or {}).get("probe", ""),
+            }
+            if probe_q is not None
+            else None
+        ),
+    }
 
 
 def finish(
-    db: Session, p: CandidateProfile, attempt: Attempt, engine: AssessmentEngine, responses: list[Response]
+    db: Session,
+    p: CandidateProfile,
+    attempt: Attempt,
+    engine: AssessmentEngine,
+    responses: list[Response],
+    report: integ.IntegrityReport | None = None,
 ) -> CatResult:
-    result = engine.finish(plan_for(attempt, engine), responses)
+    plan = plan_for(attempt, engine)
+    knowledge = engine.finish(plan, responses)
+    sc_out = scenario_outcome(db, attempt)
+    extra = (
+        scn.grm_loglik([(scn.grm_params(sc_out["grade"]), sc_out["category"])])
+        if sc_out is not None
+        else None
+    )
+    result = engine.finish(plan, responses, extra_loglik=extra) if extra is not None else knowledge
+    report = report or integrity_report(db, attempt, engine)
     now = utcnow()
     passed = result.decision == "confirmed"
     state = grade_state(db, p)
     new_state, event = gp.finish_attempt(state, passed, now)
     attempt.status = "passed" if passed else "failed"
     attempt.finished_at = now
-    switches = (
-        db.scalar(select(func.sum(AttemptItem.tab_switches)).where(AttemptItem.attempt_id == attempt.id)) or 0
-    )
-    attempt.result = result_payload(result, switches)
+    attempt.result = result_payload(result, report, knowledge=knowledge, scenario=sc_out)
     if passed:
         p.confirmed_grade = new_state.confirmed_grade
         p.confirmed_at = now
@@ -260,7 +450,30 @@ def finish(
             k: {"status": s.status, "theta": s.theta, "se": s.se, "n": s.n_items, "n_correct": s.n_correct}
             for k, s in result.skills.items()
         }
+        p.assessment_summary = {
+            "attempt_id": str(attempt.id),
+            "integrity": {"level": report.level, "reasons": report.reasons},
+            "scenario": (
+                {k: sc_out[k] for k in ("title", "category", "category_title", "method")} if sc_out else None
+            ),
+        }
     return result
+
+
+def void(db: Session, attempt: Attempt, report: integ.IntegrityReport) -> None:
+    attempt.status = "voided"
+    attempt.finished_at = utcnow()
+    attempt.result = {
+        "decision": "voided",
+        "integrity": report.to_dict(),
+        "explanation": [
+            "Попытка аннулирована: во время теста вы систематически уходили со страницы ("
+            + "; ".join(report.reasons)
+            + ").",
+            "Аннулированная попытка засчитывается как неудачная: повторить тест на этот уровень можно "
+            "через 14 дней, на уровень ниже — сразу.",
+        ],
+    }
 
 
 def abandon(db: Session, attempt: Attempt) -> None:
@@ -270,13 +483,26 @@ def abandon(db: Session, attempt: Attempt) -> None:
     attempt.finished_at = utcnow()
 
 
-def result_payload(r: CatResult, tab_switches: int = 0) -> dict:
+def result_payload(
+    r: CatResult,
+    report: integ.IntegrityReport | None = None,
+    *,
+    knowledge: CatResult | None = None,
+    scenario: dict | None = None,
+) -> dict:
     cat = get_catalog()
     g = cat.grade(r.claimed_grade)
     lines = [
         f"Оценка способности θ = {r.theta:+.2f} ± {r.se:.2f} (шкала специализации, средний кандидат — 0).",
-        f"Вероятность, что уровень выше порога {g.name}: {r.p_claimed:.0%}.",
     ]
+    if scenario is not None and knowledge is not None:
+        lines.append(
+            f"Тест знаний: P(уровень выше порога {g.name}) = {knowledge.p_claimed:.0%}; "
+            f"практический кейс «{scenario['title']}» — {scenario['category_title']}."
+        )
+        lines.append(f"С учётом кейса вероятность, что уровень выше порога {g.name}: {r.p_claimed:.0%}.")
+    else:
+        lines.append(f"Вероятность, что уровень выше порога {g.name}: {r.p_claimed:.0%}.")
     if r.decision == "confirmed":
         lines.append(f"Грейд {g.name} подтверждён.")
         if r.suggestion == "upgrade":
@@ -301,5 +527,8 @@ def result_payload(r: CatResult, tab_switches: int = 0) -> dict:
             for k, s in r.skills.items()
         },
         "explanation": lines,
-        "tab_switches": int(tab_switches),
+        "knowledge_p_claimed": knowledge.p_claimed if knowledge is not None else r.p_claimed,
+        "scenario": scenario,
+        "integrity": report.to_dict() if report is not None else None,
+        "tab_switches": report.items_left if report is not None else 0,
     }

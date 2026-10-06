@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { ArrowDown, ArrowUp, CheckCircle2, Clock, Flag, PartyPopper, RotateCcw, XCircle } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { AlertTriangle, ArrowDown, ArrowUp, Ban, CheckCircle2, Clock, Flag, PartyPopper, RotateCcw, ShieldCheck, XCircle } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { SkillList } from '../../components/domain'
-import { Badge, CodeBlock, ErrorBox, Md, PageLoader, Progress, Section } from '../../components/ui'
+import { Badge, CodeBlock, ErrorBox, Md, Notice, PageLoader, Progress, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { lookup, useCatalog } from '../../lib/catalog'
-import type { Attempt, GradeId, Item } from '../../lib/types'
+import type { Attempt, AttemptResult, GradeId, Item } from '../../lib/types'
 
 function useCountdown(item: Item | null) {
   const [left, setLeft] = useState<number | null>(null)
@@ -21,7 +21,63 @@ function useCountdown(item: Item | null) {
   return left
 }
 
-function ItemInput({ item, value, onChange }: { item: Item; value: unknown; onChange: (v: unknown) => void }) {
+const MIN_AWAY_MS = 1500 // короче — случайный клик мимо окна, не считаем
+
+/** Сигналы надёжности по текущему заданию: уходы со страницы (вкладка или окно), копирование, вставка. */
+function useIntegrity(itemKey: unknown) {
+  const s = useRef({ losses: 0, away: 0, pastes: 0, copies: 0 })
+  const awaySince = useRef<number | null>(null)
+  const [lastAway, setLastAway] = useState<number | null>(null)
+  useEffect(() => {
+    s.current = { losses: 0, away: 0, pastes: 0, copies: 0 }
+    setLastAway(null)
+  }, [itemKey])
+  useEffect(() => {
+    const leave = () => {
+      if (awaySince.current == null) awaySince.current = Date.now()
+    }
+    const back = () => {
+      if (awaySince.current == null) return
+      const d = Date.now() - awaySince.current
+      awaySince.current = null
+      if (d >= MIN_AWAY_MS) {
+        s.current.losses += 1
+        s.current.away += d
+        setLastAway(d)
+      }
+    }
+    const vis = () => (document.hidden ? leave() : back())
+    document.addEventListener('visibilitychange', vis)
+    window.addEventListener('blur', leave)
+    window.addEventListener('focus', back)
+    return () => {
+      document.removeEventListener('visibilitychange', vis)
+      window.removeEventListener('blur', leave)
+      window.removeEventListener('focus', back)
+    }
+  }, [])
+  const onCopy = useCallback((e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    s.current.copies += 1
+  }, [])
+  const onPaste = useCallback((e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    s.current.pastes += 1
+  }, [])
+  const snapshot = () => {
+    // если ответ отправляется, пока окно не в фокусе, — досчитать текущий уход
+    const extra = awaySince.current != null ? Date.now() - awaySince.current : 0
+    return {
+      tab_switches: s.current.losses + (extra >= MIN_AWAY_MS ? 1 : 0),
+      away_ms: s.current.away + (extra >= MIN_AWAY_MS ? extra : 0),
+      paste_attempts: s.current.pastes,
+      copy_attempts: s.current.copies,
+    }
+  }
+  return { onCopy, onPaste, snapshot, lastAway, flagged: s.current.losses > 0 && s.current.away >= 2000, dismiss: () => setLastAway(null) }
+}
+
+function ItemInput({ item, value, onChange, onPaste }: { item: Item; value: unknown; onChange: (v: unknown) => void; onPaste: (e: { preventDefault: () => void }) => void }) {
   if (item.kind === 'single')
     return (
       <div className="grid gap-2" role="radiogroup">
@@ -81,6 +137,25 @@ function ItemInput({ item, value, onChange }: { item: Item; value: unknown; onCh
       </ol>
     )
   }
+  if (item.kind === 'scenario' || item.kind === 'probe') {
+    const text = (value as string) ?? ''
+    return (
+      <div>
+        <textarea
+          className={clsx('input font-sans leading-relaxed', item.kind === 'scenario' ? 'min-h-72' : 'min-h-36')}
+          autoFocus
+          value={text}
+          onChange={(e) => onChange(e.target.value)}
+          onPaste={onPaste}
+          onDrop={(e) => e.preventDefault()}
+          maxLength={6000}
+          placeholder={item.kind === 'scenario' ? 'Опишите ход рассуждений, решение и как будете проверять результат. Конкретика важнее объёма.' : 'Коротко и по существу — 2–5 предложений.'}
+          aria-label="Ответ"
+        />
+        <div className="mt-1 text-right text-xs text-muted">{text.length} / 6000</div>
+      </div>
+    )
+  }
   return (
     <input
       className="input max-w-md font-mono"
@@ -88,9 +163,65 @@ function ItemInput({ item, value, onChange }: { item: Item; value: unknown; onCh
       autoFocus
       value={(value as string) ?? ''}
       onChange={(e) => onChange(e.target.value)}
+      onPaste={onPaste}
+      onDrop={(e) => e.preventDefault()}
       placeholder={item.kind === 'number' ? 'Число' : 'Ваш ответ'}
       aria-label="Ответ"
     />
+  )
+}
+
+const SCORE_TONE = ['bg-accent-50 text-accent-600', 'bg-warn-50 text-warn-600', 'bg-ok-50 text-ok-600', 'bg-brand-50 text-brand-700']
+
+function ScenarioResult({ r }: { r: AttemptResult }) {
+  const sc = r.scenario
+  if (!sc) return null
+  return (
+    <Section title={`Практический кейс: ${sc.title}`}>
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge tone={SCORE_TONE[sc.category]}>{sc.category_title}</Badge>
+        <span className="text-xs text-muted">
+          {sc.method === 'llm' ? 'оценено по рубрике' : 'предварительная автоматическая оценка по рубрике'} · тест знаний: {Math.round((r.knowledge_p_claimed ?? r.p_claimed) * 100)}% → с кейсом: {Math.round(r.p_claimed * 100)}%
+        </span>
+      </div>
+      <ul className="mt-4 space-y-2.5">
+        {sc.criteria.map((c) => (
+          <li key={c.id} className="flex items-start gap-3 text-sm">
+            <span className={clsx('mt-0.5 w-10 shrink-0 rounded-md py-0.5 text-center font-mono text-xs font-bold', SCORE_TONE[c.score])}>{c.score}/3</span>
+            <span>
+              <span className="font-medium">{c.title}</span>
+              {c.evidence && <span className="block text-xs text-muted">«{c.evidence}»</span>}
+            </span>
+          </li>
+        ))}
+        {sc.probe && (
+          <li className="flex items-start gap-3 text-sm">
+            <span className={clsx('mt-0.5 w-10 shrink-0 rounded-md py-0.5 text-center font-mono text-xs font-bold', SCORE_TONE[sc.probe.score ?? 0])}>{sc.probe.score ?? 0}/3</span>
+            <span>
+              <span className="font-medium">Уточняющий вопрос</span>
+              <span className="block text-xs text-muted">{sc.probe.question}</span>
+            </span>
+          </li>
+        )}
+      </ul>
+      <p className="hint mt-3">0 — не раскрыто, 1 — в общих словах, 2 — на уровне грейда, 3 — сверх уровня. Кейс учитывается в общей оценке вместе с тестом знаний.</p>
+    </Section>
+  )
+}
+
+function IntegrityNote({ r }: { r: AttemptResult }) {
+  const i = r.integrity
+  if (!i) return null
+  if (i.level === 'clean')
+    return (
+      <p className="flex items-center gap-1.5 text-xs text-ok-600">
+        <ShieldCheck className="h-3.5 w-3.5" /> Замечаний к прохождению нет.
+      </p>
+    )
+  return (
+    <Notice tone="warn">
+      <b>Замечания к прохождению</b> (работодатель увидит их рядом с результатом): {i.reasons.join('; ')}.
+    </Notice>
   )
 }
 
@@ -148,6 +279,8 @@ function Result({ a }: { a: Attempt }) {
           <ErrorBox error={start.error} />
         </div>
       </section>
+      <IntegrityNote r={r} />
+      <ScenarioResult r={r} />
       <Section title="Подоценки навыков">
         <SkillList scores={Object.fromEntries(Object.entries(r.skills).map(([k, v]) => [k, { ...v, title: '' }]))} />
         <p className="hint mt-3">Подтверждение навыка учитывает и общий уровень: при малом числе заданий оценка навыка осторожно «сжимается» к общей — так статус не скачет от случайностей.</p>
@@ -162,24 +295,16 @@ export default function TestRunner() {
   const nav = useNavigate()
   const { data: a, error } = useQuery({ queryKey: ['attempt', attemptId], queryFn: () => api.get<Attempt>(`/api/assessment/attempts/${attemptId}`) })
   const [value, setValue] = useState<unknown>(null)
-  const switches = useRef(0)
   const t0 = useRef(Date.now())
   const item = a?.status === 'in_progress' ? a.item : null
   const left = useCountdown(item)
+  const guard = useIntegrity(item)
   useEffect(() => {
     setValue(item?.kind === 'order' ? item.options!.map((_, i) => i) : item?.kind === 'multi' ? [] : null)
-    switches.current = 0
     t0.current = Date.now()
   }, [item])
-  useEffect(() => {
-    const h = () => {
-      if (document.hidden) switches.current += 1
-    }
-    document.addEventListener('visibilitychange', h)
-    return () => document.removeEventListener('visibilitychange', h)
-  }, [])
   const answer = useMutation({
-    mutationFn: (v: unknown) => api.post<Attempt>(`/api/assessment/attempts/${attemptId}/answer`, { position: item!.position, value: v, time_ms: Date.now() - t0.current, tab_switches: switches.current }),
+    mutationFn: (v: unknown) => api.post<Attempt>(`/api/assessment/attempts/${attemptId}/answer`, { position: item!.position, value: v, time_ms: Date.now() - t0.current, ...guard.snapshot() }),
     onSuccess: (d) => {
       qc.setQueryData(['attempt', attemptId], d)
       if (d.status !== 'in_progress') {
@@ -204,6 +329,24 @@ export default function TestRunner() {
   }, [left])
   if (error) return <ErrorBox error={error} />
   if (!a) return <PageLoader />
+  if (a.status === 'voided')
+    return (
+      <div className="mx-auto max-w-xl">
+        <Section title="Попытка аннулирована">
+          <div className="flex gap-3">
+            <Ban className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
+            <div className="space-y-2 text-sm text-ink-soft">
+              {(a.result?.explanation ?? []).map((x) => (
+                <p key={x}>{x}</p>
+              ))}
+            </div>
+          </div>
+          <Link to="/candidate/test" className="btn-primary mt-4">
+            К тестированию
+          </Link>
+        </Section>
+      </div>
+    )
   if (a.status !== 'in_progress') {
     if (a.result) return <Result a={a} />
     return (
@@ -218,13 +361,34 @@ export default function TestRunner() {
     )
   }
   if (!item) return <PageLoader />
-  const canSubmit = value !== null && value !== '' && !(Array.isArray(value) && item.kind === 'multi' && value.length === 0)
-  const lowTime = left != null && left <= 15
+  const isText = item.kind === 'scenario' || item.kind === 'probe'
+  const canSubmit = value !== null && value !== '' && !(Array.isArray(value) && item.kind === 'multi' && value.length === 0) && !(isText && String(value).trim().length < 10)
+  const lowTime = left != null && left <= (isText ? 60 : 15)
+  const stages = a.has_scenario ? 2 : 1
+  const stageTitle = item.stage === 'knowledge' ? 'Тест знаний' : item.stage === 'scenario' ? 'Практический кейс' : 'Уточняющий вопрос'
+  const leavesLeft = Math.max(0, (a.integrity?.leaves_left ?? 3) - (guard.flagged ? 1 : 0))
   return (
     <div className="mx-auto max-w-3xl">
+      {guard.lastAway != null && (
+        <div className="mb-4 flex items-start gap-3 rounded-xl border border-accent-500/30 bg-accent-50 px-4 py-3 text-sm text-accent-600" role="alert">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="flex-1">
+            Вы покинули страницу теста на {Math.round(guard.lastAway / 1000)} с — это зафиксировано.{' '}
+            {leavesLeft > 0 ? `Ещё уходы на ${leavesLeft} заданиях — и попытка будет аннулирована.` : 'Следующий уход аннулирует попытку.'}
+          </div>
+          <button type="button" className="text-xs underline" onClick={guard.dismiss}>
+            Понятно
+          </button>
+        </div>
+      )}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Badge tone="bg-brand-50 text-brand-700">Задание {item.position + 1}</Badge>
+        <div className="flex flex-wrap items-center gap-2">
+          {stages > 1 && (
+            <Badge tone="bg-ink text-white">
+              Этап {item.stage === 'knowledge' ? 1 : 2} из 2 · {stageTitle}
+            </Badge>
+          )}
+          {item.stage === 'knowledge' && <Badge tone="bg-brand-50 text-brand-700">Задание {item.position + 1}</Badge>}
           <Badge tone="bg-surface text-ink-soft">{item.skill_title}</Badge>
         </div>
         <div className={clsx('flex items-center gap-1.5 font-mono text-sm', lowTime ? 'text-accent-600' : 'text-ink-soft')} aria-live="polite">
@@ -232,10 +396,21 @@ export default function TestRunner() {
           {left != null ? `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}` : '—'}
         </div>
       </div>
-      <Progress value={a.answered / a.max_items} />
-      <p className="mt-1.5 text-xs text-muted">
-        Отвечено {a.answered}. Тест адаптивный: он закончится, как только результат станет надёжным (от {a.min_items} до {a.max_items} заданий).
-      </p>
+      {item.stage === 'knowledge' ? (
+        <>
+          <Progress value={a.answered / a.max_items} />
+          <p className="mt-1.5 text-xs text-muted">
+            Отвечено {a.answered}. Тест адаптивный: он закончится, как только результат станет надёжным (от {a.min_items} до {a.max_items} заданий).
+            {a.has_scenario && ' Затем — практический кейс.'}
+          </p>
+        </>
+      ) : item.stage === 'scenario' ? (
+        <Notice>
+          Задача уровня вашего грейда, как в реальной работе. Важны ход мысли, конкретика и компромиссы, а не объём. После ответа будет уточняющий вопрос по вашему решению — на него 2 минуты.
+        </Notice>
+      ) : (
+        <Notice tone="warn">Ответьте своими словами: вопрос задан по вашему решению. На ответ — 2 минуты.</Notice>
+      )}
       <form
         className="card mt-5 p-5 sm:p-7"
         onSubmit={(e) => {
@@ -243,10 +418,13 @@ export default function TestRunner() {
           if (canSubmit) answer.mutate(item.kind === 'number' ? String(value).replace(',', '.') : value)
         }}
       >
-        <Md text={item.prompt} className="text-[15px]" />
-        {item.code && <CodeBlock code={item.code} lang={item.code_lang} />}
+        <div className="select-none" onCopy={guard.onCopy} onCut={guard.onCopy} onContextMenu={(e) => e.preventDefault()} onDragStart={(e) => e.preventDefault()}>
+          <Md text={item.prompt} className="text-[15px]" />
+          {item.code && <CodeBlock code={item.code} lang={item.code_lang} />}
+          {item.task && <Md text={`**Задание.** ${item.task}`} className="mt-3 text-[15px]" />}
+        </div>
         <div className="mt-5">
-          <ItemInput item={item} value={value} onChange={setValue} />
+          <ItemInput item={item} value={value} onChange={setValue} onPaste={guard.onPaste} />
         </div>
         <ErrorBox error={answer.error} />
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
@@ -258,12 +436,14 @@ export default function TestRunner() {
               Не знаю
             </button>
             <button className="btn-primary px-6" disabled={!canSubmit || answer.isPending}>
-              <CheckCircle2 className="h-4 w-4" /> Ответить
+              <CheckCircle2 className="h-4 w-4" /> {answer.isPending && isText ? 'Оцениваем…' : 'Ответить'}
             </button>
           </div>
         </div>
       </form>
-      <p className="mt-3 text-center text-xs text-muted">Правильные ответы не показываются во время теста — у каждого кандидата свои варианты заданий.</p>
+      <p className="mt-3 text-center text-xs text-muted">
+        Копирование заданий и вставка текста в ответы отключены. Уход со страницы теста дольше 2 секунд фиксируется.
+      </p>
     </div>
   )
 }

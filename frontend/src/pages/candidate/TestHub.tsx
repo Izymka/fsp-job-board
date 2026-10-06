@@ -13,6 +13,7 @@ const ATTEMPT_STATUS = {
   passed: { label: 'Подтверждён', tone: 'bg-ok-50 text-ok-600' },
   failed: { label: 'Не подтверждён', tone: 'bg-warn-50 text-warn-600' },
   abandoned: { label: 'Прервана', tone: 'bg-surface text-muted' },
+  voided: { label: 'Аннулирована', tone: 'bg-accent-50 text-accent-600' },
 }
 const KIND = { initial: 'первичный', upgrade: 'повышение', downgrade: 'уровень ниже', refresh: 'обновление результата' } as Record<string, string>
 
@@ -153,7 +154,7 @@ export default function TestHub() {
         </Section>
       )}
       <p className="mt-4 flex items-center gap-1.5 text-xs text-muted">
-        <Clock className="h-3.5 w-3.5" /> На каждое задание — ограничение по времени; переключение вкладки фиксируется.
+        <Clock className="h-3.5 w-3.5" /> На каждое задание — ограничение по времени. Уход со страницы теста фиксируется: уходы на трёх заданиях аннулируют попытку.
       </p>
     </div>
   )

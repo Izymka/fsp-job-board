@@ -10,6 +10,7 @@ os.environ.update(
         "FSP_DISABLE_BACKGROUND": "1",
         "FSP_EMBEDDINGS": "hashing",
         "INVITE_QUOTA_PER_WEEK": "3",
+        "LLM_ENABLED": "0",  # тесты не ходят во внешний LLM
     }
 )
 
@@ -114,6 +115,38 @@ def pass_test(api: Api, grade="middle", correct=True) -> dict:
     att = r.json()
     while att["status"] == "in_progress":
         item = att["item"]
+        if item["kind"] in ("scenario", "probe"):
+            from app.modules.assessment.models import AttemptItem
+            from sqlalchemy import select
+
+            with SessionLocal() as db:
+                it = db.scalar(
+                    select(AttemptItem).where(
+                        AttemptItem.attempt_id == __import__("uuid").UUID(att["id"]),
+                        AttemptItem.position == item["position"],
+                    )
+                )
+                from app.modules.assessment.models import Attempt
+
+                inst = assessment_service.scenario_instance(db.get(Attempt, it.attempt_id), it)
+            if correct:
+                # «эталонный» ответ: ожидания рубрики и ключевые термины (резервная оценка без LLM)
+                if item["kind"] == "scenario":
+                    value = "\n".join(f"{c.title}: {c.expect}. {c.strong}." for c in inst.criteria) * 2
+                else:
+                    pr = inst.probe((it.meta or {}).get("probe", 0))
+                    value = f"{pr.expect}. " + " ".join(
+                        k.replace("\\", "").split("|")[0] for k in pr.keywords
+                    )
+            else:
+                value = "Не знаю."
+            r = api.post(
+                f"/api/assessment/attempts/{att['id']}/answer",
+                json={"position": item["position"], "value": value, "time_ms": 60000},
+            )
+            assert r.status_code == 200, r.text
+            att = r.json()
+            continue
         with SessionLocal() as db:
             eng = assessment_service.get_engine(db)
             from app.modules.assessment.models import AttemptItem

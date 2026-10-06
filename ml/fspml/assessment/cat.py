@@ -115,8 +115,8 @@ def _pairs(responses: Iterable[Response]) -> list[tuple[ItemParams, bool]]:
     return [(r.params, r.correct) for r in responses]
 
 
-def estimate(responses: Sequence[Response], config: CatConfig = DEFAULT_CONFIG):
-    return posterior(_pairs(responses), config.prior_mean, config.prior_sd)
+def estimate(responses: Sequence[Response], config: CatConfig = DEFAULT_CONFIG, extra_loglik=None):
+    return posterior(_pairs(responses), config.prior_mean, config.prior_sd, extra_loglik)
 
 
 def select_next(
@@ -217,12 +217,16 @@ def skill_scores(
     return out
 
 
-def decide(responses: Sequence[Response], plan: CatPlan, *, catalog: Catalog | None = None) -> CatResult:
+def decide(
+    responses: Sequence[Response], plan: CatPlan, *, catalog: Catalog | None = None, extra_loglik=None
+) -> CatResult:
+    """Решение о грейде. extra_loglik — правдоподобие практического кейса (Middle+) на сетке θ:
+    тест знаний и кейс объединяются в одном апостериорном распределении."""
     catalog = catalog or get_catalog()
     cfg = plan.config
     claimed_cut, next_cut = plan.cuts(catalog)
     responses = [*plan.carry, *responses]
-    post = estimate(responses, cfg)
+    post = estimate(responses, cfg, extra_loglik)
     p_claimed = post.prob_above(claimed_cut)
     p_next = post.prob_above(next_cut) if next_cut is not None else None
     threshold = cfg.pass_probability_upgrade if plan.kind == "upgrade" else cfg.pass_probability

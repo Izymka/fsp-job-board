@@ -7,6 +7,7 @@ from typing import Any, Literal
 
 from fastapi import APIRouter, Depends
 from fspml.assessment import grade_policy as gp
+from fspml.assessment import scenarios as scn
 from fspml.assessment.cat import CatPlan
 from fspml.assessment.engine import AssessmentEngine
 from fspml.assessment.irt import information, prob
@@ -32,7 +33,9 @@ GRADES = Literal["intern", "junior", "middle", "senior", "lead"]
 
 class ItemOut(BaseModel):
     position: int
-    kind: str
+    kind: str  # single | multi | order | number | text | scenario | probe
+    stage: str = "knowledge"  # knowledge | scenario | probe
+    task: str | None = None
     prompt: str
     code: str | None
     code_lang: str | None
@@ -57,6 +60,8 @@ class AttemptOut(BaseModel):
     blueprint: dict[str, float]
     item: ItemOut | None
     result: dict | None
+    has_scenario: bool = False  # для грейдов Middle+ после теста знаний будет практический кейс
+    integrity: dict | None = None  # живое состояние: сколько уходов со страницы ещё допустимо
 
 
 class EligibilityOption(BaseModel):
@@ -88,23 +93,61 @@ class AnswerIn(BaseModel):
         description="Индекс варианта (single), список индексов (multi/order), число (number) или строка (text)"
     )
     time_ms: int | None = Field(default=None, ge=0)
-    tab_switches: int = Field(default=0, ge=0, le=1000)
+    tab_switches: int = Field(
+        default=0, ge=0, le=1000, description="Уходы со страницы (вкладка/окно) ≥ 1,5 с"
+    )
+    away_ms: int = Field(default=0, ge=0, le=86_400_000, description="Суммарно вне страницы за задание, мс")
+    paste_attempts: int = Field(default=0, ge=0, le=1000)
+    copy_attempts: int = Field(default=0, ge=0, le=1000)
 
 
 def _item_out(db: Session, attempt: Attempt, engine: AssessmentEngine) -> ItemOut | None:
     it = service.current_item(db, attempt)
     if it is None or attempt.status != "in_progress":
         return None
+    skill_title = get_catalog().assessment_skills.get(it.skill, {}).get("title", it.skill)
+    limit = service.item_time_limit(engine, it)
+    if it.kind == "scenario":
+        inst = service.scenario_instance(attempt, it)
+        return ItemOut(
+            position=it.position,
+            kind="scenario",
+            stage="scenario",
+            task=inst.task.strip(),
+            prompt=inst.prompt,
+            code=inst.code,
+            code_lang=inst.scenario.code_lang,
+            options=None,
+            skill=it.skill,
+            skill_title=skill_title,
+            time_limit=limit,
+            issued_at=it.issued_at,
+        )
+    if it.kind == "probe":
+        inst = service.scenario_instance(attempt, it)
+        probe = inst.probe((it.meta or {}).get("probe", 0))
+        return ItemOut(
+            position=it.position,
+            kind="probe",
+            stage="probe",
+            task=None,
+            prompt=f"Уточняющий вопрос по вашему решению кейса «{inst.scenario.title}»:\n\n{probe.text}",
+            code=None,
+            code_lang=None,
+            options=None,
+            skill=it.skill,
+            skill_title=skill_title,
+            time_limit=limit,
+            issued_at=it.issued_at,
+        )
     inst = engine.regenerate(str(attempt.id), it.position, it.family_id)
-    fam = engine.bank.get(it.family_id)
-    pub = inst.public()
     return ItemOut(
         position=it.position,
         skill=it.skill,
-        skill_title=get_catalog().assessment_skills.get(it.skill, {}).get("title", it.skill),
-        time_limit=fam.time_limit if fam else 180,
+        skill_title=skill_title,
+        time_limit=limit,
         issued_at=it.issued_at,
-        **pub,
+        **inst.public(),
     )
 
 
@@ -112,9 +155,15 @@ def attempt_out(db: Session, attempt: Attempt) -> AttemptOut:
     engine = service.get_engine(db)
     answered = db.scalars(
         select(AttemptItem.id).where(
-            AttemptItem.attempt_id == attempt.id, AttemptItem.answered_at.is_not(None)
+            AttemptItem.attempt_id == attempt.id,
+            AttemptItem.answered_at.is_not(None),
+            AttemptItem.kind == "item",
         )
     ).all()
+    live = None
+    if attempt.status == "in_progress":
+        rep = service.integrity_report(db, attempt, engine)
+        live = {"items_left": rep.items_left, "leaves_left": rep.leaves_left, "level": rep.level}
     return AttemptOut(
         id=str(attempt.id),
         specialization=attempt.specialization,
@@ -129,6 +178,9 @@ def attempt_out(db: Session, attempt: Attempt) -> AttemptOut:
         blueprint=attempt.blueprint,
         item=_item_out(db, attempt, engine),
         result=attempt.result,
+        has_scenario=scn.needs_scenario(attempt.grade)
+        and scn.pick_scenario(attempt.specialization, attempt.grade, 0) is not None,
+        integrity=live,
     )
 
 
@@ -148,7 +200,9 @@ RULES = [
     "Повторная попытка на тот же или более высокий уровень после неудачи — через 14 дней.",
     "Смена подтверждённого грейда — не чаще одного раза в 90 дней.",
     "Брошенная попытка засчитывается как неудачная.",
-    "На каждое задание есть ограничение по времени; переключения вкладки фиксируются.",
+    "Для Middle, Senior и Lead после теста знаний — практический кейс (до 15–18 минут) и уточняющий вопрос по вашему решению (2 минуты). Кейс оценивается по рубрике и учитывается в решении о грейде.",
+    "На каждое задание есть ограничение по времени. Копировать текст заданий и вставлять текст в ответы нельзя.",
+    "Уход со страницы теста (другая вкладка или окно) дольше 2 секунд фиксируется. Уходы на трёх заданиях или суммарно больше минуты — попытка аннулируется и засчитывается как неудачная. Единичные уходы видит работодатель рядом с результатом.",
 ]
 
 
@@ -231,7 +285,18 @@ def post_answer(
 ):
     a = _own_attempt(db, user, attempt_id)
     p = get_profile(db, user)
-    service.answer(db, p, a, body.position, body.value, body.time_ms, body.tab_switches)
+    service.answer(
+        db,
+        p,
+        a,
+        body.position,
+        body.value,
+        body.time_ms,
+        body.tab_switches,
+        away_ms=body.away_ms,
+        paste_attempts=body.paste_attempts,
+        copy_attempts=body.copy_attempts,
+    )
     db.commit()
     return attempt_out(db, a)
 

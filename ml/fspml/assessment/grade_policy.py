@@ -8,7 +8,8 @@
   повышение на одну ступень (если тест показал уверенный результат);
 * после онбординга смена грейда (вверх на одну ступень или добровольно вниз) — не чаще чем
   раз в `change_days`; повторный тест на текущий грейд (обновить результат) — раз в `retry_days`;
-* брошенная попытка приравнивается к неудачной — нельзя «перезапускать» тест до удачного набора.
+* брошенная попытка приравнивается к неудачной — нельзя «перезапускать» тест до удачного набора;
+* аннулированная попытка (систематические уходы со страницы теста, см. `integrity.py`) — тоже.
 """
 
 from __future__ import annotations
@@ -20,7 +21,8 @@ from typing import Literal
 
 from ..catalog import Catalog, get_catalog
 
-AttemptStatus = Literal["in_progress", "passed", "failed", "abandoned"]
+AttemptStatus = Literal["in_progress", "passed", "failed", "abandoned", "voided"]
+FAILED_STATUSES = ("failed", "abandoned", "voided")
 AttemptKind = Literal["initial", "upgrade", "downgrade", "refresh"]
 
 
@@ -85,7 +87,7 @@ def check_attempt(
 
     # Неудача на грейде g блокирует g и выше на retry_days.
     for a in state.attempts:
-        if a.status in ("failed", "abandoned") and a.finished_at and catalog.grade_index(a.grade) <= t_idx:
+        if a.status in FAILED_STATUSES and a.finished_at and catalog.grade_index(a.grade) <= t_idx:
             until = a.finished_at + timedelta(days=config.retry_days)
             if until > now:
                 blockers.append(

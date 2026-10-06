@@ -16,6 +16,7 @@ interface ResumeParse {
     github: string | null
     city: string | null
     about: string | null
+    headline: string | null
     experience_years: number
     soft_skills: string[]
     experience: Job[]
@@ -100,6 +101,7 @@ export default function CandidateProfile() {
       github: s.github || x.github,
       city: s.city || x.city,
       about: s.about || x.about,
+      headline: s.headline || x.headline,
       experience_years: s.experience_years ? String(s.experience_years) : x.experience_years,
       soft_skills: s.soft_skills.length ? s.soft_skills.join(', ') : x.soft_skills,
       experience: s.experience.length ? s.experience : x.experience,
@@ -238,8 +240,24 @@ export default function CandidateProfile() {
                   <dd>{parsed.suggestions.full_name ?? '—'}</dd>
                   <dt className="text-muted">Контакты</dt>
                   <dd className="break-all">{[parsed.suggestions.contact_email, parsed.suggestions.phone, parsed.suggestions.telegram].filter(Boolean).join(', ') || '—'}</dd>
-                  <dt className="text-muted">Стаж</dt>
-                  <dd>{parsed.suggestions.experience_years} лет</dd>
+                  <dt className="text-muted">Должность</dt>
+                  <dd>{parsed.suggestions.headline ?? '—'}</dd>
+                  <dt className="text-muted">Стаж в IT</dt>
+                  <dd>{String(parsed.suggestions.experience_years).replace('.', ',')} г.</dd>
+                  <dt className="text-muted">Опыт</dt>
+                  <dd>
+                    {parsed.suggestions.experience.length ? (
+                      <ul className="space-y-0.5">
+                        {parsed.suggestions.experience.map((j, i) => (
+                          <li key={i}>
+                            {j.title} <span className="text-muted">· {j.start} — {j.end}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      '—'
+                    )}
+                  </dd>
                   <dt className="text-muted">Грейд</dt>
                   <dd>
                     {parsed.suggestions.claimed_grade ?? '—'} <span className="text-muted">({parsed.suggestions.grade_reason})</span>

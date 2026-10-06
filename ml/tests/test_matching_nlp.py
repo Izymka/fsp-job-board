@@ -157,3 +157,38 @@ def test_need_inline_headings_and_salary_formats():
         ("ЗП 180 000 ₽", (180_000, None)),
     ]:
         assert parse_need("Python-разработчик. " + t).salary_from == exp[0], t
+
+
+def test_resume_hh_layout_pdf():
+    """Выгрузка hh.ru: даты в левой колонке и разнесены на две строки — опыт должен находиться."""
+    import random
+
+    from fspml.nlp.resume import parse_resume_pdf
+    from fspml.validation.resume import make_hh_resume
+
+    rng = random.Random(5)
+    for _ in range(8):
+        truth, pdf = make_hh_resume(rng)
+        r = parse_resume_pdf(pdf)
+        assert r.layout == "hh"
+        assert len(r.jobs) == truth.n_jobs
+        assert all(j.position and j.company for j in r.jobs)
+        assert abs(r.experience_years - truth.years) <= 0.1
+        assert abs(r.it_experience_years - truth.it_years) <= 0.1
+        assert r.headline and r.email == truth.email
+
+
+def test_resume_text_two_line_period_and_non_it_experience():
+    r = parse_resume_text(
+        "Сидорова Анна\nanna@example.ru\n"
+        "Опыт работы — 6 лет 2 месяца\n"
+        "Сентябрь 2023 — ООО «Код»\nнастоящее время\n3 года 1 месяц\nPython-разработчик\n"
+        "FastAPI, PostgreSQL, Docker, Kafka\n"
+        "Август 2020 — ГБОУ Школа №1\nАвгуст 2023\n3 года 1 месяц\nУчитель\n"
+        "Разрабатывала и проводила уроки математики\n"
+        "Образование\nВысшее"
+    )
+    assert len(r.jobs) == 2 and r.jobs[0].title == "ООО «Код»"
+    assert [j.it for j in r.jobs] == [True, False]
+    assert r.experience_years > r.it_experience_years >= 3
+    assert r.grade_hint == "middle" and "всего" in r.grade_reason

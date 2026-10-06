@@ -83,9 +83,15 @@ class Posterior:
 
 
 def posterior(
-    responses: list[tuple[ItemParams, bool]], prior_mean: float = 0.0, prior_sd: float = 1.0
+    responses: list[tuple[ItemParams, bool]],
+    prior_mean: float = 0.0,
+    prior_sd: float = 1.0,
+    extra_loglik: np.ndarray | None = None,
 ) -> Posterior:
+    """extra_loglik — правдоподобие других форматов на той же сетке (практический кейс, GRM)."""
     lp = log_prior(prior_mean, prior_sd) + log_likelihood(responses)
+    if extra_loglik is not None:
+        lp = lp + extra_loglik
     lp -= lp.max()
     w = np.exp(lp)
     return Posterior(w / w.sum())

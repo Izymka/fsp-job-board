@@ -94,5 +94,5 @@ class AssessmentEngine:
         fam = self.bank.get(family_id) or REGISTRY[family_id]
         return fam.generate(instance_seed(self.secret, attempt_id, position))
 
-    def finish(self, plan: CatPlan, responses: Sequence[Response]) -> CatResult:
-        return decide(responses, plan, catalog=self.catalog)
+    def finish(self, plan: CatPlan, responses: Sequence[Response], extra_loglik=None) -> CatResult:
+        return decide(responses, plan, catalog=self.catalog, extra_loglik=extra_loglik)

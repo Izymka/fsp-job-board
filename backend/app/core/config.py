@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     # Тестирование: секрет для seed экземпляров заданий (HMAC). Сменить в production!
     assessment_secret: str = "assessment-secret-change-me-0123456789abcdef"
 
+    # Разбор резюме: если правила не нашли периодов работы — извлечь опыт через LLM
+    # (Yandex AI Studio; работает, только если LLM_ENABLED=1 и заданы ключи)
+    resume_llm_fallback: bool = True
+
     # Почта (в демо — Mailpit)
     smtp_host: str = "localhost"
     smtp_port: int = 1025

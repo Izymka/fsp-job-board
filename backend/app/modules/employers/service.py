@@ -71,6 +71,8 @@ class CandidateCard(BaseModel):
     fsp: list[FspItem]
     profile_strength: float
     salary_fit: str | None = None
+    # надёжность прохождения теста и практический кейс (Middle+): {integrity: {level, reasons}, scenario}
+    assessment: dict | None = None
 
 
 class RankedCandidate(BaseModel):
@@ -181,6 +183,7 @@ def card(
         fsp=fsp_items,
         profile_strength=round(profile_strength(f, today)[0], 3),
         salary_fit=sal,
+        assessment=p.assessment_summary,
     )
 
 

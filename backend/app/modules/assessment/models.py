@@ -23,7 +23,7 @@ class Attempt(Base):
     kind: Mapped[str] = mapped_column(String(16))  # initial | upgrade | downgrade | refresh
     status: Mapped[str] = mapped_column(
         String(16), default="in_progress", index=True
-    )  # in_progress | passed | failed | abandoned
+    )  # in_progress | passed | failed | abandoned | voided (аннулирована: нарушение правил прохождения)
     blueprint: Mapped[dict] = mapped_column(default=dict)
     stack: Mapped[list] = mapped_column(default=list)
     started_at: Mapped[datetime] = mapped_column(default=utcnow)
@@ -40,6 +40,8 @@ class AttemptItem(Base):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)
     attempt_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("attempts.id", ondelete="CASCADE"), index=True)
     position: Mapped[int]
+    # item — задание теста знаний; scenario — практический кейс; probe — уточняющий вопрос по кейсу
+    kind: Mapped[str] = mapped_column(String(16), default="item")
     family_id: Mapped[str] = mapped_column(String(64), index=True)
     skill: Mapped[str] = mapped_column(String(32))
     issued_at: Mapped[datetime] = mapped_column(default=utcnow)
@@ -47,7 +49,12 @@ class AttemptItem(Base):
     response: Mapped[dict | None] = mapped_column(default=None)  # {"value": ...}
     correct: Mapped[bool | None] = mapped_column(default=None)
     time_ms: Mapped[int | None] = mapped_column(default=None)
-    tab_switches: Mapped[int] = mapped_column(default=0)
+    tab_switches: Mapped[int] = mapped_column(default=0)  # уходы со страницы (вкладка/окно) ≥ 1,5 с
+    away_ms: Mapped[int] = mapped_column(default=0)
+    paste_attempts: Mapped[int] = mapped_column(default=0)
+    copy_attempts: Mapped[int] = mapped_column(default=0)
+    meta: Mapped[dict | None] = mapped_column(default=None)  # кейс: {scenario, probe, grading}
+    score: Mapped[float | None] = mapped_column(default=None)  # кейс/вопрос: оценка 0..1
     expected_p: Mapped[float | None] = mapped_column(
         default=None
     )  # P(верно | θ̂ до ответа) — для мониторинга утечек

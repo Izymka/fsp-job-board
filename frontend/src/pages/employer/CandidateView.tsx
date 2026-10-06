@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Download, Lock, Medal, Send } from 'lucide-react'
+import { AlertTriangle, Download, Lock, Medal, Send, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FspList, InviteModal, SkillList } from '../../components/domain'
@@ -56,6 +56,30 @@ export default function CandidateView() {
                 <div className="text-[11px] text-muted">дн. с последней активности</div>
               </div>
             </div>
+            {c.assessment && (
+              <div className="mt-4 space-y-2 text-sm">
+                {c.assessment.scenario && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-muted">Практический кейс «{c.assessment.scenario.title}»:</span>
+                    <Badge tone={c.assessment.scenario.category >= 2 ? 'bg-ok-50 text-ok-600' : 'bg-warn-50 text-warn-600'}>{c.assessment.scenario.category_title}</Badge>
+                  </div>
+                )}
+                {c.assessment.integrity.level === 'clean' ? (
+                  <p className="flex items-center gap-1.5 text-ok-600">
+                    <ShieldCheck className="h-4 w-4" /> Тест пройден без замечаний: без уходов со страницы, копирования и вставки.
+                  </p>
+                ) : (
+                  <Notice tone="warn">
+                    <span className="flex items-start gap-2">
+                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                      <span>
+                        <b>Замечания к прохождению теста:</b> {c.assessment.integrity.reasons.join('; ')}. Рекомендуем уточнить уровень на интервью.
+                      </span>
+                    </span>
+                  </Notice>
+                )}
+              </div>
+            )}
             <div className="mt-5">
               <SkillList scores={c.skill_scores} />
             </div>

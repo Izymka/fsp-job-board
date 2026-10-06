@@ -52,6 +52,8 @@ class CandidateProfile(TimestampMixin, Base):
     theta: Mapped[float | None] = mapped_column(default=None)
     theta_se: Mapped[float | None] = mapped_column(default=None)
     skill_scores: Mapped[dict] = mapped_column(default=dict)  # навык → {status, theta, se, n}
+    # сводка последнего подтверждения: надёжность прохождения и практический кейс (для работодателя)
+    assessment_summary: Mapped[dict | None] = mapped_column(default=None)
     # регулярные задания
     tasks_score: Mapped[float] = mapped_column(default=0.0)
     task_skills: Mapped[dict] = mapped_column(default=dict)
