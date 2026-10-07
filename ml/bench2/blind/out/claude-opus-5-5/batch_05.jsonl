@@ -1,0 +1,90 @@
+{"pair_id": "bab81d28fcf9", "label": 1, "rationale": "Python-бэкенд без Go, гибрид при удалённой вакансии, ожидания на верхней границе вилки"}
+{"pair_id": "d45bbdb9687a", "label": 0, "rationale": "Junior Java, уровень и язык не совпадают"}
+{"pair_id": "87a3519cf73d", "label": 1, "rationale": "Сильный Go-лид, но ожидания от 450 тыс. выше вилки более чем на 15%"}
+{"pair_id": "f3118e12ad3e", "label": 0, "rationale": "Java-лид, ожидания 550 тыс. сильно выше вилки, гибрид"}
+{"pair_id": "8bc01a16ce6b", "label": 0, "rationale": "Data Science junior, другая специализация"}
+{"pair_id": "10ecf88836ea", "label": 1, "rationale": "Сильный Python-техлид, но без Go; ожидания немного выше вилки"}
+{"pair_id": "9e2cc6f6d6f4", "label": 1, "rationale": "Python-лид с k8s и PostgreSQL, но без Go"}
+{"pair_id": "032f5b77203f", "label": 1, "rationale": "Node.js senior из платежей, без Go, только офис/гибрид"}
+{"pair_id": "8e38090f9b35", "label": 1, "rationale": "Go, но 2 года опыта и middle; требуется 4+ года"}
+{"pair_id": "e7bb8198ccc1", "label": 1, "rationale": "Python middle с k8s и PostgreSQL, Go нет"}
+{"pair_id": "264fbf711ccb", "label": 0, "rationale": "Java middle, Oracle, нет Go и PostgreSQL"}
+{"pair_id": "18c8b01454e7", "label": 0, "rationale": "Go junior-уровня опыт, слабый тест, неактивен 105 дней"}
+{"pair_id": "08c345c7e687", "label": 1, "rationale": "Java/Node senior, Go и Kubernetes нет"}
+{"pair_id": "b859da9b3baa", "label": 2, "rationale": "Go 3 года плюс высокая нагрузка, слабый тест, нет k8s; вилка подходит"}
+{"pair_id": "7c389165f12b", "label": 0, "rationale": "Java-лид, ожидания 650 тыс. далеко за вилкой"}
+{"pair_id": "95dd1d554768", "label": 2, "rationale": "Senior Go с PG и k8s, но только гибрид и слабый тест"}
+{"pair_id": "05de7d0e8576", "label": 1, "rationale": "Go middle 3 года, хороший PG, но уровень ниже и гибрид"}
+{"pair_id": "d161ba91c383", "label": 1, "rationale": "Kotlin-лид из финтеха, удалённо, но без Go"}
+{"pair_id": "6d4c8bb3b788", "label": 0, "rationale": "Java тимлид, нет Go, офис/гибрид"}
+{"pair_id": "2f04e8f65d82", "label": 0, "rationale": "Java тимлид без Go, ожидания выше вилки"}
+{"pair_id": "2cc4b2c2c72c", "label": 0, "rationale": "C#/Python middle, нет Go и k8s"}
+{"pair_id": "522f8bc2cb26", "label": 0, "rationale": "QA junior, другая специализация"}
+{"pair_id": "381759cf5a16", "label": 0, "rationale": "Python middle, Go и k8s отсутствуют"}
+{"pair_id": "261125bf27e0", "label": 0, "rationale": "Java/Node middle, слабый тест, нет Go"}
+{"pair_id": "d6aefd049f6e", "label": 0, "rationale": "Python middle ~3 года, нет Go и k8s"}
+{"pair_id": "cfca69cdc56a", "label": 0, "rationale": "Python-интеграции 1С, не профиль"}
+{"pair_id": "d0fe54a8a1a6", "label": 1, "rationale": "Go-лид с k8s и PG, но ожидания 450 тыс. выше вилки >15%"}
+{"pair_id": "1b9234e42ca0", "label": 2, "rationale": "Go-лид с k8s, удалённо, вилка подходит; PostgreSQL не указан"}
+{"pair_id": "754760bff064", "label": 0, "rationale": "C#, Python не подтверждён, нет Go"}
+{"pair_id": "fd22ea7f8b88", "label": 2, "rationale": "Go-лид 8 лет с PG, удалённо, сильные ФСП; нет k8s, слабый тест"}
+{"pair_id": "078bfb4c697c", "label": 0, "rationale": "Java/Kotlin-лид, нет Go"}
+{"pair_id": "8c4c99694e18", "label": 0, "rationale": "Java middle, нет Go"}
+{"pair_id": "9d54222086e0", "label": 0, "rationale": "Python 2 года, слабый тест, только офис"}
+{"pair_id": "253bc27ff6cc", "label": 0, "rationale": "Django 2 года, не Go"}
+{"pair_id": "f2cd9a762786", "label": 1, "rationale": "Go-тимлид с k8s и PG, но только офис при удалённой вакансии"}
+{"pair_id": "461228261b84", "label": 0, "rationale": "Node.js-интеграции, не профиль"}
+{"pair_id": "bfbf90c953c8", "label": 0, "rationale": "Python-интеграции 1С, не профиль"}
+{"pair_id": "0417372f5285", "label": 1, "rationale": "Python-лид с PG и k8s, без Go"}
+{"pair_id": "547dbbdf1cdf", "label": 0, "rationale": "Java middle, нет Go"}
+{"pair_id": "559b697b92b3", "label": 0, "rationale": "Django-разработчик, нет Go и k8s"}
+{"pair_id": "09df1e29db21", "label": 0, "rationale": "Python-лид, только офис, ожидания выше вилки"}
+{"pair_id": "92fa64754251", "label": 2, "rationale": "Go в платежах почти 4 года, k8s, Kafka; гибрид, PG не указан"}
+{"pair_id": "3e4ebb591e49", "label": 0, "rationale": "Junior Go, уровень далёк от senior"}
+{"pair_id": "7bc57f8a2a2d", "label": 0, "rationale": "Node.js-интеграции, ожидания высокие"}
+{"pair_id": "b01a2b59d1c2", "label": 1, "rationale": "Python/Django senior с PG и k8s, без Go"}
+{"pair_id": "f376d7ebd739", "label": 1, "rationale": "Go 1,5 года middle, слабый тест, гибрид"}
+{"pair_id": "5a91903db2c8", "label": 1, "rationale": "Java-лид платёжного процессинга, удалённо, но без Go"}
+{"pair_id": "d88aacc22c43", "label": 0, "rationale": "PHP-тимлид, не Go"}
+{"pair_id": "e519705c1d53", "label": 0, "rationale": "Java-лид, ожидания 470 тыс. выше вилки"}
+{"pair_id": "3bd06b4a58bf", "label": 0, "rationale": "Junior ручной тестировщик, нет автоматизации"}
+{"pair_id": "0a273bd027cd", "label": 1, "rationale": "QA-лид, Selenium немного, но нет Java и Appium"}
+{"pair_id": "215935eb9ea1", "label": 1, "rationale": "Автоматизатор Playwright/JS, нет Java, Selenium, Appium"}
+{"pair_id": "13a299035118", "label": 0, "rationale": "Ручное тестирование, автоматизации нет"}
+{"pair_id": "5ed601c69859", "label": 2, "rationale": "Java+Selenium+Allure+Jenkins, но уровень junior-middle, нет Appium"}
+{"pair_id": "cfc26627e0b4", "label": 2, "rationale": "Java, Selenium, Appium, Allure; опыт 2,6 года, нет Jenkins"}
+{"pair_id": "e34a7ce0d056", "label": 2, "rationale": "Java+Selenium+Allure+Jenkins+SQL, middle, нет Appium"}
+{"pair_id": "e57794762199", "label": 0, "rationale": "iOS-разработчик junior, другая специализация"}
+{"pair_id": "88ffc7328635", "label": 0, "rationale": "Ручной тестировщик, нет автоматизации"}
+{"pair_id": "5f85e640f84a", "label": 1, "rationale": "Playwright/Jest, нет Java, Selenium, Appium"}
+{"pair_id": "13739c21c93b", "label": 0, "rationale": "Frontend junior, другая специализация"}
+{"pair_id": "13eeecb87c29", "label": 0, "rationale": "QA-лид без автоматизации, только офис"}
+{"pair_id": "867d88c4476e", "label": 0, "rationale": "Ручное тестирование, гибрид/офис"}
+{"pair_id": "ba8b052eebb1", "label": 1, "rationale": "Автоматизация API на Python, нет Java/Selenium/Appium"}
+{"pair_id": "63b03337af61", "label": 0, "rationale": "Ручной тестировщик, только офис"}
+{"pair_id": "88b5fc369bf9", "label": 1, "rationale": "Playwright на JS, нет Java и мобильной автоматизации"}
+{"pair_id": "25ebc7f6b88a", "label": 1, "rationale": "Лид Playwright/TS, нет Java, Selenium, Appium; ожидания выше вилки"}
+{"pair_id": "ecb330848a59", "label": 2, "rationale": "Java+Selenium+REST+SQL, 4 года автоматизации; нет Appium, Jenkins"}
+{"pair_id": "29fd8c5b8e92", "label": 1, "rationale": "В основном ручник, Selenium поддержка, нет Java; офис/гибрид"}
+{"pair_id": "707e2b6e0c12", "label": 1, "rationale": "Python-автоматизация 2 года, нет Java и Appium"}
+{"pair_id": "ff694b5863a2", "label": 0, "rationale": "TS-лид, только гибрид, ожидания сильно выше вилки"}
+{"pair_id": "0cef1c412349", "label": 2, "rationale": "Java+Selenium+REST+Allure+Jenkins+Git, middle 3,6 года, нет Appium"}
+{"pair_id": "bf8bfcc4d8cb", "label": 1, "rationale": "Python+Selenium, нет Java и Appium"}
+{"pair_id": "27b2c477a0a7", "label": 1, "rationale": "Python/Playwright, гибрид, нет Java"}
+{"pair_id": "3fbc6f53345f", "label": 1, "rationale": "Senior Python+Selenium, нет Java и Appium"}
+{"pair_id": "55c1d0158f34", "label": 1, "rationale": "Java+Selenium, но 2,4 года и слабый тест"}
+{"pair_id": "3343f4beed82", "label": 0, "rationale": "Ручное тестирование, ожидания выше вилки"}
+{"pair_id": "dadfbb8b2a93", "label": 0, "rationale": "Лид Playwright/TS, нет Java, ожидания выше вилки"}
+{"pair_id": "1a59975b2e3e", "label": 1, "rationale": "SDET на TypeScript, Appium заявлен, нет Java/Selenium"}
+{"pair_id": "c529348a256d", "label": 1, "rationale": "Java+Allure+Jenkins, но Selenium и REST не указаны, middle"}
+{"pair_id": "5245b98b0bf2", "label": 1, "rationale": "Playwright/TS middle, нет Java"}
+{"pair_id": "1c3f5e7b138c", "label": 1, "rationale": "Python+Selenium, слабый тест, нет Java"}
+{"pair_id": "ac06f6647cdc", "label": 0, "rationale": "Ручное тестирование и API, нет автоматизации"}
+{"pair_id": "c49b59c7a82a", "label": 1, "rationale": "TS-автоматизация, нет Java, ожидания выше вилки"}
+{"pair_id": "0b19824e22e3", "label": 2, "rationale": "Java+Selenium+Jenkins+Allure+Appium, но только 2 года"}
+{"pair_id": "c31c42b22928", "label": 0, "rationale": "Ручное тестирование, нет автоматизации"}
+{"pair_id": "e849ab095dbd", "label": 0, "rationale": "Ручное мобильное тестирование, нет автоматизации"}
+{"pair_id": "646df95b9d0b", "label": 1, "rationale": "Python+Selenium middle, нет Java"}
+{"pair_id": "e18e478de8d6", "label": 1, "rationale": "Python-автоматизация, нет Java и Appium"}
+{"pair_id": "dfd22d67a476", "label": 0, "rationale": "Ручное тестирование, ожидания выше вилки"}
+{"pair_id": "6462399a1e54", "label": 2, "rationale": "Java+Selenium+Appium+Allure, удалённо; middle, нет Jenkins"}

@@ -1,0 +1,76 @@
+{"pair_id": "b05f70b484f7", "label": 1, "rationale": "Сильный CV-лид, PyTorch и NumPy, но ожидания намного выше вилки, нет C++ и MLflow."}
+{"pair_id": "a985b4b9840d", "label": 0, "rationale": "Data engineer, нет CV и deep learning."}
+{"pair_id": "52820e11d891", "label": 0, "rationale": "MLOps, два года опыта, нет CV и DL."}
+{"pair_id": "9b1234338e5b", "label": 0, "rationale": "Аналитик данных, другая специализация."}
+{"pair_id": "97b8d937a8b8", "label": 0, "rationale": "NLP middle, не CV, только гибрид при удалённой вакансии."}
+{"pair_id": "3c24d949a3ce", "label": 0, "rationale": "Продуктовый аналитик, нет CV."}
+{"pair_id": "30c10b617386", "label": 0, "rationale": "NLP, только офис при удалённой работе, нет CV."}
+{"pair_id": "ef4f218cb080", "label": 0, "rationale": "Классический DS на табличных данных, нет CV и DL."}
+{"pair_id": "05bfd2158aec", "label": 0, "rationale": "Табличный ML, нет CV, только офис."}
+{"pair_id": "4bdf7342c723", "label": 0, "rationale": "Продуктовая аналитика, нет CV."}
+{"pair_id": "d5f45a2b6c80", "label": 0, "rationale": "Классический ML-лид, нет CV и DL, ожидания выше вилки."}
+{"pair_id": "ec284a3f7082", "label": 1, "rationale": "CV-инженер с PyTorch и Linux, но не готов к удалёнке; нет C++ и MLflow."}
+{"pair_id": "5dfdbc2f84df", "label": 0, "rationale": "Классический ML без нейросетей, не CV."}
+{"pair_id": "ebbf343cd350", "label": 0, "rationale": "Data engineer, нет CV."}
+{"pair_id": "8a0b6dca0141", "label": 0, "rationale": "ML-инженер ранжирования, нет CV и DL."}
+{"pair_id": "40eecd9a84a3", "label": 0, "rationale": "Middle табличный DS, нет CV."}
+{"pair_id": "cc48f997d855", "label": 0, "rationale": "Ритейл DS, нет CV и DL."}
+{"pair_id": "41cc6dfce3bf", "label": 0, "rationale": "Data engineer, нет CV."}
+{"pair_id": "70aeaf417c7f", "label": 0, "rationale": "Data engineer, только гибрид, нет CV."}
+{"pair_id": "19bc4dbf5d88", "label": 0, "rationale": "Табличный DS, нет CV и DL."}
+{"pair_id": "929c92e8c185", "label": 0, "rationale": "Скоринг на бустинге, нет CV."}
+{"pair_id": "4fc782421490", "label": 0, "rationale": "Антифрод DS, нет CV, только офис."}
+{"pair_id": "841a82f14c75", "label": 0, "rationale": "Лид классического DS, нет CV."}
+{"pair_id": "3b70124daf13", "label": 0, "rationale": "Backend-разработчик, другая специализация."}
+{"pair_id": "275f34850b31", "label": 0, "rationale": "Data engineering лид, нет CV."}
+{"pair_id": "fc38db94d2aa", "label": 0, "rationale": "MLOps, нет CV и DL, только гибрид."}
+{"pair_id": "75c2975a4d74", "label": 0, "rationale": "Ценообразование и A/B, нет CV."}
+{"pair_id": "d5f11e4cb749", "label": 0, "rationale": "Middle DS в e-commerce, нет CV."}
+{"pair_id": "8662d7a362c2", "label": 2, "rationale": "Senior CV: PyTorch, C++, MLflow, Jupyter; хорошее совпадение, но только гибрид."}
+{"pair_id": "e19b4a64bf93", "label": 3, "rationale": "Лид CV ~7 лет, PyTorch, C++ для реального времени, Linux; удалёнка, ожидания в вилке."}
+{"pair_id": "5b2bdc99cbea", "label": 0, "rationale": "Аналитик, слабый тест, нет CV."}
+{"pair_id": "da4205e58fd8", "label": 0, "rationale": "ML-платформа, нет CV и DL."}
+{"pair_id": "475b945259fa", "label": 0, "rationale": "Ценообразование, нет CV."}
+{"pair_id": "73040c8f20a2", "label": 0, "rationale": "Фактически data engineering, CV только в ключевых словах, гибрид."}
+{"pair_id": "8b9b52459a79", "label": 0, "rationale": "Junior-ish табличный DS, нет CV."}
+{"pair_id": "f42b08a687cd", "label": 1, "rationale": "Сильный DL на PyTorch, но NLP, а не CV; нет C++."}
+{"pair_id": "afa16553592b", "label": 1, "rationale": "Senior DL/PyTorch, но NLP вместо CV, нет C++ и MLflow."}
+{"pair_id": "0ba8bbba7020", "label": 0, "rationale": "Табличный DS-лид, нет CV."}
+{"pair_id": "464e9a78dacb", "label": 0, "rationale": "Frontend, другая специализация."}
+{"pair_id": "21c501fd3b3a", "label": 0, "rationale": "Лид ML-платформы, нет CV, только гибрид."}
+{"pair_id": "c0bb7101ca4b", "label": 0, "rationale": "Android на Kotlin, нет Swift/iOS, только удалёнка."}
+{"pair_id": "e97ef4ba9dc1", "label": 3, "rationale": "iOS middle 3 года, Swift, ООП, паттерны, Git; ожидания в вилке, любой формат."}
+{"pair_id": "0732de66f48f", "label": 0, "rationale": "DevOps, другая специализация."}
+{"pair_id": "3b2e2de14cfb", "label": 3, "rationale": "iOS middle, Swift, ООП, архитектура подтверждена тестом; ожидания в вилке."}
+{"pair_id": "1bfb94f417f4", "label": 0, "rationale": "Flutter senior, только офис Москва, ожидания сильно выше."}
+{"pair_id": "0658c799f58a", "label": 0, "rationale": "Android-разработчик, нет iOS."}
+{"pair_id": "c0eed33af3d8", "label": 0, "rationale": "Junior Android, нет iOS."}
+{"pair_id": "22d2154edf53", "label": 0, "rationale": "Android-лид, нет iOS, ожидания выше."}
+{"pair_id": "1991542f04ce", "label": 2, "rationale": "iOS middle, Swift, паттерны, Git; ожидания немного выше вилки."}
+{"pair_id": "5098a1f50d30", "label": 0, "rationale": "Kotlin/Android, ожидания сильно выше."}
+{"pair_id": "efff425ecbaf", "label": 1, "rationale": "Senior iOS на Objective-C без Swift, ожидания значительно выше вилки."}
+{"pair_id": "7f5ee42516e3", "label": 0, "rationale": "Системный аналитик."}
+{"pair_id": "53d71fc1e5f5", "label": 2, "rationale": "iOS middle Swift, паттерны, рефакторинг легаси; тест слабый по архитектуре и Git."}
+{"pair_id": "7b735830c0eb", "label": 1, "rationale": "Junior iOS почти 2 года, Swift и паттерны, уровень ниже требуемого."}
+{"pair_id": "7bf43f6c42ae", "label": 0, "rationale": "Android-разработчик, нет iOS."}
+{"pair_id": "80e4daa94d3f", "label": 1, "rationale": "Flutter-разработчик с опытом iOS-сборок, без Swift."}
+{"pair_id": "b4d14d9a26bf", "label": 1, "rationale": "Lead iOS, переквалифицирован, ожидания намного выше вилки."}
+{"pair_id": "825da723f6f1", "label": 0, "rationale": "Junior Flutter, 10 месяцев опыта."}
+{"pair_id": "794270c7eae3", "label": 1, "rationale": "Junior iOS 1,5 года, Swift, WebSocket; опыт меньше требуемого."}
+{"pair_id": "75c64ed1e327", "label": 2, "rationale": "Middle iOS 3,5 года, WebSocket, архитектура подтверждена; Swift и ООП явно не указаны."}
+{"pair_id": "40b4141ffff9", "label": 0, "rationale": "React Native лид, ожидания сильно выше."}
+{"pair_id": "c4e9a9908227", "label": 0, "rationale": "Стажёр iOS, опыта недостаточно."}
+{"pair_id": "2590244b7b49", "label": 0, "rationale": "Flutter с фокусом на Android."}
+{"pair_id": "8f4bf347316a", "label": 0, "rationale": "Junior Android."}
+{"pair_id": "50e2aefc75fe", "label": 1, "rationale": "Junior iOS 1,3 года, Swift, WebSocket; уровень ниже."}
+{"pair_id": "3b5f93df61ec", "label": 1, "rationale": "Junior iOS 7 месяцев, Swift и паттерны; опыта мало."}
+{"pair_id": "6e4106fdc5d2", "label": 1, "rationale": "iOS около полугода коммерческого опыта, Swift, ООП; уровень ниже."}
+{"pair_id": "0a532fc6c745", "label": 1, "rationale": "Мобильный 2,5 года, Swift заявлен, но опыт в основном хранилища; iOS-фокус неясен."}
+{"pair_id": "645c92faf277", "label": 0, "rationale": "Android Kotlin/Java, нет iOS."}
+{"pair_id": "e9101ca8b156", "label": 1, "rationale": "Junior iOS 1,5 года, Swift, паттерны; давно неактивен."}
+{"pair_id": "4c07df502519", "label": 0, "rationale": "Начинающий Flutter-разработчик."}
+{"pair_id": "0845e6d6fedf", "label": 0, "rationale": "Kotlin, 7 месяцев опыта, нет iOS."}
+{"pair_id": "ca9cdcff8590", "label": 0, "rationale": "Java мобильный, нет iOS."}
+{"pair_id": "fd8148212bbf", "label": 1, "rationale": "iOS тимлид на Swift, ожидания значительно выше вилки."}
+{"pair_id": "bdbfc09f28e4", "label": 0, "rationale": "Android-разработчик."}
+{"pair_id": "13497064a0d2", "label": 1, "rationale": "Senior iOS Swift с WebSocket, но ожидания намного выше вилки."}

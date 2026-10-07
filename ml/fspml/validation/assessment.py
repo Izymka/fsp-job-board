@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import math
 import random
 from collections import Counter, defaultdict
@@ -21,6 +22,7 @@ from dataclasses import dataclass, field, replace
 import numpy as np
 
 from ..assessment.bank import REGISTRY
+from ..assessment.blueprint import personal_blueprint
 from ..assessment.calibration import calibrate
 from ..assessment.cat import (
     DEFAULT_CONFIG,
@@ -36,7 +38,8 @@ from ..assessment.drift import CusumConfig, run_cusum
 from ..assessment.irt import ItemParams, information, prob
 from ..assessment.items import Family
 from ..catalog import get_catalog
-from .population import TrueCandidate
+from ..nlp.skills import get_dictionary
+from .population import TrueCandidate, legacy_blueprint
 
 
 @dataclass
@@ -57,6 +60,22 @@ def make_true_bank(
     return TrueBank(params, inst_sd)
 
 
+def skill_ability(cand: TrueCandidate, skill: str) -> float:
+    """Способность кандидата в навыке. Навыки вне прежнего состава теста получают такое же
+    индивидуальное отклонение N(0, 0.45), детерминированное по (кандидат, навык), — иначе
+    навыки, которых не было в генераторе, отвечались бы ровно по общему θ."""
+    if skill in cand.skill_theta:
+        return cand.skill_theta[skill]
+    h = int(hashlib.sha1(f"{cand.id}|{skill}".encode()).hexdigest()[:12], 16)
+    return cand.theta + random.Random(h).gauss(0, 0.45)
+
+
+def _practiced_skills(cand: TrueCandidate) -> set[str]:
+    """Навыки теста, которые подтверждает *реальный* стек кандидата (без накрутки)."""
+    dic = get_dictionary()
+    return {s for t in cand.techs if t in dic.techs for s in dic.techs[t].assess}
+
+
 # Модель утечки: функция (семейство, вероятность верного) → новая вероятность
 LeakFn = Callable[[Family, float], float]
 
@@ -66,6 +85,15 @@ class AttemptLog:
     result: CatResult
     responses: list[Response]
     true_correct_p: list[float] = field(default_factory=list)
+
+
+def candidate_blueprint(cand: TrueCandidate, legacy: bool = False) -> dict[str, float]:
+    """Состав теста кандидата так, как его строит продукт: ядро + модули по *заявленному* стеку
+    (с накруткой — тест проверяет заявленное). legacy — прежний общий состав специализации."""
+    if legacy:
+        return legacy_blueprint(cand.spec, [cand.lang] if cand.lang else None)
+    measurable = {s for s, n in Counter(f.skill for f in REGISTRY.values()).items() if n >= 2}
+    return personal_blueprint(cand.spec, sorted(cand.claimed), available=measurable).weights
 
 
 def simulate_attempt(
@@ -80,12 +108,19 @@ def simulate_attempt(
     fixed_form: Sequence[Family] | None = None,
     carry: Sequence[Response] = (),
     kind: str = "initial",
+    legacy: bool = False,
+    off_stack_penalty: float = 0.0,
 ) -> AttemptLog:
+    """off_stack_penalty — насколько ниже общего уровня способность кандидата в навыке-модуле,
+    которого нет в его реальном стеке (Python у Java-разработчика). Ядро специализации штрафом
+    не затрагивается: это фундамент, которым владеют все в профессии."""
     cat = get_catalog()
     bank = bank if bank is not None else list(REGISTRY.values())
-    plan = CatPlan(
-        cat.blueprint(cand.spec, [cand.lang] if cand.lang else None), grade, config, kind, tuple(carry)
-    )
+    if legacy:  # прежний алгоритм целиком: и состав, и остановка без требования покрытия
+        config = replace(config, cover_min_items=0)
+    plan = CatPlan(candidate_blueprint(cand, legacy), grade, config, kind, tuple(carry))
+    practiced = _practiced_skills(cand) if off_stack_penalty else set()
+    core = set(cat.specializations[cand.spec].core)
     responses: list[Response] = []
     ps: list[float] = []
     form_iter = iter(fixed_form) if fixed_form is not None else None
@@ -93,14 +128,16 @@ def simulate_attempt(
         if form_iter is not None:
             fam = next(form_iter, None)
         else:
-            if should_stop(responses, plan, catalog=cat):
+            if should_stop(responses, plan, catalog=cat, bank=bank):
                 break
             fam = select_next(responses, bank, plan, rng, catalog=cat)
         if fam is None:
             break
         tp = truth.params[fam.id]
         b_inst = tp.b + rng.gauss(0, truth.inst_sd)
-        th = cand.skill_theta.get(fam.skill, cand.theta)
+        th = skill_ability(cand, fam.skill)
+        if off_stack_penalty and fam.skill not in core and fam.skill not in practiced:
+            th -= off_stack_penalty
         p = float(prob(th, tp.a, b_inst, tp.c))
         if leak is not None:
             p = leak(fam, p)
@@ -427,4 +464,79 @@ def run_threshold_roc(
             ]
         )
         out[f"{t:.2f}"] = {"false_pass_plus1": float(fp), "true_pass": float(tp)}
+    return out
+
+
+# ------------------------------------------------------------------------- состав теста
+
+
+def run_blueprint_experiment(
+    n: int = 600, seed: int = 41, penalties: Sequence[float] = (0.0, 0.5, 1.0)
+) -> dict:
+    """Прежний общий состав специализации против персонального (ядро + модули стека).
+
+    Популяция — реалистичные стеки из архетипов, и backend-кандидат знает только свой язык
+    (Java-разработчику Python не достаётся «в нагрузку»). off_stack_penalty — насколько ниже
+    общего уровня способность в навыке-модуле не из реального стека: при 0 модель совпадает
+    с остальной валидацией (стек не влияет на ответы), 0.5–1.0 — реалистичный диапазон (чужой
+    язык или фреймворк знаком поверхностно).
+
+    «Затронутые» кандидаты — те, у кого прежний состав содержит модули не из их реального стека
+    (Python у Java-разработчика, React у Vue-разработчика, Kubernetes у Linux-администратора).
+    """
+    from .population import make_candidates
+
+    cat = get_catalog()
+    dic = get_dictionary()
+    cands = make_candidates(n, seed=seed, stuffing_rate=0.3, realistic=True, force_language=False)
+    truth = make_true_bank()
+
+    def affected(c: TrueCandidate) -> bool:
+        core = set(cat.specializations[c.spec].core)
+        return any(s not in core and s not in _practiced_skills(c) for s in candidate_blueprint(c, True))
+
+    aff = np.array([affected(c) for c in cands])
+    true_g = np.array([cat.grade_index(c.grade) for c in cands])
+    out: dict = {"n": n, "affected_share": float(aff.mean()), "arms": {}}
+    for pen in penalties:
+        for arm in ("legacy", "personal"):
+            rng1, rng2 = random.Random(seed), random.Random(seed + 1000)
+            first, second, bias, items, attempts = [], [], [], [], []
+            claimed_tested, stuffed_conf, real_conf = [], [], []
+            for c in cands:
+                kw = {"legacy": arm == "legacy", "off_stack_penalty": pen}
+                r1 = simulate_onboarding(c, truth, rng1, **kw)
+                r2 = simulate_onboarding(c, truth, rng2, **kw)
+                first.append(grade_idx(r1.grade))
+                second.append(grade_idx(r2.grade))
+                bias.append(r1.logs[0].result.theta - c.theta)
+                items.append(sum(len(lg.responses) for lg in r1.logs))
+                attempts.append(r1.attempts)
+                st = r1.logs[-1].result.skills
+                for t in c.claimed:
+                    assess = dic.techs[t].assess if t in dic.techs else ()
+                    statuses = [st[a].status for a in assess if a in st]
+                    has = any(x != "no_data" for x in statuses)
+                    if assess:
+                        claimed_tested.append(has)
+                    if has:
+                        confirmed = all(x == "confirmed" for x in statuses if x != "no_data")
+                        (stuffed_conf if t in c.stuffed else real_conf).append(confirmed)
+            f, s2 = np.array(first), np.array(second)
+            key = f"{arm}@{pen:.1f}"
+            out["arms"][key] = {
+                "accuracy_exact": float(np.mean(f == true_g)),
+                "accuracy_affected": float(np.mean(f[aff] == true_g[aff])),
+                "accuracy_unaffected": float(np.mean(f[~aff] == true_g[~aff])),
+                "undergrade_affected": float(np.mean(f[aff] < true_g[aff])),
+                "overgrade_rate": float(np.mean(f > true_g)),
+                "retest_agreement": float(np.mean(f == s2)),
+                "theta_bias_affected": float(np.mean(np.array(bias)[aff])),
+                "theta_bias_unaffected": float(np.mean(np.array(bias)[~aff])),
+                "items_per_attempt": float(np.sum(items) / np.sum(attempts)),
+                "claimed_tested_share": float(np.mean(claimed_tested)) if claimed_tested else float("nan"),
+                # среди технологий с данными теста: доля подтверждённых — накрученных и реальных
+                "stuffed_confirmed_rate": float(np.mean(stuffed_conf)) if stuffed_conf else float("nan"),
+                "real_confirmed_rate": float(np.mean(real_conf)) if real_conf else float("nan"),
+            }
     return out

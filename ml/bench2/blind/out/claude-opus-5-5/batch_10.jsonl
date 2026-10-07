@@ -1,0 +1,99 @@
+{"pair_id": "df171837917d", "label": 0, "rationale": "Go middle без PHP, ожидания вдвое выше вилки, только гибрид."}
+{"pair_id": "9918498f5c37", "label": 0, "rationale": "Junior Java/Spring, нет PHP и Laravel."}
+{"pair_id": "cb118d3d5dac", "label": 0, "rationale": "Junior Go, нет PHP, только гибрид."}
+{"pair_id": "9654674fb031", "label": 0, "rationale": "Python/FastAPI junior, нет PHP и Laravel."}
+{"pair_id": "ab401634e18c", "label": 0, "rationale": "FastAPI/Node, нет PHP, ожидания выше вилки."}
+{"pair_id": "6bb3b45df275", "label": 2, "rationale": "Junior PHP/Laravel, MySQL, Linux, REST; нет Docker и Redis, только гибрид."}
+{"pair_id": "7dd28f278061", "label": 2, "rationale": "Junior PHP/Laravel, MySQL, Linux, Nginx, удалёнка; нет Docker/Redis, ожидания на верхней границе."}
+{"pair_id": "e40b19167741", "label": 1, "rationale": "Junior Laravel с Docker и Nginx, но ожидания 200k сильно выше вилки."}
+{"pair_id": "a744ea74a71d", "label": 0, "rationale": "Python/Django, нет PHP, ожидания выше."}
+{"pair_id": "65df14c0b3c0", "label": 0, "rationale": "Python-интеграции с 1С, нет PHP."}
+{"pair_id": "2331e918d47c", "label": 0, "rationale": "Go/Node, ожидания вдвое выше."}
+{"pair_id": "8c8354987b05", "label": 0, "rationale": "Senior PHP/Laravel, уровень и ожидания далеко за джуном."}
+{"pair_id": "f6976c1a3ca3", "label": 0, "rationale": "Senior Python, нет PHP."}
+{"pair_id": "6d7e2bbe2110", "label": 0, "rationale": "NLP-инженер, другая специализация."}
+{"pair_id": "525122cbae75", "label": 1, "rationale": "Стажёр Python, Laravel лишь заявлен; Redis, Docker, Git есть; только гибрид."}
+{"pair_id": "3ebeebf9f3df", "label": 2, "rationale": "PHP/Laravel 1,5 года, Redis, Linux, MySQL; слабый тест, только гибрид."}
+{"pair_id": "e0ff0daab4b7", "label": 0, "rationale": "Junior C#, нет PHP."}
+{"pair_id": "53810d3759c6", "label": 0, "rationale": "Node.js/1С, ожидания вдвое выше."}
+{"pair_id": "dd272bc200c7", "label": 0, "rationale": "Senior Python/Django, ожидания сильно выше."}
+{"pair_id": "aa5abf3c2d40", "label": 0, "rationale": "Python/Django middle, нет PHP, не удалёнка."}
+{"pair_id": "0f65cde9f0b0", "label": 3, "rationale": "Junior PHP/Laravel 1,7 года, MySQL, Redis, Nginx; любой формат, ожидания в вилке."}
+{"pair_id": "2ce73cf3cc2e", "label": 1, "rationale": "PHP/Laravel middle с Docker и Linux, но ожидания 210k сильно выше."}
+{"pair_id": "ee581be6c36f", "label": 0, "rationale": "Java/Spring middle, нет PHP."}
+{"pair_id": "a0b84a4ed292", "label": 0, "rationale": "Node.js стажёр, нет PHP."}
+{"pair_id": "a68fa19e5cdf", "label": 0, "rationale": "Java middle, нет PHP."}
+{"pair_id": "04668d17f125", "label": 0, "rationale": "C#/Python middle, нет PHP."}
+{"pair_id": "c4b6f0370277", "label": 0, "rationale": "Junior Python/Django, нет PHP и Laravel."}
+{"pair_id": "45756baa70b5", "label": 0, "rationale": "Go junior, нет PHP."}
+{"pair_id": "e9defda8f220", "label": 0, "rationale": "Python middle, нет PHP, ожидания выше."}
+{"pair_id": "708eb0e1a27a", "label": 0, "rationale": "Senior Go/Python, нет PHP."}
+{"pair_id": "64c6d5a106e7", "label": 0, "rationale": "Node.js-разработчик, нет PHP."}
+{"pair_id": "14707452cda2", "label": 0, "rationale": "Node.js/NestJS, нет PHP, гибрид."}
+{"pair_id": "8334f688e11b", "label": 0, "rationale": "Python/Django middle, нет PHP."}
+{"pair_id": "d03ad59aeb6f", "label": 0, "rationale": "Go/Node middle, нет PHP."}
+{"pair_id": "1c0e6ce3e5ae", "label": 0, "rationale": "Node.js-интеграции, нет PHP."}
+{"pair_id": "d5a4f551e148", "label": 0, "rationale": "Node.js стажёр, нет PHP."}
+{"pair_id": "739869818980", "label": 0, "rationale": "Python middle, нет PHP."}
+{"pair_id": "b94d28351c16", "label": 0, "rationale": "Стажёр Node.js первый месяц, Laravel только упомянут."}
+{"pair_id": "3299cfd4411a", "label": 0, "rationale": "Начинающий Python, нет PHP."}
+{"pair_id": "4703dc5a130e", "label": 1, "rationale": "PHP/Laravel middle с Docker, Nginx, MySQL; ожидания значительно выше вилки."}
+{"pair_id": "b43c68c7f1df", "label": 1, "rationale": "PHP/Laravel middle 3,5 года, MySQL, REST; ожидания сильно выше вилки."}
+{"pair_id": "05b49d8d129c", "label": 0, "rationale": "Node.js junior, нет PHP."}
+{"pair_id": "4c0da1e6f3d9", "label": 0, "rationale": "Java/Kotlin junior, нет PHP."}
+{"pair_id": "311f33f063d8", "label": 0, "rationale": "Python middle, нет PHP."}
+{"pair_id": "4fb134a42b30", "label": 1, "rationale": "Полный PHP/Laravel стек, но ожидания 260k почти вдвое выше вилки."}
+{"pair_id": "7052345eab18", "label": 0, "rationale": "Java junior, нет PHP."}
+{"pair_id": "c1c248d347ee", "label": 0, "rationale": "Мобильный Flutter-разработчик."}
+{"pair_id": "796193930f3c", "label": 1, "rationale": "PHP/Laravel middle с Redis и Docker, но только офис и ожидания выше."}
+{"pair_id": "ab49f2d25316", "label": 0, "rationale": "Go/Python middle, нет PHP."}
+{"pair_id": "8950377065d8", "label": 0, "rationale": "Python стажёр, нет PHP."}
+{"pair_id": "4636696ebad4", "label": 1, "rationale": "Сильный React с web performance, но ожидания 340k значительно выше вилки."}
+{"pair_id": "f17953366f69", "label": 0, "rationale": "Junior Angular, 8 месяцев, только удалёнка."}
+{"pair_id": "e95f18bf581c", "label": 3, "rationale": "React+TS 3,7 года, web performance, Tailwind, Docker; любой формат, ожидания в вилке."}
+{"pair_id": "d65038d1aa17", "label": 1, "rationale": "Vue-разработчик, React частично; нет performance."}
+{"pair_id": "0d495e03809c", "label": 1, "rationale": "React+TS около года, уровень ниже, гибрид."}
+{"pair_id": "11f9ce4ae262", "label": 1, "rationale": "Сильный perf-фронтендер на React, ожидания 320k намного выше вилки."}
+{"pair_id": "006929a3295a", "label": 1, "rationale": "Junior React 1,5 года, офис в Екатеринбурге; уровень ниже, тест слабый."}
+{"pair_id": "d1bcb17900ef", "label": 2, "rationale": "React/TS/Next, Node.js, 4 года; ожидания в вилке, офис подходит; performance явно не описан."}
+{"pair_id": "78d80b44d43f", "label": 1, "rationale": "Angular-разработчик, React только по тесту."}
+{"pair_id": "285813fdbfc4", "label": 1, "rationale": "Тимлид realtime-интерфейсов на TS, React не в стеке, ожидания сильно выше."}
+{"pair_id": "9ecdab719bcc", "label": 2, "rationale": "React/Next, сильный web performance, REST; тест по React частичный."}
+{"pair_id": "a0be12db5b37", "label": 3, "rationale": "React+TS, web performance, REST, Node BFF, Docker, Tailwind; ожидания в вилке."}
+{"pair_id": "f84e9e04521d", "label": 1, "rationale": "Тимлид React, ожидания 360k сильно выше вилки."}
+{"pair_id": "8dcca1f43cc5", "label": 1, "rationale": "Junior React около двух лет, только гибрид."}
+{"pair_id": "91cac923193a", "label": 2, "rationale": "React+TS чуть больше двух лет, REST, Jest; performance не описан."}
+{"pair_id": "eef5710121b1", "label": 0, "rationale": "Android-разработчик."}
+{"pair_id": "14dd75cf0d86", "label": 1, "rationale": "Лид React/TS, ожидания 300k заметно выше вилки."}
+{"pair_id": "e8bf3a7192fd", "label": 1, "rationale": "React+TS 1,4 года, опыта меньше требуемого."}
+{"pair_id": "5b765c3d5188", "label": 2, "rationale": "React+TS 3 года, оптимизация сборки; слабый тест, офис подходит."}
+{"pair_id": "4dd94a231bb3", "label": 1, "rationale": "React+TS 2 года, но не готов к офису, тест слабый."}
+{"pair_id": "27f7b3b286c3", "label": 2, "rationale": "React+TS почти 3 года, REST; performance не описан, ожидания в верхней части."}
+{"pair_id": "1a880c45194f", "label": 0, "rationale": "Junior год опыта, только удалёнка."}
+{"pair_id": "fcfb44f1ceb8", "label": 0, "rationale": "Angular senior, ожидания намного выше, гибрид."}
+{"pair_id": "7148aef56a8d", "label": 1, "rationale": "Junior TS/MobX 1,2 года, React только по тесту."}
+{"pair_id": "4d47543a4927", "label": 0, "rationale": "Vue-лид, ожидания намного выше."}
+{"pair_id": "9ce1a29ac8b9", "label": 1, "rationale": "Сильный senior React с performance, но без офиса и с ожиданиями выше."}
+{"pair_id": "e36a8c611720", "label": 0, "rationale": "Тимлид 10 лет, ожидания 400k вдвое выше."}
+{"pair_id": "24a4a44423b1", "label": 1, "rationale": "React+TS около двух лет, слабый тест, гибрид."}
+{"pair_id": "594f6a58c4b5", "label": 0, "rationale": "Vue, только удалёнка."}
+{"pair_id": "89f8eedaf116", "label": 0, "rationale": "Лид 12 лет, ожидания 400k."}
+{"pair_id": "045e9918a718", "label": 1, "rationale": "React+TS+REST, но только удалёнка."}
+{"pair_id": "ddae8193d6d8", "label": 0, "rationale": "Лид, ожидания 390k, офис не рассматривает."}
+{"pair_id": "ce2b683ec28c", "label": 2, "rationale": "React+TS, REST, разделение бандлов; ожидания на верхней границе вилки."}
+{"pair_id": "355cf256d5c8", "label": 0, "rationale": "Angular-руководитель, ожидания 400k."}
+{"pair_id": "e6b249fce032", "label": 0, "rationale": "Vue-лид, только удалёнка, ожидания выше."}
+{"pair_id": "5e76ede6af77", "label": 1, "rationale": "React/Next с performance, но офис не рассматривает."}
+{"pair_id": "42efbe83de74", "label": 1, "rationale": "React-тимлид, ожидания 440k намного выше."}
+{"pair_id": "10961443164a", "label": 0, "rationale": "Системный аналитик."}
+{"pair_id": "c49211dede47", "label": 1, "rationale": "React+TS 4 года, но только удалёнка и ожидания выше."}
+{"pair_id": "f47f3e4f4c79", "label": 0, "rationale": "Руководитель фронтенда, ожидания 450k."}
+{"pair_id": "db1e3b759416", "label": 0, "rationale": "Junior Vue, только удалёнка."}
+{"pair_id": "5e257a7c2e32", "label": 1, "rationale": "Performance сильный, но без React и TypeScript."}
+{"pair_id": "898afe5e0510", "label": 0, "rationale": "Лид без TypeScript, ожидания выше, офис не рассматривает."}
+{"pair_id": "e7ac3e805aeb", "label": 3, "rationale": "React/Next/TS, web performance, Node BFF, Docker; любой формат, ожидания в вилке."}
+{"pair_id": "37402e5a071b", "label": 1, "rationale": "TS/Redux, слабый тест, без офиса, ожидания на границе."}
+{"pair_id": "5c93ab1109af", "label": 2, "rationale": "React+TS 2 года, REST, уменьшение бандла; офис подходит, тест слабый."}
+{"pair_id": "9c5c934ea51c", "label": 2, "rationale": "Senior React/TS в Екатеринбурге, performance; ожидания немного выше вилки."}
+{"pair_id": "ee3e3fa1c422", "label": 2, "rationale": "Опытный React/TS, офис подходит; ожидания чуть выше, performance не описан."}
+{"pair_id": "c2f65720c129", "label": 1, "rationale": "Vue-разработчик, React только по тесту, только гибрид."}

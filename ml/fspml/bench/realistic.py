@@ -119,7 +119,7 @@ def prepare():
         raise RuntimeError(f"нет текстов резюме для {len(missing)} кандидатов, например {missing[:3]}")
     dic, emb = get_dictionary(), HashingEmbedder()
     feats = []
-    for f in vm.observe(cands, make_true_bank()).features:
+    for f in vm.observe(cands, make_true_bank(), legacy=True).features:
         text = resumes[f.id]
         feats.append(replace(f, claimed=set(dic.extract(text)), about=text, embedding=emb.encode([text])[0]))
     needs = []

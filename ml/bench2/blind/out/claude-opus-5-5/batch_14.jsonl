@@ -1,0 +1,46 @@
+{"pair_id": "308d857b48c0", "label": 0, "rationale": "NLP 3,5 года, только удалёнка, ожидания 280 тыс. — не junior и не офис."}
+{"pair_id": "517bf16e8930", "label": 0, "rationale": "Middle/senior DS, ожидания от 220 тыс., офис в Краснодаре."}
+{"pair_id": "033d91fea7fb", "label": 1, "rationale": "Стек подходит (Python, SQL, Jupyter, Matplotlib), но слабый тест и гибрид в Краснодаре."}
+{"pair_id": "139357ceebe7", "label": 2, "rationale": "Junior, Python, SQL, статистика подтверждены на 100-м перцентиле, Jupyter; хочет гибрид в СПб."}
+{"pair_id": "3ba2b8f449b2", "label": 3, "rationale": "Год опыта, A/B и статистика на 97-м перцентиле, SQL, Jupyter, Matplotlib; любой формат, ожидания в вилке."}
+{"pair_id": "6c3e6548e9db", "label": 0, "rationale": "Frontend-стажёр, другая специализация."}
+{"pair_id": "f5a00ff2cff6", "label": 0, "rationale": "Руководитель NLP, уровень и ожидания несовместимы с junior."}
+{"pair_id": "9f41fe8388a6", "label": 1, "rationale": "Junior с хорошим стеком, но очень слабый тест по Python и статистике."}
+{"pair_id": "36ce2b1df4c8", "label": 2, "rationale": "Junior, SQL, статистика, продуктовые метрики, Jupyter; анализ в основном на R, условия подходят."}
+{"pair_id": "9d9e9ebc003b", "label": 1, "rationale": "Middle 3,7 года, ожидания 240 тыс. сильно выше вилки."}
+{"pair_id": "089c08bb922a", "label": 1, "rationale": "Очень слабый тест, офис в СПб, ожидания выше вилки."}
+{"pair_id": "133449593f39", "label": 0, "rationale": "Middle 3,7 года, ожидания 230 тыс., только гибрид/удалёнка."}
+{"pair_id": "fbbda3da114a", "label": 1, "rationale": "4 года опыта, ожидания 230 тыс. выше вилки."}
+{"pair_id": "bda3cefa1238", "label": 1, "rationale": "Стажёр NLP, без SQL и продуктовой аналитики."}
+{"pair_id": "f0dc0510e566", "label": 2, "rationale": "Junior, Python, SQL, статистика подтверждены, A/B; хочет гибрид, ожидания в вилке."}
+{"pair_id": "00c21befb620", "label": 0, "rationale": "ML-инженер/MLOps middle, другой профиль."}
+{"pair_id": "6fefeeb88088", "label": 3, "rationale": "Junior 1,7 года, Python, SQL, статистика подтверждены, Jupyter; любой формат, ожидания ниже вилки."}
+{"pair_id": "05a3f251959f", "label": 1, "rationale": "Хороший junior-профиль, но только удалёнка при офисной вакансии."}
+{"pair_id": "0df06535e354", "label": 1, "rationale": "Стек подходит, но 3,5 года и ожидания 240 тыс."}
+{"pair_id": "f9b9fb01be7f", "label": 0, "rationale": "Senior аналитик 6,5 лет, ожидания 350 тыс."}
+{"pair_id": "ad5cded17432", "label": 0, "rationale": "Middle, только удалёнка, ожидания 240 тыс."}
+{"pair_id": "34a5ecf76ab8", "label": 0, "rationale": "Senior NLP-инженер, ожидания 330 тыс."}
+{"pair_id": "db0cdbf8e11d", "label": 1, "rationale": "Уклон в дата-инженерию, ожидания 210 тыс. выше вилки."}
+{"pair_id": "a24791e41541", "label": 1, "rationale": "Junior CV, без SQL-аналитики, офис в Екатеринбурге."}
+{"pair_id": "7a1ee7a9facc", "label": 0, "rationale": "NLP 5,7 года, ожидания 420 тыс., удалёнка."}
+{"pair_id": "a1b019736d80", "label": 0, "rationale": "Senior CV, ожидания 380 тыс."}
+{"pair_id": "161557c644c1", "label": 0, "rationale": "Middle, только удалёнка, ожидания 220 тыс."}
+{"pair_id": "e9ddeae7ff04", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "37029a8e6d29", "label": 0, "rationale": "Middle продуктовый аналитик, ожидания 350 тыс."}
+{"pair_id": "5cc9533a8b04", "label": 1, "rationale": "Офис в Москве подходит, но middle 3 года и ожидания 230 тыс."}
+{"pair_id": "b9e803ad551c", "label": 3, "rationale": "Junior 1,5 года, SQL, статистика, A/B, продуктовые метрики; любой формат, ожидания в вилке."}
+{"pair_id": "d8402611985f", "label": 1, "rationale": "Стажёр CV, SQL не подтверждён, офис в СПб."}
+{"pair_id": "64bb04f68b71", "label": 1, "rationale": "Профиль подходит, но middle с ожиданиями 200 тыс."}
+{"pair_id": "35be252a8a6d", "label": 0, "rationale": "NLP middle 4 года, только удалёнка."}
+{"pair_id": "782021132209", "label": 0, "rationale": "Senior MLOps, ожидания 370 тыс."}
+{"pair_id": "0445f349b3ee", "label": 0, "rationale": "Ожидания 360 тыс. при junior-вилке."}
+{"pair_id": "2a86705f3780", "label": 0, "rationale": "NLP middle, ожидания 260 тыс., гибрид в Самаре."}
+{"pair_id": "b86ef00e6cd8", "label": 2, "rationale": "Junior, SQL, Jupyter, Matplotlib, статистика, ожидания в вилке; хочет гибрид в Москве."}
+{"pair_id": "2a0226d42e92", "label": 1, "rationale": "Middle 3 года, ожидания 230 тыс."}
+{"pair_id": "188f0e60b9ef", "label": 1, "rationale": "Дата-инженер, только удалёнка."}
+{"pair_id": "88f07f2fc3fe", "label": 1, "rationale": "Почти 4 года опыта, ожидания 180 тыс. выше вилки."}
+{"pair_id": "6a328ebe47d1", "label": 0, "rationale": "Data Engineer middle, слабый тест по статистике, ожидания 250 тыс."}
+{"pair_id": "314447b41cbb", "label": 2, "rationale": "Junior, Python, SQL, статистика подтверждены; уклон в дата-инженерию, условия подходят."}
+{"pair_id": "4301b6de428f", "label": 1, "rationale": "Junior ML со статистикой, но SQL не подтверждён, гибрид в Самаре."}
+{"pair_id": "ced3d025a517", "label": 1, "rationale": "Junior CV, гибрид/удалёнка, нет продуктовой аналитики."}
+{"pair_id": "e9165c36a101", "label": 3, "rationale": "Junior, SQL и статистика подтверждены, Python, Jupyter; офис подходит, ожидания в вилке."}

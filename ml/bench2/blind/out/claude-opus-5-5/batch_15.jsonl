@@ -1,0 +1,55 @@
+{"pair_id": "9f113275e681", "label": 0, "rationale": "Без React, только офис, нет Redux/Jest"}
+{"pair_id": "65356333001d", "label": 2, "rationale": "Middle React/Redux/Storybook/Webpack, ожидания на верхней границе"}
+{"pair_id": "a29d41036be7", "label": 2, "rationale": "React, Redux, Storybook, Tailwind; нет Jest"}
+{"pair_id": "827ec3210e60", "label": 0, "rationale": "Angular-лид, 400k"}
+{"pair_id": "f5dbc28ca928", "label": 1, "rationale": "Vue-разработчик, ожидания выше вилки"}
+{"pair_id": "ffbbdcd396de", "label": 1, "rationale": "React/Tailwind/Jest, но ожидания 310k выше вилки"}
+{"pair_id": "53f360b55c5f", "label": 1, "rationale": "React/Next, нет Redux, Storybook, Jest"}
+{"pair_id": "ab5955779b27", "label": 0, "rationale": "Lead, ожидания 400k+"}
+{"pair_id": "3a3d0960eb19", "label": 1, "rationale": "Junior по тесту, только офис"}
+{"pair_id": "b89bac4a66f0", "label": 1, "rationale": "Senior Next.js, нет Redux/Jest/Storybook"}
+{"pair_id": "3706f825ecad", "label": 2, "rationale": "Middle Redux/Tailwind/Webpack, слабый тест, нет Jest"}
+{"pair_id": "f654b02bfde4", "label": 1, "rationale": "Angular, нет Redux/Storybook"}
+{"pair_id": "d9ba6dde8c48", "label": 0, "rationale": "Лид, 400k, только офис"}
+{"pair_id": "13438c86051a", "label": 1, "rationale": "Junior React, MobX"}
+{"pair_id": "ffd0fd3e441b", "label": 1, "rationale": "Junior, год опыта"}
+{"pair_id": "f279bb9357a6", "label": 2, "rationale": "React/Redux/Jest/Webpack, ожидания чуть выше вилки"}
+{"pair_id": "c1009ff185db", "label": 0, "rationale": "Junior Vue, полгода"}
+{"pair_id": "9073e8d60d34", "label": 0, "rationale": "Backend-лид, другая специализация"}
+{"pair_id": "ac01b0a87117", "label": 0, "rationale": "QA-автоматизатор"}
+{"pair_id": "9ae30d858a7e", "label": 1, "rationale": "Next.js, ожидания 320k"}
+{"pair_id": "46989c119eed", "label": 1, "rationale": "Junior Angular"}
+{"pair_id": "eb88450e3ebc", "label": 1, "rationale": "Junior Next.js/Redux"}
+{"pair_id": "9510ee2d6d0e", "label": 0, "rationale": "Senior Angular, 370k, гибрид"}
+{"pair_id": "36425d6d7c11", "label": 1, "rationale": "Junior Angular, гибрид Москва"}
+{"pair_id": "ceea2294f4c1", "label": 2, "rationale": "Vue-мидл, React подтверждён тестом, Jest, Tailwind"}
+{"pair_id": "cd3bccfe1171", "label": 0, "rationale": "Vue-лид, 350k"}
+{"pair_id": "81f48ac48de7", "label": 0, "rationale": "Vue-лид, 340k, неактивен"}
+{"pair_id": "49dad6d89e2c", "label": 1, "rationale": "Лид React, ожидания 360k"}
+{"pair_id": "637e19248e68", "label": 0, "rationale": "Лид MobX, 330k, без удалёнки"}
+{"pair_id": "dcc184e1fc20", "label": 0, "rationale": "340k, только офис"}
+{"pair_id": "e01001d46f29", "label": 1, "rationale": "Junior React/Storybook"}
+{"pair_id": "136022b7a46e", "label": 2, "rationale": "Middle React, Jest, Webpack, REST; нет Redux"}
+{"pair_id": "d7d9746c04af", "label": 2, "rationale": "Middle React, Jest, Webpack; гибрид, ожидания у верха"}
+{"pair_id": "67d71cbbb433", "label": 1, "rationale": "Без фреймворка в опыте, junior по тесту"}
+{"pair_id": "11d3cd3ac2fe", "label": 1, "rationale": "Junior, слабый тест, офис"}
+{"pair_id": "591b73b20d4f", "label": 0, "rationale": "Vue senior, 320k, слабый тест"}
+{"pair_id": "72071bc65e4a", "label": 0, "rationale": "Junior без React-опыта"}
+{"pair_id": "f2b67da1c775", "label": 0, "rationale": "Лид, 390k"}
+{"pair_id": "713997eb6358", "label": 1, "rationale": "Senior React/Tailwind, ожидания 310k"}
+{"pair_id": "dc5bf31f1fa6", "label": 1, "rationale": "Junior, неактивен 116 дней"}
+{"pair_id": "3010841b128f", "label": 1, "rationale": "Angular, Jest/Storybook, без удалёнки"}
+{"pair_id": "2624c4c0fae8", "label": 0, "rationale": "Руководитель, 450k, офис"}
+{"pair_id": "cc1777d95972", "label": 1, "rationale": "Лид, ожидания 310k+"}
+{"pair_id": "2cf8ed52f4d7", "label": 1, "rationale": "Angular-мидл, Jest, нет Redux"}
+{"pair_id": "e751e606dd4a", "label": 2, "rationale": "Middle React/Redux/REST, ожидания у верха вилки"}
+{"pair_id": "d5b140ac2652", "label": 2, "rationale": "React/Redux/Webpack/REST, ожидания у верха вилки"}
+{"pair_id": "6b04d57f27e3", "label": 1, "rationale": "Junior по тесту, Storybook, MobX"}
+{"pair_id": "3d528b4818ff", "label": 1, "rationale": "Junior, год опыта"}
+{"pair_id": "c7d36976221d", "label": 0, "rationale": "Junior, слабый тест, офис Екатеринбург"}
+{"pair_id": "ecf065728c59", "label": 3, "rationale": "Middle React/Redux/Jest/Webpack, удалёнка, вилка подходит"}
+{"pair_id": "1136e32c0dff", "label": 1, "rationale": "Junior, узкий стек"}
+{"pair_id": "b08c46eb11b6", "label": 3, "rationale": "React/Redux/Storybook/Jest/Webpack подтверждены, удалёнка, 200k"}
+{"pair_id": "c2c032ba1228", "label": 0, "rationale": "Junior Angular, офис/гибрид Казань"}
+{"pair_id": "c8c0e13f7ff2", "label": 1, "rationale": "Redux/Webpack, но только офис"}
+{"pair_id": "91fc1848cf6f", "label": 2, "rationale": "Redux/Jest/Webpack, слабый тест, удалёнка"}

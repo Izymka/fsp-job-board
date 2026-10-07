@@ -1,0 +1,73 @@
+{"pair_id": "aa782fa05e1e", "label": 1, "rationale": "Стек Java/Spring/Kafka подходит, но без коммерческого опыта, только офис при удалённой вакансии"}
+{"pair_id": "43b0f3798b83", "label": 0, "rationale": "Python middle, другой язык, ожидания вдвое выше вилки"}
+{"pair_id": "f31f5388191d", "label": 1, "rationale": "Сильный junior, но Python вместо Java и офис/гибрид в Москве"}
+{"pair_id": "c99bd4014167", "label": 0, "rationale": "Node.js стажёр, нет Java/Spring, ожидания выше вилки"}
+{"pair_id": "ea500416dd80", "label": 0, "rationale": "Go-разработчик, 260k, гибрид"}
+{"pair_id": "4d54b976bc17", "label": 1, "rationale": "Стек полностью совпадает, но опыт 3 года и ожидания 190k сильно выше вилки"}
+{"pair_id": "ea0dcd7a3db2", "label": 1, "rationale": "C# junior, нет Java/Spring; удалёнка и вилка подходят"}
+{"pair_id": "36584b2fe270", "label": 1, "rationale": "Идеальный Java-стек с Oracle, но 150k и без удалёнки"}
+{"pair_id": "028f7ea66a12", "label": 0, "rationale": "Go, слабый тест, неактивен 105 дней"}
+{"pair_id": "481eddc2536d", "label": 2, "rationale": "Java junior, Spring/Kafka/Redis/Prometheus/Docker, вилка подходит; только офис"}
+{"pair_id": "b71371433b2f", "label": 1, "rationale": "Java-стек подходит, но ожидания 250k вдвое выше вилки"}
+{"pair_id": "8fbdefe16c5e", "label": 3, "rationale": "Java junior, Spring/Kafka/Redis/Docker/Prometheus, удалёнка, ожидания ниже вилки"}
+{"pair_id": "0999c68fdb59", "label": 1, "rationale": "Go junior с подходящей инфраструктурой, но не Java; только гибрид"}
+{"pair_id": "4fb873d1b4f9", "label": 1, "rationale": "C#/Node.js стажёр, нет Java; удалёнка, вилка ок"}
+{"pair_id": "e0aac3806f15", "label": 3, "rationale": "Java junior+, Spring/Hibernate/Kafka/K8s, удалёнка, 120k в вилке"}
+{"pair_id": "466d8cecf43f", "label": 0, "rationale": "Python middle 260k"}
+{"pair_id": "0b8c980df312", "label": 3, "rationale": "Java junior, Spring/Hibernate/Redis, удалёнка, 120k; Kafka нет, есть RabbitMQ"}
+{"pair_id": "6106b713fbfd", "label": 0, "rationale": "PHP junior, нет Java/Spring"}
+{"pair_id": "8d51db83895e", "label": 2, "rationale": "Java-стажёр, Spring/Kafka/PostgreSQL, низкие ожидания; только гибрид"}
+{"pair_id": "f40650641c1e", "label": 0, "rationale": "Python senior, другой язык и уровень"}
+{"pair_id": "5a93cfa333ad", "label": 1, "rationale": "Полный Java-стек с Oracle, но middle и 220k"}
+{"pair_id": "b473383c2de3", "label": 0, "rationale": "Go senior, 220k, гибрид"}
+{"pair_id": "9f56645a40e2", "label": 2, "rationale": "Java junior, Spring/Hibernate/Oracle, удалёнка, вилка; нет Kafka, Redis"}
+{"pair_id": "7afd933ca864", "label": 1, "rationale": "Java senior 220k, выше уровня и вилки"}
+{"pair_id": "b3428b7ff0bd", "label": 0, "rationale": "Python/1С-интегратор, нет Java"}
+{"pair_id": "7990a49146ee", "label": 2, "rationale": "Java/Kotlin junior, Docker/K8s/Prometheus, любой формат; нет Spring, Kafka"}
+{"pair_id": "c7c6f7b414ee", "label": 0, "rationale": "C# middle 240k"}
+{"pair_id": "4507a2980e9a", "label": 0, "rationale": "Django middle 210k, без удалёнки"}
+{"pair_id": "6fc61e1166e0", "label": 0, "rationale": "Python junior, без удалёнки, неактивен 73 дня"}
+{"pair_id": "5d6fbcfb2155", "label": 0, "rationale": "Node.js, 230k"}
+{"pair_id": "03c34ae05dd7", "label": 2, "rationale": "Java-стажёр, Spring/Hibernate/Oracle, удалёнка, 120k; нет Kafka/Redis/Docker"}
+{"pair_id": "513053ce71a2", "label": 3, "rationale": "Java junior, Spring/Hibernate/Oracle/Docker, любой формат, 100k"}
+{"pair_id": "b58788af77ea", "label": 0, "rationale": "Python/Django junior, нет Java, неактивен 63 дня"}
+{"pair_id": "b49e5ec525d0", "label": 0, "rationale": "Python middle, гибрид, 190k"}
+{"pair_id": "815054af4607", "label": 0, "rationale": "Go, 230k"}
+{"pair_id": "004836a82a35", "label": 1, "rationale": "C# junior с RabbitMQ и Docker, нет Java; без удалёнки"}
+{"pair_id": "f2a563e48e84", "label": 0, "rationale": "Frontend lead, другая специализация"}
+{"pair_id": "2db4ccc13927", "label": 0, "rationale": "Frontend senior, другая специализация"}
+{"pair_id": "919c19e2361e", "label": 1, "rationale": "Node.js junior с Prometheus/Docker, нет Java; формат и вилка ок"}
+{"pair_id": "13e19323e524", "label": 1, "rationale": "Go junior с Prometheus/Docker, нет Java"}
+{"pair_id": "b5baaeb2bde8", "label": 0, "rationale": "Go middle 240k"}
+{"pair_id": "57912f9c5de3", "label": 0, "rationale": "Python senior 330k"}
+{"pair_id": "e9dd3aa92906", "label": 1, "rationale": "Go junior с Kafka/Redis, нет Java, неактивен 73 дня"}
+{"pair_id": "ac9b894e1c26", "label": 2, "rationale": "Java/Spring/PostgreSQL/K8s, вилка подходит; только гибрид, нет Kafka"}
+{"pair_id": "a4a19896aa2c", "label": 2, "rationale": "Java junior, Spring/Docker/Prometheus; только офис, слабый тест"}
+{"pair_id": "b2940da87280", "label": 0, "rationale": "Python junior, без удалёнки"}
+{"pair_id": "dec6120ae9e5", "label": 1, "rationale": "DevOps-лид с K8s, но нет Terraform, ArgoCD, Go, Yandex Cloud"}
+{"pair_id": "40821a654116", "label": 0, "rationale": "Middle 2 года, слабый тест, только офис"}
+{"pair_id": "afef9463b596", "label": 2, "rationale": "K8s, Terraform, ArgoCD подтверждены, 5 лет, вилка ок; нет Go и Yandex Cloud"}
+{"pair_id": "5bc34e28a296", "label": 0, "rationale": "Системный инженер без K8s/Terraform, только офис"}
+{"pair_id": "c625a402b802", "label": 1, "rationale": "Middle с K8s, нет Terraform/ArgoCD/Go"}
+{"pair_id": "f7b991d6af34", "label": 0, "rationale": "PHP-разработчик"}
+{"pair_id": "a240962f7645", "label": 0, "rationale": "Два года опыта, только гибрид, нет Terraform/ArgoCD"}
+{"pair_id": "aec4d6ddf1c5", "label": 2, "rationale": "Senior с Terraform/ArgoCD, удалёнка, вилка; тест K8s слабый"}
+{"pair_id": "e53ae4d6ef3e", "label": 1, "rationale": "Middle на Jenkins без Terraform/ArgoCD, нет удалёнки"}
+{"pair_id": "960297065675", "label": 2, "rationale": "K8s в Yandex Cloud, ArgoCD; middle 3 года, нет Terraform и Go"}
+{"pair_id": "5c5c472154ef", "label": 1, "rationale": "Terraform и K8s, но middle, нет ArgoCD/Go, давно неактивен"}
+{"pair_id": "99c5fd26c973", "label": 1, "rationale": "K8s и Terraform, но 2,5 года, нет ArgoCD/Go/YC"}
+{"pair_id": "1ee3e896518c", "label": 1, "rationale": "Senior без K8s/Terraform, только гибрид"}
+{"pair_id": "f40410248ae3", "label": 2, "rationale": "Senior 6 лет, Terraform/K8s, удалёнка; нет ArgoCD/Go, давно неактивен"}
+{"pair_id": "fe4eea85e19e", "label": 2, "rationale": "Lead платформы, Terraform/K8s, удалёнка, вилка; нет ArgoCD, Go, YC"}
+{"pair_id": "722045c63c5a", "label": 1, "rationale": "Сильный лид с Go и K8s, но ожидания 540k выше вилки"}
+{"pair_id": "adeb12ae5391", "label": 0, "rationale": "Лид без K8s/Terraform, 480k, гибрид"}
+{"pair_id": "1ed23cba3b6b", "label": 2, "rationale": "Terraform/ArgoCD/Yandex Cloud, удалёнка; middle 3 года, K8s не заявлен"}
+{"pair_id": "86b165369984", "label": 2, "rationale": "Lead 8 лет, K8s/Terraform, удалёнка; ожидания у верха вилки, тест частичный"}
+{"pair_id": "94d710a3384f", "label": 2, "rationale": "Terraform, YC, K8s, Go-оператор — почти идеально, но без удалёнки"}
+{"pair_id": "748af851cfde", "label": 2, "rationale": "K8s/ArgoCD/Terraform почти 5 лет; ожидания у верхней границы"}
+{"pair_id": "7038df1143ad", "label": 1, "rationale": "Middle без K8s/Terraform/ArgoCD"}
+{"pair_id": "4e71a6d635ca", "label": 0, "rationale": "Системный аналитик, другая специализация"}
+{"pair_id": "9880fed4a1ad", "label": 1, "rationale": "Middle с K8s, нет Terraform/ArgoCD/Go"}
+{"pair_id": "2649b31a167c", "label": 1, "rationale": "K8s в Yandex Cloud, но middle, слабый тест, нет Terraform/ArgoCD"}
+{"pair_id": "f3ca36d0021e", "label": 2, "rationale": "DevOps-лид 10 лет, K8s подтверждён; нет Terraform, ArgoCD, Go"}
+{"pair_id": "f958d11f0084", "label": 0, "rationale": "Неактивен 125 дней, middle без K8s/Terraform"}

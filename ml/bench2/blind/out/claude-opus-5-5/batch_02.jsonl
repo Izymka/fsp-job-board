@@ -1,0 +1,97 @@
+{"pair_id": "a2f5e57a4210", "label": 1, "rationale": "Senior, но Vue вместо React/Next, React и TS лишь частично, слабый тест; условия подходят."}
+{"pair_id": "c1f799e7ec78", "label": 1, "rationale": "Сильный лид на Angular, Webpack, Jest; нет Next.js, ожидания от 490 тыс. сильно выше вилки."}
+{"pair_id": "97abc2b32f2b", "label": 1, "rationale": "Middle без React/TS/Next.js, фокус на производительности; уровень и стек не дотягивают."}
+{"pair_id": "c85dc1463d28", "label": 2, "rationale": "React+TS, Webpack, Figma, лидство; грейд middle, нет Next.js; вилка частично покрывает ожидания."}
+{"pair_id": "9572794e9b49", "label": 1, "rationale": "Angular-лид без Next.js, ожидания от 520 тыс. намного выше вилки."}
+{"pair_id": "8074bd3e0ebe", "label": 1, "rationale": "Middle React/TS без Next.js и Webpack, только удалёнка при гибриде."}
+{"pair_id": "e57b473630c5", "label": 1, "rationale": "Angular middle 2 года, нет Next.js, уровень ниже senior."}
+{"pair_id": "e02db4791d99", "label": 1, "rationale": "Next.js и SSR есть, но middle 3,5 года, слабый тест по JS/React."}
+{"pair_id": "cc7a9e10e752", "label": 2, "rationale": "React-лид, всё подтверждено тестом, Redux, Webpack, REST; нет Next.js, ожидания чуть выше вилки."}
+{"pair_id": "1af7bfe0edb1", "label": 1, "rationale": "Vue/Svelte вместо React/Next, только удалёнка при гибридном формате."}
+{"pair_id": "34262bc3ca0d", "label": 1, "rationale": "Vue middle 2,5 года, нет Next.js, уровень ниже требуемого."}
+{"pair_id": "9f42e5566110", "label": 1, "rationale": "Middle 3 года, слабый тест, нет Next.js, только офис."}
+{"pair_id": "3394a92c7336", "label": 1, "rationale": "Middle 2,5 года, Redux и Webpack есть, но нет Next.js и опыта senior."}
+{"pair_id": "a6bfe0d34b60", "label": 1, "rationale": "Angular-лид, нет Next.js, ожидания от 530 тыс. значительно выше вилки."}
+{"pair_id": "9ea4c1a301e3", "label": 1, "rationale": "Angular-лид, нет React/Next в опыте, ожидания выше вилки."}
+{"pair_id": "d4e736f0ccc6", "label": 0, "rationale": "Junior около двух лет, уровень на две ступени ниже senior."}
+{"pair_id": "dfc1cfc42e11", "label": 2, "rationale": "Senior React+TS подтверждены, 5,5 года, производительность; нет Next.js и Webpack, условия подходят."}
+{"pair_id": "171668395a79", "label": 2, "rationale": "6 лет, лид React/Redux/TS, Webpack, Jest; нет Next.js, условия подходят."}
+{"pair_id": "b042beab1d9f", "label": 1, "rationale": "Два года опыта, вёрстка и доступность, без React/Next в практике."}
+{"pair_id": "8499667869fc", "label": 2, "rationale": "Next.js и React почти 6 лет, производительность; грейд middle, офис подходит, вилка покрывает."}
+{"pair_id": "197de77fb6f6", "label": 0, "rationale": "Стажёр DevOps, другая специализация."}
+{"pair_id": "907149eb80d1", "label": 0, "rationale": "Java-бэкенд, другая специализация."}
+{"pair_id": "db3728cb0362", "label": 1, "rationale": "Middle 3 года, слабый тест по JS/React/TS, нет Next.js."}
+{"pair_id": "3e494f95cac6", "label": 1, "rationale": "Senior Angular, React подтверждён тестом, но нет опыта React/Next.js; условия подходят."}
+{"pair_id": "2ea2fd916a52", "label": 1, "rationale": "Angular middle, нет Next.js и опыта уровня senior."}
+{"pair_id": "7329f78ceb3d", "label": 1, "rationale": "Vue middle 2 года, только удалёнка."}
+{"pair_id": "1cfa9c6432fb", "label": 3, "rationale": "Senior, Next.js SSR/SSG для каталога, React/TS подтверждены, тимлид; ожидания ниже вилки."}
+{"pair_id": "a293e07df85d", "label": 1, "rationale": "Сильный лид React/TS/Webpack/Figma, но ожидания от 450 тыс. выше вилки более 15%, офис в Самаре."}
+{"pair_id": "defe23e60508", "label": 1, "rationale": "Vue-лид без React/Next.js, условия близки."}
+{"pair_id": "8eab8748cd63", "label": 2, "rationale": "7 лет React+TS подтверждены, архитектура; нет Next.js и Webpack, ожидания ниже вилки."}
+{"pair_id": "ee59a60feb13", "label": 2, "rationale": "Почти 6 лет, Next.js SSR и производительность; грейд middle, условия подходят."}
+{"pair_id": "58584da0d4eb", "label": 3, "rationale": "Lead 7 лет, React/Next.js/TS подтверждены, e-commerce SSR; ожидания в вилке, гибрид."}
+{"pair_id": "27d44053244b", "label": 1, "rationale": "Middle React/Redux/Webpack/Jest, нет Next.js, только удалёнка."}
+{"pair_id": "7b06a8360ead", "label": 2, "rationale": "Лид Next.js/Redux/Webpack/Jest, 12 лет; React не подтверждён тестом, ожидания немного выше."}
+{"pair_id": "eec9fc51e4f7", "label": 2, "rationale": "Лид React 7 лет, CSS, Figma; нет Next.js и TS, грейд middle, условия подходят."}
+{"pair_id": "819da0992b4f", "label": 1, "rationale": "Vue/Svelte, Webpack и Figma; без опыта React/Next.js."}
+{"pair_id": "f5f44df77b2a", "label": 1, "rationale": "Next.js, но middle 2,3 года — ниже требуемых 4 лет."}
+{"pair_id": "2fbc546b7eee", "label": 2, "rationale": "Next.js SSR, React/TS, производительность; middle 3,7 года, ожидания ниже вилки."}
+{"pair_id": "2a4baa3bc392", "label": 3, "rationale": "Тимлид 10 лет, React/Next.js SSR, производительность, Redux; ожидания у верхней границы, офис подходит."}
+{"pair_id": "8e202d8b1dee", "label": 2, "rationale": "Senior React/TS подтверждены, Webpack, Jest, Figma; нет Next.js, условия подходят."}
+{"pair_id": "fdfc037f5f8f", "label": 1, "rationale": "MS SQL и RabbitMQ есть, но 4 года опыта и ожидания от 210 тыс. сильно выше вилки."}
+{"pair_id": "3c62e0f80a9c", "label": 2, "rationale": "Junior Python, PostgreSQL и Redis, ожидания в вилке; нет RabbitMQ и MS SQL."}
+{"pair_id": "1e9341f8b129", "label": 2, "rationale": "Начинающий, PostgreSQL и Redis, REST, ожидания в вилке; нет очередей и MS SQL."}
+{"pair_id": "ab09d4e7f02a", "label": 1, "rationale": "Стажёр с PostgreSQL и Redis, но ожидания 150 тыс. выше вилки более 15%."}
+{"pair_id": "90234452a068", "label": 3, "rationale": "Junior Python, PostgreSQL и RabbitMQ, REST, тест высокий; ожидания в вилке, удалёнка подходит."}
+{"pair_id": "f438d08e85cd", "label": 2, "rationale": "Начинающий Java, микросервисы, PostgreSQL; нет RabbitMQ и Redis, удалёнка и ожидания подходят."}
+{"pair_id": "07c1d93f370b", "label": 1, "rationale": "Хороший стек PostgreSQL/Redis/Kafka, но только офис и ожидания выше вилки."}
+{"pair_id": "15eedd49f6e8", "label": 1, "rationale": "Middle почти 4 года, ожидания от 160 тыс. выше вилки."}
+{"pair_id": "f79fd7887dc6", "label": 1, "rationale": "3,6 года, ожидания 260 тыс. вдвое выше вилки, гибрид в Москве."}
+{"pair_id": "bc7eb32c8e88", "label": 2, "rationale": "Junior Go, PostgreSQL, полгода опыта; нет очередей и Redis, ожидания ниже вилки."}
+{"pair_id": "cd30062b5731", "label": 1, "rationale": "Стек идеален (MS SQL, PostgreSQL, RabbitMQ, Redis), но middle с ожиданиями от 190 тыс."}
+{"pair_id": "afa3371c0573", "label": 1, "rationale": "Middle Java, ожидания от 230 тыс. сильно выше вилки."}
+{"pair_id": "10e3fed22f6e", "label": 1, "rationale": "Middle C#, MS SQL, микросервисы; ожидания 240 тыс. вдвое выше вилки."}
+{"pair_id": "4a67a73d2278", "label": 2, "rationale": "Junior, микросервисы, PostgreSQL, Redis, Kafka; хочет гибрид при удалённой вакансии."}
+{"pair_id": "a85be3e55153", "label": 1, "rationale": "Junior PHP, слабый тест, без очередей и Redis, формат гибрид."}
+{"pair_id": "20747b162447", "label": 1, "rationale": "Стажёр с очень слабым тестом, неактивен 79 дней; стек частично подходит."}
+{"pair_id": "0ab06062187f", "label": 1, "rationale": "Junior Java, Kafka, PostgreSQL; ожидания выше вилки, только гибрид/офис."}
+{"pair_id": "a980ab2f146d", "label": 2, "rationale": "Стажёр Java, PostgreSQL, Kafka, заявлены RabbitMQ и Redis; удалёнка, ожидания ниже вилки."}
+{"pair_id": "6af3e6fb9e49", "label": 1, "rationale": "3 года, ожидания от 190 тыс. выше вилки."}
+{"pair_id": "474bf4f91dd5", "label": 1, "rationale": "Middle Go, ожидания от 240 тыс. сильно выше вилки."}
+{"pair_id": "8201b47a0578", "label": 1, "rationale": "Middle Python, ожидания 190 тыс. выше вилки, только гибрид."}
+{"pair_id": "a7f404db258e", "label": 1, "rationale": "Начинающий, PostgreSQL и Redis; только гибрид, нет очередей."}
+{"pair_id": "48d002e1fe69", "label": 0, "rationale": "Middle с ожиданиями от 270 тыс., уровень и условия несовместимы."}
+{"pair_id": "142c2f6710aa", "label": 2, "rationale": "Junior Node, RabbitMQ и PostgreSQL, MS SQL заявлен; слабый тест, хочет гибрид."}
+{"pair_id": "a8e4fc3d8378", "label": 2, "rationale": "Junior C#, MS SQL, микросервисы, удалёнка, ожидания в вилке; нет RabbitMQ и Redis."}
+{"pair_id": "c33a9ec12698", "label": 2, "rationale": "Стажёр Node, PostgreSQL, Kafka, Redis; любой формат, ожидания ниже вилки."}
+{"pair_id": "37d787238360", "label": 2, "rationale": "Junior Java, PostgreSQL, RabbitMQ заявлен; удалёнка, ожидания у верхней границы."}
+{"pair_id": "79352a71fe14", "label": 1, "rationale": "Junior Python, PostgreSQL; только гибрид/офис, ожидания выше вилки."}
+{"pair_id": "1ae2cdb27526", "label": 1, "rationale": "Junior PostgreSQL+Redis, но только гибрид/офис, неактивен 73 дня."}
+{"pair_id": "6a3eee9ba16f", "label": 1, "rationale": "Уровень выше, ожидания 220 тыс. сильно выше вилки."}
+{"pair_id": "3767ca54db06", "label": 1, "rationale": "Стек подходит (PostgreSQL, RabbitMQ, Redis), но middle, ожидания 210 тыс., гибрид/офис."}
+{"pair_id": "fb5491691390", "label": 0, "rationale": "Senior с ожиданиями от 330 тыс., не уровень junior."}
+{"pair_id": "3a7c1d6e6d76", "label": 2, "rationale": "Junior Java, микросервисы, Redis, RabbitMQ заявлен; удалёнка, ожидания в вилке."}
+{"pair_id": "142876f9e42d", "label": 1, "rationale": "MS SQL и SQL сильные, но ожидания 170 тыс. выше вилки, нет очередей."}
+{"pair_id": "7162acd80030", "label": 1, "rationale": "Хороший стек, но ожидания 200 тыс. и только гибрид."}
+{"pair_id": "543ea4914c7c", "label": 0, "rationale": "Frontend-разработчик, другая специализация."}
+{"pair_id": "221a73e3f460", "label": 2, "rationale": "Стажёр C#, MS SQL, микросервисы, RabbitMQ заявлен; удалёнка, ожидания в вилке."}
+{"pair_id": "d21d63373dc0", "label": 2, "rationale": "Junior Node, PostgreSQL, миграции; нет очередей и Redis, условия подходят."}
+{"pair_id": "bc199d2a219b", "label": 2, "rationale": "Junior Java, микросервисы, PostgreSQL; нет очередей и Redis, условия подходят."}
+{"pair_id": "3739abe1cba4", "label": 1, "rationale": "Стек хороший, но ожидания от 240 тыс. вдвое выше вилки."}
+{"pair_id": "06e7d517ecd8", "label": 1, "rationale": "Начинающий Node, PostgreSQL, Kafka; только гибрид при удалённой вакансии."}
+{"pair_id": "85ce0ab0e5c6", "label": 2, "rationale": "Junior, микросервисы, Kafka, PostgreSQL; нет Redis/RabbitMQ, условия подходят."}
+{"pair_id": "f382d4f9e454", "label": 1, "rationale": "Junior Python, PostgreSQL, Kafka; только офис/гибрид в Москве."}
+{"pair_id": "9ed63ecc33df", "label": 0, "rationale": "Middle с ожиданиями от 260 тыс., нет очередей; несовместимо."}
+{"pair_id": "a6220da0cf70", "label": 1, "rationale": "Очень слабый тест, неактивен 105 дней, гибрид/офис."}
+{"pair_id": "db62da1221b2", "label": 0, "rationale": "Senior техлид с ожиданиями от 390 тыс."}
+{"pair_id": "155784c80e24", "label": 1, "rationale": "Стек идеален, но ожидания 230 тыс. и только гибрид."}
+{"pair_id": "61b2d409ed5d", "label": 3, "rationale": "Junior, микросервисы, PostgreSQL, Kafka, Redis, RabbitMQ; удалёнка, ожидания в вилке."}
+{"pair_id": "65b506b6cb2e", "label": 1, "rationale": "Очень слабый тест, переоценивает уровень; стек частично подходит."}
+{"pair_id": "f7ceab322253", "label": 1, "rationale": "Хороший junior-стек, но только офис/гибрид в Москве."}
+{"pair_id": "77769f2581d4", "label": 0, "rationale": "Только офис в Екатеринбурге и ожидания 230 тыс. при удалённой junior-вакансии."}
+{"pair_id": "f770e213abd7", "label": 1, "rationale": "3,5 года, ожидания от 230 тыс. сильно выше вилки."}
+{"pair_id": "0e088e4648e0", "label": 3, "rationale": "1,5 года, PostgreSQL, RabbitMQ, Redis, REST подтверждены; удалёнка, ожидания ниже вилки."}
+{"pair_id": "921be0f37537", "label": 0, "rationale": "Senior, только гибрид в Казани, ожидания 220 тыс."}
+{"pair_id": "cec2c2a62529", "label": 2, "rationale": "Junior Java, Kafka, Redis, RabbitMQ заявлен; удалёнка, ожидания ниже вилки."}
+{"pair_id": "93e79748e822", "label": 2, "rationale": "Junior Python, PostgreSQL, Redis, REST; нет очередей, условия подходят."}
+{"pair_id": "3cdde9b53cf8", "label": 0, "rationale": "Frontend Angular, другая специализация."}

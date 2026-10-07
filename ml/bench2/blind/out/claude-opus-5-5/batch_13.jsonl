@@ -1,0 +1,58 @@
+{"pair_id": "a16f97a61061", "label": 1, "rationale": "React/Redux есть, но тест очень слабый, год опыта, офис в Москве, нет GraphQL и Jest"}
+{"pair_id": "4913668d23bb", "label": 1, "rationale": "Angular-разработчик без React/Redux/GraphQL; ожидания в вилке"}
+{"pair_id": "8d32d0e2583d", "label": 1, "rationale": "Junior на Next.js, нет GraphQL и Jest, уровень ниже"}
+{"pair_id": "be6b1b58300e", "label": 1, "rationale": "Vue-стажёр, нет React-стека, уровень ниже"}
+{"pair_id": "1ea7bd73abfe", "label": 2, "rationale": "React/Redux/Jest/TS, 4 года, вилка и гибрид подходят; нет GraphQL"}
+{"pair_id": "2f3eb2d7be0d", "label": 0, "rationale": "Lead с ожиданиями 390k, уровень и вилка не совпадают"}
+{"pair_id": "8a4e93fb5a2c", "label": 0, "rationale": "Frontend Lead 12 лет, ожидания 400k"}
+{"pair_id": "e75160b17b70", "label": 2, "rationale": "React/Redux/GraphQL/TS, middle 3 года; ожидания чуть выше вилки, нет Jest"}
+{"pair_id": "b450adfcfec5", "label": 1, "rationale": "Сильный React-лид, но ожидания 360k и нет Redux/GraphQL"}
+{"pair_id": "fd77a14fe8ac", "label": 1, "rationale": "Angular-junior, React не основной; GraphQL и Jest заявлены"}
+{"pair_id": "9070161c80d4", "label": 1, "rationale": "React/TS/Webpack, но нет Redux, GraphQL, Jest; офис в Новосибирске"}
+{"pair_id": "f2427edbe808", "label": 0, "rationale": "Vue-лид, 340k, неактивен 74 дня"}
+{"pair_id": "89ea3ef60c7a", "label": 0, "rationale": "Vue senior, слабый тест, 320k"}
+{"pair_id": "70d2fb46def5", "label": 1, "rationale": "Angular, нет React/Redux/GraphQL, ожидания выше вилки"}
+{"pair_id": "07209c13c91a", "label": 1, "rationale": "Vue middle, нет React/Redux/GraphQL; вилка и гибрид подходят"}
+{"pair_id": "829f2f62caea", "label": 0, "rationale": "Лид 12 лет, 450k, офис в Самаре"}
+{"pair_id": "1f62b9f84907", "label": 0, "rationale": "Vue/Svelte senior, 340k"}
+{"pair_id": "958ca02ecfbb", "label": 1, "rationale": "Vue, только удалёнка, нет React/Redux/GraphQL"}
+{"pair_id": "de8df3b6759f", "label": 0, "rationale": "Java-бэкенд, другая специализация"}
+{"pair_id": "edbe647c2504", "label": 2, "rationale": "React/Redux/TS/Webpack 3,5 года; нет GraphQL и Jest, ожидания чуть выше"}
+{"pair_id": "de41351a8005", "label": 1, "rationale": "Junior на MobX, слабый тест, офис в Екатеринбурге"}
+{"pair_id": "eaf847f309e9", "label": 1, "rationale": "Angular с Jest и realtime, нет React-стека, только удалёнка"}
+{"pair_id": "737cd0351a3e", "label": 0, "rationale": "Vue-лид, 350k, неактивен 52 дня"}
+{"pair_id": "62c95986c860", "label": 3, "rationale": "React/TS/GraphQL/Jest/Webpack, 2 года, вилка, любой формат; Redux не указан"}
+{"pair_id": "28724158fd29", "label": 1, "rationale": "10 месяцев опыта, очень слабый тест"}
+{"pair_id": "10fa344a1d07", "label": 1, "rationale": "GraphQL и TS есть, но нет React/Redux/Jest в опыте"}
+{"pair_id": "f44837b95d18", "label": 2, "rationale": "React/Redux/GraphQL-кэш/TS, вилка подходит; слабый тест, нет Jest"}
+{"pair_id": "ae4114a8b306", "label": 1, "rationale": "React/Next/Jest, нет Redux и GraphQL, давно неактивен"}
+{"pair_id": "6e212333a43f", "label": 0, "rationale": "Angular-лид, 400k"}
+{"pair_id": "62f358507eae", "label": 2, "rationale": "React/Redux/Jest/Webpack, вилка ок; слабый тест, нет GraphQL"}
+{"pair_id": "c64e1b4b025e", "label": 0, "rationale": "Тимлид 10 лет, 400k, только офис"}
+{"pair_id": "1be83c0d6a23", "label": 1, "rationale": "Redux/TS, но нет GraphQL/Jest, ожидания выше вилки"}
+{"pair_id": "be76a11972cd", "label": 3, "rationale": "React/TS/Redux/GraphQL/Jest/Webpack, 3,5 года, 170k, любой формат"}
+{"pair_id": "5df74a1cf9c2", "label": 1, "rationale": "Angular с Jest, нет React/Redux/GraphQL"}
+{"pair_id": "aa3fe8a04d66", "label": 1, "rationale": "React/Next, нет Redux, GraphQL, Jest"}
+{"pair_id": "31c602563a3c", "label": 0, "rationale": "Angular senior, 370k"}
+{"pair_id": "bd4ab714a7b3", "label": 1, "rationale": "React/TS/Jest/Webpack, но нет Redux/GraphQL, 250k, неактивен 56 дней"}
+{"pair_id": "37ba74ca4994", "label": 1, "rationale": "React/Next, нет Redux/GraphQL/Jest"}
+{"pair_id": "c7a3387f2324", "label": 0, "rationale": "Вёрстка и доступность, нет React, неактивен 62 дня"}
+{"pair_id": "b91eaa9e82d0", "label": 1, "rationale": "React/GraphQL, но 340k и только офис"}
+{"pair_id": "a003cbd64bcd", "label": 0, "rationale": "Vue-junior без React/TS"}
+{"pair_id": "6f94f347bf53", "label": 1, "rationale": "Год опыта, Next.js, нет Redux/GraphQL/Jest"}
+{"pair_id": "36119425614d", "label": 1, "rationale": "React/Next лид, нет Redux/GraphQL/Jest, без гибрида"}
+{"pair_id": "f9785033bc55", "label": 2, "rationale": "React/TS/Redux, вилка и формат ок; нет GraphQL и Jest"}
+{"pair_id": "307bc3fbf5aa", "label": 0, "rationale": "Тимлид на MobX, 330k"}
+{"pair_id": "1b0b3e886f2d", "label": 1, "rationale": "Junior на MobX, год опыта"}
+{"pair_id": "d00a121ec983", "label": 1, "rationale": "Angular с Jest, нет React/Redux/GraphQL"}
+{"pair_id": "8c8659da64bb", "label": 0, "rationale": "Неактивен 116 дней, 1,5 года опыта"}
+{"pair_id": "5dc9b7bc998e", "label": 1, "rationale": "Angular 1,5 года, нет React-стека"}
+{"pair_id": "19453697efb3", "label": 1, "rationale": "React/MobX, нет Redux/GraphQL/Jest, ожидания выше вилки"}
+{"pair_id": "ba04410068e8", "label": 0, "rationale": "Vue, 250k, нет React-стека"}
+{"pair_id": "017fc40543cd", "label": 1, "rationale": "React/MobX 1,4 года, нет Redux/GraphQL/Jest"}
+{"pair_id": "a4fb9dc93690", "label": 0, "rationale": "Продуктовый аналитик, другая специализация"}
+{"pair_id": "c113992916ce", "label": 1, "rationale": "Vue/Svelte с Jest, нет React/Redux/GraphQL"}
+{"pair_id": "00b575ca870c", "label": 2, "rationale": "React/Redux/TS/Webpack, вилка; слабый тест, нет GraphQL/Jest"}
+{"pair_id": "b565770bc362", "label": 0, "rationale": "Next.js перфоманс, 320k, нет Redux/GraphQL"}
+{"pair_id": "f15814d0c3a6", "label": 2, "rationale": "Весь стек: Redux/GraphQL/Jest/TS; но лишь год опыта"}
+{"pair_id": "b73bfd565022", "label": 1, "rationale": "Junior React/MobX, нет Redux и Jest"}

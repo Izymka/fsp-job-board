@@ -1,0 +1,81 @@
+{"pair_id": "5e5c00a08bcc", "label": 2, "rationale": "Senior Go с Kafka и PG-партиционированием, но гибрид, слабый тест, нет gRPC"}
+{"pair_id": "0dbd842330b1", "label": 2, "rationale": "Go-лид телеметрии с gRPC, удалённо; Kafka и PostgreSQL не указаны"}
+{"pair_id": "690e38723e91", "label": 0, "rationale": "Python-интеграции 1С, не профиль"}
+{"pair_id": "1c9e59042333", "label": 0, "rationale": "Стажёр DevOps, другая специализация"}
+{"pair_id": "064cbbe6ae6e", "label": 2, "rationale": "Go middle 3 года с gRPC, Kafka, PG; гибрид, уровень ниже"}
+{"pair_id": "ef395c9d3aa3", "label": 0, "rationale": "Junior, уровень сильно ниже"}
+{"pair_id": "32ae34cd920a", "label": 0, "rationale": "Python middle, нет Go и Kafka"}
+{"pair_id": "2dfe9daecf64", "label": 0, "rationale": "Python middle 2 года, не профиль"}
+{"pair_id": "db1bcb2ea28f", "label": 1, "rationale": "Go-лид с PG, удалённо; нет Kafka и gRPC, слабый тест"}
+{"pair_id": "baddb8e4bea0", "label": 2, "rationale": "Go-лид, полное покрытие стека; ожидания 450 тыс. выше вилки"}
+{"pair_id": "519462f02fe3", "label": 1, "rationale": "Go 4 года с Kafka, но гибрид, нет gRPC и PG"}
+{"pair_id": "35a4e838985f", "label": 2, "rationale": "Go middle с gRPC, Kafka, PG, Docker; уровень ниже senior"}
+{"pair_id": "cf872b37a467", "label": 0, "rationale": "Java тимлид, нет Go"}
+{"pair_id": "2b6c924fd7f4", "label": 0, "rationale": "Python-лид, только офис, ожидания выше вилки"}
+{"pair_id": "bef12aa031eb", "label": 0, "rationale": "Python/Django, нет Go, Kafka, gRPC"}
+{"pair_id": "2fbb3422faeb", "label": 0, "rationale": "Java-лид, ожидания сильно выше вилки"}
+{"pair_id": "993269907350", "label": 0, "rationale": "Django-лид, нет Go"}
+{"pair_id": "7d2720fbfc59", "label": 0, "rationale": "Java middle, нет Go"}
+{"pair_id": "a95238757129", "label": 0, "rationale": "Python middle, гибрид, нет Go"}
+{"pair_id": "96eff444c44d", "label": 0, "rationale": "PHP-тимлид, не Go"}
+{"pair_id": "d27f7e2298c5", "label": 0, "rationale": "C# junior-уровня, не профиль"}
+{"pair_id": "78dfd7d596cf", "label": 0, "rationale": "C# middle, не профиль"}
+{"pair_id": "4bd24981f792", "label": 2, "rationale": "Go под нагрузкой: gRPC, Kafka, PG, Docker; слабый тест"}
+{"pair_id": "3894e798c62f", "label": 0, "rationale": "Java-лид, ожидания 550 тыс. выше вилки"}
+{"pair_id": "7f58144a5594", "label": 1, "rationale": "Go 2 года, Kafka и PG, нет gRPC, опыт мал"}
+{"pair_id": "04b05824ab75", "label": 1, "rationale": "Kotlin-лид с Kafka и PG-партиционированием, но без Go"}
+{"pair_id": "532b35197842", "label": 0, "rationale": "Python 2 года, слабый тест, только офис"}
+{"pair_id": "95266e6c9791", "label": 0, "rationale": "Java-лид, нет Go, Kafka, gRPC"}
+{"pair_id": "c653aeefbb9f", "label": 1, "rationale": "Java/Node senior с Kafka, но нет Go и gRPC"}
+{"pair_id": "d6e01f89a706", "label": 0, "rationale": "Node.js senior, нет Go, Kafka; ожидания выше вилки"}
+{"pair_id": "0befa61007f4", "label": 1, "rationale": "Go middle 1,5 года, gRPC и PG, нет Kafka, гибрид"}
+{"pair_id": "cfc13384dd1c", "label": 0, "rationale": "Python-лид, нет Go и Kafka"}
+{"pair_id": "845cb2e80369", "label": 0, "rationale": "Java тимлид, нет Go"}
+{"pair_id": "bb65f78a1cfe", "label": 1, "rationale": "Go-тимлид с gRPC и PG, но только офис, нет Kafka"}
+{"pair_id": "c2879a24eba8", "label": 0, "rationale": "Junior Java, не профиль"}
+{"pair_id": "7afc6de1b39e", "label": 0, "rationale": "Java middle, нет Go"}
+{"pair_id": "de3f1e6917d4", "label": 1, "rationale": "Python-техлид с Kafka и PG-партициями, без Go"}
+{"pair_id": "4d621e04e133", "label": 0, "rationale": "Java/Kotlin-лид, ожидания 650 тыс."}
+{"pair_id": "9aa4d7d02075", "label": 1, "rationale": "Go middle 3 года с gRPC и PG, нет Kafka, гибрид"}
+{"pair_id": "2c8be69eb61a", "label": 0, "rationale": "Go 1,5 года, слабый тест, неактивен 105 дней"}
+{"pair_id": "7b0f17131901", "label": 1, "rationale": "Python с gRPC, Kafka, PG, но без Go"}
+{"pair_id": "64ca72cbe73c", "label": 0, "rationale": "Python-интеграции 1С, не профиль"}
+{"pair_id": "2b49f29d3b70", "label": 0, "rationale": "Frontend junior, другая специализация"}
+{"pair_id": "78eb6711dfe5", "label": 0, "rationale": "Node.js-интеграции, не профиль"}
+{"pair_id": "19adfd2560fa", "label": 0, "rationale": "Python-лид, гибрид, ожидания выше вилки"}
+{"pair_id": "5cca4c3ffe9e", "label": 1, "rationale": "Go-лид с gRPC и PG, но нет Kafka, ожидания выше вилки"}
+{"pair_id": "1a2c1710d89c", "label": 0, "rationale": "Node.js-интеграции, не профиль"}
+{"pair_id": "b976872831d4", "label": 0, "rationale": "Системный аналитик 1С, удалённо, не продуктовый"}
+{"pair_id": "60d8f3b59690", "label": 1, "rationale": "Продуктовый аналитик middle 2,6 года, без A/B-опыта"}
+{"pair_id": "97bd41f4b11f", "label": 0, "rationale": "QA, другая специализация"}
+{"pair_id": "6b5bd04fd306", "label": 2, "rationale": "Продуктовый аналитик 3,7 года: A/B, SQL, Jira, User Story; middle"}
+{"pair_id": "e94b49442463", "label": 1, "rationale": "Системный аналитик-лид, продуктовой аналитики мало"}
+{"pair_id": "6111c6ce1c0b", "label": 0, "rationale": "Бизнес-аналитик 1С, неактивен 132 дня"}
+{"pair_id": "327a50c4aa37", "label": 1, "rationale": "Продуктовый аналитик 2 года, слабый тест"}
+{"pair_id": "48d6c32c4cf7", "label": 0, "rationale": "Бизнес-аналитик, нет SQL-аналитики и A/B"}
+{"pair_id": "1ae33375b12e", "label": 3, "rationale": "Продуктовый аналитик 6,5 лет: A/B, статистика, SQL; офис, вилка подходит"}
+{"pair_id": "c0deb58de8ff", "label": 1, "rationale": "Аналитик данных/BI, нет A/B и статистики"}
+{"pair_id": "e51921928c68", "label": 0, "rationale": "Бизнес-аналитик 1С, не продуктовый"}
+{"pair_id": "f877e82bcaaa", "label": 0, "rationale": "Бизнес-аналитик 1С middle, не продуктовый"}
+{"pair_id": "b5e989b3b322", "label": 0, "rationale": "Аналитик ERP/1С, неактивен"}
+{"pair_id": "979bccd3b152", "label": 0, "rationale": "Системный аналитик, не продуктовый"}
+{"pair_id": "8a0a7c8efebc", "label": 0, "rationale": "Бизнес-аналитик 1С, не продуктовый"}
+{"pair_id": "147730e19224", "label": 1, "rationale": "Аналитик данных middle, метрики есть, нет A/B"}
+{"pair_id": "3940a213bac3", "label": 1, "rationale": "Аналитик данных ~3 года, нет A/B и статистики"}
+{"pair_id": "76648f894da9", "label": 2, "rationale": "Лид продуктовой аналитики 7 лет, SQL, Jira; A/B явно не указан"}
+{"pair_id": "df352eb95269", "label": 0, "rationale": "Системный аналитик интеграций, не профиль"}
+{"pair_id": "fb9230b7d144", "label": 0, "rationale": "Системный аналитик-лид, не продуктовый"}
+{"pair_id": "73b20ed36d1f", "label": 0, "rationale": "Бизнес-аналитик 1С, ожидания выше вилки"}
+{"pair_id": "ec1e2555c566", "label": 0, "rationale": "Системный аналитик junior-уровня"}
+{"pair_id": "06b06ccf0c31", "label": 0, "rationale": "Бизнес-аналитик, слабый тест"}
+{"pair_id": "c1abcdc393ce", "label": 0, "rationale": "Системный аналитик интеграций, не профиль"}
+{"pair_id": "3d1ed9512572", "label": 1, "rationale": "Аналитик данных 7 лет, нет A/B, не готов к офису"}
+{"pair_id": "5afb78813356", "label": 0, "rationale": "Системный аналитик junior"}
+{"pair_id": "bc1806e426f7", "label": 0, "rationale": "Бизнес-аналитик, нет SQL и A/B"}
+{"pair_id": "d01836052232", "label": 0, "rationale": "Бизнес-аналитик, не продуктовый"}
+{"pair_id": "7c594a5a44ff", "label": 0, "rationale": "Системный аналитик 1С, не профиль"}
+{"pair_id": "bfbb7e3b00fa", "label": 1, "rationale": "Аналитик продукта 7 лет, но нет A/B и статистики"}
+{"pair_id": "bbcdd1267d14", "label": 1, "rationale": "Аналитик с A/B и продуктовым анализом, но только удалённо"}
+{"pair_id": "070174879995", "label": 0, "rationale": "Junior Data Scientist, другая специализация"}
+{"pair_id": "9269db32fe33", "label": 0, "rationale": "Системный аналитик интеграций, не профиль"}
+{"pair_id": "b7d525527058", "label": 0, "rationale": "BI-аналитик, не продуктовый"}

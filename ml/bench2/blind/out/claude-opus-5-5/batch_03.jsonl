@@ -1,0 +1,93 @@
+{"pair_id": "93f998d87402", "label": 1, "rationale": "Junior, год опыта, нет Jest; условия подходят"}
+{"pair_id": "7b6223293a10", "label": 2, "rationale": "Middle, стек и Jest подтверждены, но только удалёнка"}
+{"pair_id": "565c9fe95df4", "label": 1, "rationale": "Слабый тест, React/TS частично, нет Jest"}
+{"pair_id": "804c57e946f4", "label": 2, "rationale": "Senior React/TS, вилка подходит, нет Jest, формат офис/удалёнка"}
+{"pair_id": "f722b0197ff5", "label": 1, "rationale": "Junior, слабый тест, офис в Екатеринбурге"}
+{"pair_id": "f759ef3187fa", "label": 1, "rationale": "Junior Vue без React"}
+{"pair_id": "2a1325e5fc5f", "label": 2, "rationale": "Middle, полный стек с Jest, слабый тест"}
+{"pair_id": "84ad73b597bf", "label": 1, "rationale": "Senior лид, ожидания 390k сильно выше вилки"}
+{"pair_id": "2bb21bc8adf5", "label": 0, "rationale": "Vue-лид, ожидания 350k+, нет React"}
+{"pair_id": "d9731e4cb590", "label": 1, "rationale": "Junior, низкий тест, частичные React/TS"}
+{"pair_id": "676b68886e75", "label": 1, "rationale": "Junior без React"}
+{"pair_id": "f5bc2d09a279", "label": 2, "rationale": "Сильный React/Jest/REST, ожидания чуть выше вилки"}
+{"pair_id": "c261382158be", "label": 1, "rationale": "Junior, удалёнка, мало опыта"}
+{"pair_id": "de17e7caaab4", "label": 0, "rationale": "Junior Vue, полгода опыта"}
+{"pair_id": "c8bb45c20273", "label": 2, "rationale": "Middle, React/TS подтверждены, нет Jest, вилка подходит"}
+{"pair_id": "e3a87d779ae0", "label": 1, "rationale": "Junior, 1.4 года, узкий стек"}
+{"pair_id": "8997ace413fd", "label": 1, "rationale": "Senior, ожидания выше вилки на 11%, нет Jest"}
+{"pair_id": "559def17dac3", "label": 2, "rationale": "Middle, всё подтверждено, REST, нет Jest"}
+{"pair_id": "6599e0235de7", "label": 2, "rationale": "Middle, Figma/REST/Redux, слабый тест, нет Jest"}
+{"pair_id": "bb2e3295fa82", "label": 1, "rationale": "Junior Angular"}
+{"pair_id": "b73dac3e90b4", "label": 2, "rationale": "Angular-мидл, React подтверждён тестом, Jest, гибрид"}
+{"pair_id": "032d1ef23cb4", "label": 1, "rationale": "Ожидания 320k выше вилки, нет Jest"}
+{"pair_id": "095711bbe49b", "label": 1, "rationale": "Junior fullstack, не тот уровень"}
+{"pair_id": "8bafa98232b4", "label": 1, "rationale": "Junior, очень слабый тест"}
+{"pair_id": "f78c349c0193", "label": 1, "rationale": "Junior, ниже уровня"}
+{"pair_id": "3ada5817a4c0", "label": 3, "rationale": "Middle React/TS, Jest, REST, GraphQL, условия подходят"}
+{"pair_id": "121bd7f6d0f2", "label": 1, "rationale": "Junior по тесту, офис Новосибирск"}
+{"pair_id": "9f5195eb6ba4", "label": 0, "rationale": "Junior без фреймворков, удалёнка"}
+{"pair_id": "6dcc07625b20", "label": 1, "rationale": "Junior Angular"}
+{"pair_id": "f7b0da0eac27", "label": 2, "rationale": "Middle React/TS, REST, нет Jest, условия подходят"}
+{"pair_id": "4444b6d4549c", "label": 0, "rationale": "Junior Angular, 8 месяцев"}
+{"pair_id": "b355411f88f2", "label": 0, "rationale": "Аналитик, другая специализация"}
+{"pair_id": "c7fe086a2b43", "label": 2, "rationale": "Angular-мидл, React подтверждён тестом, Jest"}
+{"pair_id": "05209e2c4b5f", "label": 2, "rationale": "Middle React/Next, слабый тест, нет Jest"}
+{"pair_id": "1c24e810b618", "label": 1, "rationale": "Сильный, но ожидания 340k выше вилки"}
+{"pair_id": "10fb106fa052", "label": 0, "rationale": "Vue-лид, 340k, удалёнка, неактивен"}
+{"pair_id": "e48f4e7e3301", "label": 0, "rationale": "Angular-лид, ожидания 400k"}
+{"pair_id": "014648b8abab", "label": 0, "rationale": "Lead, ожидания 400k+"}
+{"pair_id": "828f965a8392", "label": 1, "rationale": "Junior по тесту, нет Jest"}
+{"pair_id": "e21b6e3f4267", "label": 0, "rationale": "Junior 8 месяцев, без React"}
+{"pair_id": "2b652ca01ef4", "label": 1, "rationale": "Vue/Svelte, ожидания 340k выше вилки"}
+{"pair_id": "e918de8662a6", "label": 2, "rationale": "Vue-мидл, React/TS подтверждены тестом, Jest"}
+{"pair_id": "44f377dcd6fe", "label": 0, "rationale": "Лид, ожидания 400k+"}
+{"pair_id": "00d68796032b", "label": 2, "rationale": "Vue-мидл, React/TS подтверждены тестом, гибрид"}
+{"pair_id": "6dbdf5ba2c9d", "label": 1, "rationale": "Junior, неактивен 116 дней"}
+{"pair_id": "9536852619d9", "label": 0, "rationale": "Руководитель, 450k, Самара офис"}
+{"pair_id": "156907b193ef", "label": 0, "rationale": "DevOps, другая специализация"}
+{"pair_id": "b554c7ab7c49", "label": 3, "rationale": "Middle React/TS/Redux, Jest, GraphQL, условия подходят"}
+{"pair_id": "3df3d6df5ccd", "label": 1, "rationale": "Junior, уклон в вёрстку и PHP"}
+{"pair_id": "408f1eff881e", "label": 1, "rationale": "Junior, год опыта, Jest есть"}
+{"pair_id": "81ff71e6545d", "label": 0, "rationale": "Senior Angular, 370k"}
+{"pair_id": "f7e8b3ae2a18", "label": 1, "rationale": "Лид, ожидания 360k выше вилки"}
+{"pair_id": "dd5efa15feb4", "label": 1, "rationale": "Лид, ожидания 310k+, ищет лидерство"}
+{"pair_id": "9e86e9e025c1", "label": 2, "rationale": "Senior полный стек с Jest, ожидания чуть выше"}
+{"pair_id": "c79955ec5f85", "label": 2, "rationale": "Middle React/Next, нет Jest, условия подходят"}
+{"pair_id": "c4f6e16c3dc9", "label": 1, "rationale": "Vue-мидл без React"}
+{"pair_id": "9afbf511df0f", "label": 1, "rationale": "Автоматизатор 2.6 года, ниже уровня"}
+{"pair_id": "875204479b6d", "label": 1, "rationale": "Автоматизатор веба, нет мобильного опыта"}
+{"pair_id": "4aabb512a827", "label": 0, "rationale": "Data Science, другая специализация"}
+{"pair_id": "f8d995ccaba7", "label": 1, "rationale": "Java-автоматизатор, без мобильного"}
+{"pair_id": "3926a3c1e1f3", "label": 1, "rationale": "Junior/middle ручной, мало опыта для ведущего"}
+{"pair_id": "a5493c9a691c", "label": 0, "rationale": "Год опыта, автотесты Java"}
+{"pair_id": "6c0446360da8", "label": 1, "rationale": "Автоматизатор веба, ниже уровня"}
+{"pair_id": "1d29208671d2", "label": 2, "rationale": "Senior ручник веб+мобайл, REST, условия подходят"}
+{"pair_id": "bd06ed165dd7", "label": 1, "rationale": "Лид автоматизации, только удалёнка"}
+{"pair_id": "c0c8a38020ae", "label": 1, "rationale": "QA-лид без мобильного, офис Екатеринбург"}
+{"pair_id": "493c03366c3e", "label": 1, "rationale": "QA-лид веб, без мобильного опыта"}
+{"pair_id": "b0827c845a47", "label": 1, "rationale": "Senior ручник финтех, без мобильного"}
+{"pair_id": "3adbcf7d6a62", "label": 1, "rationale": "Автоматизатор 2 года"}
+{"pair_id": "93fbb14dab42", "label": 0, "rationale": "Лид автоматизации, 380k+"}
+{"pair_id": "d02bb198656f", "label": 1, "rationale": "Java-автоматизатор, без мобильного"}
+{"pair_id": "d5e4409a67d3", "label": 1, "rationale": "Senior ручник, только удалёнка, без мобильного"}
+{"pair_id": "d748745e23e7", "label": 1, "rationale": "Senior ручник, удалёнка, без мобильного"}
+{"pair_id": "7e7b7da119e8", "label": 0, "rationale": "Бизнес-аналитик, другая специализация"}
+{"pair_id": "5ed7b19a9adb", "label": 1, "rationale": "3 года, офис Пермь, ниже уровня"}
+{"pair_id": "528f9eab0510", "label": 1, "rationale": "Автоматизатор веба, не ручник мобайла"}
+{"pair_id": "c7cc7cd2ca84", "label": 2, "rationale": "Мобильный ручник 4+ года, iOS, только удалёнка"}
+{"pair_id": "c87614ee504a", "label": 1, "rationale": "2.8 года, мобильный веб"}
+{"pair_id": "326310a9043d", "label": 2, "rationale": "Ручник iOS/Android 3.5 года, REST, Jira"}
+{"pair_id": "403a0ab11223", "label": 0, "rationale": "API-автоматизация, удалёнка, неактивен"}
+{"pair_id": "068c1011e87d", "label": 2, "rationale": "Ручник веб+мобайл 5 лет, Jira, условия подходят"}
+{"pair_id": "da7737f433f9", "label": 1, "rationale": "Лид автоматизации веба"}
+{"pair_id": "4b948ec858bc", "label": 1, "rationale": "Автоматизатор фронтенда, удалёнка"}
+{"pair_id": "3a3ed2583a0a", "label": 1, "rationale": "Senior автоматизатор, без мобильного"}
+{"pair_id": "6ca6369ff4f1", "label": 0, "rationale": "Автоматизатор 2 года, удалёнка"}
+{"pair_id": "a61461177567", "label": 0, "rationale": "Java-автоматизатор, слабый тест"}
+{"pair_id": "3c36846261a7", "label": 1, "rationale": "Лид автоматизации, без мобильного"}
+{"pair_id": "e4606352771a", "label": 0, "rationale": "Junior нагрузочник"}
+{"pair_id": "2bd236bc4094", "label": 0, "rationale": "Python-автоматизатор, слабый тест"}
+{"pair_id": "e04047ab6175", "label": 1, "rationale": "Senior ручник, ожидания выше вилки, без мобильного"}
+{"pair_id": "1dd4378b735d", "label": 2, "rationale": "Senior ручник, Jira/Git, Москва гибрид"}
+{"pair_id": "fac3ef1974aa", "label": 0, "rationale": "Python-автоматизатор, удалёнка"}
+{"pair_id": "8d842bba6f1a", "label": 0, "rationale": "Java-автоматизатор, без мобильного"}

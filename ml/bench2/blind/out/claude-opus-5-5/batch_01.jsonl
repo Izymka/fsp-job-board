@@ -1,0 +1,68 @@
+{"pair_id": "ee18793b6299", "label": 1, "rationale": "Senior с 2 годами без опыта руководства, слабый тест, только удалёнка, ожидания ниже вилки"}
+{"pair_id": "a8d64659a9c1", "label": 1, "rationale": "Senior без управленческого опыта и PyTorch, только удалёнка"}
+{"pair_id": "1cd71d184663", "label": 2, "rationale": "Lead 7 лет в ритейле, прогноз спроса, гибрид подходит; нет PyTorch"}
+{"pair_id": "aefe2efda2ba", "label": 2, "rationale": "Сильный PyTorch и наставничество, Senior на ступень ниже, нет опыта руководства командой"}
+{"pair_id": "4362ae0dc2a6", "label": 1, "rationale": "Senior MLE без руководства и PyTorch, только удалёнка"}
+{"pair_id": "16d6fe65bcb4", "label": 0, "rationale": "Мобильная разработка, другая специализация"}
+{"pair_id": "2e922fefd9dd", "label": 0, "rationale": "MLOps с двумя годами опыта, далеко от уровня Head of ML"}
+{"pair_id": "72e852d21ffd", "label": 1, "rationale": "Лид дата-инжиниринга, а не ML; нет PyTorch, удалёнка"}
+{"pair_id": "041a05918e64", "label": 1, "rationale": "Лид данных с упором на DE, нет PyTorch и ML-моделей"}
+{"pair_id": "37778a1ce3a0", "label": 2, "rationale": "Head of DS 10 лет, бизнес-эффект, стандарты; нет PyTorch, гибрид не указан"}
+{"pair_id": "f5ea3d3174dc", "label": 3, "rationale": "Лид CV, команда 10, PyTorch, прод; ожидания в вилке, гибрид подходит"}
+{"pair_id": "32dffb9fa7d3", "label": 1, "rationale": "Senior без руководства и PyTorch, только офис в Москве"}
+{"pair_id": "edec4c3e51cd", "label": 2, "rationale": "Head of DS 11 лет, эффект в деньгах, вилка подходит; нет PyTorch"}
+{"pair_id": "10783f77fe85", "label": 0, "rationale": "Junior backend, другая специализация"}
+{"pair_id": "31e0fe2d0118", "label": 1, "rationale": "Сильный data engineer, но не ML-лид, нет PyTorch"}
+{"pair_id": "f05e94a7437d", "label": 2, "rationale": "CV Senior 6 лет, PyTorch, менторство; руководящего опыта мало"}
+{"pair_id": "a21f2b1edef3", "label": 2, "rationale": "Лид ML-платформы, команда 8, гибрид; TensorFlow вместо PyTorch"}
+{"pair_id": "fa64ebd533d3", "label": 1, "rationale": "Техлид data engineering, не ML, нет PyTorch"}
+{"pair_id": "0ff350e68ad6", "label": 1, "rationale": "Senior DS без руководства и PyTorch, только удалёнка"}
+{"pair_id": "034c4c2a3044", "label": 1, "rationale": "Лид аналитики, не ML; нет PyTorch"}
+{"pair_id": "cf44f1edbee9", "label": 1, "rationale": "Руководитель DS-группы, но слабый тест, удалёнка, нет PyTorch"}
+{"pair_id": "d7a8434d8291", "label": 1, "rationale": "Senior DS с бизнес-эффектом, но без руководства и PyTorch"}
+{"pair_id": "2709cce0956c", "label": 2, "rationale": "Стек совпадает полностью, тест слабый, гибрид в Краснодаре"}
+{"pair_id": "e11a1fcb9007", "label": 1, "rationale": "Уклон в data engineering, нет scikit-learn и pandas; условия подходят"}
+{"pair_id": "0c7dfc91cbd9", "label": 0, "rationale": "Senior MLOps, ожидания втрое выше вилки"}
+{"pair_id": "a8ad00538c8e", "label": 2, "rationale": "Junior с сильным тестом, Python/sklearn/Jupyter; CV-уклон, нет SQL"}
+{"pair_id": "33815dde4d04", "label": 0, "rationale": "Frontend, другая специализация"}
+{"pair_id": "1b2a32ac6843", "label": 1, "rationale": "Middle, ожидания сильно выше вилки, офис в Москве"}
+{"pair_id": "8e820efdac92", "label": 0, "rationale": "Продуктовый аналитик middle, ожидания 350k"}
+{"pair_id": "24b66701ed7e", "label": 2, "rationale": "Junior DS, табличный ML, вилка подходит; только гибрид, нет SQL в стеке"}
+{"pair_id": "686d987c730f", "label": 1, "rationale": "Middle скоринг, хороший стек, ожидания заметно выше вилки"}
+{"pair_id": "ecc523d2c4a1", "label": 0, "rationale": "Data engineer, ожидания выше вилки, нет DS-стека"}
+{"pair_id": "4e435b4d5a9d", "label": 2, "rationale": "Junior CV, офис, вилка подходит; нет scikit-learn и Matplotlib"}
+{"pair_id": "345a4535e4e7", "label": 0, "rationale": "Middle CV, ожидания 240k, низкая активность"}
+{"pair_id": "3dc410ad5816", "label": 1, "rationale": "Сильный middle, но ожидания выше вилки, без офиса"}
+{"pair_id": "87eda04641ee", "label": 2, "rationale": "Полный стек и опыт junior, но тест слабый"}
+{"pair_id": "b1be9652ffcd", "label": 1, "rationale": "Аналитик на R, нет scikit-learn и Matplotlib"}
+{"pair_id": "1b671e57f00e", "label": 0, "rationale": "Middle с ожиданиями 360k, втрое выше вилки"}
+{"pair_id": "788a0aec795f", "label": 0, "rationale": "NLP middle, 420k, только удалёнка"}
+{"pair_id": "ed4ec1830454", "label": 0, "rationale": "Lead backend, другая специализация"}
+{"pair_id": "e991a26a4027", "label": 1, "rationale": "Хороший стек, но ожидания 180k выше вилки"}
+{"pair_id": "008e0d7d7454", "label": 1, "rationale": "Middle 230k, без офиса, слабый тест"}
+{"pair_id": "589af5b47129", "label": 1, "rationale": "Продуктовый аналитик, ML слабый, нет scikit-learn"}
+{"pair_id": "466ef4143446", "label": 2, "rationale": "Полный стек junior, вилка подходит; только гибрид в Москве"}
+{"pair_id": "e22bfba68dd0", "label": 3, "rationale": "Junior скоринг/отток, стек совпадает, офис возможен, вилка подходит"}
+{"pair_id": "ce9dd0837dd1", "label": 0, "rationale": "NLP Senior/Middle, 330k"}
+{"pair_id": "1781de32c571", "label": 1, "rationale": "Хороший стек, но ожидания 240k"}
+{"pair_id": "764e27889b1c", "label": 1, "rationale": "Middle 230k, выше вилки"}
+{"pair_id": "804d77a8ad77", "label": 3, "rationale": "Junior, sklearn/pandas/Jupyter/Git, офис возможен, вилка подходит"}
+{"pair_id": "2e3f467cc639", "label": 1, "rationale": "Middle 250k, гибрид/удалёнка"}
+{"pair_id": "bfd00446b0c5", "label": 3, "rationale": "Junior DS, полный стек, офис возможен, ожидания в вилке"}
+{"pair_id": "dd222743b079", "label": 1, "rationale": "Middle 220k, офис в Краснодаре"}
+{"pair_id": "e32e55a20c8e", "label": 2, "rationale": "Junior DS, стек подходит, вилка ок; только удалёнка"}
+{"pair_id": "45b4e6153238", "label": 1, "rationale": "Middle 250k, слабый тест ML"}
+{"pair_id": "69ed5f6e3e6c", "label": 1, "rationale": "Middle 230k, выше вилки"}
+{"pair_id": "99adafd34f87", "label": 1, "rationale": "Хороший тест, но ожидания 230k"}
+{"pair_id": "85da52ae83e3", "label": 1, "rationale": "Junior data engineer, нет sklearn/Jupyter"}
+{"pair_id": "a7e55fee5d6f", "label": 0, "rationale": "NLP middle 260k, гибрид"}
+{"pair_id": "96404e015cf7", "label": 0, "rationale": "Ожидания 360k, в 2,5 раза выше вилки"}
+{"pair_id": "563771e84578", "label": 0, "rationale": "Data engineer, 210k, гибрид"}
+{"pair_id": "f0c14d3865b6", "label": 2, "rationale": "Junior с топ-тестом, стек подходит; только гибрид в СПб"}
+{"pair_id": "40e0fdaef86a", "label": 0, "rationale": "MLOps-инженер, 180k"}
+{"pair_id": "9dfe985a64ab", "label": 2, "rationale": "Стажёр с хорошим стеком, гибрид/удалёнка, вилка на границе"}
+{"pair_id": "70763c7a6779", "label": 1, "rationale": "Junior CV, нет pandas/sklearn, без офиса"}
+{"pair_id": "070b686e12f9", "label": 1, "rationale": "A/B-аналитик, нет scikit-learn и pandas в стеке"}
+{"pair_id": "42e195f3afd2", "label": 1, "rationale": "Middle 220k, только удалёнка"}
+{"pair_id": "68901e9d0158", "label": 0, "rationale": "MLOps 310k"}
+{"pair_id": "e3ee489fa725", "label": 0, "rationale": "Продуктовый аналитик middle, 240k"}

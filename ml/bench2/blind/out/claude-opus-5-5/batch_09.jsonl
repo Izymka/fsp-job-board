@@ -1,0 +1,76 @@
+{"pair_id": "244084c40836", "label": 0, "rationale": "Senior Python, ожидания 330k, нет C#"}
+{"pair_id": "0e990276b18d", "label": 1, "rationale": "Junior Go/Python без C# и MS SQL"}
+{"pair_id": "4a48579c2a3b", "label": 1, "rationale": "Junior Python, Нижний Новгород, нет C#"}
+{"pair_id": "27dae86b7772", "label": 1, "rationale": "Junior Java, офис в Петербурге"}
+{"pair_id": "584a479674b5", "label": 1, "rationale": "Junior Node.js, нет C#, Екатеринбург"}
+{"pair_id": "022a83117f39", "label": 0, "rationale": "Senior Python, 270k"}
+{"pair_id": "6fe9ec15c358", "label": 2, "rationale": "Junior C#, MS SQL, REST; только удалёнка"}
+{"pair_id": "2af3a0ac0a53", "label": 1, "rationale": "Стажёр Node.js, нет C#"}
+{"pair_id": "38ae1fe92b3f", "label": 1, "rationale": "Junior Node.js, нет C# и MS SQL"}
+{"pair_id": "5f2097a4320b", "label": 0, "rationale": "Middle Python, 270k"}
+{"pair_id": "07c9b3d64734", "label": 0, "rationale": "Middle Python, офис Пермь, 190k"}
+{"pair_id": "cdcaeeaeccef", "label": 0, "rationale": "Data Science lead"}
+{"pair_id": "15ca30e3bc5d", "label": 2, "rationale": "Junior C#, MS SQL, RabbitMQ, Docker; только удалёнка"}
+{"pair_id": "4615ecb2ad3b", "label": 0, "rationale": "Python senior-профиль, удалёнка, 210k"}
+{"pair_id": "eee601558b3b", "label": 0, "rationale": "Middle Python, 210k"}
+{"pair_id": "cae010e728dd", "label": 1, "rationale": "C# и MS SQL есть, но уровень выше, 200k, удалёнка"}
+{"pair_id": "d6a722db3b31", "label": 0, "rationale": "Frontend-разработчик"}
+{"pair_id": "326fdd5bf03e", "label": 2, "rationale": "Junior C#, MS SQL, RabbitMQ; Самара, не НН"}
+{"pair_id": "14aa56a164da", "label": 0, "rationale": "Senior Go"}
+{"pair_id": "6582a6acbfcf", "label": 0, "rationale": "Middle Go/Python, нет C#"}
+{"pair_id": "e6070c8aa396", "label": 1, "rationale": "Junior Java, НН гибрид, вилка выше"}
+{"pair_id": "d944cffc59b7", "label": 1, "rationale": "Стажёр C#/MS SQL, слабый тест, неактивен"}
+{"pair_id": "010bb0c0cd29", "label": 1, "rationale": "Junior Go, нет C#"}
+{"pair_id": "69498c5037e9", "label": 0, "rationale": "Middle Node.js, 230k"}
+{"pair_id": "2b9ceba1593d", "label": 1, "rationale": "C#/MS SQL, но middle и 240k"}
+{"pair_id": "02e88c959d66", "label": 0, "rationale": "Middle Java"}
+{"pair_id": "51b81ff570a9", "label": 1, "rationale": "C#/MS SQL, middle, 220k"}
+{"pair_id": "3c6a658f539a", "label": 1, "rationale": "Junior Go, удалёнка"}
+{"pair_id": "c920c1cde39a", "label": 0, "rationale": "Node.js senior, 210k"}
+{"pair_id": "9973e5c3f230", "label": 1, "rationale": "C#/MS SQL middle, 190k"}
+{"pair_id": "4141c33c65c2", "label": 0, "rationale": "Go senior-профиль, 230k"}
+{"pair_id": "4a07af692dfa", "label": 0, "rationale": "Python senior, удалёнка"}
+{"pair_id": "ffc4f104c751", "label": 1, "rationale": "Junior Go/Node, нет C#"}
+{"pair_id": "6d305b4c938e", "label": 0, "rationale": "Senior Python, 310k"}
+{"pair_id": "e5a268823174", "label": 0, "rationale": "PHP middle"}
+{"pair_id": "c5e40e8e5e65", "label": 1, "rationale": "Junior Python, нет C#"}
+{"pair_id": "724c906d90be", "label": 1, "rationale": "Стажёр Python, офис НН"}
+{"pair_id": "eee2921eb221", "label": 0, "rationale": "Middle Python, 260k"}
+{"pair_id": "aaae9604626d", "label": 1, "rationale": "Junior Java/Kotlin"}
+{"pair_id": "1d1f67670726", "label": 0, "rationale": "Go, 260k"}
+{"pair_id": "a1c956973a9d", "label": 1, "rationale": "Стажёр Django, нет C#"}
+{"pair_id": "d640dc4572ef", "label": 1, "rationale": "Junior Java"}
+{"pair_id": "0b76a1d471d0", "label": 1, "rationale": "Junior Python с MS SQL, ожидания выше вилки"}
+{"pair_id": "50ace62e557e", "label": 1, "rationale": "Стажёр Python, удалёнка"}
+{"pair_id": "7eba569ba5cf", "label": 0, "rationale": "Middle Python"}
+{"pair_id": "593dd90b34ad", "label": 1, "rationale": "C#/MS SQL 3 года, 230k"}
+{"pair_id": "c4297a2ea1e3", "label": 0, "rationale": "Middle Go/Node"}
+{"pair_id": "e45fed62401a", "label": 0, "rationale": "Java senior-профиль"}
+{"pair_id": "759a20f8e543", "label": 0, "rationale": "iOS, 440k"}
+{"pair_id": "cc957236170e", "label": 1, "rationale": "Kotlin 7 месяцев, далеко от senior"}
+{"pair_id": "281efecd795a", "label": 2, "rationale": "Android Kotlin/Java, корутины, 3.5 года, нет SQLite"}
+{"pair_id": "771963b396d7", "label": 0, "rationale": "iOS Objective-C"}
+{"pair_id": "266fc08cafa8", "label": 1, "rationale": "Kotlin 2.5 года, нет Java/SQLite"}
+{"pair_id": "9e0991851594", "label": 0, "rationale": "Junior 1.5 года, неактивен 96 дней"}
+{"pair_id": "57af850296ef", "label": 1, "rationale": "Мобильный Java без Kotlin"}
+{"pair_id": "6e84bc185fc3", "label": 2, "rationale": "Android lead 5 лет, Room, корутины"}
+{"pair_id": "1dd74e317562", "label": 2, "rationale": "Kotlin 4 года, Room, корутины, гибрид"}
+{"pair_id": "22745629ce65", "label": 2, "rationale": "Lead Android 11 лет, полный стек; без удалёнки"}
+{"pair_id": "5e29678812a4", "label": 0, "rationale": "iOS lead, 550k"}
+{"pair_id": "300041b6f999", "label": 0, "rationale": "iOS-разработчик"}
+{"pair_id": "fd0ba7e52d51", "label": 0, "rationale": "Frontend junior"}
+{"pair_id": "c23440daf159", "label": 1, "rationale": "2.5 года, SQLite, нет Kotlin"}
+{"pair_id": "c0d403705fcd", "label": 1, "rationale": "Middle 2 года, гибрид СПб"}
+{"pair_id": "31b783badd6d", "label": 2, "rationale": "Kotlin 5+ лет, SQLite, корутины; только офис"}
+{"pair_id": "ae8165769fb0", "label": 1, "rationale": "Middle 2 года Kotlin, Room/SQLite"}
+{"pair_id": "bd57f36c1a0d", "label": 1, "rationale": "Kotlin 3.5 года, нет SQLite/Java"}
+{"pair_id": "75bbb31858cf", "label": 0, "rationale": "iOS middle"}
+{"pair_id": "b851ac2762e0", "label": 1, "rationale": "Flutter, офис Москва"}
+{"pair_id": "7b4e05c47119", "label": 0, "rationale": "iOS Swift"}
+{"pair_id": "6ffc849b2192", "label": 2, "rationale": "Senior Kotlin/Java, Room, корутины; без удалёнки"}
+{"pair_id": "7fe56b96d261", "label": 2, "rationale": "Kotlin 5 лет, Room, ожидания чуть выше"}
+{"pair_id": "1cd0453f0891", "label": 0, "rationale": "QA-инженер"}
+{"pair_id": "5342e6c82a2d", "label": 0, "rationale": "iOS lead"}
+{"pair_id": "47b34ef42d96", "label": 1, "rationale": "Kotlin 2.5 года, ниже уровня"}
+{"pair_id": "19d38629b621", "label": 2, "rationale": "Kotlin/Java 4 года, Room, корутины, большая аудитория"}
+{"pair_id": "4cb340166f42", "label": 0, "rationale": "iOS lead"}

@@ -19,6 +19,7 @@ import pickle
 import random
 import sys
 import time
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -120,7 +121,7 @@ def make_bench_needs(n_synthetic: int) -> tuple[list[S.BenchNeed], dict]:
 
 def build_systems(corpus: S.Corpus, needs: list[S.BenchNeed], neural: bool = True) -> dict[str, S.Ranker]:
     systems: dict[str, S.Ranker] = {
-        "ours": S.ours(corpus, TODAY),
+        "ours": S.ours(corpus, TODAY, version=1),
         "bm25": S.bm25(corpus),
         "test_only": S.test_only(corpus),
         "random": S.random_in_category(corpus),
@@ -162,7 +163,7 @@ def build(
     if prepared is None:
         _log("Популяция и онбординг-тест…")
         cands = make_candidates(n_candidates, stuffing_rate=0.3)
-        feats = vm.observe(cands, make_true_bank()).features
+        feats = vm.observe(cands, make_true_bank(), legacy=True).features
         needs, true_needs = make_bench_needs(n_synthetic)
     else:
         cands, feats, needs, true_needs = prepared
@@ -284,7 +285,7 @@ def load_state(out: Path = DATA, n_candidates: int = 1000, n_synthetic: int = 30
             st = pickle.load(fh)
         return st["feats"], st["needs"]
     cands = make_candidates(n_candidates, stuffing_rate=0.3)
-    return vm.observe(cands, make_true_bank()).features, load_bench_needs(n_synthetic, out)
+    return vm.observe(cands, make_true_bank(), legacy=True).features, load_bench_needs(n_synthetic, out)
 
 
 def load_bench_needs(n_synthetic: int = 30, out: Path = DATA) -> list[S.BenchNeed]:
@@ -314,7 +315,27 @@ def load_bench_needs(n_synthetic: int = 30, out: Path = DATA) -> list[S.BenchNee
     return out_needs
 
 
+def _hybrid(corpus: S.Corpus, version: int) -> S.Ranker:
+    from ..matching.hybrid import rank_hybrid
+
+    text = dict(zip(corpus.ids, corpus.texts))
+
+    def run(bn: S.BenchNeed) -> list[str]:
+        if not bn.need.specialization:
+            return []
+        need = replace(bn.need, text=bn.text)
+        return [
+            s.candidate_id
+            for s in rank_hybrid(corpus.feats, need, TODAY, card_text=lambda f: text[f.id], version=version)
+        ][: S.DEPTH]
+
+    return run
+
+
 LOCAL_SYSTEMS = {
+    "ours_v4": lambda corpus: _hybrid(corpus, 1),  # гибрид на формуле v1
+    "ours_v5": lambda corpus: S.ours(corpus, TODAY, version=5),
+    "ours_v5_ce": lambda corpus: _hybrid(corpus, 5),  # гибрид на формуле v5
     "ours": lambda corpus: S.ours(corpus, TODAY, version=1),
     "ours_v2": lambda corpus: S.ours(corpus, TODAY, version=2),
 }
@@ -327,7 +348,8 @@ def add_systems(names: list[str], n_candidates: int = 1000, n_synthetic: int = 3
     тексты совпадают с исходной сборкой. Новые пары помечаются `batch: "addN"` для доразметки.
     """
     feats, needs = load_state(out, n_candidates, n_synthetic)
-    corpus = S.Corpus(feats, [""] * len(feats))
+    card = {r["cand_id"]: r["text"] for r in load_jsonl(out / "candidates.jsonl")}
+    corpus = S.Corpus(feats, [card.get(f.id, "") for f in feats])
     runs = json.loads((out / "runs.json").read_text(encoding="utf-8"))
     pairs = load_jsonl(out / "pairs.jsonl")
     known = {p["pair_id"]: p for p in pairs}

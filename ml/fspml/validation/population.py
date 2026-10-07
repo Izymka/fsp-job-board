@@ -43,6 +43,63 @@ SPEC_SALARY = {
 }
 YEARS_BY_GRADE = {"intern": (0, 0.5), "junior": (0.5, 2), "middle": (2, 4), "senior": (4, 7), "lead": (6, 12)}
 
+# Прежний общий состав теста специализации («$language» — язык по стеку, по умолчанию первый).
+# Заморожен здесь: по нему сгенерированы навыки синтетической популяции и карточки размеченных
+# бенчмарков; изменение порядка или набора навыков сдвинуло бы поток случайных чисел и сломало
+# воспроизводимость скрытой истины. Продукт использует catalog.blueprint (ядро + модули стека).
+LEGACY_BLUEPRINTS: dict[str, dict[str, float]] = {
+    "backend": {
+        "algorithms": 0.15,
+        "sql": 0.2,
+        "http": 0.15,
+        "architecture": 0.1,
+        "git": 0.05,
+        "linux": 0.05,
+        "docker": 0.05,
+        "security": 0.05,
+        "$language": 0.2,
+    },
+    "frontend": {
+        "javascript": 0.3,
+        "html_css": 0.15,
+        "react": 0.15,
+        "typescript": 0.1,
+        "http": 0.15,
+        "algorithms": 0.1,
+        "git": 0.05,
+    },
+    "mobile": {"mobile": 0.4, "algorithms": 0.2, "http": 0.2, "git": 0.1, "architecture": 0.1},
+    "data_science": {"python": 0.15, "pandas": 0.15, "statistics": 0.25, "ml": 0.3, "sql": 0.15},
+    "qa": {"testing": 0.45, "http": 0.2, "sql": 0.15, "python": 0.1, "git": 0.1},
+    "devops": {
+        "linux": 0.25,
+        "docker": 0.2,
+        "kubernetes": 0.15,
+        "cicd": 0.15,
+        "http": 0.1,
+        "git": 0.05,
+        "security": 0.1,
+    },
+    "analyst": {"requirements": 0.35, "sql": 0.25, "http": 0.15, "metrics": 0.25},
+}
+LEGACY_STACK_LANGUAGES: dict[str, tuple[str, ...]] = {"backend": ("python", "javascript")}
+
+
+def legacy_blueprint(spec: str, stack: list[str] | None = None) -> dict[str, float]:
+    """Прежний состав теста: общий для специализации, «$language» — первый язык стека или Python."""
+    stack_l = {s.lower() for s in (stack or []) if s}
+    langs = LEGACY_STACK_LANGUAGES.get(spec, ())
+    bp: dict[str, float] = {}
+    for skill, w in LEGACY_BLUEPRINTS[spec].items():
+        if skill == "$language":
+            lang = next((x for x in langs if x in stack_l), None) or (langs[0] if langs else None)
+            if lang:
+                bp[lang] = bp.get(lang, 0.0) + w
+        else:
+            bp[skill] = bp.get(skill, 0.0) + w
+    total = sum(bp.values())
+    return {k: v / total for k, v in bp.items()}
+
 
 @dataclass
 class TrueCandidate:
@@ -194,9 +251,19 @@ ABOUT = {
 
 
 def make_candidates(
-    n: int = 1000, seed: int = 7, stuffing_rate: float = 0.3, *, realistic: bool = False
+    n: int = 1000,
+    seed: int = 7,
+    stuffing_rate: float = 0.3,
+    *,
+    realistic: bool = False,
+    force_language: bool = True,
 ) -> list[TrueCandidate]:
-    """realistic=True — стек из архетипов (реальные связки технологий) вместо независимой выборки."""
+    """realistic=True — стек из архетипов (реальные связки технологий) вместо независимой выборки.
+
+    force_language=False — backend-кандидат не получает Python/Node.js «в нагрузку» к архетипу:
+    Java-, Go-, C#-разработчики знают только свой стек (для проверки состава теста). По умолчанию
+    True — так построены популяции бенчмарков.
+    """
     rng = random.Random(seed)
     cat = get_catalog()
     specs, shares = zip(*SPEC_SHARE.items())
@@ -212,29 +279,29 @@ def make_candidates(
         claim_idx = max(0, min(len(cat.grades) - 1, claim_idx))
         lang = None
         stack = None
-        spec_obj = cat.specializations[spec]
-        if spec_obj.stack_languages:
-            lang = rng.choice(spec_obj.stack_languages)
+        stack_languages = LEGACY_STACK_LANGUAGES.get(spec, ())
+        if stack_languages:
+            lang = rng.choice(stack_languages)
             stack = [lang]
-        bp = cat.blueprint(spec, stack)
+        bp = legacy_blueprint(spec, stack)
         skill_theta = {s: theta + rng.gauss(0, 0.45) for s in bp}
         if realistic:
             _, techs = _archetype_techs(rng, spec, g_idx)
-            if spec_obj.stack_languages:  # языковой навык теста — по реальному стеку
+            if stack_languages:  # языковой навык теста — по реальному стеку
                 lang = (
                     "python"
                     if "Python" in techs
                     else "javascript"
                     if techs & {"JavaScript", "TypeScript", "Node.js"}
-                    else lang
+                    else (lang if force_language else None)
                 )
-                bp = cat.blueprint(spec, [lang])
+                bp = legacy_blueprint(spec, [lang])
                 skill_theta = {s_: theta + rng.gauss(0, 0.45) for s_ in bp}
         else:
             techs = _sample_techs(rng, spec, rng.randint(4, 8) + g_idx)
-        if lang == "python":
+        if force_language and lang == "python":
             techs.add("Python")
-        elif lang == "javascript":
+        elif force_language and lang == "javascript":
             techs.add("Node.js")
             techs.add("JavaScript")
         stuffed: set[str] = set()

@@ -16,7 +16,15 @@ import numpy as np
 
 from ..catalog import get_catalog
 from ..matching.baselines import BM25, random_order
-from ..matching.scoring import DEFAULT_WEIGHTS, CandidateFeatures, Need, Weights, rank
+from ..matching.scoring import (
+    DEFAULT_WEIGHTS,
+    DEFAULT_WEIGHTS_V2,
+    CandidateFeatures,
+    Need,
+    Weights,
+    WeightsV2,
+    rank,
+)
 from ..nlp.embed import HashingEmbedder
 from .assessment import TrueBank, simulate_onboarding
 from .population import TODAY, TrueCandidate, TrueNeed, accept_probability, true_relevance
@@ -30,14 +38,19 @@ class Observed:
     by_id: dict[str, TrueCandidate]
 
 
-def observe(cands: Sequence[TrueCandidate], truth: TrueBank, seed: int = 21) -> Observed:
-    """Прогоняет каждого кандидата через онбординг-тест и собирает наблюдаемые признаки."""
+def observe(
+    cands: Sequence[TrueCandidate], truth: TrueBank, seed: int = 21, *, legacy: bool = False
+) -> Observed:
+    """Прогоняет каждого кандидата через онбординг-тест и собирает наблюдаемые признаки.
+
+    legacy=True — прежний общий состав теста: на нём построены карточки размеченных бенчмарков.
+    """
     rng = random.Random(seed)
     emb = HashingEmbedder()
     vecs = emb.encode([c.resume_text for c in cands])
     feats = []
     for c, v in zip(cands, vecs):
-        ob = simulate_onboarding(c, truth, rng)
+        ob = simulate_onboarding(c, truth, rng, legacy=legacy)
         last_ok = next(
             (l.result for l in reversed(ob.logs) if l.result.decision == "confirmed"), ob.logs[-1].result
         )
@@ -106,10 +119,12 @@ def _system_rankers(
     def ours(
         w: Weights = DEFAULT_WEIGHTS,
         transform: Callable[[CandidateFeatures], CandidateFeatures] | None = None,
+        version: int = 5,
+        w2: WeightsV2 = DEFAULT_WEIGHTS_V2,
     ):
         def run(tn: TrueNeed, need: Need) -> list[str]:
             pool = [transform(f) for f in feats] if transform else feats
-            return [s.candidate_id for s in rank(pool, need, TODAY, w=w)]
+            return [s.candidate_id for s in rank(pool, need, TODAY, w=w, version=version, w2=w2)]
 
         return run
 
@@ -148,7 +163,11 @@ def _system_rankers(
         "ours": ours(),
         "ours_without_fsp": ours(transform=no_fsp),
         "ours_claims_only": ours(transform=claims_only),
-        "ours_without_conditions": ours(w=replace(DEFAULT_WEIGHTS, conditions=0.0)),
+        "ours_without_conditions": ours(
+            w=replace(DEFAULT_WEIGHTS, conditions=0.0),
+            w2=replace(DEFAULT_WEIGHTS_V2, gate_format_soft=1.0, gate_format_hard=1.0, gate_salary_slope=0.0),
+        ),
+        "ours_v1": ours(version=1),
         "test_only_in_category": test_only,
         "random_in_category": cat_random,
         "bm25_in_specialization": bm25_spec,
@@ -251,3 +270,32 @@ def category_accuracy(obs: Observed) -> dict[str, float]:
         "category_exact": float(exact),
         "category_within1": float(within),
     }
+
+
+def composition_effect(
+    cands: Sequence[TrueCandidate], needs: Sequence[TrueNeed], truth: TrueBank, obs: Observed | None = None
+) -> dict[str, dict[str, float]]:
+    """Разложение 2×2: состав теста (прежний общий / ядро + модули) × формула подбора (v1 / v5).
+
+    Для каждой клетки — NDCG@10 с подоценками навыков из теста и без них (только заявленный стек):
+    разница показывает, насколько тест помогает подбору.
+    """
+    emb = HashingEmbedder()
+    rel_cache = {n.id: {c.id: true_relevance(c, n) for c in cands} for n in needs}
+    prepared = [(tn, to_need(tn, emb)) for tn in needs]
+    out: dict[str, dict[str, float]] = {}
+    for legacy in (True, False):
+        ob = observe(cands, truth, legacy=True) if legacy else (obs or observe(cands, truth))
+        claims = [replace(f, skill_status={}, skill_theta={}) for f in ob.features]
+        for version in (1, 5):
+            row = {}
+            for key, feats in (("with_test", ob.features), ("claims_only", claims)):
+                vals = [
+                    metrics_for(
+                        [s.candidate_id for s in rank(feats, need, TODAY, version=version)], tn, ob, rel_cache
+                    )["ndcg@10"]
+                    for tn, need in prepared
+                ]
+                row[key] = float(np.mean(vals))
+            out[f"{'legacy' if legacy else 'personal'}/v{version}"] = row
+    return out

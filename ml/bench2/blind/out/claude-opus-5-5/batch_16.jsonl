@@ -1,0 +1,85 @@
+{"pair_id": "3798e5a73c6e", "label": 0, "rationale": "Node.js middle, нет Java/Spring, только офис."}
+{"pair_id": "1beb73cae636", "label": 0, "rationale": "Node.js-интеграции с 1С, нет Java, Kafka, Elasticsearch."}
+{"pair_id": "d24fc7e1d9a7", "label": 1, "rationale": "Java/Spring, Kafka, микросервисы, но около двух лет опыта вместо четырёх."}
+{"pair_id": "8dce14419b08", "label": 0, "rationale": "Лид интеграций на Node.js, нет Java, ожидания выше."}
+{"pair_id": "a4dffe719c6f", "label": 0, "rationale": "Python-лид, нет Java и Spring."}
+{"pair_id": "28cf2cfb7f92", "label": 1, "rationale": "Java/Spring техлид с Kafka и PostgreSQL, но ожидания 550k и только гибрид."}
+{"pair_id": "f4a3968e8634", "label": 1, "rationale": "Java/Spring лид, микросервисы, но нет Kafka и ES, ожидания 510k, гибрид."}
+{"pair_id": "5258cc92106d", "label": 0, "rationale": "Python/Django, нет Java."}
+{"pair_id": "621809d75625", "label": 0, "rationale": "Go-тимлид, только офис."}
+{"pair_id": "9147a60891c6", "label": 1, "rationale": "Kafka, PostgreSQL, микросервисы, но основной язык Node.js, не удалёнка."}
+{"pair_id": "8b064b71747b", "label": 0, "rationale": "Python middle, нет Java."}
+{"pair_id": "6f3af915a498", "label": 2, "rationale": "Java/Kotlin на Spring, Kafka, PostgreSQL, удалёнка; нет Elasticsearch."}
+{"pair_id": "08f5a2f69906", "label": 3, "rationale": "Java/Spring 7+ лет, Kafka, Elasticsearch, микросервисы, K8s; любой формат, ожидания в вилке."}
+{"pair_id": "7ce42368730b", "label": 0, "rationale": "Python/Django middle."}
+{"pair_id": "40b64086e0a4", "label": 0, "rationale": "QA Lead, другая специализация."}
+{"pair_id": "acc4b62a4273", "label": 0, "rationale": "Python-тимлид, только офис."}
+{"pair_id": "639319d85556", "label": 0, "rationale": "Go middle 1,5 года, слабый тест."}
+{"pair_id": "8f8a22c8b3d5", "label": 1, "rationale": "Spring и микросервисы 3,5 года, нет Kafka/ES, только гибрид."}
+{"pair_id": "4be1ee6d66e2", "label": 1, "rationale": "Java с Kafka и PostgreSQL 3,5 года, без Spring и ES, только гибрид."}
+{"pair_id": "59f78ef98456", "label": 1, "rationale": "Java/Spring лид с Kafka, но ожидания 650k."}
+{"pair_id": "77516dbdab96", "label": 2, "rationale": "Java/Spring, Elasticsearch, PostgreSQL, K8s, Prometheus ~4 года; нет Kafka, уровень middle."}
+{"pair_id": "ae8d03f5103a", "label": 0, "rationale": "Go-техлид, нет Java."}
+{"pair_id": "60fa9265638b", "label": 0, "rationale": "Senior Go, нет Java."}
+{"pair_id": "7bbe5663fbe1", "label": 0, "rationale": "Python-интеграции, нет Java."}
+{"pair_id": "89b1fa86f179", "label": 1, "rationale": "Java/Spring 2 года, middle; нет Kafka и ES."}
+{"pair_id": "185a0eec2e06", "label": 0, "rationale": "Python/Django лид."}
+{"pair_id": "f58702f7a62a", "label": 0, "rationale": "Python middle."}
+{"pair_id": "13316af2c0f6", "label": 2, "rationale": "Java/Spring техлид, Elasticsearch, микросервисы, K8s; нет Kafka, ожидания немного выше."}
+{"pair_id": "6dbc623997a1", "label": 0, "rationale": "Go middle, гибрид."}
+{"pair_id": "1daabea04501", "label": 0, "rationale": "Go/Node middle."}
+{"pair_id": "924a85fc2b8e", "label": 1, "rationale": "Java/Spring, Kafka, PostgreSQL 3 года, но только офис."}
+{"pair_id": "bb708d7eac47", "label": 0, "rationale": "Senior Node.js, нет Java."}
+{"pair_id": "1f70140c0b61", "label": 2, "rationale": "Java/Spring лид, микросервисы, PostgreSQL, K8s, Prometheus, удалёнка; нет Kafka и ES."}
+{"pair_id": "851e302c6941", "label": 1, "rationale": "Java с Elasticsearch и PostgreSQL, но 2,6 года, без Spring и Kafka."}
+{"pair_id": "07dab1f4c8b4", "label": 1, "rationale": "Java 6 лет, но без Spring, Kafka, ES; не удалёнка."}
+{"pair_id": "e80ff843e7af", "label": 0, "rationale": "Go/Node техлид, ожидания выше."}
+{"pair_id": "e27966ca666f", "label": 2, "rationale": "Kotlin/Spring 4 года, Kafka, PostgreSQL, микросервисы; нет ES, Java не основной."}
+{"pair_id": "fdf7144da5af", "label": 2, "rationale": "Java/Spring, Kafka, PostgreSQL, микросервисы, удалёнка; 3,6 года, нет ES."}
+{"pair_id": "2f48203d5e99", "label": 0, "rationale": "PHP-тимлид, нет Java."}
+{"pair_id": "0d19770566f5", "label": 1, "rationale": "Java/Spring тимлид, но нет Kafka/ES и не удалёнка."}
+{"pair_id": "c7ae502e14be", "label": 0, "rationale": "Go-разработчик, нет Java."}
+{"pair_id": "705a007aa138", "label": 0, "rationale": "Frontend React."}
+{"pair_id": "911f130ec16f", "label": 0, "rationale": "Node.js, только офис."}
+{"pair_id": "8a7a113e428f", "label": 0, "rationale": "Python/Django middle."}
+{"pair_id": "0c3d6f5c55ab", "label": 0, "rationale": "Python-техлид, нет Java."}
+{"pair_id": "68333c30e135", "label": 1, "rationale": "Java/Spring с ES, но около двух лет опыта, нет Kafka."}
+{"pair_id": "15f7f0c39bc7", "label": 2, "rationale": "Java/Spring лид, PostgreSQL, REST, K8s; нет Kafka и ES, ожидания на границе."}
+{"pair_id": "6417ff63fa09", "label": 0, "rationale": "Python-тимлид."}
+{"pair_id": "7a1743aadb5a", "label": 1, "rationale": "DevOps с Terraform, K8s, ELK, но нет Prometheus, Go/Python, тест слабый, ожидания выше."}
+{"pair_id": "29a0296f5c73", "label": 2, "rationale": "SRE-практики, K8s, Prometheus, ELK, Python; нет Terraform и Go, только гибрид."}
+{"pair_id": "e99783583fc8", "label": 0, "rationale": "NLP-инженер, другая специализация."}
+{"pair_id": "28f4b5eedd29", "label": 0, "rationale": "Junior DevOps полгода."}
+{"pair_id": "33fb24a6f57c", "label": 1, "rationale": "DevOps с K8s и Prometheus, но нет Terraform, ELK, Go/Python."}
+{"pair_id": "e0b550816a8d", "label": 1, "rationale": "Сильный DevOps с Terraform и SLO, но ожидания 420k намного выше."}
+{"pair_id": "e903dbfe1b03", "label": 1, "rationale": "Junior SRE 1,5 года с Go, Prometheus, Terraform; уровень ниже, гибрид."}
+{"pair_id": "e05dbc7ea357", "label": 1, "rationale": "DevOps K8s/Terraform, нет Prometheus, ELK, Go; слабый тест, гибрид."}
+{"pair_id": "a60d327074d9", "label": 2, "rationale": "K8s, Terraform, ELK, Docker 2,5 года; нет Prometheus и Go/Python."}
+{"pair_id": "2ed9bdf76ce7", "label": 0, "rationale": "Junior пять месяцев, слабый тест."}
+{"pair_id": "db91b6b0d0ac", "label": 1, "rationale": "Senior DevOps без K8s и Terraform, гибрид, ожидания выше."}
+{"pair_id": "e3fcbb01fb6d", "label": 0, "rationale": "DevOps-лид, ожидания 480k, нет K8s/Terraform."}
+{"pair_id": "a1cf2597d698", "label": 1, "rationale": "K8s и ELK, но нет Terraform, Prometheus, Go/Python."}
+{"pair_id": "77b78d3ca322", "label": 1, "rationale": "Terraform и GitOps, но нет Prometheus, ELK, Go."}
+{"pair_id": "842abe71ba74", "label": 2, "rationale": "SRE: Terraform, K8s, Prometheus, ELK, Go, Python; только гибрид, давно неактивен."}
+{"pair_id": "f7ab0fd6d5d6", "label": 2, "rationale": "K8s, Prometheus, ELK, Python, удалёнка; нет Terraform и Go."}
+{"pair_id": "5e96b2f247bc", "label": 1, "rationale": "1,5 года DevOps, Go и Python, но нет мониторинга, Terraform; гибрид."}
+{"pair_id": "bb1c3555d670", "label": 1, "rationale": "Senior SRE с полным стеком, но ожидания 460k."}
+{"pair_id": "43728826b721", "label": 1, "rationale": "Terraform, Go, Python, K8s, но без Prometheus/ELK и не удалёнка."}
+{"pair_id": "3693157263a5", "label": 0, "rationale": "Junior со слабым тестом, не удалёнка."}
+{"pair_id": "17252cc9e16c", "label": 2, "rationale": "Junior SRE ~2 года: Go, Prometheus, Terraform, Python, SLO; удалёнка, уровень чуть ниже."}
+{"pair_id": "cc1cce4cd5b2", "label": 0, "rationale": "DevOps-лид без Terraform/Prometheus, ожидания 370k."}
+{"pair_id": "1c0631963b76", "label": 2, "rationale": "Полный SRE-стек 2,4 года, но удалёнку не рассматривает."}
+{"pair_id": "d97ebd10d82a", "label": 1, "rationale": "Terraform, K8s, Python 1,5 года; нет мониторинга и ELK."}
+{"pair_id": "baaf28b599c3", "label": 1, "rationale": "K8s и ELK, нет Terraform, Prometheus, Go; ожидания выше, не удалёнка."}
+{"pair_id": "b98031e7bbba", "label": 0, "rationale": "Junior 8 месяцев."}
+{"pair_id": "e9d1ddc1671f", "label": 2, "rationale": "K8s, Prometheus, ELK 3 года, удалёнка; нет Terraform и Go, слабый тест."}
+{"pair_id": "9f104c26e193", "label": 0, "rationale": "Android-разработчик."}
+{"pair_id": "7513b9748c69", "label": 1, "rationale": "Terraform, K8s, ELK, но нет Prometheus и Go/Python, ожидания выше."}
+{"pair_id": "e12f5347dbe4", "label": 0, "rationale": "Стажёр DevSecOps."}
+{"pair_id": "98b51d8099c6", "label": 1, "rationale": "SRE с Go, Prometheus, SLO, но только офис и слабый тест."}
+{"pair_id": "dc56c97baf98", "label": 1, "rationale": "Prometheus и Docker, но нет K8s в опыте, Terraform, ELK."}
+{"pair_id": "1378e90c649d", "label": 1, "rationale": "DevOps с Python, нет K8s, Terraform, мониторинга; давно неактивен."}
+{"pair_id": "0baaab460baa", "label": 0, "rationale": "DevOps-стажёр."}
+{"pair_id": "0e9d0fde194b", "label": 3, "rationale": "SRE ~4 года: Prometheus, ELK, Terraform, K8s, Python; любой формат, ожидания в вилке."}
+{"pair_id": "43542f596fb4", "label": 0, "rationale": "Стажёр первый месяц."}
+{"pair_id": "507b571df026", "label": 1, "rationale": "DevOps-лид с Terraform и K8s, нет мониторинга, ожидания 380k."}

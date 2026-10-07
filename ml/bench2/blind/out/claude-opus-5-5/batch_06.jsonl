@@ -1,0 +1,99 @@
+{"pair_id": "8932cc2ed144", "label": 1, "rationale": "Middle SRE, стек близок, но ожидания 210k+ выше вилки 150k"}
+{"pair_id": "de5cd0695c65", "label": 2, "rationale": "Junior DevOps, K8s, Terraform, офис ок; слабый тест, нет Python и Yandex Cloud"}
+{"pair_id": "23a94f4f5deb", "label": 1, "rationale": "Стажёр с хорошим стеком, но только удалёнка при офисной вакансии"}
+{"pair_id": "8a5e49cdeccb", "label": 1, "rationale": "Junior, нет Terraform, облака, Python; формат без офиса"}
+{"pair_id": "711f9d980dd7", "label": 1, "rationale": "Фактически middle, ожидания 250k значительно выше вилки"}
+{"pair_id": "2ed879856b49", "label": 2, "rationale": "Junior с K8s, Terraform, Python; ожидания у верхней границы, офис не указан"}
+{"pair_id": "7ce2fc4cd09b", "label": 1, "rationale": "Junior, нет Python и облака, низкий тест, давно неактивен"}
+{"pair_id": "ea25ab2cd540", "label": 3, "rationale": "Junior: Yandex Cloud, Terraform, S3, K8s подтверждён, офис, вилка подходит"}
+{"pair_id": "b071c7d7572f", "label": 1, "rationale": "Middle с Yandex Cloud, но ожидания 190k выше вилки"}
+{"pair_id": "d62bf286756c", "label": 0, "rationale": "Бизнес-аналитик, другая специализация"}
+{"pair_id": "3bb4f438bd8c", "label": 0, "rationale": "Тимлид с ожиданиями 370k, уровень несопоставим"}
+{"pair_id": "d3c35106a8b2", "label": 1, "rationale": "Middle, ожидания 260k вдвое выше, давно неактивен"}
+{"pair_id": "22e031eea774", "label": 2, "rationale": "Стажёр с K8s, Python, подтверждённым тестом; офис ок, дешевле вилки"}
+{"pair_id": "e8328356c249", "label": 1, "rationale": "Сильный стек YC/S3/Terraform, но ожидания 260k вне вилки"}
+{"pair_id": "f5528189f8b0", "label": 0, "rationale": "Middle, только удалёнка, ожидания 200k"}
+{"pair_id": "92603b9b854e", "label": 0, "rationale": "Senior с ожиданиями 460k"}
+{"pair_id": "c74a2269fef9", "label": 2, "rationale": "Junior, Python, K8s подтверждён тестом; нет Terraform и облака"}
+{"pair_id": "b9f17f41b470", "label": 1, "rationale": "Junior с Terraform и K8s, но только удалёнка"}
+{"pair_id": "fbe5a12d2f95", "label": 0, "rationale": "Senior, удалённо, 420k"}
+{"pair_id": "ac318a1bd82b", "label": 2, "rationale": "Стажёр: Terraform, Yandex Cloud, Python, K8s; офис ок, мало опыта"}
+{"pair_id": "de18d0ef4667", "label": 2, "rationale": "Junior SRE: K8s, Terraform, Python; нет Yandex Cloud, офис ок"}
+{"pair_id": "c8f787849a0a", "label": 0, "rationale": "Middle с ожиданиями 310k"}
+{"pair_id": "dfad05518577", "label": 2, "rationale": "Junior с полным стеком YC/S3/Terraform/Python, но без офиса"}
+{"pair_id": "617be807c8c5", "label": 1, "rationale": "Junior с очень слабым тестом, нет Terraform и облака"}
+{"pair_id": "22b429960382", "label": 1, "rationale": "Стажёр, нет Python/облака, формат без офиса"}
+{"pair_id": "e01876addd38", "label": 1, "rationale": "Фактически middle, ожидания 200k выше вилки"}
+{"pair_id": "a7295c45052a", "label": 2, "rationale": "Junior, K8s подтверждён, офис; нет Terraform, Python, облака"}
+{"pair_id": "646b777a98ba", "label": 0, "rationale": "Мобильный разработчик, другая специализация"}
+{"pair_id": "c0c43090c0af", "label": 2, "rationale": "Стажёр с сильным тестом, Terraform, K8s; нет Python и облака"}
+{"pair_id": "212a4277576e", "label": 1, "rationale": "Начинающий, K8s только учебный, гибрид, много пробелов"}
+{"pair_id": "2b433478dbbb", "label": 1, "rationale": "Senior SRE, ожидания 250k вне вилки"}
+{"pair_id": "cee04c9c4f03", "label": 1, "rationale": "Senior в Казани, но ожидания 270k вне вилки"}
+{"pair_id": "afede21c3b93", "label": 1, "rationale": "Системный инженер middle, нет Terraform, облака, ожидания 190k"}
+{"pair_id": "a0f3efd0a47e", "label": 0, "rationale": "Middle, только удалёнка, ожидания 230k"}
+{"pair_id": "5ee481925924", "label": 1, "rationale": "Middle, ожидания 190k выше вилки, нет Terraform"}
+{"pair_id": "b31bb307223a", "label": 0, "rationale": "Middle с низким тестом, ожидания 240k"}
+{"pair_id": "51f422c2bd09", "label": 0, "rationale": "Middle, 250k, гибрид, слабый тест"}
+{"pair_id": "2e539afe0a9a", "label": 0, "rationale": "Middle, только удалёнка, 210k"}
+{"pair_id": "1b26743f08f1", "label": 1, "rationale": "Начинающий с Terraform и K8s, но только удалёнка"}
+{"pair_id": "0a94edb2595b", "label": 1, "rationale": "Data Engineer-лид, нет A/B, ожидания 300k"}
+{"pair_id": "42679bfd5511", "label": 2, "rationale": "A/B, ClickHouse, ML, но слабый тест и ожидания на границе вилки"}
+{"pair_id": "50d91b898a12", "label": 2, "rationale": "Сильный DS, модели оттока; нет A/B и SQL, формат без офиса"}
+{"pair_id": "a6f7457e6684", "label": 2, "rationale": "Продуктовый DS: A/B, метрики, ML; нет ClickHouse, тест junior"}
+{"pair_id": "266669698b20", "label": 1, "rationale": "ML-скоринг, нет A/B и метрик, уровень junior"}
+{"pair_id": "b4e475e3922f", "label": 0, "rationale": "Senior Data Engineer, 400k"}
+{"pair_id": "5b264de865ba", "label": 0, "rationale": "Lead ML-платформы, 390k, другой профиль"}
+{"pair_id": "abe116479c2b", "label": 1, "rationale": "Junior аналитик: A/B, ClickHouse, но уровень ниже"}
+{"pair_id": "8d5193378b69", "label": 1, "rationale": "Lead DS, стек подходит, но ожидания 330k"}
+{"pair_id": "71b58151cd3e", "label": 0, "rationale": "Senior Data Engineer, 350k"}
+{"pair_id": "14e720f6e6aa", "label": 1, "rationale": "ML есть, нет A/B, ClickHouse, продуктовых метрик"}
+{"pair_id": "7acadd14fb52", "label": 1, "rationale": "Очень слабый тест, нет ML, офис в СПб"}
+{"pair_id": "21523733a203", "label": 0, "rationale": "Senior, 340k, удалёнка, мало стека"}
+{"pair_id": "a2721399bd3c", "label": 0, "rationale": "Lead аналитик, 330k, нет ML"}
+{"pair_id": "c171ff721e9d", "label": 0, "rationale": "Backend-разработчик, другая специализация"}
+{"pair_id": "2b5cc71c658e", "label": 2, "rationale": "Middle: A/B, ML, статистика; нет ClickHouse, переезд из Краснодара"}
+{"pair_id": "ac4b415ad2b2", "label": 1, "rationale": "ML в агро, нет A/B, ClickHouse, продуктовых метрик"}
+{"pair_id": "735dd08dc393", "label": 3, "rationale": "Middle: ClickHouse, A/B, метрики, модели оттока; вилка и формат подходят"}
+{"pair_id": "24cb59eb02a2", "label": 0, "rationale": "Ожидания 360k, нет A/B и ClickHouse"}
+{"pair_id": "e5799c445bf1", "label": 0, "rationale": "Senior NLP, другой профиль, 350k"}
+{"pair_id": "ee55325b55ac", "label": 1, "rationale": "Junior с ClickHouse и ML, но уровень ниже, нет A/B"}
+{"pair_id": "49196dc4d76d", "label": 2, "rationale": "Middle продуктовый: A/B, метрики, Matplotlib; нет ClickHouse, слабее ML"}
+{"pair_id": "49dbc9514869", "label": 1, "rationale": "Сильный продуктовый профиль, но ожидания 350k"}
+{"pair_id": "40bc2551533b", "label": 0, "rationale": "Lead DS, 430k, без офиса"}
+{"pair_id": "3a26bc54ad50", "label": 2, "rationale": "Модели оттока, ClickHouse, статистика; нет A/B, без офиса"}
+{"pair_id": "b619ff93c744", "label": 2, "rationale": "ClickHouse, A/B, ML, любой формат; тест junior"}
+{"pair_id": "1537ae3e2e34", "label": 1, "rationale": "Junior, полгода опыта, гибрид"}
+{"pair_id": "58afe7690cab", "label": 0, "rationale": "Senior аналитик, 350k, нет ML"}
+{"pair_id": "3fd241f49a0f", "label": 1, "rationale": "Подходит по стеку, но только удалёнка"}
+{"pair_id": "26bdeaef9a80", "label": 2, "rationale": "Middle, модели оттока, офис Москва; нет A/B и ClickHouse"}
+{"pair_id": "bf0ce8b250ad", "label": 1, "rationale": "ML есть, но ожидания 360k, нет A/B"}
+{"pair_id": "c0acbb854e5e", "label": 2, "rationale": "Модели оттока и склонности, любой формат; нет A/B и ClickHouse"}
+{"pair_id": "83b722c78683", "label": 1, "rationale": "Стек подходит, но слабый тест и только удалёнка"}
+{"pair_id": "e2657949d0f0", "label": 0, "rationale": "MLOps-инженер, 370k, другой профиль"}
+{"pair_id": "78cc8c91003a", "label": 1, "rationale": "Junior, модель оттока, нет A/B и ClickHouse"}
+{"pair_id": "1efc23f4d6aa", "label": 0, "rationale": "Junior MLOps, удалённо, другой профиль"}
+{"pair_id": "331beafe68ee", "label": 0, "rationale": "QA-инженер, другая специализация"}
+{"pair_id": "b43caa483520", "label": 1, "rationale": "NLP, нет A/B и ClickHouse, только удалёнка"}
+{"pair_id": "74bf58a42246", "label": 1, "rationale": "Сильный A/B и ML, но ожидания 360k"}
+{"pair_id": "c3dae6e870e0", "label": 1, "rationale": "ClickHouse и метрики, но только удалёнка, нет A/B"}
+{"pair_id": "d6ef6207e267", "label": 3, "rationale": "Middle: ML, A/B, ClickHouse, SQL, Matplotlib; офис ок, вилка подходит"}
+{"pair_id": "3615bb7813b7", "label": 0, "rationale": "Computer Vision, другой профиль"}
+{"pair_id": "995d423df17b", "label": 1, "rationale": "Опытный Angular-лид, нет Vue и Jest"}
+{"pair_id": "620a770d7d04", "label": 1, "rationale": "Angular-лид, нет Vue, ожидания 520k выше вилки"}
+{"pair_id": "3392a224f73d", "label": 1, "rationale": "React-лид, нет Vue, только офис при удалённой вакансии"}
+{"pair_id": "6c2d4376ab00", "label": 2, "rationale": "Vue-лид 8 лет, но нет Jest и не готов к удалёнке"}
+{"pair_id": "46382f1fc62b", "label": 0, "rationale": "Стажёр backend, другая специализация"}
+{"pair_id": "669d027a1484", "label": 0, "rationale": "Python backend, другая специализация"}
+{"pair_id": "d20bc7ac5445", "label": 1, "rationale": "Senior React, не лид, нет Vue"}
+{"pair_id": "b12b6b546a6b", "label": 1, "rationale": "Senior Vue без опыта лида, слабый тест"}
+{"pair_id": "8295ac5e923b", "label": 1, "rationale": "React-лид, только офис в Самаре"}
+{"pair_id": "1de6059e6ecc", "label": 1, "rationale": "Angular-лид с Jest, но нет Vue, ожидания выше вилки"}
+{"pair_id": "da041acf6244", "label": 1, "rationale": "Senior React, не лид, нет Vue"}
+{"pair_id": "8ba8a9a36bb8", "label": 1, "rationale": "Senior Angular, не лид, гибрид"}
+{"pair_id": "1c7630c9214a", "label": 2, "rationale": "Vue-лид, Jest, REST, удалёнка; опыт 4,5 года меньше требуемого"}
+{"pair_id": "4a597aa670a6", "label": 1, "rationale": "React-лид, нет Vue и Jest"}
+{"pair_id": "6df442f0c571", "label": 1, "rationale": "Angular-лид с Jest, нет Vue, 530k"}
+{"pair_id": "dc816029d2d1", "label": 1, "rationale": "Next.js-лид, нет Vue, без удалёнки"}
+{"pair_id": "6ff4f6dec808", "label": 1, "rationale": "React-лид, всего 4 года, нет Vue"}
+{"pair_id": "2e2ed1883a7a", "label": 1, "rationale": "React-лид, нет Vue и Jest"}
