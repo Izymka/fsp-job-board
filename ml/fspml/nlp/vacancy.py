@@ -103,12 +103,46 @@ def _classify_heading(h: str) -> str | None:
     return None
 
 
+# Маркеры внутри строки: «Обязательно: Go, PostgreSQL. Будет плюсом: Kafka», «Kafka будет плюсом»,
+# «нужен Go-разработчик, обязательно Go, будет плюсом Kafka». «Дополнительно» здесь не маркер
+# («дополнительно оплачиваем обучение»), «не обязательно» — не требование.
+INLINE_MARKERS = re.compile(
+    r"(?P<plus>будет плюсом|будет преимуществом|желательно|приветствуется|nice to have|плюсом будет|как плюс)"
+    r"|(?P<must>(?<!не )\bобязательно|must have|требования|необходимо|мы жд[её]м|что нужно|ожидаем)",
+    re.I,
+)
+SENTENCE_END = re.compile(r"(?<=[.!?;])\s+")
+
+
+def _inline_segments(line: str, base: str) -> list[tuple[str, str]]:
+    """Разбить строку на сегменты по встроенным маркерам «обязательно / будет плюсом».
+
+    Предложение с одним маркером целиком получает его тип: так одинаково читаются
+    «Будет плюсом: Kafka» и «Опыт с Kafka будет плюсом». Если в предложении маркеры разных
+    типов, оно режется по их началу; текст до первого маркера остаётся в текущей секции.
+    """
+    out: list[tuple[str, str]] = []
+    for sent in SENTENCE_END.split(line):
+        marks = [(m.start(), m.lastgroup) for m in INLINE_MARKERS.finditer(sent)]
+        if not marks:
+            out.append((base, sent))
+        elif len({k for _, k in marks}) == 1:
+            out.append((marks[0][1], sent))
+        else:
+            out.append((base, sent[: marks[0][0]]))
+            for (pos, kind), nxt in zip(marks, [*(p for p, _ in marks[1:]), len(sent)]):
+                out.append((kind, sent[pos:nxt]))
+    return out
+
+
 def _sections(text: str) -> list[tuple[str, str]]:
     """Разбить текст на (тип секции, текст) по заголовкам.
 
     Заголовок — короткая строка («Требования:», «# Задачи», «БУДЕТ ПЛЮСОМ») или начало строки
     до двоеточия («Будет плюсом: Kubernetes, gRPC») — тогда остаток строки относится к новой секции.
+    Короткая строка с технологиями («- Знание Go обязательно») — не заголовок, а пункт списка.
     """
+    dic = get_dictionary()
     kind = "intro"
     out: list[tuple[str, str]] = []
     buf: list[str] = []
@@ -127,14 +161,24 @@ def _sections(text: str) -> list[tuple[str, str]]:
         else:
             candidate = ""
         new_kind = _classify_heading(candidate) if candidate else None
+        if new_kind and dic.extract(candidate, fuzzy=False):
+            new_kind = None
         if new_kind:
             if buf:
                 out.append((kind, "\n".join(buf)))
-            kind, buf = new_kind, ([rest] if rest else [])
+            kind, buf = new_kind, []
+            # остаток строки после «Обязательно:» может содержать и «Будет плюсом: …»
+            if rest and INLINE_MARKERS.search(rest):
+                out.extend(seg for seg in _inline_segments(rest, kind) if seg[1].strip())
+            elif rest:
+                buf = [rest]
             continue
-        # Встроенное «будет плюсом» внутри длинной строки
-        if PLUS_HEADINGS.search(line) and kind != "plus":
-            out.append(("plus", line))
+        # Встроенные «обязательно / будет плюсом» внутри строки
+        if INLINE_MARKERS.search(line):
+            if buf:
+                out.append((kind, "\n".join(buf)))
+                buf = []
+            out.extend(seg for seg in _inline_segments(line, kind) if seg[1].strip())
             continue
         buf.append(line)
     if buf:
@@ -282,8 +326,9 @@ def parse_need(text: str, title: str = "") -> ParsedNeed:
 def blueprint_from_need(need: ParsedNeed, *, base_share: float = 0.4) -> dict[str, float]:
     """Blueprint теста под вакансию.
 
-    Смесь: `base_share` — базовый blueprint специализации (сопоставимость с категорией и якоря
-    шкалы), остальное — навыки, которые требует вакансия, пропорционально их важности.
+    Смесь: `base_share` — ядро специализации (сопоставимость с категорией и якоря шкалы),
+    остальное — навыки, которые требует вакансия, пропорционально их важности. Язык вакансии
+    берётся из её текста: Java-вакансия не получает задания по Python «по умолчанию».
     """
     cat = get_catalog()
     dic = get_dictionary()
@@ -292,8 +337,7 @@ def blueprint_from_need(need: ParsedNeed, *, base_share: float = 0.4) -> dict[st
         assess = dic.techs[name].assess
         for s in assess:
             from_vacancy[s] = from_vacancy.get(s, 0.0) + imp / len(assess)
-    langs = [n.lower() for n in need.skills]
-    base = cat.blueprint(need.specialization, langs) if need.specialization else {}
+    base = cat.blueprint(need.specialization) if need.specialization else {}
     if not from_vacancy:
         return base
     tot_v = sum(from_vacancy.values())

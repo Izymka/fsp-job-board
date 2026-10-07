@@ -16,7 +16,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import date
 
@@ -272,6 +272,21 @@ def eligible(c: CandidateFeatures, need: Need, catalog: Catalog) -> tuple[bool, 
     return False, False
 
 
+def specificity(candidates: Sequence[CandidateFeatures], techs: Iterable[str]) -> dict[str, float]:
+    """Специфичность требования внутри пула: √(−log доли кандидатов, заявивших технологию),
+    со сглаживанием Лапласа — как IDF в информационном поиске.
+
+    Git, Docker, REST есть почти у всех в категории (вес ≈ 0.8): они не отличают кандидатов.
+    Go, PHP, Vue, Appium определяют стек вакансии (вес 1.3–1.6). Без этого Java-разработчик
+    с Docker, Git и PostgreSQL закрывает Go-вакансию почти так же, как Go-разработчик.
+    Корень смягчает перевес редких, но второстепенных меток («Интеграции»); выигрыш на
+    бенчмарках устойчив к форме веса (ln, √, с потолком) — см. docs/bench.md.
+    """
+    pool = list(candidates)
+    n = len(pool)
+    return {t: math.sqrt(-math.log((sum(t in c.claimed for c in pool) + 1) / (n + 2))) for t in techs}
+
+
 def score_candidate(
     c: CandidateFeatures,
     need: Need,
@@ -281,21 +296,31 @@ def score_candidate(
     adjacent: bool = False,
     catalog: Catalog | None = None,
     percentile: float | None = None,
+    spec_weights: Mapping[str, float] | None = None,
+    gates: WeightsV2 | None = None,
 ) -> Scored:
+    """spec_weights — специфичность требований (`specificity`), None — все равны (v1).
+    gates — «ворота» v5: обязательные навыки, формат и вилка как множители; None — без ворот (v1)."""
     catalog = catalog or get_catalog()
     ps, ps_parts = profile_strength(c, today, w, catalog)
+    spec_weights = spec_weights or {}
 
     # need_fit: покрытие требуемых технологий с учётом подтверждённости + семантика текста
     reasons: list[Reason] = []
     missing: list[str] = []
     confirmed_names, claimed_names = [], []
+    must_num = must_den = 0.0
     if need.skills:
         num = den = 0.0
         need_cut = catalog.grade(need.grade).cut
         for tech, imp in need.skills.items():
             ev, src = skill_evidence(c, tech, w, cut=need_cut)
-            num += imp * ev
-            den += imp
+            wt = imp * spec_weights.get(tech, 1.0)
+            num += wt * ev
+            den += wt
+            if imp >= DEFAULT_WEIGHTS_V2.must_importance:
+                must_num += wt * ev
+                must_den += wt
             if ev >= 0.85 and src in ("test", "tasks"):
                 confirmed_names.append(tech)
             elif tech in c.claimed:
@@ -303,8 +328,11 @@ def score_candidate(
             if ev < 0.5 and imp >= 0.6:
                 missing.append(tech)
         coverage = num / den if den else 0.0
+        # самые специфичные (определяющие стек) пробелы — первыми
+        missing.sort(key=lambda t: -spec_weights.get(t, 1.0))
     else:
         coverage = 0.5
+    must_cov = must_num / must_den if must_den else coverage
     semantic = None
     if need.embedding is not None and c.embedding is not None:
         cos = float(np.dot(need.embedding, c.embedding))
@@ -326,6 +354,18 @@ def score_candidate(
         "freshness": w.freshness * fresh,
     }
     mult = w.adjacent_grade_multiplier if adjacent else 1.0
+    gate = {}
+    if gates is not None:
+        # Решение рекрутера устроено как «И»: один жёсткий провал (нет обязательного языка,
+        # офис против удалёнки, ожидания сильно выше вилки) не перекрывается достоинствами.
+        gate = {
+            "must": 1.0 if must_cov >= gates.gate_must_threshold else 0.5 + must_cov,
+            "format": 1.0
+            if fmt >= 0.8
+            else (gates.gate_format_soft if fmt >= 0.5 else gates.gate_format_hard),
+            "salary": _gate_salary(c, need, gates),
+        }
+        mult *= math.prod(gate.values())
     total = sum(raw.values()) * mult
     components = {k: v * mult for k, v in raw.items()}
 
@@ -395,8 +435,12 @@ def score_candidate(
         )
     if adjacent:
         reasons.append(Reason("neutral", f"Соседняя категория: {catalog.grade(c.grade).name}"))
-    if missing:
+    if missing and gate.get("must", 1.0) < 1.0:
+        reasons.append(Reason("negative", "Не закрыто из обязательного: " + ", ".join(missing[:4])))
+    elif missing:
         reasons.append(Reason("negative", "Не подтверждено: " + ", ".join(missing[:4])))
+    if gate.get("salary", 1.0) < 1.0:
+        reasons.append(Reason("negative", "Ожидания по ЗП выше вилки более чем на 15%"))
 
     return Scored(
         candidate_id=c.id,
@@ -406,9 +450,11 @@ def score_candidate(
         details={
             "need_fit": need_fit,
             "coverage": coverage,
+            "must_coverage": must_cov,
             "semantic": semantic if semantic is not None else -1,
             "conditions": conditions,
             "freshness": fresh,
+            **{f"gate_{k}": v for k, v in gate.items()},
             **ps_parts,
         },
         reasons=reasons,
@@ -578,15 +624,18 @@ def rank(
     *,
     w: Weights = DEFAULT_WEIGHTS,
     catalog: Catalog | None = None,
-    version: int = 1,
+    version: int = 5,
     w2: WeightsV2 = DEFAULT_WEIGHTS_V2,
 ) -> list[Scored]:
+    """version: 5 — формула v1 + специфичность требований + «ворота» (по умолчанию);
+    1 — исходная аддитивная формула; 2 — граф навыков и «ворота» (экспериментальная)."""
     catalog = catalog or get_catalog()
     pool = []
     for c in candidates:
         ok, adj = eligible(c, need, catalog)
         if ok:
             pool.append((c, adj))
+    spec_w = specificity([c for c, _ in pool], need.skills) if version == 5 else None
     # перцентиль θ внутри собственной категории кандидата (для объяснения)
     by_cat: dict[tuple, list[float]] = {}
     for c, _ in pool:
@@ -603,6 +652,20 @@ def rank(
         if version == 2:
             out.append(
                 score_candidate_v2(c, need, today, w=w2, adjacent=adj, catalog=catalog, percentile=pct)
+            )
+        elif version == 5:
+            out.append(
+                score_candidate(
+                    c,
+                    need,
+                    today,
+                    w=w,
+                    adjacent=adj,
+                    catalog=catalog,
+                    percentile=pct,
+                    spec_weights=spec_w,
+                    gates=w2,
+                )
             )
         else:
             out.append(score_candidate(c, need, today, w=w, adjacent=adj, catalog=catalog, percentile=pct))

@@ -89,3 +89,21 @@ def test_ltr_monotone_in_test_and_salary():
     by_gap = booster.predict(ltr.matrix([{**base, "salary_gap": g} for g in grid]))
     assert all(np.diff(by_test) >= -1e-9)
     assert all(np.diff(by_gap) <= 1e-9)
+
+
+def test_hybrid_fuse_and_fallback():
+    from fspml.matching.hybrid import fuse, rank_hybrid
+
+    # голос механики вдвое весомее: её лидер остаётся первым при несогласии на одну позицию
+    assert fuse(["a", "b", "c"], ["b", "a", "c"])[0] == "a"
+    assert fuse(["a", "b", "c"], ["c", "b", "a"])[-1] in {"c", "a"}
+
+    class Fake:
+        def predict(self, pairs, **kw):
+            return [len(t) for _, t in pairs]  # «семантика»: длиннее карточка — выше
+
+    cands = [cand(f"c{i}", work_formats={"office"}) for i in range(5)]
+    n = need(text="Python backend")
+    out = rank_hybrid(cands, n, TODAY, card_text=lambda f: "x" * int(f.id[1:]), reranker=Fake())
+    assert sorted(s.candidate_id for s in out) == [f"c{i}" for i in range(5)]
+    assert all("semantic_place" in s.details for s in out)

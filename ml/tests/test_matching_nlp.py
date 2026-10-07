@@ -192,3 +192,25 @@ def test_resume_text_two_line_period_and_non_it_experience():
     assert [j.it for j in r.jobs] == [True, False]
     assert r.experience_years > r.it_experience_years >= 3
     assert r.grade_hint == "middle" and "всего" in r.grade_reason
+
+
+def test_need_must_and_plus_in_one_line():
+    """Однострочное описание: «Обязательно: …. Будет плюсом: …» — обе секции распознаются."""
+    n = parse_need(
+        "Ищем backend-разработчика. Обязательно: Python, Django, PostgreSQL. Будет плюсом: Kafka.",
+        "Backend-разработчик",
+    )
+    assert {"Python", "Django", "PostgreSQL"} <= set(n.must) and n.plus == ["Kafka"]
+    n = parse_need("Нужен Go-разработчик, обязательно Go и PostgreSQL, будет плюсом Kafka")
+    assert n.must == ["Go", "PostgreSQL"] and n.plus == ["Kafka"]
+
+
+def test_short_bullet_with_marker_is_content_not_heading():
+    """«- Знание Redis обязательно» короче 40 символов, но это пункт списка, а не заголовок."""
+    n = parse_need(
+        "Требования:\n- Go, PostgreSQL\n- Знание Redis обязательно\n"
+        "- опыт с Kafka будет плюсом\n- Kubernetes не обязательно, но желательно",
+        "Backend-разработчик",
+    )
+    assert {"Go", "PostgreSQL", "Redis"} <= set(n.must)
+    assert {"Kafka", "Kubernetes"} <= set(n.plus)

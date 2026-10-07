@@ -21,6 +21,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from ...core.config import get_settings
 from ...core.db import aware, utcnow
 from ..candidates.models import CandidateProfile
 from ..candidates.service import anonymous_alias, category_label, embeddings_for, features
@@ -246,8 +247,28 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
     if company.industry and not need.industry:
         need.industry = company.industry
     today = utcnow().date()
-    scored = rank(feats, need, today)
     by_id = {str(p.user_id): p for p in profiles}
+    ranker = get_settings().fsp_ranker
+    version = 1 if ranker in ("v1", "v4") else 5
+    if ranker in ("hybrid", "v4"):
+        from fspml.bench.dossier import render_candidate
+        from fspml.matching.hybrid import rank_hybrid
+
+        pct_ = _percentiles(profiles)
+        scored = rank_hybrid(
+            feats,
+            need,
+            today,
+            card_text=lambda f: render_candidate(
+                f,
+                today,
+                alias=anonymous_alias(by_id[f.id]),
+                percentile=pct_.get(by_id[f.id].user_id),
+            ),
+            version=version,
+        )
+    else:
+        scored = rank(feats, need, today, version=version)
     base_total = len(scored)
     filtered = apply_filters(scored, by_id, s.filters or {})
     pct = _percentiles(profiles)
