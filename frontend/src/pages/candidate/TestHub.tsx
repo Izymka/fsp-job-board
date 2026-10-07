@@ -18,7 +18,8 @@ const ATTEMPT_STATUS = {
 const KIND = { initial: 'первичный', upgrade: 'повышение', downgrade: 'уровень ниже', refresh: 'обновление результата' } as Record<string, string>
 
 export default function TestHub() {
-  const { data: cat } = useCatalog()
+  const catalog = useCatalog()
+  const cat = catalog.data
   const L = lookup(cat)
   const qc = useQueryClient()
   const nav = useNavigate()
@@ -32,7 +33,10 @@ export default function TestHub() {
       nav(`/candidate/test/${a.id}`)
     },
   })
-  if (!elig.data || !prof.data || !cat) return <PageLoader />
+  if (!elig.data || !prof.data || !cat) {
+    const failed = [elig, prof, catalog].filter((q) => q.isError)
+    return <PageLoader error={failed[0]?.error} onRetry={() => failed.forEach((q) => q.refetch())} />
+  }
   const e = elig.data
   const p = prof.data
   if (!p.survey_completed_at)

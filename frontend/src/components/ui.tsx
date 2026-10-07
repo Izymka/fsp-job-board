@@ -6,7 +6,19 @@ export function Spinner({ className }: { className?: string }) {
   return <Loader2 className={clsx('animate-spin text-brand-500', className ?? 'h-5 w-5')} aria-label="Загрузка" />
 }
 
-export function PageLoader() {
+// error — первая ошибка загрузки данных страницы: вместо бесконечного спиннера сообщение и повтор
+export function PageLoader({ error, onRetry }: { error?: unknown; onRetry?: () => void } = {}) {
+  if (error)
+    return (
+      <div className="mx-auto flex min-h-[40vh] max-w-md flex-col items-center justify-center gap-3">
+        <ErrorBox error={error} />
+        {onRetry && (
+          <button className="btn-secondary" onClick={onRetry}>
+            Повторить
+          </button>
+        )}
+      </div>
+    )
   return (
     <div className="flex min-h-[40vh] items-center justify-center">
       <Spinner className="h-7 w-7" />

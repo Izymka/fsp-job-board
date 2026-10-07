@@ -19,13 +19,16 @@ const FSP_MSG: Record<string, { text: string; tone: 'ok' | 'warn' }> = {
 }
 
 export default function CandidateSettings() {
-  const { data: cat } = useCatalog()
+  const catalog = useCatalog()
+  const cat = catalog.data
   const { config } = useAuth()
-  const { data: me } = useMe()
+  const meQ = useMe()
+  const me = meQ.data
   const qc = useQueryClient()
   const [params] = useSearchParams()
   const fspMsg = FSP_MSG[params.get('fsp') ?? '']
-  const { data: p } = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
+  const profile = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
+  const p = profile.data
   const [showFsp, setShowFsp] = useState(true)
   const [excluded, setExcluded] = useState<string[]>([])
   const [status, setStatus] = useState('active')
@@ -57,7 +60,10 @@ export default function CandidateSettings() {
       qc.invalidateQueries({ queryKey: ['profile'] })
     },
   })
-  if (!p || !cat || !me) return <PageLoader />
+  if (!p || !cat || !me) {
+    const failed = [profile, catalog, meQ].filter((q) => q.isError)
+    return <PageLoader error={failed[0]?.error} onRetry={() => failed.forEach((q) => q.refetch())} />
+  }
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader eyebrow="Настройки" title="Приватность, ФСП ID и согласия" />
