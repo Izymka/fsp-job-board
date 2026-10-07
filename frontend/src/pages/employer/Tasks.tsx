@@ -22,7 +22,7 @@ function NewTask({ onClose }: { onClose: () => void }) {
       onClose()
     },
   })
-  const bp = Object.keys(cat?.specializations.find((s) => s.id === spec)?.blueprint ?? {})
+  const bp = cat?.specializations.find((s) => s.id === spec)?.skills ?? []
   return (
     <Modal open onClose={onClose} title="Новое регулярное задание">
       <form

@@ -25,7 +25,8 @@ export interface AuthConfig {
 
 export interface Catalog {
   grades: { id: GradeId; name: string; title: string; experience: string; order: number }[]
-  specializations: { id: string; name: string; title: string; description: string; blueprint: Record<string, number>; stack_languages: string[] }[]
+  // blueprint — состав теста без заявленного стека (ядро); core — фундамент, modules — навыки по стеку
+  specializations: { id: string; name: string; title: string; description: string; blueprint: Record<string, number>; core: string[]; modules: string[]; skills: string[] }[]
   assessment_skills: { id: string; title: string; anchor?: boolean; families: number }[]
   industries: { id: string; title: string }[]
   work_formats: { id: string; title: string }[]
@@ -204,6 +205,16 @@ export interface Eligibility {
   in_progress: string | null
   options: { grade: GradeId; allowed: boolean; kind: string; reason: string | null; available_at: string | null }[]
   rules: string[]
+  blueprint: TestBlueprint | null
+}
+
+/** Персональный состав теста: ядро специализации + модули по заявленному стеку */
+export interface TestBlueprint {
+  weights: Record<string, number>
+  core: string[]
+  modules: { skill: string; techs: string[] }[]
+  untested: string[]
+  explanation: string[]
 }
 
 export interface Reason {

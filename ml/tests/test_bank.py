@@ -15,13 +15,14 @@ SEEDS = range(30)
 
 
 def test_bank_covers_all_blueprint_skills():
+    """Ядро и модули каждой специализации измеримы: на каждый навык — не меньше 4 семейств
+    (покрытие требует 2 задания на навык, ещё 2 — запас на повтор и вывод семейств из ротации)."""
     cat = get_catalog()
-    skills = {f.skill for f in FAMILIES}
+    per_skill = {s: sum(f.skill == s for f in FAMILIES) for s in {f.skill for f in FAMILIES}}
     for spec in cat.specializations.values():
-        for lang in spec.stack_languages or (None,):
-            bp = cat.blueprint(spec.id, [lang] if lang else None)
-            missing = set(bp) - skills
-            assert not missing, f"{spec.id}: нет семейств для навыков {missing}"
+        thin = {s: per_skill.get(s, 0) for s in spec.skills if per_skill.get(s, 0) < 4}
+        assert not thin, f"{spec.id}: мало семейств для навыков {thin}"
+        assert abs(sum(spec.core.values()) - 1) < 1e-9, f"{spec.id}: доли ядра не дают 1"
 
 
 def test_every_skill_spans_levels():

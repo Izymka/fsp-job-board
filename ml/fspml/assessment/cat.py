@@ -6,10 +6,15 @@
 * задания подбираются по максимуму информации Фишера в точке порога, решение по которому
   сейчас наиболее неопределённо (заявленный грейд или следующий — для предложения повышения);
 * первые `warmup` заданий нацелены на порог заявленного грейда (самооценка — хорошая стартовая точка);
-* состав теста балансируется по blueprint (доли навыков специализации / вакансии);
+* состав теста балансируется по blueprint (ядро специализации + модули стека кандидата, см.
+  `blueprint.py`, или навыки вакансии);
+* каждый навык состава получает не меньше `cover_min_items` заданий: иначе его подоценка — «нет
+  данных», а подтверждённые тестом навыки — главный сигнал подбора; когда до `min_items` остаётся
+  столько же заданий, сколько не хватает до покрытия, выбор ограничивается непокрытыми навыками;
 * экспозиция контролируется выбором случайного из top-k по информации (randomesque) и потолком
   частоты показа семейства;
-* остановка — когда P(θ > порог) ∉ (1 − conf, conf) и задано не меньше `min_items`, либо по `max_items`.
+* остановка — когда P(θ > порог) ∉ (1 − conf, conf), задано не меньше `min_items` и навыки покрыты,
+  либо по `max_items`.
 
 Все функции чистые: состояние попытки — это список ответов, его легко хранить в БД.
 """
@@ -46,6 +51,8 @@ class CatConfig:
     skill_prior_sd: float = 0.6
     skill_min_items: int = 2
     skill_confirm_probability: float = 0.7
+    # покрытие: минимум заданий на каждый навык состава до остановки (0 — без требования)
+    cover_min_items: int = 2
     # накопление ответов предыдущих попыток онбординга (та же шкала θ)
     min_items_with_carry: int = 6
     max_items_with_carry: int = 20
@@ -115,6 +122,27 @@ def _pairs(responses: Iterable[Response]) -> list[tuple[ItemParams, bool]]:
     return [(r.params, r.correct) for r in responses]
 
 
+def coverage_gap(
+    responses: Sequence[Response], plan: CatPlan, bank: Sequence[Family] | None = None
+) -> dict[str, int]:
+    """Сколько заданий не хватает каждому навыку состава до `cover_min_items`.
+
+    Если передан банк, требование не превышает число семейств навыка в нём (выведенные из ротации
+    семейства не должны растягивать тест до `max_items`).
+    """
+    need = plan.config.cover_min_items
+    if need <= 0:
+        return {}
+    in_bank = Counter(f.skill for f in bank) if bank is not None else None
+    counts = Counter(r.skill for r in [*plan.carry, *responses])
+    gap = {}
+    for s in plan.blueprint:
+        req = need if in_bank is None else min(need, in_bank.get(s, 0))
+        if counts.get(s, 0) < req:
+            gap[s] = req - counts.get(s, 0)
+    return gap
+
+
 def estimate(responses: Sequence[Response], config: CatConfig = DEFAULT_CONFIG, extra_loglik=None):
     return posterior(_pairs(responses), config.prior_mean, config.prior_sd, extra_loglik)
 
@@ -145,9 +173,13 @@ def select_next(
         return None
 
     # 1. Балансировка содержания: навык с наибольшим дефицитом относительно blueprint.
+    #    Ближе к минимальной длине — только навыки, которым не хватает заданий до покрытия.
     n = len(responses)
     counts = Counter(r.skill for r in responses)
     available_skills = {f.skill for f in eligible}
+    gap = coverage_gap(responses, plan, bank)
+    if gap and n + sum(gap.values()) >= plan.limits()[0]:
+        available_skills = {s for s in available_skills if s in gap} or available_skills
     deficits = {s: plan.blueprint[s] * (n + 1) - counts.get(s, 0) for s in available_skills}
     best = max(deficits.values())
     skill = rng.choice(sorted(s for s, d in deficits.items() if d >= best - 1e-9))
@@ -173,14 +205,20 @@ def select_next(
     return rng.choice(pool[: cfg.randomesque])
 
 
-def should_stop(responses: Sequence[Response], plan: CatPlan, *, catalog: Catalog | None = None) -> bool:
+def should_stop(
+    responses: Sequence[Response],
+    plan: CatPlan,
+    *,
+    catalog: Catalog | None = None,
+    bank: Sequence[Family] | None = None,
+) -> bool:
     catalog = catalog or get_catalog()
     cfg = plan.config
     n = len(responses)
     lo, hi = plan.limits()
     if n >= hi:
         return True
-    if n < lo:
+    if n < lo or coverage_gap(responses, plan, bank):
         return False
     claimed_cut, _ = plan.cuts(catalog)
     p = estimate([*plan.carry, *responses], cfg).prob_above(claimed_cut)

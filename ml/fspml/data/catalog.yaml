@@ -10,44 +10,63 @@ grades:
   - {id: senior, name: Senior, title: "Старший специалист", experience: "4+ лет", cut: 0.75}
   - {id: lead, name: Lead, title: "Ведущий / техлид", experience: "6+ лет, лидерство", cut: 1.6}
 
+# Состав теста (blueprint) = ядро специализации + модули заявленного стека.
+#   core    — фундамент специализации: проверяется у всех кандидатов категории, поэтому грейды
+#             сопоставимы, а языконезависимые навыки служат якорями шкалы. Отбор — навыки, которые
+#             есть почти у всех архетипов стека специализации (data/stack_archetypes.yaml), плюс
+#             общепринятый фундамент (алгоритмы для разработчиков, статистика для DS).
+#   modules — навыки, которые зависят от стека: входят в тест, только если их подтверждают
+#             заявленные технологии (Django → python, React → react). Порядок — приоритет при
+#             равенстве. Язык, по которому нет заданий (Java, Go, C#), ничем не подменяется:
+#             тест опирается на ядро, а технология остаётся «заявленной».
+blueprint_rules:
+  max_modules: 3          # больше модулей — меньше заданий на навык и шумнее подоценки
+  module_share: 0.2       # доля теста на один модуль …
+  module_share_max: 0.4   # … но не больше этой доли на все модули: ядро — не меньше 60%
+
 specializations:
   - id: backend
     name: Backend
     title: "Backend-разработка"
     description: "Серверная логика, API, базы данных, интеграции, производительность и надёжность сервисов"
-    # Языковой навык выбирается по стеку кандидата (первый совпавший из stack_languages)
-    stack_languages: [python, javascript]
-    blueprint: {algorithms: 0.15, sql: 0.2, http: 0.15, architecture: 0.1, git: 0.05, linux: 0.05, docker: 0.05, security: 0.05, $language: 0.2}
+    core: {algorithms: 0.25, sql: 0.3, http: 0.25, architecture: 0.2}
+    modules: [python, javascript, typescript, docker, linux, security, kubernetes, cicd, git]
   - id: frontend
     name: Frontend
     title: "Frontend-разработка"
     description: "Веб-интерфейсы, браузер, JavaScript/TypeScript, React, вёрстка, взаимодействие с API"
-    blueprint: {javascript: 0.3, html_css: 0.15, react: 0.15, typescript: 0.1, http: 0.15, algorithms: 0.1, git: 0.05}
+    core: {javascript: 0.4, html_css: 0.3, http: 0.15, algorithms: 0.15}
+    modules: [react, typescript, git]
   - id: mobile
     name: Mobile
     title: "Мобильная разработка"
     description: "Приложения для Android и iOS: жизненный цикл, UI, хранение данных, сеть, публикация"
-    blueprint: {mobile: 0.4, algorithms: 0.2, http: 0.2, git: 0.1, architecture: 0.1}
+    core: {mobile: 0.5, http: 0.2, algorithms: 0.15, architecture: 0.15}
+    modules: [sql, react, javascript, typescript, git]
   - id: data_science
     name: Data Science
     title: "Data Science / ML"
     description: "Анализ данных, статистика, машинное обучение, подготовка признаков, оценка моделей"
-    blueprint: {python: 0.15, pandas: 0.15, statistics: 0.25, ml: 0.3, sql: 0.15}
+    core: {ml: 0.4, statistics: 0.3, python: 0.3}
+    modules: [pandas, sql, metrics]
   - id: qa
     name: QA
     title: "QA / тестирование"
     description: "Тест-дизайн, ручное и автоматизированное тестирование, API и баг-репорты"
-    blueprint: {testing: 0.45, http: 0.2, sql: 0.15, python: 0.1, git: 0.1}
+    core: {testing: 0.7, http: 0.3}
+    modules: [sql, python, javascript, mobile, cicd, git]
   - id: devops
     name: DevOps
     title: "DevOps / SRE"
     description: "Инфраструктура, контейнеры, CI/CD, наблюдаемость, сети и безопасность эксплуатации"
-    blueprint: {linux: 0.25, docker: 0.2, kubernetes: 0.15, cicd: 0.15, http: 0.1, git: 0.05, security: 0.1}
+    core: {linux: 0.35, docker: 0.25, cicd: 0.2, http: 0.2}
+    modules: [kubernetes, security, python, git, sql]
   - id: analyst
     name: Analyst
     title: "Системный / бизнес-аналитик"
     description: "Требования, моделирование процессов, интеграции, SQL и продуктовые метрики"
-    blueprint: {requirements: 0.35, sql: 0.25, http: 0.15, metrics: 0.25}
+    core: {requirements: 0.5, sql: 0.5}
+    modules: [metrics, http, statistics]
 
 # Навыки, которые проверяет тест (единица подоценки). anchor — языконезависимые якоря для связывания шкал.
 assessment_skills:

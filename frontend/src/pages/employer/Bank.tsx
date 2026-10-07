@@ -73,7 +73,7 @@ export default function EmployerBank() {
               <div>
                 <div className="label">Подтверждено тестом</div>
                 <div className="flex flex-wrap gap-1.5">
-                  {(spec ? Object.keys(cat?.specializations.find((s) => s.id === spec)?.blueprint ?? {}) : ['python', 'sql', 'javascript', 'react', 'ml', 'testing']).map((k) => (
+                  {(spec ? cat?.specializations.find((s) => s.id === spec)?.skills ?? [] : ['python', 'sql', 'javascript', 'react', 'ml', 'testing']).map((k) => (
                     <button key={k} onClick={() => toggle('confirmed_skill', confirmed, k)} className={clsx('chip border px-2.5 py-1', confirmed.includes(k) ? 'border-ok-600 bg-ok-50 text-ok-600' : 'border-line text-ink-soft')}>
                       {cat?.assessment_skills.find((s) => s.id === k)?.title ?? k}
                     </button>

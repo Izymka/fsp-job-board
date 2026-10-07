@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+from collections.abc import Container, Mapping
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -27,8 +29,12 @@ class Specialization:
     name: str
     title: str
     description: str
-    blueprint: dict[str, float]
-    stack_languages: tuple[str, ...] = ()
+    core: dict[str, float]  # фундамент: проверяется у всех кандидатов категории
+    modules: tuple[str, ...] = ()  # навыки стека: входят в тест, только если заявлены
+
+    @property
+    def skills(self) -> tuple[str, ...]:
+        return (*self.core, *self.modules)
 
 
 @dataclass(frozen=True)
@@ -71,21 +77,37 @@ class Catalog:
         return best
 
     # --- blueprint ---
-    def blueprint(self, spec_id: str, stack: list[str] | None = None) -> dict[str, float]:
-        """Доли навыков в тесте специализации; `$language` раскрывается по стеку кандидата."""
+    def blueprint(
+        self,
+        spec_id: str,
+        evidence: Mapping[str, float] | None = None,
+        available: Container[str] | None = None,
+    ) -> dict[str, float]:
+        """Доли навыков в тесте: ядро специализации + модули стека.
+
+        evidence — навык теста → сколько заявленных технологий его подтверждают (Django и FastAPI
+        дают python = 2). В модули попадают до `max_modules` навыков из `modules` специализации
+        с наибольшей поддержкой; их доля — `module_share` на модуль, но не больше `module_share_max`,
+        внутри — пропорционально √поддержки (язык с тремя фреймворками весит больше, чем Git).
+        available — навыки, по которым в банке достаточно заданий (недоступные модули пропускаются).
+        """
         spec = self.specializations[spec_id]
-        stack_l = {s.lower() for s in (stack or [])}
-        bp: dict[str, float] = {}
-        for skill, w in spec.blueprint.items():
-            if skill == "$language":
-                lang = next((x for x in spec.stack_languages if x in stack_l), None)
-                lang = lang or (spec.stack_languages[0] if spec.stack_languages else None)
-                if lang:
-                    bp[lang] = bp.get(lang, 0.0) + w
-            else:
-                bp[skill] = bp.get(skill, 0.0) + w
-        total = sum(bp.values())
-        return {k: v / total for k, v in bp.items()}
+        rules = self.raw.get("blueprint_rules", {})
+        ev = {
+            s: float(v)
+            for s, v in (evidence or {}).items()
+            if v > 0 and s in spec.modules and s not in spec.core and (available is None or s in available)
+        }
+        chosen = sorted(ev, key=lambda s: (-ev[s], spec.modules.index(s)))[: int(rules.get("max_modules", 3))]
+        share = min(
+            float(rules.get("module_share_max", 0.4)), float(rules.get("module_share", 0.2)) * len(chosen)
+        )
+        core_total = sum(spec.core.values())
+        bp = {k: (1 - share) * v / core_total for k, v in spec.core.items()}
+        support = {s: math.sqrt(ev[s]) for s in chosen}
+        for s in chosen:
+            bp[s] = share * support[s] / sum(support.values())
+        return bp
 
     def fsp_weight(self, kind: str, item_id: str) -> float:
         for x in self.fsp[kind]:
@@ -113,8 +135,8 @@ def get_catalog() -> Catalog:
             name=s["name"],
             title=s["title"],
             description=s["description"],
-            blueprint=dict(s["blueprint"]),
-            stack_languages=tuple(s.get("stack_languages", [])),
+            core=dict(s["core"]),
+            modules=tuple(s.get("modules", [])),
         )
         for s in raw["specializations"]
     }

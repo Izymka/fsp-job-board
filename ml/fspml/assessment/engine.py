@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import random
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
 
 from ..catalog import Catalog, get_catalog
 from .bank import REGISTRY
+from .blueprint import TestBlueprint, personal_blueprint
 from .cat import DEFAULT_CONFIG, CatConfig, CatPlan, CatResult, Response, decide, select_next, should_stop
 from .irt import ItemParams
 from .items import Family, ItemInstance, instance_seed
@@ -47,11 +49,23 @@ class AssessmentEngine:
             self.bank[fid] = fam
 
     # --- планы ---
+    def measurable_skills(self) -> set[str]:
+        """Навыки, по которым в активном банке хватает семейств для подоценки."""
+        counts = Counter(f.skill for f in self.bank.values())
+        return {s for s, n in counts.items() if n >= self.config.skill_min_items}
+
+    def blueprint_for(self, spec_id: str, stack: Sequence[str] | None = None) -> TestBlueprint:
+        """Состав теста кандидата: ядро специализации + модули по заявленному стеку (с объяснением)."""
+        return personal_blueprint(
+            spec_id, stack or (), available=self.measurable_skills(), catalog=self.catalog
+        )
+
     def plan_for_specialization(
         self, spec_id: str, grade: str, stack: Sequence[str] | None = None, kind: str = "initial"
     ) -> CatPlan:
+        """stack — технологии из профиля кандидата (канонические имена или id навыков теста)."""
         return CatPlan(
-            blueprint=self.catalog.blueprint(spec_id, list(stack or [])),
+            blueprint=self.blueprint_for(spec_id, stack).weights,
             claimed_grade=grade,
             config=self.config,
             kind=kind,
@@ -77,7 +91,7 @@ class AssessmentEngine:
         *,
         exposure: dict[str, float] | None = None,
     ) -> IssuedItem | None:
-        if should_stop(responses, plan, catalog=self.catalog):
+        if should_stop(responses, plan, catalog=self.catalog, bank=list(self.bank.values())):
             return None
         position = len(responses)
         seed = instance_seed(self.secret, attempt_id, position)

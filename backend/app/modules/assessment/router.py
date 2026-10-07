@@ -72,6 +72,21 @@ class EligibilityOption(BaseModel):
     available_at: datetime | None
 
 
+class BlueprintModule(BaseModel):
+    skill: str
+    techs: list[str]
+
+
+class BlueprintOut(BaseModel):
+    """Персональный состав теста: ядро специализации + модули по заявленному стеку."""
+
+    weights: dict[str, float]
+    core: list[str]
+    modules: list[BlueprintModule]
+    untested: list[str] = Field(description="Заявленные технологии, по которым в тесте нет заданий")
+    explanation: list[str]
+
+
 class EligibilityOut(BaseModel):
     specialization: str | None
     claimed_grade: str | None
@@ -81,6 +96,7 @@ class EligibilityOut(BaseModel):
     in_progress: str | None
     options: list[EligibilityOption]
     rules: list[str]
+    blueprint: BlueprintOut | None = None
 
 
 class StartIn(BaseModel):
@@ -196,6 +212,7 @@ def _own_attempt(db: Session, user: User, attempt_id: str) -> Attempt:
 
 RULES = [
     "Тест адаптивный: следующее задание подбирается по вашим ответам, у каждого кандидата — свой набор и свои варианты заданий.",
+    "Состав теста — ядро специализации (общее для всех в категории) и модули по технологиям, которые вы заявили в опросе. Технологии, которых нет в вашем стеке, в тест не попадают.",
     "Грейд по результату теста не понижается. Если заявленный уровень не подтверждён, можно сразу пройти тест на уровень ниже.",
     "Повторная попытка на тот же или более высокий уровень после неудачи — через 14 дней.",
     "Смена подтверждённого грейда — не чаще одного раза в 90 дней.",
@@ -228,6 +245,16 @@ def eligibility(user: User = Depends(CandidateUser), db: Session = Depends(get_d
         select(Attempt.id).where(Attempt.candidate_id == p.user_id, Attempt.status == "in_progress")
     )
     db.commit()
+    bp = None
+    if p.specialization:
+        tb = service.get_engine(db).blueprint_for(p.specialization, list(p.stack or []))
+        bp = BlueprintOut(
+            weights={k: round(v, 4) for k, v in tb.weights.items()},
+            core=list(tb.core),
+            modules=[BlueprintModule(skill=s, techs=list(t)) for s, t in tb.modules.items()],
+            untested=list(tb.untested),
+            explanation=tb.explanation(),
+        )
     return EligibilityOut(
         specialization=p.specialization,
         claimed_grade=p.claimed_grade,
@@ -237,6 +264,7 @@ def eligibility(user: User = Depends(CandidateUser), db: Session = Depends(get_d
         in_progress=str(inprog) if inprog else None,
         options=opts,
         rules=RULES,
+        blueprint=bp,
     )
 
 

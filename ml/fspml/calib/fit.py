@@ -20,7 +20,6 @@ from scipy.stats import spearmanr
 
 from ..assessment.bank import REGISTRY
 from ..assessment.calibration import CalibrationConfig, calibrate
-from ..assessment.irt import ItemParams
 from ..catalog import DATA_DIR
 from .respondents import CALIB_DIR
 

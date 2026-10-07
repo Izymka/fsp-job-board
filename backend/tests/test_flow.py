@@ -396,3 +396,18 @@ def test_specialization_change_resets_category(client):
     pass_test(cand)
     r = cand.put("/api/candidate/survey", json={**SURVEY, "specialization": "frontend", "stack": ["React"]})
     assert r.json()["confirmed_grade"] is None and r.json()["category"] is None
+
+
+def test_test_composition_follows_declared_stack(client):
+    """Состав теста — ядро специализации + модули по заявленному стеку; чужой язык не подставляется."""
+    java = {**SURVEY, "stack": ["Java", "Spring", "PostgreSQL", "Kafka", "Docker"]}
+    cand = make_candidate(client, "java@example.ru", survey=java)
+    bp = cand.get("/api/assessment/eligibility").json()["blueprint"]
+    assert set(bp["core"]) == {"algorithms", "sql", "http", "architecture"}
+    assert "python" not in bp["weights"] and "javascript" not in bp["weights"]
+    assert [m["skill"] for m in bp["modules"]] == ["docker"] and "Java" in bp["untested"]
+    assert abs(sum(bp["weights"].values()) - 1) < 1e-3 and bp["explanation"]
+    att = cand.post("/api/assessment/attempts", json={"grade": "middle"}).json()
+    assert all(abs(att["blueprint"][k] - v) < 1e-3 for k, v in bp["weights"].items())
+    assert set(att["blueprint"]) == set(bp["weights"])
+    assert att["item"]["skill"] in bp["weights"]

@@ -16,7 +16,6 @@ from fspml.assessment.irt import ItemParams, prob
 from fspml.assessment.items import instance_seed
 from fspml.assessment.scenario_grader import grade_answer, grade_probe
 from fspml.catalog import get_catalog
-from fspml.nlp.skills import get_dictionary
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -72,11 +71,6 @@ def exposure_rates(db: Session) -> dict[str, float]:
         rates = {fid: cnt / n_attempts for fid, cnt in rows}
     _exposure_cache = (now, rates)
     return rates
-
-
-def stack_languages(stack: list[str]) -> list[str]:
-    dic = get_dictionary()
-    return sorted({a for t in stack or [] for a in (dic.techs[t].assess if t in dic.techs else ())})
 
 
 def grade_state(db: Session, p: CandidateProfile) -> gp.GradeState:
@@ -185,7 +179,7 @@ def start_attempt(db: Session, p: CandidateProfile, grade: str) -> Attempt:
             {"available_at": elig.available_at.isoformat() if elig.available_at else None},
         )
     engine = get_engine(db)
-    plan = engine.plan_for_specialization(p.specialization, grade, stack_languages(p.stack), kind=elig.kind)
+    plan = engine.plan_for_specialization(p.specialization, grade, list(p.stack or []), kind=elig.kind)
     attempt = Attempt(
         id=uuid.uuid4(),
         candidate_id=p.user_id,

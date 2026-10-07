@@ -42,8 +42,11 @@ def _catalog() -> CatalogOut:
                 "name": s.name,
                 "title": s.title,
                 "description": s.description,
+                # состав теста без заявленного стека (только ядро); персональный — /api/assessment/eligibility
                 "blueprint": cat.blueprint(s.id),
-                "stack_languages": list(s.stack_languages),
+                "core": list(s.core),
+                "modules": list(s.modules),
+                "skills": list(s.skills),
             }
             for s in cat.specializations.values()
         ],

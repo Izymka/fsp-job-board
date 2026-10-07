@@ -38,6 +38,9 @@ export default function TestHub() {
   if (!p.survey_completed_at)
     return <EmptyState title="Сначала опрос" text="Специализация и стек определяют содержание теста." action={<Link to="/candidate/survey" className="btn-primary">Пройти опрос</Link>} />
   const spec = cat.specializations.find((s) => s.id === p.specialization)
+  const bp = e.blueprint
+  const pick = (keys: string[]) => Object.fromEntries(keys.filter((k) => bp && k in bp.weights).map((k) => [k, bp!.weights[k]]))
+  const bpMax = bp ? Math.max(...Object.values(bp.weights), 0.01) : undefined
   return (
     <div>
       <PageHeader
@@ -108,10 +111,24 @@ export default function TestHub() {
               ))}
             </ul>
           </Section>
-          {spec && (
+          {bp && (
             <Section title="Что проверяет тест">
-              <BlueprintBars blueprint={spec.blueprint} label={L.skill} />
-              <p className="hint mt-3">Доли навыков выведены из типичных вакансий специализации. Языковая часть подстраивается под ваш стек.</p>
+              <div className="mb-2 text-xs font-medium text-muted">Ядро специализации — общее для всех в категории</div>
+              <BlueprintBars blueprint={pick(bp.core)} label={L.skill} max={bpMax} />
+              {bp.modules.length > 0 && (
+                <>
+                  <div className="mt-4 mb-2 text-xs font-medium text-muted">Модули по вашему стеку</div>
+                  <BlueprintBars blueprint={pick(bp.modules.map((m) => m.skill))} label={L.skill} max={bpMax} />
+                  <p className="hint mt-2">
+                    {bp.modules.map((m) => `${L.skill(m.skill)} — ${m.techs.join(', ')}`).join('; ')}
+                  </p>
+                </>
+              )}
+              <p className="hint mt-3">
+                Технологии, которых нет в вашем стеке, в тест не попадают.
+                {bp.untested.length > 0 && ` Без отдельных заданий: ${bp.untested.join(', ')} — вместо них ничего не подставляется, в профиле они остаются заявленными.`}{' '}
+                Стек можно изменить в <Link to="/candidate/survey" className="link">опросе</Link>.
+              </p>
             </Section>
           )}
         </div>

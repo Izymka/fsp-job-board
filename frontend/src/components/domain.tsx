@@ -8,9 +8,10 @@ import { INVITE_STATUS, SALARY_FIT, SKILL_STATUS, date, lookup, pct, useCatalog 
 import type { CandidateCard, FspAchievement, Invitation, Ranked, Reason, SkillScore } from '../lib/types'
 import { Badge, ErrorBox, Field, Modal, Notice } from './ui'
 
-export function BlueprintBars({ blueprint, label }: { blueprint: Record<string, number>; label: (k: string) => string }) {
+export function BlueprintBars({ blueprint, label, max: scale }: { blueprint: Record<string, number>; label: (k: string) => string; max?: number }) {
   const rows = Object.entries(blueprint).sort((a, b) => b[1] - a[1])
-  const max = Math.max(...rows.map((r) => r[1]), 0.01)
+  // max — общий масштаб, если несколько групп полос показываются рядом
+  const max = scale ?? Math.max(...rows.map((r) => r[1]), 0.01)
   return (
     <div className="space-y-2">
       {rows.map(([k, v]) => (
