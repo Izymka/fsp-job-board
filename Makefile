@@ -1,10 +1,12 @@
-.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick seed reset dev-backend dev-registry dev-frontend
+.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick seed reset dev dev-backend dev-registry dev-frontend
 
 help:
 	@echo "make up            — весь стек в Docker (http://localhost)"
 	@echo "make test          — тесты ML-ядра и API"
 	@echo "make validate      — процедура валидации (отчёт в docs/)"
+	@echo "make dev           — реестр ФСП, API и фронтенд локально одной командой (Ctrl+C — остановить всё)"
 	@echo "make dev-backend   — API локально (AUTH_MODE=dev, SQLite)"
+	@echo "make dev-registry  — имитация реестра ФСП локально (:8090)"
 	@echo "make dev-frontend  — фронтенд локально (Vite)"
 
 up:
@@ -66,7 +68,11 @@ seed:
 reset:
 	docker compose exec backend python -m app.seed --reset
 
-# Локальная разработка без Docker: SQLite, вход без Keycloak
+# Локальная разработка без Docker: SQLite, вход без Keycloak.
+# dev — три процесса параллельно; Ctrl+C останавливает все (сигнал получает вся группа процессов).
+dev:
+	$(MAKE) -j3 dev-registry dev-backend dev-frontend
+
 dev-backend:
 	cd backend && AUTH_MODE=dev DATABASE_URL=sqlite:///./dev.db FSP_EMBEDDINGS=hashing EMAIL_ENABLED=false \
 	  sh -c "uv run alembic upgrade head && uv run python -m app.seed && uv run uvicorn app.main:app --reload --port 8000"
