@@ -5,12 +5,13 @@ import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { ErrorBox, PageLoader } from '../../components/ui'
 import { api } from '../../lib/api'
-import { useAuth, useMe } from '../../lib/auth'
+import { MeLoadError, useAuth, useMe } from '../../lib/auth'
 import type { Me, Role } from '../../lib/types'
 
 export default function Onboarding() {
   const { ready, authenticated, config, login } = useAuth()
-  const { data: me, isLoading } = useMe()
+  const meQ = useMe()
+  const { data: me, isPending, isError } = meQ
   const qc = useQueryClient()
   const nav = useNavigate()
   const intent = (typeof localStorage !== 'undefined' && (localStorage.getItem('fsp_intent') as Role | null)) || null
@@ -25,11 +26,12 @@ export default function Onboarding() {
       nav(data.role === 'candidate' ? '/candidate/survey' : '/employer/company')
     },
   })
-  if (!ready || isLoading) return <PageLoader />
+  if (!ready || (authenticated && isPending)) return <PageLoader />
   if (!authenticated) {
     login('/onboarding')
     return <PageLoader />
   }
+  if (isError) return <MeLoadError me={meQ} redirectTo="/onboarding" />
   if (me?.role) return <Navigate to="/app" replace />
   const texts = config?.consent_texts ?? {}
   return (

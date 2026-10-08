@@ -293,7 +293,8 @@ export default function TestRunner() {
   const { attemptId } = useParams()
   const qc = useQueryClient()
   const nav = useNavigate()
-  const { data: a, error } = useQuery({ queryKey: ['attempt', attemptId], queryFn: () => api.get<Attempt>(`/api/assessment/attempts/${attemptId}`) })
+  const attempt = useQuery({ queryKey: ['attempt', attemptId], queryFn: () => api.get<Attempt>(`/api/assessment/attempts/${attemptId}`) })
+  const a = attempt.data
   const [value, setValue] = useState<unknown>(null)
   const t0 = useRef(Date.now())
   const item = a?.status === 'in_progress' ? a.item : null
@@ -327,8 +328,7 @@ export default function TestRunner() {
     if (left === 0 && item && !answer.isPending) answer.mutate(value)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [left])
-  if (error) return <ErrorBox error={error} />
-  if (!a) return <PageLoader />
+  if (!a) return <PageLoader queries={[attempt]} />
   if (a.status === 'voided')
     return (
       <div className="mx-auto max-w-xl">

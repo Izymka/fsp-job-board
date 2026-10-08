@@ -3,7 +3,8 @@
 import Keycloak from 'keycloak-js'
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { api, setTokenProvider } from './api'
+import { EmptyState, PageLoader } from '../components/ui'
+import { ApiError, api, setTokenProvider } from './api'
 import type { AuthConfig, Me } from './types'
 
 const DEV_KEY = 'fsp_dev_token'
@@ -133,5 +134,35 @@ export function useAuth(): AuthState {
 
 export function useMe() {
   const { authenticated, ready } = useAuth()
-  return useQuery({ queryKey: ['me'], queryFn: () => api.get<Me>('/api/me'), enabled: ready && authenticated, staleTime: 30_000 })
+  return useQuery({
+    queryKey: ['me'],
+    queryFn: () => api.get<Me>('/api/me'),
+    enabled: ready && authenticated,
+    staleTime: 30_000,
+    // 401 повтором не исправить — сразу показываем «Сессия истекла»
+    retry: (n, e) => !(e instanceof ApiError && e.status === 401) && n < 1,
+  })
+}
+
+const isUnauthorized = (e: unknown) => e instanceof ApiError && e.status === 401
+
+// Токен есть, но /api/me не ответил: 401 — сессия истекла или токен недействителен (например,
+// пересоздана база или сменился секрет dev-режима) — предлагаем войти заново; иначе — сбой с повтором.
+// Результат запроса передаётся снаружи: собственный useMe() здесь перезапрашивал бы упавший запрос
+// при каждом монтировании, и Gate зацикливался бы между спиннером и этим экраном.
+export function MeLoadError({ me, redirectTo }: { me: ReturnType<typeof useMe>; redirectTo: string }) {
+  const { login } = useAuth()
+  if (isUnauthorized(me.error))
+    return (
+      <EmptyState
+        title="Сессия истекла"
+        text="Войдите снова, чтобы продолжить."
+        action={
+          <button className="btn-primary" onClick={() => login(redirectTo)}>
+            Войти
+          </button>
+        }
+      />
+    )
+  return <PageLoader queries={[me]} />
 }

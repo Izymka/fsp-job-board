@@ -7,8 +7,9 @@ import { date } from '../../lib/catalog'
 import type { SearchSummary } from '../../lib/types'
 
 export default function Searches() {
-  const { data, isLoading } = useQuery({ queryKey: ['searches'], queryFn: () => api.get<SearchSummary[]>('/api/employer/searches') })
-  if (isLoading || !data) return <PageLoader />
+  const searches = useQuery({ queryKey: ['searches'], queryFn: () => api.get<SearchSummary[]>('/api/employer/searches') })
+  const data = searches.data
+  if (!data) return <PageLoader queries={[searches]} />
   return (
     <div>
       <PageHeader

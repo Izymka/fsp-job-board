@@ -4,7 +4,7 @@ import { History, RotateCcw, SlidersHorizontal, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CandidateRow, InviteModal } from '../../components/domain'
-import { Badge, EmptyState, ErrorBox, PageHeader, PageLoader, Section, Tabs } from '../../components/ui'
+import { Badge, EmptyState, PageHeader, PageLoader, Section, Tabs } from '../../components/ui'
 import { api } from '../../lib/api'
 import { dateTime, lookup, money, pct, range, useCatalog } from '../../lib/catalog'
 import type { Filters, GradeId, SearchOut } from '../../lib/types'
@@ -93,7 +93,8 @@ export default function SearchView() {
   const L = lookup(cat)
   const qc = useQueryClient()
   const key = ['search', id]
-  const { data: s, error } = useQuery({ queryKey: key, queryFn: () => api.get<SearchOut>(`/api/employer/searches/${id}`) })
+  const search = useQuery({ queryKey: key, queryFn: () => api.get<SearchOut>(`/api/employer/searches/${id}`) })
+  const s = search.data
   const [tab, setTab] = useState<'all' | 'short'>('all')
   const [invite, setInvite] = useState<{ id: string; label: string } | null>(null)
   const [showFilters, setShowFilters] = useState(false)
@@ -103,8 +104,7 @@ export default function SearchView() {
     mutationFn: (v: { cid: string; on: boolean }) => (v.on ? api.put(`/api/employer/searches/${id}/shortlist/${v.cid}`, {}) : api.del(`/api/employer/searches/${id}/shortlist/${v.cid}`)),
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
   })
-  if (error) return <ErrorBox error={error} />
-  if (!s) return <PageLoader />
+  if (!s) return <PageLoader queries={[search]} />
   const rows = tab === 'short' ? s.results.filter((r) => r.shortlisted) : s.results
   const filtered = s.filtered_total !== s.base_total
   return (

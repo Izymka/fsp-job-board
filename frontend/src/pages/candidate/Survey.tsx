@@ -9,11 +9,13 @@ import { lookup, useCatalog } from '../../lib/catalog'
 import type { GradeId, Profile } from '../../lib/types'
 
 export default function CandidateSurvey() {
-  const { data: cat } = useCatalog()
+  const catalog = useCatalog()
+  const cat = catalog.data
   const L = lookup(cat)
   const qc = useQueryClient()
   const nav = useNavigate()
-  const { data: p } = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
+  const profile = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
+  const p = profile.data
   const hint = (p?.resume_parsed ?? {}) as { specialization_hint?: string; grade_hint?: GradeId; grade_reason?: string; skills?: string[] }
   const [industries, setIndustries] = useState<string[]>([])
   const [spec, setSpec] = useState('')
@@ -58,7 +60,7 @@ export default function CandidateSurvey() {
       nav(data.confirmed_grade ? '/candidate' : '/candidate/test')
     },
   })
-  if (!cat || !p) return <PageLoader />
+  if (!cat || !p) return <PageLoader queries={[catalog, profile]} />
   const toggle = (arr: string[], v: string, set: (x: string[]) => void) => set(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
   const specChanged = p.confirmed_grade && p.specialization && spec !== p.specialization
   return (

@@ -7,8 +7,9 @@ import { APP_STATUS, date } from '../../lib/catalog'
 import type { Application } from '../../lib/types'
 
 export default function CandidateApplications() {
-  const { data, isLoading } = useQuery({ queryKey: ['applications'], queryFn: () => api.get<Application[]>('/api/candidate/applications') })
-  if (isLoading || !data) return <PageLoader />
+  const apps = useQuery({ queryKey: ['applications'], queryFn: () => api.get<Application[]>('/api/candidate/applications') })
+  const data = apps.data
+  if (!data) return <PageLoader queries={[apps]} />
   return (
     <div>
       <PageHeader eyebrow="Вакансии" title="Мои отклики" actions={<Link to="/candidate/vacancies" className="btn-secondary">К вакансиям</Link>} />

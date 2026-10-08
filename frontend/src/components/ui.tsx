@@ -6,17 +6,23 @@ export function Spinner({ className }: { className?: string }) {
   return <Loader2 className={clsx('animate-spin text-brand-500', className ?? 'h-5 w-5')} aria-label="Загрузка" />
 }
 
-// error — первая ошибка загрузки данных страницы: вместо бесконечного спиннера сообщение и повтор
-export function PageLoader({ error, onRetry }: { error?: unknown; onRetry?: () => void } = {}) {
-  if (error)
+interface Loadable {
+  isError: boolean
+  error: unknown
+  refetch: () => unknown
+}
+
+// queries — запросы данных страницы: если какой-то завершился ошибкой, вместо бесконечного
+// спиннера показываются сообщение и кнопка повтора упавших запросов
+export function PageLoader({ queries = [] }: { queries?: Loadable[] }) {
+  const failed = queries.filter((q) => q.isError)
+  if (failed.length)
     return (
       <div className="mx-auto flex min-h-[40vh] max-w-md flex-col items-center justify-center gap-3">
-        <ErrorBox error={error} />
-        {onRetry && (
-          <button className="btn-secondary" onClick={onRetry}>
-            Повторить
-          </button>
-        )}
+        <ErrorBox error={failed[0].error} />
+        <button className="btn-secondary" onClick={() => failed.forEach((q) => q.refetch())}>
+          Повторить
+        </button>
       </div>
     )
   return (

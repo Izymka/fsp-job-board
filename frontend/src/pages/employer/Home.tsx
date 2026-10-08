@@ -8,15 +8,16 @@ import { date, lookup, money, pct, useCatalog } from '../../lib/catalog'
 import type { CategoryCell, Company, Insights, SearchSummary } from '../../lib/types'
 
 export default function EmployerHome() {
-  const { data: cat } = useCatalog()
+  const catalog = useCatalog()
+  const cat = catalog.data
   const L = lookup(cat)
   const company = useQuery({ queryKey: ['company'], queryFn: () => api.get<Company | null>('/api/employer/company') })
   const cells = useQuery({ queryKey: ['categories'], queryFn: () => api.get<CategoryCell[]>('/api/employer/categories'), enabled: !!company.data })
   const searches = useQuery({ queryKey: ['searches'], queryFn: () => api.get<SearchSummary[]>('/api/employer/searches'), enabled: !!company.data })
   const ins = useQuery({ queryKey: ['insights'], queryFn: () => api.get<Insights>('/api/employer/insights'), enabled: !!company.data })
-  if (company.isLoading) return <PageLoader />
+  if (company.isLoading || company.isError) return <PageLoader queries={[company]} />
   if (!company.data) return <Navigate to="/employer/company" replace />
-  if (!cat || !cells.data) return <PageLoader />
+  if (!cat || !cells.data) return <PageLoader queries={[catalog, cells]} />
   const max = Math.max(1, ...cells.data.map((c) => c.total))
   const sent = Object.values(ins.data?.invitations ?? {}).reduce((a, b) => a + b, 0)
   return (

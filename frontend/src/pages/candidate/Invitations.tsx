@@ -108,8 +108,9 @@ function InvitationDetail({ inv, onClose }: { inv: Invitation; onClose: () => vo
 export default function CandidateInvitations() {
   const [tab, setTab] = useState<'active' | 'all'>('active')
   const [open, setOpen] = useState<Invitation | null>(null)
-  const { data, isLoading } = useQuery({ queryKey: ['candidate-invitations'], queryFn: () => api.get<Invitation[]>('/api/candidate/invitations') })
-  if (isLoading || !data) return <PageLoader />
+  const invs = useQuery({ queryKey: ['candidate-invitations'], queryFn: () => api.get<Invitation[]>('/api/candidate/invitations') })
+  const data = invs.data
+  if (!data) return <PageLoader queries={[invs]} />
   const rows = tab === 'active' ? data.filter((i) => i.status === 'sent' || i.status === 'viewed') : data
   return (
     <div>

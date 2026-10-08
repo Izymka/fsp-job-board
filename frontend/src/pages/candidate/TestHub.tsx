@@ -33,10 +33,7 @@ export default function TestHub() {
       nav(`/candidate/test/${a.id}`)
     },
   })
-  if (!elig.data || !prof.data || !cat) {
-    const failed = [elig, prof, catalog].filter((q) => q.isError)
-    return <PageLoader error={failed[0]?.error} onRetry={() => failed.forEach((q) => q.refetch())} />
-  }
+  if (!elig.data || !prof.data || !cat) return <PageLoader queries={[elig, prof, catalog]} />
   const e = elig.data
   const p = prof.data
   if (!p.survey_completed_at)

@@ -3,7 +3,7 @@ import { AlertTriangle, Download, Lock, Medal, Send, ShieldCheck } from 'lucide-
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FspList, InviteModal, SkillList } from '../../components/domain'
-import { Badge, ErrorBox, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
+import { Badge, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, lookup, pct, SKILL_STATUS, useCatalog } from '../../lib/catalog'
 import type { CandidateCard } from '../../lib/types'
@@ -13,9 +13,9 @@ export default function CandidateView() {
   const { data: cat } = useCatalog()
   const L = lookup(cat)
   const [invite, setInvite] = useState(false)
-  const { data: c, error } = useQuery({ queryKey: ['candidate', id], queryFn: () => api.get<CandidateCard>(`/api/employer/candidates/${id}`) })
-  if (error) return <ErrorBox error={error} />
-  if (!c) return <PageLoader />
+  const card = useQuery({ queryKey: ['candidate', id], queryFn: () => api.get<CandidateCard>(`/api/employer/candidates/${id}`) })
+  const c = card.data
+  if (!c) return <PageLoader queries={[card]} />
   return (
     <div>
       <PageHeader

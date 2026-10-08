@@ -84,8 +84,9 @@ function TaskCard({ a }: { a: Assignment }) {
 }
 
 export default function CandidateTasks() {
-  const { data, isLoading } = useQuery({ queryKey: ['tasks'], queryFn: () => api.get<Assignment[]>('/api/candidate/tasks') })
-  if (isLoading || !data) return <PageLoader />
+  const tasks = useQuery({ queryKey: ['tasks'], queryFn: () => api.get<Assignment[]>('/api/candidate/tasks') })
+  const data = tasks.data
+  if (!data) return <PageLoader queries={[tasks]} />
   return (
     <div>
       <PageHeader

@@ -13,7 +13,7 @@ export default function CandidateHome() {
   const dash = useQuery({ queryKey: ['dashboard'], queryFn: () => api.get<Dashboard>('/api/candidate/dashboard') })
   const prof = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
   const inv = useQuery({ queryKey: ['candidate-invitations'], queryFn: () => api.get<Invitation[]>('/api/candidate/invitations') })
-  if (!dash.data || !prof.data) return <PageLoader />
+  if (!dash.data || !prof.data) return <PageLoader queries={[dash, prof]} />
   const d = dash.data
   const p = prof.data
   return (

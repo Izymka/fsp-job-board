@@ -60,10 +60,7 @@ export default function CandidateSettings() {
       qc.invalidateQueries({ queryKey: ['profile'] })
     },
   })
-  if (!p || !cat || !me) {
-    const failed = [profile, catalog, meQ].filter((q) => q.isError)
-    return <PageLoader error={failed[0]?.error} onRetry={() => failed.forEach((q) => q.refetch())} />
-  }
+  if (!p || !cat || !me) return <PageLoader queries={[profile, catalog, meQ]} />
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader eyebrow="Настройки" title="Приватность, ФСП ID и согласия" />

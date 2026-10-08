@@ -47,7 +47,8 @@ const empty: Form = { full_name: '', contact_email: '', phone: '', telegram: '',
 
 export default function CandidateProfile() {
   const qc = useQueryClient()
-  const { data: p } = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
+  const profile = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
+  const p = profile.data
   const [f, setF] = useState<Form>(empty)
   const [parsed, setParsed] = useState<ResumeParse | null>(null)
   const [saved, setSaved] = useState(false)
@@ -107,7 +108,7 @@ export default function CandidateProfile() {
       experience: s.experience.length ? s.experience : x.experience,
     }))
   }
-  if (!p) return <PageLoader />
+  if (!p) return <PageLoader queries={[profile]} />
   const set = (k: keyof Form) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
   return (
     <div>

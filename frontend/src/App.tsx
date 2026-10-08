@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppLayout } from './components/Layout'
 import { EmptyState, PageLoader } from './components/ui'
-import { useAuth, useMe } from './lib/auth'
+import { MeLoadError, useAuth, useMe } from './lib/auth'
 import type { Role } from './lib/types'
 import CandidateApplications from './pages/candidate/Applications'
 import CandidateHome from './pages/candidate/Home'
@@ -32,9 +32,10 @@ import TestDemo from './pages/public/TestDemo'
 
 function Gate({ role, children }: { role?: Role; children: ReactNode }) {
   const { ready, authenticated, login } = useAuth()
-  const { data: me, isLoading } = useMe()
+  const meQ = useMe()
+  const me = meQ.data
   const loc = useLocation()
-  if (!ready || (authenticated && isLoading)) return <PageLoader />
+  if (!ready || (authenticated && meQ.isPending)) return <PageLoader />
   if (!authenticated)
     return (
       <EmptyState
@@ -47,6 +48,7 @@ function Gate({ role, children }: { role?: Role; children: ReactNode }) {
         }
       />
     )
+  if (meQ.isError) return <MeLoadError me={meQ} redirectTo={loc.pathname} />
   if (!me?.role) return <Navigate to="/onboarding" replace />
   if (role && me.role !== role) return <Navigate to="/app" replace />
   return <>{children}</>

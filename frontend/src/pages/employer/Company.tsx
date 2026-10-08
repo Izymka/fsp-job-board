@@ -13,7 +13,8 @@ export default function EmployerCompany() {
   const { data: cat } = useCatalog()
   const qc = useQueryClient()
   const nav = useNavigate()
-  const { data, isLoading } = useQuery({ queryKey: ['company'], queryFn: () => api.get<Company | null>('/api/employer/company') })
+  const company = useQuery({ queryKey: ['company'], queryFn: () => api.get<Company | null>('/api/employer/company') })
+  const data = company.data
   const [f, setF] = useState<Form>(Object.fromEntries(FIELDS.map((k) => [k, ''])) as Form)
   useEffect(() => {
     if (data) setF(Object.fromEntries(FIELDS.map((k) => [k, (data[k] as string) ?? ''])) as Form)
@@ -27,7 +28,7 @@ export default function EmployerCompany() {
       if (isNew) nav('/employer/searches/new')
     },
   })
-  if (isLoading) return <PageLoader />
+  if (company.isLoading || company.isError) return <PageLoader queries={[company]} />
   const set = (k: keyof Form) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
   return (
     <div className="mx-auto max-w-3xl">

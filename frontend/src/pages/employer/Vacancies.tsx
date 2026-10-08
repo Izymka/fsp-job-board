@@ -104,12 +104,13 @@ function VacancyForm({ v, onClose }: { v: Vacancy | null; onClose: () => void })
 
 function ApplicationsModal({ v, onClose }: { v: Vacancy; onClose: () => void }) {
   const qc = useQueryClient()
-  const { data } = useQuery({ queryKey: ['applications', v.id], queryFn: () => api.get<Application[]>(`/api/employer/vacancies/${v.id}/applications`) })
+  const apps = useQuery({ queryKey: ['applications', v.id], queryFn: () => api.get<Application[]>(`/api/employer/vacancies/${v.id}/applications`) })
+  const data = apps.data
   const setStatus = useMutation({ mutationFn: (x: { id: string; status: string }) => api.post(`/api/employer/applications/${x.id}/status`, { status: x.status }), onSuccess: () => qc.invalidateQueries({ queryKey: ['applications', v.id] }) })
   return (
     <Modal open onClose={onClose} title={`Отклики: ${v.title}`} wide>
       {!data ? (
-        <PageLoader />
+        <PageLoader queries={[apps]} />
       ) : data.length === 0 ? (
         <p className="text-sm text-muted">Откликов пока нет. Главный сценарий — пригласить кандидатов из подборки самостоятельно.</p>
       ) : (
@@ -156,8 +157,9 @@ export default function EmployerVacancies() {
   const L = lookup(cat)
   const [edit, setEdit] = useState<Vacancy | null | 'new'>(null)
   const [apps, setApps] = useState<Vacancy | null>(null)
-  const { data, isLoading } = useQuery({ queryKey: ['employer-vacancies'], queryFn: () => api.get<Vacancy[]>('/api/employer/vacancies') })
-  if (isLoading || !data) return <PageLoader />
+  const vacs = useQuery({ queryKey: ['employer-vacancies'], queryFn: () => api.get<Vacancy[]>('/api/employer/vacancies') })
+  const data = vacs.data
+  if (!data) return <PageLoader queries={[vacs]} />
   return (
     <div>
       <PageHeader

@@ -12,9 +12,10 @@ export default function EmployerInvitations() {
   const L = lookup(cat)
   const qc = useQueryClient()
   const [tab, setTab] = useState<string>('all')
-  const { data, isLoading } = useQuery({ queryKey: ['employer-invitations'], queryFn: () => api.get<Invitation[]>('/api/employer/invitations') })
+  const invs = useQuery({ queryKey: ['employer-invitations'], queryFn: () => api.get<Invitation[]>('/api/employer/invitations') })
+  const data = invs.data
   const withdraw = useMutation({ mutationFn: (id: string) => api.post(`/api/employer/invitations/${id}/withdraw`), onSuccess: () => qc.invalidateQueries({ queryKey: ['employer-invitations'] }) })
-  if (isLoading || !data) return <PageLoader />
+  if (!data) return <PageLoader queries={[invs]} />
   const counts = data.reduce<Record<string, number>>((a, i) => ((a[i.status] = (a[i.status] ?? 0) + 1), a), {})
   const rows = tab === 'all' ? data : data.filter((i) => i.status === tab)
   return (

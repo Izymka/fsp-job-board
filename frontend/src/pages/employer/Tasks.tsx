@@ -83,13 +83,14 @@ function NewTask({ onClose }: { onClose: () => void }) {
 
 function Submissions({ t, onClose }: { t: TaskOut; onClose: () => void }) {
   const qc = useQueryClient()
-  const { data } = useQuery({ queryKey: ['subs', t.id], queryFn: () => api.get<Assignment[]>(`/api/employer/tasks/${t.id}/submissions`) })
+  const subs = useQuery({ queryKey: ['subs', t.id], queryFn: () => api.get<Assignment[]>(`/api/employer/tasks/${t.id}/submissions`) })
+  const data = subs.data
   const [scores, setScores] = useState<Record<string, string>>({})
   const review = useMutation({ mutationFn: (x: { id: string; score: number }) => api.post(`/api/employer/submissions/${x.id}/review`, { score: x.score }), onSuccess: () => qc.invalidateQueries({ queryKey: ['subs', t.id] }) })
   return (
     <Modal open onClose={onClose} title={`Решения: ${t.title}`} wide>
       {!data ? (
-        <PageLoader />
+        <PageLoader queries={[subs]} />
       ) : data.length === 0 ? (
         <p className="text-sm text-muted">Решений пока нет.</p>
       ) : (
@@ -127,8 +128,9 @@ export default function EmployerTasks() {
   const L = lookup(cat)
   const [creating, setCreating] = useState(false)
   const [subs, setSubs] = useState<TaskOut | null>(null)
-  const { data, isLoading } = useQuery({ queryKey: ['employer-tasks'], queryFn: () => api.get<TaskOut[]>('/api/employer/tasks') })
-  if (isLoading || !data) return <PageLoader />
+  const tasks = useQuery({ queryKey: ['employer-tasks'], queryFn: () => api.get<TaskOut[]>('/api/employer/tasks') })
+  const data = tasks.data
+  if (!data) return <PageLoader queries={[tasks]} />
   return (
     <div>
       <PageHeader
