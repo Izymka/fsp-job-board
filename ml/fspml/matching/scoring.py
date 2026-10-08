@@ -66,20 +66,32 @@ class CandidateFeatures:
     about: str = ""
     embedding: np.ndarray | None = None
     proctored: bool = False  # грейд подтверждён тестом с цифровым проктором без перерывов
-    integrity: str = "ok"  # уровень надёжности попытки, подтвердившей грейд: ok / review
+    integrity: str = "ok"  # уровень надёжности попытки, подтвердившей грейд: ok / clean / review
+    integrity_severity: str | None = None  # none / soft / hard; None — нет данных (выводится из integrity)
     experience_years: float | None = None  # общий стаж (из опроса или резюме), не проверяется
     relevant_years: float | None = None  # стаж в той же специализации; None — нет разбивки по местам работы
     it_years: float | None = None  # стаж в IT (любая специализация)
     industry_years: dict[str, float] = field(default_factory=dict)  # отрасль → годы
 
 
-# Доверие к подтверждённому грейду — множитель итогового скора: тест с проктором без перерывов
-# весит полностью, обычный тест — меньше, тест с замечаниями (review) — заметно меньше.
-TRUST = {"verified": 1.0, "plain": 0.85, "review": 0.6}
+# Доверие к подтверждённому грейду — множитель итогового скора. Главное — был ли проктор: результат
+# без наблюдения легко списать, поэтому тест с проктором даже с тяжёлыми замечаниями весит больше,
+# чем чистый тест без проктора. Прерванный проктор (камера отключалась) — как без проктора: иначе
+# выгодно включить проктор и выключить камеру. Внутри яруса — по тяжести замечаний
+# (`fspml.assessment.integrity`: hard — признаки подмены или подсказки, soft — остальные).
+TRUST = {
+    "proctor_clean": 1.0,
+    "proctor_soft": 0.9,
+    "proctor_hard": 0.8,
+    "plain_clean": 0.6,
+    "plain_review": 0.5,
+}
 TRUST_REASON = {
-    "verified": ("positive", "Тест пройден с цифровым проктором"),
-    "plain": ("neutral", "Тест без проктора"),
-    "review": ("negative", "Тест с замечаниями о самостоятельности прохождения"),
+    "proctor_clean": ("positive", "Тест пройден с цифровым проктором"),
+    "proctor_soft": ("positive", "Тест с цифровым проктором, есть незначительные замечания"),
+    "proctor_hard": ("neutral", "Тест с цифровым проктором, есть замечания о самостоятельности"),
+    "plain_clean": ("neutral", "Тест без проктора: результат не подтверждён наблюдением"),
+    "plain_review": ("negative", "Тест без проктора, есть замечания о самостоятельности"),
 }
 
 # Опыт работы — множитель относительно требования вакансии (если не указано — типичного для грейда).
@@ -94,12 +106,13 @@ EXP_INDUSTRY = 1.04  # от года опыта в отрасли ваканси
 
 
 def trust_level(c: CandidateFeatures) -> str | None:
-    """verified / plain / review; None — грейд не подтверждён тестом (множитель не применяется)."""
+    """Ярус доверия (ключ `TRUST`); None — грейд не подтверждён тестом (множитель не применяется)."""
     if c.theta is None or c.grade is None:
         return None
-    if c.integrity == "review":
-        return "review"
-    return "verified" if c.proctored else "plain"
+    sev = c.integrity_severity or ("soft" if c.integrity == "review" else "none")
+    if c.proctored:
+        return {"none": "proctor_clean", "soft": "proctor_soft"}.get(sev, "proctor_hard")
+    return "plain_clean" if sev == "none" else "plain_review"
 
 
 def required_years(need: Need) -> tuple[float, bool]:

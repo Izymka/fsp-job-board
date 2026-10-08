@@ -32,6 +32,7 @@ SIGNAL_FIELDS = (
     "multi_face_ms",
     "phone_hits",
     "look_away_ms",
+    "look_down_ms",
     "speech_ms",
     "cam_lost_ms",
     "mic_lost_ms",
@@ -40,7 +41,7 @@ SIGNAL_FIELDS = (
 
 @dataclass(frozen=True)
 class ProctorStart:
-    embedding: Sequence[float]
+    embeddings: Sequence[Sequence[float]]  # несколько качественных кадров с проверки
     model: str
     snapshot_b64: str | None = None
 
@@ -78,14 +79,17 @@ def start(db: Session, attempt: Attempt, s: ProctorStart) -> None:
         )
     provider = get_provider()
     if provider.has_template(db, attempt.candidate_id):
-        v = provider.verify(db, attempt.candidate_id, s.embedding, s.model)
-        identity = {
-            "status": "match" if v.match else "mismatch",
-            "similarity": v.similarity,
-            "re_enrolled": False,
-        }
+        # лучший из кадров проверки: один неудачный кадр не делает старт «чужим»
+        best, v = max(
+            ((e, provider.verify(db, attempt.candidate_id, e, s.model)) for e in s.embeddings),
+            key=lambda ev: ev[1].similarity,
+        )
+        identity = {"status": v.status, "similarity": v.similarity, "re_enrolled": False}
+        # уверенное совпадение пополняет эталон: свет, очки, причёска со временем меняются
+        if v.match:
+            provider.add(db, attempt.candidate_id, best, s.model)
     else:
-        e = provider.enroll(db, attempt.candidate_id, s.embedding, s.model)
+        e = provider.enroll(db, attempt.candidate_id, s.embeddings, s.model)
         identity = {"status": "enrolled", "similarity": None, "re_enrolled": e.re_enrolled}
     attempt.proctored = True
     attempt.identity = {**identity, "provider": provider.name, "model": s.model}
@@ -110,11 +114,13 @@ def item_signals(
         return None
     raw = signals or {}
     out = {k: max(0, int(raw.get(k) or 0)) for k in SIGNAL_FIELDS}
-    out["checks"] = out["mismatch"] = 0
+    out["checks"] = out["mismatch"] = out["uncertain"] = 0
     if embedding:
         model = (attempt.identity or {}).get("model", "")
         v = get_provider().verify(db, attempt.candidate_id, embedding, model)
-        out["checks"], out["mismatch"] = 1, int(not v.match)
+        out["checks"] = 1
+        out["mismatch"], out["uncertain"] = int(v.status == "mismatch"), int(v.status == "uncertain")
+        # сходство хранится для калибровки порогов на реальных данных
         out["similarity"] = v.similarity
     return out
 
@@ -148,5 +154,9 @@ def summary(attempt: Attempt, report) -> dict | None:
         "re_enrolled": bool(ident.get("re_enrolled")),
         "checks": pr.checks,
         "mismatches": pr.mismatches,
+        "episodes": pr.episodes,
+        "uncertain": pr.uncertain,
+        "look_down_items": pr.look_down_items,
+        "severity": pr.severity,
         "reasons": pr.reasons,
     }

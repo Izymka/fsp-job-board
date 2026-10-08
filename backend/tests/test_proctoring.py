@@ -188,3 +188,94 @@ def test_regular_test_unchanged(client):
     att = pass_test(cand, "junior")
     assert att["status"] == "passed"
     assert att["proctored"] is False and att["result"]["integrity"]["proctoring"] is None
+
+
+def near(v: list[float], sim: float, seed: int = 0) -> list[float]:
+    """Вектор с заданным сходством Human к v (обратная формула `similarity`)."""
+    import math
+
+    rng = random.Random(seed)
+    d = [rng.gauss(0, 1) for _ in v]
+    n = math.sqrt(sum(x * x for x in d))
+    r = math.sqrt((100 * (0.8 - 0.6 * sim)) ** 2 / 25)
+    return [x + y / n * r for x, y in zip(v, d)]
+
+
+def test_gallery_enrollment_three_way_verification_and_growth(client):
+    from app.core.config import get_settings
+    from app.modules.biometrics.provider import GALLERY_MAX, LocalDemoProvider
+
+    cand = make_candidate(client)
+    consent(cand, "proctoring_biometric")
+    me = face(1)
+    r = cand.post(
+        "/api/assessment/attempts",
+        json={
+            "grade": "middle",
+            "proctored": True,
+            "embeddings": [same(me, 1), same(me, 2), same(me, 3)],
+            "embedding_model": MODEL,
+        },
+    )
+    assert r.status_code == 201 and r.json()["identity"] == "enrolled"
+    run(cand, r.json(), correct=False)
+    prov = LocalDemoProvider(get_settings())
+    with SessionLocal() as db:
+        t = db.scalars(select(BiometricTemplate)).one()
+        base, gallery = prov._unpack(t)
+        assert base == 3 and len(gallery) == 3
+        uid = t.user_id
+        assert prov.verify(db, uid, near(me, 0.7), MODEL).status == "match"
+        assert prov.verify(db, uid, near(me, 0.42), MODEL).status == "uncertain"
+        assert prov.verify(db, uid, face(9), MODEL).status == "mismatch"
+        # уверенные совпадения пополняют эталон, стартовые кадры не вытесняются
+        for i in range(4):
+            assert prov.add(db, uid, near(me, 0.8, seed=i), MODEL)
+        assert not prov.add(db, uid, near(me, 0.45), MODEL)  # неуверенный кадр эталон не портит
+        base, gallery = prov._unpack(db.get(BiometricTemplate, uid))
+        assert base == 3 and len(gallery) == GALLERY_MAX
+        assert gallery[:3] == prov._unpack(t)[1][:3]
+
+
+def test_legacy_single_vector_template_still_verifies(client):
+    import os
+    import struct
+
+    from app.core.config import get_settings
+    from app.modules.biometrics.provider import LocalDemoProvider
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    cand = make_candidate(client)
+    consent(cand, "proctoring_biometric")
+    me = face(1)
+    run(cand, start(cand, "middle", me).json(), correct=False)
+    prov = LocalDemoProvider(get_settings())
+    with SessionLocal() as db:
+        t = db.scalars(select(BiometricTemplate)).one()
+        # эталон в старом формате: один вектор без заголовка
+        t.nonce = os.urandom(12)
+        t.ciphertext = AESGCM(prov.key).encrypt(t.nonce, struct.pack(f"<{len(me)}f", *me), MODEL.encode())
+        db.commit()
+    att = start(cand, "junior", same(me, 5)).json()
+    assert att["identity"] == "match"
+
+
+def test_single_bad_frame_is_not_flagged_and_severity_saved(client):
+    cand = make_candidate(client)
+    consent(cand, "proctoring_biometric")
+    me = face(1)
+    run(cand, start(cand, "middle", me).json(), correct=False)
+    att = start(cand, "junior", same(me, 5)).json()
+    # один кадр с наклонённой к листу головой (плохой эмбеддинг) среди хороших — не сигнал
+    frames = iter([face(7)] + [same(me, 10 + i) for i in range(50)])
+    while att["status"] == "in_progress":
+        extra = {"proctor": {"look_down_ms": 30_000}}
+        if att["item"]["stage"] == "knowledge" and att["item"]["position"] % 3 == 0:
+            extra["embedding"] = next(frames)
+        att = _answer(cand, att, correct=True, **extra)
+    assert att["status"] == "passed"
+    integ = att["result"]["integrity"]
+    assert integ["level"] == "clean" and integ["proctoring"]["mismatches"] == 1
+    assert integ["proctoring"]["episodes"] == 0 and integ["proctoring"]["look_down_items"] >= 1
+    s = _summary(att["id"])
+    assert s["integrity"]["severity"] == "none" and s["proctoring"]["severity"] == "none"

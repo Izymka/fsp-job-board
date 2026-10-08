@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     biometric_provider: str = "local_demo"
     biometric_key: str = "biometric-demo-key-change-me-0123456789abcdef"
     biometric_threshold: float = 0.5  # сходство Human ≥ порога — то же лицо
+    biometric_mismatch_threshold: float = 0.35  # ниже — уверенно другое лицо; между порогами — серая зона
     snapshot_retention_days: int = 180
 
     # Механика подбора: v5 — формула (специфичность требований + «ворота»); hybrid — v5 +

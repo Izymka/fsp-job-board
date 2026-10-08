@@ -56,24 +56,41 @@ def test_gates_explain_conditions():
     assert abs(sum(res["ok"].components.values()) - res["ok"].score) < 1e-3
 
 
-def test_trust_proctor_above_plain_above_review():
-    """Одинаковые кандидаты: тест с проктором выше обычного, обычный выше теста с замечаниями."""
+def test_trust_proctor_with_remarks_above_plain():
+    """Одинаковые кандидаты: проктор даже с тяжёлыми замечаниями выше чистого теста без проктора."""
     from dataclasses import replace
 
     base = cand("x", claimed={"Go", "PostgreSQL", "Kafka", "Docker", "Git"}, theta=0.3)
     pool_ = [
-        replace(base, id="plain"),
-        replace(base, id="proc", proctored=True),
-        replace(base, id="rev", integrity="review"),
+        replace(base, id="plain", integrity="clean", integrity_severity="none"),
+        replace(base, id="plain_rev", integrity="review", integrity_severity="soft"),
+        replace(base, id="proc", proctored=True, integrity="clean", integrity_severity="none"),
+        replace(base, id="proc_soft", proctored=True, integrity="review", integrity_severity="soft"),
+        replace(base, id="proc_hard", proctored=True, integrity="review", integrity_severity="hard"),
     ]
     out = rank(pool_, GO_NEED, TODAY)
-    assert [s.candidate_id for s in out] == ["proc", "plain", "rev"]
+    assert [s.candidate_id for s in out] == ["proc", "proc_soft", "proc_hard", "plain", "plain_rev"]
     by = {s.candidate_id: s.score for s in out}
-    assert by["plain"] / by["proc"] == pytest.approx(0.85, abs=1e-3)
-    assert by["rev"] / by["proc"] == pytest.approx(0.6, abs=1e-3)
+    for cid, ratio in (("proc_soft", 0.9), ("proc_hard", 0.8), ("plain", 0.6), ("plain_rev", 0.5)):
+        assert by[cid] / by["proc"] == pytest.approx(ratio, abs=1e-3)
     reasons = {s.candidate_id: [r.text for r in s.reasons] for s in out}
     assert "Тест пройден с цифровым проктором" in reasons["proc"]
-    assert any("замечаниями" in t for t in reasons["rev"])
+    assert any("без проктора" in t for t in reasons["plain"])
+
+
+def test_trust_legacy_profiles_and_interrupted_proctor():
+    """Профили без severity: review → мягкие замечания; прерванный проктор — как без проктора."""
+    from dataclasses import replace
+
+    from fspml.matching.scoring import trust_level
+
+    base = cand("x", claimed={"Go"}, theta=0.3)
+    assert trust_level(replace(base, proctored=True, integrity="review")) == "proctor_soft"
+    assert trust_level(replace(base, integrity="review")) == "plain_review"
+    assert trust_level(replace(base, integrity="ok")) == "plain_clean"
+    # proctored=False у прерванного проктора (статус interrupted) — ярус «без проктора»
+    assert trust_level(replace(base, proctored=False, integrity="clean")) == "plain_clean"
+    assert trust_level(replace(base, theta=None)) is None
 
 
 def test_much_better_fit_without_proctor_still_wins():

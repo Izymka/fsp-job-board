@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Clock, Lock, Play, ShieldCheck } from 'lucide-react'
+import { AlertTriangle, Clock, Lock, Play, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BlueprintBars, StatusBadge } from '../../components/domain'
 import { ProctorCheckModal, type ProctorStart } from '../../components/proctor'
-import { Badge, EmptyState, ErrorBox, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
+import { Badge, EmptyState, ErrorBox, Modal, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, dateTime, lookup, useCatalog } from '../../lib/catalog'
 import { detectEnv, enterFullscreen, isDesktop, screenExtended } from '../../lib/environment'
@@ -30,20 +30,21 @@ export default function TestHub() {
   const prof = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
   const elig = useQuery({ queryKey: ['eligibility'], queryFn: () => api.get<Eligibility>('/api/assessment/eligibility') })
   const hist = useQuery({ queryKey: ['attempts'], queryFn: () => api.get<Attempt[]>('/api/assessment/attempts') })
-  const [withProctor, setWithProctor] = useState(false)
+  const [launchFor, setLaunchFor] = useState<GradeId | null>(null)
   const [checkFor, setCheckFor] = useState<GradeId | null>(null)
   const start = useMutation({
     mutationFn: ({ grade, p }: { grade: GradeId; p?: ProctorStart }) => api.post<Attempt>('/api/assessment/attempts', { grade, ...p, env: detectEnv() }),
     onSuccess: (a, v) => {
       qc.invalidateQueries({ queryKey: ['eligibility'] })
-      if (v.p) proctor.start(v.p.embedding)
+      if (v.p) proctor.start(v.p.embeddings)
       nav(`/candidate/test/${a.id}`)
     },
     onError: (_e, v) => {
       if (v.p) proctor.stop()
     },
   })
-  const begin = (grade: GradeId) => {
+  const begin = (grade: GradeId, withProctor: boolean) => {
+    setLaunchFor(null)
     if (withProctor) return setCheckFor(grade)
     void enterFullscreen() // синхронно в обработчике клика — требование браузера
     start.mutate({ grade })
@@ -82,17 +83,6 @@ export default function TestHub() {
       )}
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
         <Section title="Выберите уровень">
-          <label className={clsx('mb-4 flex cursor-pointer items-start gap-3 rounded-xl border p-4', withProctor ? 'border-brand-500 bg-brand-50' : 'border-line')}>
-            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={withProctor} onChange={(ev) => setWithProctor(ev.target.checked)} />
-            <span className="text-sm">
-              <span className="flex items-center gap-1.5 font-semibold">
-                <ShieldCheck className="h-4 w-4 text-brand-600" /> Пройти с цифровым проктором
-              </span>
-              <span className="mt-0.5 block text-xs text-muted">
-                По желанию. Камера и микрофон анализируются в браузере, видео не записывается. Работодатель увидит отметку «Тест с проктором», и в выдаче такой профиль стоит выше, чем профиль с тестом без проктора.
-              </span>
-            </span>
-          </label>
           <div className="grid gap-3 sm:grid-cols-2">
             {e.options.map((o) => {
               const g = cat.grades.find((x) => x.id === o.grade)!
@@ -107,7 +97,7 @@ export default function TestHub() {
                     {g.title} · {g.experience}
                   </div>
                   {o.allowed ? (
-                    <button className={clsx('mt-3 w-full', recommended ? 'btn-primary' : 'btn-secondary')} disabled={start.isPending || !!e.in_progress} onClick={() => begin(o.grade)}>
+                    <button className={clsx('mt-3 w-full', recommended ? 'btn-primary' : 'btn-secondary')} disabled={start.isPending || !!e.in_progress} onClick={() => setLaunchFor(o.grade)}>
                       <Play className="h-4 w-4" /> Начать ({KIND[o.kind] ?? o.kind})
                     </button>
                   ) : (
@@ -134,6 +124,7 @@ export default function TestHub() {
           <div className="mt-3">
             <ErrorBox error={start.error} />
           </div>
+          <LaunchModal grade={launchFor} label={launchFor ? L.grade(launchFor) : ''} onClose={() => setLaunchFor(null)} onStart={begin} />
           <ProctorCheckModal
             open={checkFor != null}
             onClose={() => setCheckFor(null)}
@@ -216,8 +207,57 @@ export default function TestHub() {
         </Section>
       )}
       <p className="mt-4 flex items-center gap-1.5 text-xs text-muted">
-        <Clock className="h-3.5 w-3.5" /> На каждое задание — ограничение по времени. Уход со страницы теста фиксируется: уходы на трёх заданиях аннулируют попытку.
+        <Clock className="h-3.5 w-3.5" /> У каждого задания есть рекомендуемое время. Не успели — ответьте позже: ответ засчитается, а задание будет отмечено «с превышением времени». Уход со страницы теста фиксируется: уходы на трёх заданиях аннулируют попытку.
       </p>
     </div>
+  )
+}
+
+/** Окно запуска теста: проктор включён по умолчанию, отказ от него — с явным предупреждением о потере в выдаче. */
+function LaunchModal({ grade, label, onClose, onStart }: { grade: GradeId | null; label: string; onClose: () => void; onStart: (g: GradeId, withProctor: boolean) => void }) {
+  const [withProctor, setWithProctor] = useState(true)
+  const close = () => {
+    setWithProctor(true)
+    onClose()
+  }
+  return (
+    <Modal open={grade != null} onClose={close} title={`Тест на грейд ${label}`}>
+      <label className={clsx('flex cursor-pointer items-start gap-3 rounded-xl border p-4', withProctor ? 'border-brand-500 bg-brand-50' : 'border-line')}>
+        <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={withProctor} onChange={(ev) => setWithProctor(ev.target.checked)} />
+        <span className="text-sm">
+          <span className="flex items-center gap-1.5 font-semibold">
+            <ShieldCheck className="h-4 w-4 text-brand-600" /> Пройти с цифровым проктором
+          </span>
+          <span className="mt-0.5 block text-xs text-muted">
+            Камера и микрофон анализируются в браузере, видео не записывается. Ручка и лист для расчётов — можно. Работодатель увидит отметку «Тест с проктором».
+          </span>
+        </span>
+      </label>
+      {!withProctor && (
+        <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-warn-600/30 bg-warn-50 p-4 text-sm text-warn-600">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>
+            <b>Без проктора вы заметно потеряете в выдаче.</b> Результату без наблюдения работодатели доверяют меньше: итоговый скор профиля в поиске снижается на 40%,
+            и кандидаты с тестом под проктором — даже с замечаниями — будут стоять выше вас. Работодатель увидит пометку «Тест без проктора».
+          </span>
+        </div>
+      )}
+      <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <button className="btn-secondary" onClick={close}>
+          Отмена
+        </button>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            const g = grade!
+            const p = withProctor
+            setWithProctor(true)
+            onStart(g, p)
+          }}
+        >
+          <Play className="h-4 w-4" /> {withProctor ? 'Продолжить с проктором' : 'Начать без проктора'}
+        </button>
+      </div>
+    </Modal>
   )
 }

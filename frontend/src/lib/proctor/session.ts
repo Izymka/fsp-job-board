@@ -11,6 +11,7 @@ export interface ProctorCounters {
   multi_face_ms: number
   phone_hits: number
   look_away_ms: number
+  look_down_ms: number
   speech_ms: number
   cam_lost_ms: number
   mic_lost_ms: number
@@ -39,14 +40,18 @@ export interface CheckResult {
   embedding: number[] | null
 }
 
-const ZERO: ProctorCounters = { no_face_ms: 0, multi_face_ms: 0, phone_hits: 0, look_away_ms: 0, speech_ms: 0, cam_lost_ms: 0, mic_lost_ms: 0 }
+const ZERO: ProctorCounters = { no_face_ms: 0, multi_face_ms: 0, phone_hits: 0, look_away_ms: 0, look_down_ms: 0, speech_ms: 0, cam_lost_ms: 0, mic_lost_ms: 0 }
 const IDLE: ProctorLive = { active: false, faces: 0, phone: false, lookingAway: false, speaking: false, camOk: false, micOk: false, mismatch: false, level: 0, noFaceMs: 0 }
 
 const VISION_MS = 500
 const AUDIO_MS = 100
 const EMBED_EVERY_MS = 10_000
 const SERVER_EVERY_MS = 60_000 // эмбеддинг на сервер — примерно раз в минуту, в случайный момент
-const MATCH_MIN = 0.5
+// Пороги как на сервере: ≥ MATCH — то же лицо, < MISMATCH — уверенно другое, между — серая зона.
+const MATCH = 0.5
+const MISMATCH = 0.35
+const MISMATCH_RUN = 2 // предупреждать только после стольких уверенно плохих сверок подряд
+const START_FRAMES = 3 // кадров в эталоне со старта
 
 class ProctorSession {
   stream: MediaStream | null = null
@@ -55,7 +60,9 @@ class ProctorSession {
   private video: HTMLVideoElement | null = null
   private canvas = document.createElement('canvas')
   private audio: AudioMonitor | null = null
-  private ref: number[] | null = null
+  private ref: number[][] = []
+  private recent: number[][] = [] // качественные отпечатки с проверки перед стартом
+  private badRun = 0
   private counters: ProctorCounters = { ...ZERO }
   private live: ProctorLive = IDLE
   private listeners = new Set<() => void>()
@@ -101,14 +108,26 @@ class ProctorSession {
     const track = this.stream?.getVideoTracks()[0]
     const camOk = !!track && track.readyState === 'live' && !track.muted
     const fr = await detect(this.human, this.video, { embed: true, liveness: true })
+    if (fr.embedding) this.recent = [...this.recent, fr.embedding].slice(-START_FRAMES)
     return { camOk, light: !isDark(l), faces: fr.faces, phone: fr.phone, real: fr.real ?? null, live: fr.live ?? null, embedding: fr.embedding ?? null }
   }
 
-  /** Свежий эмбеддинг (для старта следующей попытки без повторной проверки). */
-  async capture(): Promise<number[] | null> {
-    if (!this.human || !this.video) return null
-    const fr = await detect(this.human, this.video, { embed: true })
-    return fr.embedding ?? null
+  /** Отпечатки последних качественных кадров проверки (эталон и сверка на старте). */
+  startEmbeddings(): number[][] {
+    return [...this.recent]
+  }
+
+  /** Несколько свежих качественных отпечатков (для старта следующей попытки без повторной проверки). */
+  async capture(n = START_FRAMES, timeoutMs = 4000): Promise<number[][]> {
+    if (!this.human || !this.video) return []
+    const out: number[][] = []
+    const until = performance.now() + timeoutMs
+    while (out.length < n && performance.now() < until) {
+      const fr = await detect(this.human, this.video, { embed: true })
+      if (fr.embedding) out.push(fr.embedding)
+      else await new Promise((r) => setTimeout(r, 250))
+    }
+    return out
   }
 
   /** Кадр JPEG 320×240 для работодателя (только при согласии). */
@@ -127,11 +146,12 @@ class ProctorSession {
     return p
   }
 
-  /** Начать наблюдение за попыткой. ref — эмбеддинг со старта (для мгновенной локальной сверки). */
-  start(ref: number[] | null, lostBeforeMs = 0) {
+  /** Начать наблюдение за попыткой. ref — отпечатки со старта (для мгновенной локальной сверки). */
+  start(ref: number[][], lostBeforeMs = 0) {
     this.ref = ref
+    this.badRun = 0
     this.counters = { ...ZERO, cam_lost_ms: lostBeforeMs }
-    this.fresh = ref ? { v: ref, at: performance.now() } : null
+    this.fresh = ref.length ? { v: ref[ref.length - 1], at: performance.now() } : null
     this.nextServerAt = performance.now() + SERVER_EVERY_MS * (0.5 + Math.random())
     this.lastVision = performance.now()
     this.live = { ...IDLE, active: true, camOk: true, micOk: true, faces: 1 }
@@ -149,8 +169,9 @@ class ProctorSession {
     this.counters = { ...ZERO }
   }
 
+  /** Счётчики для сервера: интервалы копятся из performance.now() (дробные мс), а API ждёт целые. */
   counts(): ProctorCounters {
-    return { ...this.counters }
+    return Object.fromEntries(Object.entries(this.counters).map(([k, v]) => [k, Math.round(v)])) as unknown as ProctorCounters
   }
 
   /** Эмбеддинг для серверной сверки, если подошло время (раз в ~минуту) и есть свежий. */
@@ -177,7 +198,9 @@ class ProctorSession {
     this.stream?.getTracks().forEach((t) => t.stop())
     this.stream = null
     this.video = null
-    this.ref = this.fresh = null
+    this.ref = []
+    this.recent = []
+    this.fresh = null
     this.live = IDLE
     this.emit()
   }
@@ -236,6 +259,7 @@ class ProctorSession {
       } else this.noFace = 0
       if (fr.faces >= 2) this.counters.multi_face_ms += dt
       if (fr.lookingAway) this.counters.look_away_ms += dt
+      if (fr.lookingDown) this.counters.look_down_ms += dt
       // телефон: эпизод засчитывается после двух кадров подряд, заканчивается после двух кадров без него
       if (fr.phone) {
         this.phoneRun += 1
@@ -247,7 +271,13 @@ class ProctorSession {
         this.lastEmbedAt = now
         if (fr.embedding) {
           this.fresh = { v: fr.embedding, at: now }
-          if (this.ref) mismatch = similarity(this.human, this.ref, fr.embedding) < MATCH_MIN
+          if (this.ref.length) {
+            // один плохой кадр — не повод для предупреждения; серая зона цепочку не меняет
+            const sim = Math.max(...this.ref.map((r) => similarity(this.human!, r, fr.embedding!)))
+            if (sim < MISMATCH) this.badRun += 1
+            else if (sim >= MATCH) this.badRun = 0
+            mismatch = this.badRun >= MISMATCH_RUN
+          }
         }
       }
       this.set({ camOk: true, faces: fr.faces, phone: this.phoneRun >= 2, lookingAway: fr.lookingAway, mismatch, noFaceMs: Math.round(this.noFace / 1000) * 1000 })

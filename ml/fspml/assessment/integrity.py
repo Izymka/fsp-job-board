@@ -37,10 +37,20 @@ TeamViewer/AnyDesk к физическому компьютеру браузер
 Правила консервативны — ложное срабатывание детектора не должно аннулировать честного кандидата:
 * лица нет в кадре дольше `no_face_ms` — то же, что уход со страницы (общий счётчик уходов);
 * телефон в кадре: на `phone_void_items` заданиях → `void`, реже → `review`;
-* сверка с эталоном не совпала: на старте или однажды за тест → `review`, ≥ `mismatch_void` раз → `void`;
-* несколько лиц, речь на ≥ `speech_items` заданиях, взгляд в сторону на ≥ `look_away_items` → `review`;
+* сверка с эталоном: сервер делит сверки на уверенное совпадение, серую зону и уверенное несовпадение.
+  Один плохой кадр (поворот головы, наклон к листу, свет) — не сигнал: **эпизод** несовпадения —
+  ≥ `mismatch_run` уверенно плохих сверок подряд (серая зона цепочку не рвёт и не продлевает).
+  Несовпадение на старте или эпизод → `review`; вместе их ≥ `mismatch_void` или эпизод длиной
+  ≥ `mismatch_long_run` → `void`;
+* несколько лиц, речь на ≥ `speech_items` заданиях, взгляд вбок или вверх на ≥ `look_away_items` → `review`;
+* взгляд вниз (лист бумаги, клавиатура) разрешён — только счётчик для работодателя;
 * камера или микрофон отключены суммарно ≥ `lost_ms` — проктор прерван: бейдж снимается, тест идёт
   дальше как обычный (это не нарушение — у человека могла отвалиться камера).
+
+**Тяжесть замечаний** (`severity`) — для доверия к результату в подборе: `hard` — прямые признаки
+подмены или подсказки (несовпадение лица, телефон, посторонние в кадре на нескольких заданиях,
+автоматизация браузера, удалённый рабочий стол или ВМ, вставка текста), `soft` — остальные замечания,
+`none` — замечаний нет.
 """
 
 from __future__ import annotations
@@ -70,8 +80,12 @@ class IntegrityConfig:
     speech_items: int = 2
     look_away_ms: int = 15_000
     look_away_items: int = 3
+    look_down_ms: int = 15_000  # взгляд вниз (лист) дольше — задание учитывается в счётчике, без пометки
+    multi_face_hard_items: int = 2  # посторонние в кадре на стольких заданиях — тяжёлое замечание
     shrunk_ms: int = 2_000  # окно уменьшено дольше — пометка
-    mismatch_void: int = 2
+    mismatch_run: int = 2  # уверенно плохих сверок подряд — эпизод несовпадения
+    mismatch_long_run: int = 3  # эпизод такой длины — аннулирование
+    mismatch_void: int = 2  # несовпадение на старте + эпизоды
     lost_ms: int = 30_000  # камера/микрофон отключены суммарно дольше — проктор прерван
 
 
@@ -127,27 +141,34 @@ class EnvSignals:
 
 @dataclass(frozen=True)
 class ProctorSignals:
-    """Счётчики проктора за задание; `mismatch`/`checks` — серверные сверки эмбеддинга с эталоном."""
+    """Счётчики проктора за задание; `checks` — серверные сверки эмбеддинга с эталоном, из них
+    `mismatch` — уверенное несовпадение, `uncertain` — серая зона."""
 
     no_face_ms: int = 0
     multi_face_ms: int = 0
     phone_hits: int = 0
-    look_away_ms: int = 0
+    look_away_ms: int = 0  # взгляд вбок или вверх
+    look_down_ms: int = 0  # взгляд вниз: лист бумаги, клавиатура — разрешено
     speech_ms: int = 0
     cam_lost_ms: int = 0
     mic_lost_ms: int = 0
     mismatch: int = 0
+    uncertain: int = 0
     checks: int = 0
 
 
 @dataclass
 class ProctoringReport:
     status: Literal["verified", "interrupted", "off"]
-    identity: Literal["enrolled", "match", "mismatch"] | None = None
+    identity: Literal["enrolled", "match", "uncertain", "mismatch"] | None = None
     reasons: list[str] = field(default_factory=list)
     phone_items: int = 0
-    mismatches: int = 0
+    mismatches: int = 0  # уверенно плохие сверки (включая старт)
+    episodes: int = 0  # эпизоды несовпадения (подряд идущие уверенно плохие сверки)
+    uncertain: int = 0  # сверки в серой зоне — не сигнал
     checks: int = 0
+    look_down_items: int = 0  # задания с долгим взглядом вниз — не сигнал
+    severity: Literal["none", "soft", "hard"] = "none"
     lost_ms: int = 0  # суммарно без камеры/микрофона; не нарушение, но снимает бейдж проктора
 
     def to_dict(self) -> dict:
@@ -166,6 +187,7 @@ class IntegrityReport:
     # сколько ещё уходов допустимо до аннулирования (для живого предупреждения)
     leaves_left: int = 0
     proctoring: ProctoringReport | None = None
+    severity: Literal["none", "soft", "hard"] = "none"
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -192,42 +214,93 @@ def _minutes(ms: int) -> str:
     return f"{s // 60} мин {s % 60} с" if s >= 60 else f"{s} с"
 
 
+def _worse(a: str, b: str) -> Literal["none", "soft", "hard"]:
+    order = ("none", "soft", "hard")
+    return order[max(order.index(a), order.index(b))]  # type: ignore[return-value]
+
+
+def mismatch_runs(proctor: Sequence[ProctorSignals], run: int) -> list[int]:
+    """Длины эпизодов: подряд идущие уверенно плохие сверки (не короче `run`).
+
+    Совпадение цепочку обрывает, серая зона — нет (и не продлевает): один кадр с наклонённой
+    головой не делает из двух плохих кадров два отдельных случая и не создаёт новый.
+    """
+    out: list[int] = []
+    cur = 0
+    for s in proctor:
+        good = s.checks - s.mismatch - s.uncertain
+        if s.mismatch:
+            cur += s.mismatch
+        elif good > 0:
+            if cur >= run:
+                out.append(cur)
+            cur = 0
+    if cur >= run:
+        out.append(cur)
+    return out
+
+
 def assess_proctor(
     proctor: Sequence[ProctorSignals],
-    identity: Literal["enrolled", "match", "mismatch"] | None,
+    identity: Literal["enrolled", "match", "uncertain", "mismatch"] | None,
     config: IntegrityConfig = DEFAULT_INTEGRITY,
 ) -> tuple[ProctoringReport, bool]:
     """Отчёт проктора и признак аннулирования (без учёта уходов — они считаются в `assess`)."""
     reasons: list[str] = []
+    severity: Literal["none", "soft", "hard"] = "none"
     phone = sum(1 for s in proctor if s.phone_hits > 0)
-    mism = sum(s.mismatch for s in proctor) + (1 if identity == "mismatch" else 0)
-    checks = sum(s.checks for s in proctor) + (1 if identity in ("match", "mismatch") else 0)
-    if identity == "mismatch":
+    runs = mismatch_runs(proctor, config.mismatch_run)
+    start_bad = identity == "mismatch"
+    mism = sum(s.mismatch for s in proctor) + (1 if start_bad else 0)
+    uncertain = sum(s.uncertain for s in proctor) + (1 if identity == "uncertain" else 0)
+    checks = sum(s.checks for s in proctor) + (1 if identity in ("match", "uncertain", "mismatch") else 0)
+    if start_bad:
         reasons.append("на старте в кадре не владелец профиля: лицо не совпало с эталоном")
-    in_test = sum(s.mismatch for s in proctor)
-    if in_test:
+        severity = "hard"
+    if runs:
         reasons.append(
-            f"во время теста лицо не совпало с эталоном профиля: {in_test} из {sum(s.checks for s in proctor)} сверок"
+            f"во время теста лицо не совпадало с эталоном профиля: {len(runs)} эпизод., "
+            f"{sum(runs)} из {sum(s.checks for s in proctor)} сверок"
         )
+        severity = "hard"
     if phone:
         reasons.append(f"в кадре телефон: {phone} задан.")
+        severity = "hard"
     multi = sum(1 for s in proctor if s.multi_face_ms >= config.multi_face_ms)
     if multi:
         reasons.append(f"в кадре несколько человек: {multi} задан.")
+        severity = _worse(severity, "hard" if multi >= config.multi_face_hard_items else "soft")
     speech = sum(1 for s in proctor if s.speech_ms >= config.speech_ms)
     if speech >= config.speech_items:
         reasons.append(f"речь во время заданий (возможно, задания зачитывались вслух): {speech} задан.")
+        severity = _worse(severity, "soft")
     look = sum(1 for s in proctor if s.look_away_ms >= config.look_away_ms)
     if look >= config.look_away_items:
         reasons.append(f"взгляд надолго уходил в сторону от экрана: {look} задан.")
+        severity = _worse(severity, "soft")
+    look_down = sum(1 for s in proctor if s.look_down_ms >= config.look_down_ms)
     lost = sum(s.cam_lost_ms + s.mic_lost_ms for s in proctor)
     status: Literal["verified", "interrupted", "off"] = "verified"
     if lost >= config.lost_ms:
         status = "interrupted"
-    void = phone >= config.phone_void_items or mism >= config.mismatch_void
+    void = (
+        phone >= config.phone_void_items
+        or len(runs) + (1 if start_bad else 0) >= config.mismatch_void
+        or any(r >= config.mismatch_long_run for r in runs)
+    )
     return (
         ProctoringReport(
-            status, identity, reasons, phone_items=phone, mismatches=mism, checks=checks, lost_ms=lost
+            status,
+            identity,
+            reasons,
+            phone_items=phone,
+            mismatches=mism,
+            episodes=len(runs),
+            uncertain=uncertain,
+            checks=checks,
+            lost_ms=lost,
+            look_down_items=look_down,
+            severity=severity,
         ),
         void,
     )
@@ -240,7 +313,7 @@ def assess(
     theta: float | None = None,
     config: IntegrityConfig = DEFAULT_INTEGRITY,
     proctor: Sequence[ProctorSignals] | None = None,
-    identity: Literal["enrolled", "match", "mismatch"] | None = None,
+    identity: Literal["enrolled", "match", "uncertain", "mismatch"] | None = None,
     env: EnvSignals | None = None,
 ) -> IntegrityReport:
     """proctor=None — тест без проктора; иначе счётчики проктора по тем же заданиям, что и signals."""
@@ -255,6 +328,8 @@ def assess(
     copies = sum(s.copy_attempts for s in signals)
     lz = person_fit_lz(pairs, theta) if theta is not None and len(pairs) >= config.lz_min_items else None
     reasons: list[str] = []
+    # тяжёлые замечания (прямые признаки подмены или подсказки); остальные — мягкие
+    hard = False
     if left:
         where = ["со страницы теста"]
         if any(s.fullscreen_off_ms >= config.min_away_ms for s in signals):
@@ -275,10 +350,13 @@ def assess(
     if env and env.virtual:
         where = "в сеансе удалённого рабочего стола" if env.virtual == "rdp" else "в виртуальной машине"
         reasons.append(f"тест проходил {where} (видеоадаптер «{env.renderer}»)")
+        hard = True
     if env and env.webdriver:
         reasons.append("браузер был под управлением программы автоматизации (webdriver)")
+        hard = True
     if pastes:
         reasons.append(f"попытки вставить текст в ответ: {pastes}")
+        hard = True
     if copies:
         reasons.append(f"попытки скопировать текст задания: {copies}")
     void = len(left) >= config.void_items or away >= config.void_away_ms or pastes >= config.void_pastes
@@ -293,6 +371,9 @@ def assess(
             "верные ответы на трудных заданиях при ошибках на лёгких"
         )
     level: Literal["clean", "review", "void"] = "void" if void else ("review" if reasons else "clean")
+    severity: Literal["none", "soft", "hard"] = "hard" if hard else ("soft" if reasons else "none")
+    if proctoring is not None:
+        severity = _worse(severity, proctoring.severity)
     return IntegrityReport(
         level=level,
         items_left=len(left),
@@ -303,4 +384,5 @@ def assess(
         reasons=reasons,
         leaves_left=max(0, config.void_items - len(left)),
         proctoring=proctoring,
+        severity=severity,
     )

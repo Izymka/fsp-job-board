@@ -13,7 +13,7 @@ from fspml.assessment.engine import AssessmentEngine
 from fspml.assessment.irt import information, prob
 from fspml.catalog import get_catalog
 from fspml.nlp.vacancy import parse_need
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -110,6 +110,11 @@ class StartIn(BaseModel):
     embedding: Embedding | None = Field(
         default=None, description="Эмбеддинг лица из браузера (Human faceres) — вектор, не изображение"
     )
+    embeddings: list[Embedding] | None = Field(
+        default=None,
+        max_length=5,
+        description="Несколько эмбеддингов с проверки (фронтальные чёткие кадры) — эталон и сверка надёжнее",
+    )
     embedding_model: str | None = Field(default=None, max_length=64)
     snapshot: str | None = Field(
         default=None,
@@ -136,9 +141,16 @@ class ProctorIn(BaseModel):
     multi_face_ms: int = Field(default=0, ge=0, le=86_400_000)
     phone_hits: int = Field(default=0, ge=0, le=10_000)
     look_away_ms: int = Field(default=0, ge=0, le=86_400_000)
+    look_down_ms: int = Field(default=0, ge=0, le=86_400_000)
     speech_ms: int = Field(default=0, ge=0, le=86_400_000)
     cam_lost_ms: int = Field(default=0, ge=0, le=86_400_000)
     mic_lost_ms: int = Field(default=0, ge=0, le=86_400_000)
+
+    @field_validator("*", mode="before")
+    @classmethod
+    def _round(cls, v: Any) -> Any:
+        # интервалы в браузере меряются performance.now() — дробные миллисекунды
+        return round(v) if isinstance(v, float) else v
 
 
 class AnswerIn(BaseModel):
@@ -272,10 +284,12 @@ RULES = [
     "Смена подтверждённого грейда — не чаще одного раза в 90 дней.",
     "Брошенная попытка засчитывается как неудачная.",
     "Для Middle, Senior и Lead после теста знаний — практический кейс (до 15–18 минут) и уточняющий вопрос по вашему решению (2 минуты). Кейс оценивается по рубрике и учитывается в решении о грейде.",
-    "На каждое задание есть ограничение по времени. Копировать текст заданий и вставлять текст в ответы нельзя.",
+    "У каждого задания есть рекомендуемое время. Если не успеваете — спокойно ответьте позже: ответ засчитывается по существу, а задание помечается «с превышением времени», работодатель видит число таких заданий. Копировать текст заданий и вставлять текст в ответы нельзя.",
+    "Для расчётов можно пользоваться ручкой и листом бумаги, а также черновиком и калькулятором прямо в тесте. Сторонние калькуляторы, телефон и другие устройства использовать нельзя.",
     "На компьютере тест идёт в полноэкранном режиме: выход из него считается уходом со страницы. Второй монитор, виртуальную машину и удалённый рабочий стол работодатель увидит в замечаниях — отключите их до начала.",
     "Уход со страницы теста (другая вкладка или окно) дольше 2 секунд фиксируется. Уходы на трёх заданиях или суммарно больше минуты — попытка аннулируется и засчитывается как неудачная. Единичные уходы видит работодатель рядом с результатом.",
-    "По желанию тест можно пройти с цифровым проктором (камера и микрофон): работодатель увидит отметку «Тест с проктором». Видео и звук не записываются и не покидают ваше устройство; на сервер передаются только счётчики событий и числовой отпечаток лица для сверки с эталоном. Телефон в кадре на трёх заданиях или чужое лицо дважды аннулируют попытку.",
+    "По желанию тест можно пройти с цифровым проктором (камера и микрофон): работодатель увидит отметку «Тест с проктором». Видео и звук не записываются и не покидают ваше устройство; на сервер передаются только счётчики событий и числовой отпечаток лица для сверки с эталоном. Смотреть на лист с расчётами можно. Телефон в кадре на трёх заданиях или чужое лицо в кадре (подтверждённое несколькими сверками подряд) аннулируют попытку.",
+    "Работодатели доверяют результату с проктором больше: в подборе кандидаты с тестом под проктором стоят заметно выше, даже если были замечания. Результат без проктора учитывается с пониженным доверием.",
 ]
 
 
@@ -337,9 +351,10 @@ def start(body: StartIn, user: User = Depends(CandidateUser), db: Session = Depe
     p = get_profile(db, user)
     pstart = None
     if body.proctored:
-        if not body.embedding or not body.embedding_model:
+        embs = body.embeddings or ([body.embedding] if body.embedding else [])
+        if not embs or not body.embedding_model:
             raise AppError(422, "embedding_required", "Для теста с проктором нужен эмбеддинг лица с проверки")
-        pstart = proctoring.ProctorStart(body.embedding, body.embedding_model, body.snapshot)
+        pstart = proctoring.ProctorStart(embs, body.embedding_model, body.snapshot)
     attempt = service.start_attempt(db, p, body.grade, pstart, body.env.model_dump() if body.env else None)
     db.commit()
     return attempt_out(db, attempt)

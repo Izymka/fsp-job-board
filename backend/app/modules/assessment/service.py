@@ -30,6 +30,9 @@ STALE_AFTER = timedelta(hours=3)
 # Окно памяти о показанных заданиях: повторная попытка (не раньше чем через 14 дней) идёт на других
 # семействах; через полгода банк успевает обновиться, и ограничение снимается.
 SEEN_WINDOW = timedelta(days=180)
+# Время на задание — ориентир, а не обрыв: ответ после него принимается и оценивается по существу,
+# задание помечается «с превышением времени» (лимиты пока не откалиброваны по реальным ответам).
+# Запас покрывает сеть и задержку отрисовки.
 TIME_GRACE_SEC = 20
 
 _engine_cache: tuple[float, AssessmentEngine] | None = None
@@ -283,7 +286,7 @@ def client_env(raw: dict | None) -> dict | None:
 def _proctor_signals(it: AttemptItem) -> integ.ProctorSignals:
     d = it.proctor or {}
     return integ.ProctorSignals(
-        **{k: int(d.get(k) or 0) for k in (*proctoring.SIGNAL_FIELDS, "mismatch", "checks")}
+        **{k: int(d.get(k) or 0) for k in (*proctoring.SIGNAL_FIELDS, "mismatch", "uncertain", "checks")}
     )
 
 
@@ -384,9 +387,10 @@ def answer(
     if item is None or item.position != position:
         raise AppError(409, "wrong_position", "Ответ на это задание уже принят или задание не выдано")
     engine = get_engine(db)
-    limit = item_time_limit(engine, item) + TIME_GRACE_SEC
+    limit = item_time_limit(engine, item)
     elapsed = (utcnow() - aware(item.issued_at)).total_seconds()
-    timed_out = elapsed > limit
+    over = elapsed > limit + TIME_GRACE_SEC
+    pace = {"overtime": over, "overtime_sec": int(elapsed - limit) if over else 0}
     item.answered_at = utcnow()
     item.time_ms = time_ms if time_ms is not None else int(elapsed * 1000)
     item.tab_switches = max(0, int(tab_switches or 0))
@@ -399,12 +403,12 @@ def answer(
 
     if item.kind == "item":
         inst = engine.regenerate(str(attempt.id), item.position, item.family_id)
-        item.correct = (not timed_out) and inst.check(value)
-        item.response = {"value": value, "timed_out": timed_out}
+        item.correct = inst.check(value)
+        item.response = {"value": value, **pace}
         _update_family_stats(db, item)
     else:
-        text = "" if timed_out or value is None else str(value)[:8000]
-        item.response = {"value": text, "timed_out": timed_out}
+        text = "" if value is None else str(value)[:8000]
+        item.response = {"value": text, **pace}
         inst_s = scenario_instance(attempt, item)
         if item.kind == "scenario":
             g = grade_answer(inst_s, text)
@@ -452,6 +456,17 @@ def answer(
         db.flush()
         return None
     return finish(db, p, attempt, engine, responses, report)
+
+
+def pace_summary(db: Session, attempt: Attempt) -> dict:
+    """Сколько заданий решено с превышением рекомендуемого времени (на оценку не влияет)."""
+    items = answered_items(db, attempt)
+    over = [it for it in items if (it.response or {}).get("overtime")]
+    return {
+        "items": len(items),
+        "overtime_items": len(over),
+        "overtime_sec": sum(int((it.response or {}).get("overtime_sec") or 0) for it in over),
+    }
 
 
 def scenario_outcome(db: Session, attempt: Attempt) -> dict | None:
@@ -521,7 +536,8 @@ def finish(
     new_state, event = gp.finish_attempt(state, passed, now)
     attempt.status = "passed" if passed else "failed"
     attempt.finished_at = now
-    attempt.result = result_payload(result, report, knowledge=knowledge, scenario=sc_out)
+    pace = pace_summary(db, attempt)
+    attempt.result = result_payload(result, report, knowledge=knowledge, scenario=sc_out, pace=pace)
     if passed:
         p.confirmed_grade = new_state.confirmed_grade
         p.confirmed_at = now
@@ -534,8 +550,9 @@ def finish(
         }
         p.assessment_summary = {
             "attempt_id": str(attempt.id),
-            "integrity": {"level": report.level, "reasons": report.reasons},
+            "integrity": {"level": report.level, "severity": report.severity, "reasons": report.reasons},
             "proctoring": proctoring.summary(attempt, report),
+            "pace": pace,
             "scenario": (
                 {k: sc_out[k] for k in ("title", "category", "category_title", "method")} if sc_out else None
             ),
@@ -570,6 +587,7 @@ def result_payload(
     *,
     knowledge: CatResult | None = None,
     scenario: dict | None = None,
+    pace: dict | None = None,
 ) -> dict:
     cat = get_catalog()
     g = cat.grade(r.claimed_grade)
@@ -612,4 +630,5 @@ def result_payload(
         "scenario": scenario,
         "integrity": report.to_dict() if report is not None else None,
         "tab_switches": report.items_left if report is not None else 0,
+        "pace": pace,
     }

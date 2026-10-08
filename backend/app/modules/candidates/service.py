@@ -107,6 +107,7 @@ def features(p: CandidateProfile, embedding: np.ndarray | None = None) -> Candid
         embedding=embedding,
         proctored=((p.assessment_summary or {}).get("proctoring") or {}).get("status") == "verified",
         integrity=((p.assessment_summary or {}).get("integrity") or {}).get("level") or "ok",
+        integrity_severity=((p.assessment_summary or {}).get("integrity") or {}).get("severity"),
         **_experience_kw(p),
     )
 

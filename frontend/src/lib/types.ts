@@ -155,6 +155,14 @@ export interface AttemptResult {
   knowledge_p_claimed?: number
   scenario?: ScenarioOutcome | null
   integrity?: IntegrityReport | null
+  pace?: Pace | null
+}
+
+/** Задания, решённые дольше рекомендуемого времени (на оценку не влияет). */
+export interface Pace {
+  items: number
+  overtime_items: number
+  overtime_sec: number
 }
 
 export interface IntegrityReport {
@@ -167,26 +175,37 @@ export interface IntegrityReport {
   reasons: string[]
   leaves_left: number
   proctoring?: ProctoringReport | null
+  severity?: Severity
 }
+
+/** Тяжесть замечаний: hard — признаки подмены или подсказки, soft — остальные */
+export type Severity = 'none' | 'soft' | 'hard'
 
 /** Отчёт цифрового проктора (детекторы — в браузере, сверка лица 1:1 — на сервере) */
 export interface ProctoringReport {
   status: 'verified' | 'interrupted' | 'off'
-  identity: 'enrolled' | 'match' | 'mismatch' | null
+  identity: 'enrolled' | 'match' | 'uncertain' | 'mismatch' | null
   reasons: string[]
   phone_items: number
   mismatches: number
+  episodes?: number
+  uncertain?: number
   checks: number
   lost_ms: number
+  look_down_items?: number
+  severity?: Severity
 }
 
 /** Что видит работодатель о прокторе */
 export interface ProctoringSummary {
   status: 'verified' | 'interrupted' | 'off'
-  identity: 'enrolled' | 'match' | 'mismatch' | null
+  identity: 'enrolled' | 'match' | 'uncertain' | 'mismatch' | null
   re_enrolled: boolean
   checks: number
   mismatches: number
+  episodes?: number
+  look_down_items?: number
+  severity?: Severity
   reasons: string[]
 }
 
@@ -220,7 +239,7 @@ export interface Attempt {
   has_scenario: boolean
   integrity: { items_left: number; leaves_left: number; level: string } | null
   proctored: boolean
-  identity: 'enrolled' | 'match' | 'mismatch' | null
+  identity: 'enrolled' | 'match' | 'uncertain' | 'mismatch' | null
 }
 
 export interface Eligibility {
@@ -282,6 +301,7 @@ export interface CandidateCard {
   assessment: {
     integrity: { level: 'clean' | 'review' | 'void'; reasons: string[] }
     proctoring?: ProctoringSummary | null
+    pace?: Pace | null
     scenario: { title: string; category: number; category_title: string; method: string } | null
   } | null
   test_photo_available?: boolean

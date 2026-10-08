@@ -205,3 +205,35 @@ def test_environment_and_fullscreen_signals(client):
     for _ in range(3):
         att = _answer(cand2, att, fullscreen_off_ms=5000)
     assert att["status"] == "voided"
+
+
+def _age_current_item(att: dict, seconds: int) -> None:
+    from datetime import timedelta
+
+    from app.core.db import SessionLocal
+
+    with SessionLocal() as db:
+        it = db.scalar(
+            select(AttemptItem).where(
+                AttemptItem.attempt_id == uuid.UUID(att["id"]),
+                AttemptItem.position == att["item"]["position"],
+            )
+        )
+        it.issued_at = it.issued_at - timedelta(seconds=seconds)
+        db.commit()
+
+
+def test_overtime_answer_counts_and_is_marked(client):
+    """Время на задание — ориентир: ответ после него засчитывается, задание помечается."""
+    cand = make_candidate(client)
+    att = cand.post("/api/assessment/attempts", json={"grade": "junior"}).json()
+    limit = att["item"]["time_limit"]
+    _age_current_item(att, limit + assessment_service.TIME_GRACE_SEC + 60)
+    pos = att["item"]["position"]
+    att = _answer(cand, att)
+    it, _ = _db_item({**att, "item": {"position": pos}})
+    assert it.correct is True
+    assert it.response["overtime"] is True and it.response["overtime_sec"] >= 60
+    att = _run_knowledge(cand, att)
+    pace = att["result"]["pace"]
+    assert pace["overtime_items"] == 1 and pace["items"] == att["result"]["n_items"]

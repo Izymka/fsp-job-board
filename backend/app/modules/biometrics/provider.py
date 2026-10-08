@@ -3,6 +3,11 @@
 Эмбеддинг считает браузер кандидата (Human, модель faceres); сервер получает только вектор и
 решает сам — клиентскому флагу «совпало» не доверяем. Поиска по базе (1:N) нет.
 
+Эталон — галерея до `GALLERY_MAX` эмбеддингов: несколько кадров с первой проверки и лучшие кадры
+последующих уверенных совпадений (свет, очки, причёска меняются). Сходство — максимум по галерее.
+Решение трёхзначное: уверенное совпадение (≥ `biometric_threshold`), уверенное несовпадение
+(< `biometric_mismatch_threshold`) и серая зона между ними, которая сигналом не считается.
+
 Поставщики:
 * `local_demo` — эталон в нашей БД, зашифрован AES-256-GCM. Только для демонстрации.
 * `ebs` — Единая биометрическая система. По 572-ФЗ аутентификация по биометрии в production
@@ -18,7 +23,7 @@ import struct
 import uuid
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from sqlalchemy.orm import Session
@@ -29,12 +34,22 @@ from ...core.errors import AppError
 from .models import BiometricTemplate
 
 EMBEDDING_MIN, EMBEDDING_MAX = 64, 2048
+GALLERY_MAX = 5  # векторов в эталоне
+ENROLL_MAX = 3  # из них — с первой проверки; остальные места пополняются уверенными совпадениями
+GALLERY_ADD_MIN = 0.6  # сходство, с которым кадр пополняет эталон
+_MAGIC = b"FSPG"  # заголовок галереи; запись без него — один вектор (эталоны до галереи)
+
+Status = Literal["match", "uncertain", "mismatch"]
 
 
 @dataclass(frozen=True)
 class Verification:
-    match: bool
+    status: Status
     similarity: float
+
+    @property
+    def match(self) -> bool:
+        return self.status == "match"
 
 
 @dataclass(frozen=True)
@@ -48,12 +63,14 @@ class BiometricProvider(Protocol):
     def has_template(self, db: Session, user_id: uuid.UUID) -> bool: ...
 
     def enroll(
-        self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str
+        self, db: Session, user_id: uuid.UUID, embeddings: Sequence[Sequence[float]], model: str
     ) -> Enrollment: ...
 
     def verify(
         self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str
     ) -> Verification: ...
+
+    def add(self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str) -> bool: ...
 
     def delete(self, db: Session, user_id: uuid.UUID) -> bool: ...
 
@@ -86,28 +103,40 @@ class LocalDemoProvider:
     def __init__(self, settings: Settings) -> None:
         self.key = hashlib.sha256(settings.biometric_key.encode()).digest()
         self.threshold = settings.biometric_threshold
+        self.mismatch_threshold = settings.biometric_mismatch_threshold
 
-    def _pack(self, v: Sequence[float], model: str) -> tuple[bytes, bytes]:
+    def _pack(self, base: int, vs: Sequence[Sequence[float]], model: str) -> tuple[bytes, bytes]:
+        """base — сколько первых векторов с первой проверки (не вытесняются при пополнении)."""
         nonce = os.urandom(12)
-        data = struct.pack(f"<{len(v)}f", *v)
+        flat = [x for v in vs for x in v]
+        data = _MAGIC + struct.pack("<HH", base, len(vs)) + struct.pack(f"<{len(flat)}f", *flat)
         return AESGCM(self.key).encrypt(nonce, data, model.encode()), nonce
 
-    def _unpack(self, t: BiometricTemplate) -> list[float]:
+    def _unpack(self, t: BiometricTemplate) -> tuple[int, list[list[float]]]:
         data = AESGCM(self.key).decrypt(t.nonce, t.ciphertext, (t.model_version or "").encode())
-        return list(struct.unpack(f"<{len(data) // 4}f", data))
+        if not data.startswith(_MAGIC):
+            return 1, [list(struct.unpack(f"<{len(data) // 4}f", data))]
+        base, n = struct.unpack("<HH", data[4:8])
+        flat = struct.unpack(f"<{(len(data) - 8) // 4}f", data[8:])
+        d = len(flat) // n
+        return base, [list(flat[i * d : (i + 1) * d]) for i in range(n)]
 
     def has_template(self, db: Session, user_id: uuid.UUID) -> bool:
         t = db.get(BiometricTemplate, user_id)
         return t is not None and t.ciphertext is not None
 
-    def enroll(self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str) -> Enrollment:
-        v = check_embedding(embedding)
+    def enroll(
+        self, db: Session, user_id: uuid.UUID, embeddings: Sequence[Sequence[float]], model: str
+    ) -> Enrollment:
+        vs = [check_embedding(v) for v in embeddings][:ENROLL_MAX]
+        if not vs or len({len(v) for v in vs}) != 1:
+            raise AppError(422, "bad_embedding", "Некорректный эмбеддинг лица")
         t = db.get(BiometricTemplate, user_id)
         if t is None:
             t = BiometricTemplate(user_id=user_id, enrollments=0)
             db.add(t)
         re = (t.enrollments or 0) > 0
-        t.ciphertext, t.nonce = self._pack(v, model)
+        t.ciphertext, t.nonce = self._pack(len(vs), vs, model)
         t.model_version = model
         t.enrollments = (t.enrollments or 0) + 1
         t.enrolled_at, t.deleted_at = utcnow(), None
@@ -120,10 +149,30 @@ class LocalDemoProvider:
         if t is None or t.ciphertext is None:
             raise AppError(409, "no_template", "Эталон лица не создан")
         if (t.model_version or "") != model:
-            # эмбеддинги разных моделей несравнимы: считаем несовпадением, а не ошибкой клиента
-            return Verification(False, 0.0)
-        s = similarity(self._unpack(t), v)
-        return Verification(s >= self.threshold, round(s, 3))
+            # эмбеддинги разных моделей несравнимы: сигналом это не считаем — ошибка не кандидата
+            return Verification("uncertain", 0.0)
+        _, gallery = self._unpack(t)
+        s = max(similarity(g, v) for g in gallery)
+        status: Status = (
+            "match" if s >= self.threshold else "mismatch" if s < self.mismatch_threshold else "uncertain"
+        )
+        return Verification(status, round(s, 3))
+
+    def add(self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str) -> bool:
+        """Пополнить эталон кадром уверенного совпадения; добавленные ранее вытесняются по очереди."""
+        v = check_embedding(embedding)
+        t = db.get(BiometricTemplate, user_id)
+        if t is None or t.ciphertext is None or (t.model_version or "") != model:
+            return False
+        base, gallery = self._unpack(t)
+        if len(v) != len(gallery[0]):
+            return False
+        if max(similarity(g, v) for g in gallery) < GALLERY_ADD_MIN:
+            return False
+        extra = (gallery[base:] + [v])[-(GALLERY_MAX - base) :] if base < GALLERY_MAX else []
+        t.ciphertext, t.nonce = self._pack(base, gallery[:base] + extra, model)
+        db.flush()
+        return True
 
     def delete(self, db: Session, user_id: uuid.UUID) -> bool:
         t = db.get(BiometricTemplate, user_id)
@@ -152,11 +201,16 @@ class EbsProvider:
     def has_template(self, db: Session, user_id: uuid.UUID) -> bool:
         self._unavailable()
 
-    def enroll(self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str) -> Enrollment:
+    def enroll(
+        self, db: Session, user_id: uuid.UUID, embeddings: Sequence[Sequence[float]], model: str
+    ) -> Enrollment:
         self._unavailable()
 
     def verify(self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str) -> Verification:
         self._unavailable()
+
+    def add(self, db: Session, user_id: uuid.UUID, embedding: Sequence[float], model: str) -> bool:
+        return False  # эталон ведёт ЕБС
 
     def delete(self, db: Session, user_id: uuid.UUID) -> bool:
         return False  # эталон хранится в ЕБС; отзыв согласия — у оператора ЕБС

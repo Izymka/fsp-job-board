@@ -50,10 +50,22 @@ def test_proctor_rules_are_conservative():
     # телефон на двух заданиях — пометка, на трёх — аннулирование
     assert run([P(phone_hits=2)] * 2 + [P()] * 8).level == "review"
     assert run([P(phone_hits=1)] * 3 + [P()] * 7).level == "void"
-    # несовпадение с эталоном: на старте — пометка, дважды за тест — аннулирование
-    assert run([P()] * 10, identity="mismatch").level == "review"
-    assert run([P(mismatch=1, checks=1)] + [P()] * 9).level == "review"
-    assert run([P(mismatch=1, checks=1)] * 2 + [P()] * 8).level == "void"
+    # несовпадение с эталоном: на старте — пометка; во время теста считается эпизодами —
+    # уверенно плохие сверки подряд. Один плохой кадр (наклон к листу, свет) — не сигнал.
+    bad, good, grey = P(mismatch=1, checks=1), P(checks=1), P(uncertain=1, checks=1)
+    start = run([good] * 10, identity="mismatch")
+    assert start.level == "review" and start.severity == "hard"
+    assert run([bad] + [good] * 9).level == "clean"
+    assert run([bad, good, bad, good] + [good] * 6).level == "clean"
+    ep = run([bad, bad] + [good] * 8)
+    assert ep.level == "review" and ep.severity == "hard" and ep.proctoring.episodes == 1
+    # серая зона цепочку не рвёт, но и не продлевает; сама по себе — не сигнал
+    assert run([bad, grey, bad] + [good] * 7).proctoring.episodes == 1
+    assert run([grey] * 10).level == "clean"
+    # аннулирование: два эпизода, эпизод и несовпадение на старте, или длинный эпизод
+    assert run([bad, bad, good, bad, bad] + [good] * 5).level == "void"
+    assert run([bad, bad] + [good] * 8, identity="mismatch").level == "void"
+    assert run([bad] * 3 + [good] * 7).level == "void"
     # лицо пропало из кадра надолго — считается уходом; три таких задания — как три ухода
     assert run([P(no_face_ms=25_000)] + [P()] * 9).level == "review"
     assert run([P(no_face_ms=25_000)] * 3 + [P()] * 7).level == "void"
@@ -64,6 +76,33 @@ def test_proctor_rules_are_conservative():
     # отключённая камера — не нарушение: тест засчитан без замечаний, но бейдж проктора снят
     lost = run([P(cam_lost_ms=40_000)] + [P()] * 9)
     assert lost.level == "clean" and lost.proctoring.status == "interrupted"
+
+
+def test_severity_classes_and_look_down():
+    S, P, E = integ.ItemSignals, integ.ProctorSignals, integ.EnvSignals
+    clean = [S()] * 10
+
+    def run(pr, signals=clean, **kw):
+        return integ.assess(signals, proctor=pr, identity="match", **kw)
+
+    assert run([P()] * 10).severity == "none"
+    # взгляд вниз (лист с расчётами) — разрешён: только счётчик
+    down = run([P(look_down_ms=60_000)] * 10)
+    assert down.level == "clean" and down.severity == "none" and down.proctoring.look_down_items == 10
+    # мягкие: взгляд вбок, речь, единичный уход, второй монитор, посторонний на одном задании
+    assert run([P(look_away_ms=20_000)] * 3 + [P()] * 7).severity == "soft"
+    assert run([P(speech_ms=4_000)] * 2 + [P()] * 8).severity == "soft"
+    assert run([P()] * 10, signals=[S(1, 5000)] + [S()] * 9).severity == "soft"
+    assert run([P()] * 10, signals=[S(extended_screen=True)] + [S()] * 9).severity == "soft"
+    assert run([P(multi_face_ms=6_000)] + [P()] * 9).severity == "soft"
+    # тяжёлые: телефон, посторонние на нескольких заданиях, вставка, webdriver, ВМ
+    assert run([P(phone_hits=1)] + [P()] * 9).severity == "hard"
+    assert run([P(multi_face_ms=6_000)] * 2 + [P()] * 8).severity == "hard"
+    assert run([P()] * 10, signals=[S(paste_attempts=1)] + [S()] * 9).severity == "hard"
+    assert run([P()] * 10, env=E(webdriver=True)).severity == "hard"
+    assert integ.assess(clean, env=E(virtual="vm", renderer="VMware SVGA 3D")).severity == "hard"
+    # без проктора — тоже по классам
+    assert integ.assess([S(copy_attempts=1)] + [S()] * 9).severity == "soft"
 
 
 def test_fullscreen_and_environment_rules():

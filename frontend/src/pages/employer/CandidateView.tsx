@@ -34,6 +34,7 @@ function TestPhoto({ id }: { id: string }) {
 
 function ProctorBadges({ c }: { c: CandidateCard }) {
   const pr = c.assessment?.proctoring
+  const pace = c.assessment?.pace
   return (
     <div className="mt-3 flex flex-wrap gap-2">
       {pr?.status === 'verified' && (
@@ -44,6 +45,11 @@ function ProctorBadges({ c }: { c: CandidateCard }) {
       )}
       {pr?.status === 'interrupted' && <Badge tone="bg-surface text-muted">Проктор прерывался</Badge>}
       {pr?.re_enrolled && <Badge tone="bg-warn-50 text-warn-600">Эталон лица создан заново</Badge>}
+      {!!pace?.overtime_items && (
+        <Badge tone="bg-surface text-ink-soft">
+          С превышением времени: {pace.overtime_items} из {pace.items} заданий
+        </Badge>
+      )}
       {c.fsp_linked && (
         <Badge tone="bg-brand-50 text-brand-700">
           <BadgeCheck className="mr-1 inline h-3.5 w-3.5" />

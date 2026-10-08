@@ -1,7 +1,7 @@
-// Цифровой проктор: проверка перед стартом, окно с собственным видео во время теста, водяной знак.
+// Цифровой проктор: проверка перед стартом (с собственным видео), индикаторы во время теста, водяной знак.
 import { useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Camera, CheckCircle2, Circle, Loader2, Mic, MicOff, ShieldCheck, Smartphone, UserX, Users, VideoOff } from 'lucide-react'
+import { Camera, CheckCircle2, Circle, Loader2, Mic, MicOff, PenLine, ShieldCheck, Smartphone, UserX, Users, VideoOff } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { api } from '../lib/api'
 import { useAuth, useMe } from '../lib/auth'
@@ -11,7 +11,7 @@ import { ErrorBox, Modal, Notice } from './ui'
 
 export interface ProctorStart {
   proctored: true
-  embedding: number[]
+  embeddings: number[][] // несколько качественных кадров проверки: эталон и сверка надёжнее
   embedding_model: string
   snapshot?: string
 }
@@ -43,7 +43,7 @@ function SelfView({ className }: { className?: string }) {
 }
 
 /**
- * Проверка перед тестом с проктором: согласия → доступ к камере и микрофону → чек-лист → эмбеддинг
+ * Проверка перед тестом с проктором: согласия → доступ к камере и микрофону → чек-лист → эмбеддинги
  * (и кадр, если дано согласие). Видео и звук не покидают устройство.
  */
 export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; onClose: () => void; onReady: (s: ProctorStart) => void }) {
@@ -117,10 +117,11 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
   const liveOk = res?.real == null || res?.live == null ? null : res.real >= 0.4 && res.live >= 0.4
 
   const go = () => {
-    if (!res?.embedding) return
+    const embeddings = proctor.startEmbeddings()
+    if (!embeddings.length) return
     onReady({
       proctored: true,
-      embedding: res.embedding,
+      embeddings,
       embedding_model: proctor.model,
       snapshot: photo ? (proctor.snapshotJpeg() ?? undefined) : undefined,
     })
@@ -143,6 +144,7 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
             <li className="flex gap-2"><Users className="mt-0.5 h-4 w-4 shrink-0 text-muted" />В кадре — только вы</li>
             <li className="flex gap-2"><Mic className="mt-0.5 h-4 w-4 shrink-0 text-muted" />Микрофон включён, задания не читаем вслух</li>
             <li className="flex gap-2"><Camera className="mt-0.5 h-4 w-4 shrink-0 text-muted" />Лицо в кадре, достаточно света</li>
+            <li className="flex gap-2 sm:col-span-2"><PenLine className="mt-0.5 h-4 w-4 shrink-0 text-muted" />Ручка и лист для расчётов — можно, смотреть на лист не нарушение. В тесте есть черновик и калькулятор</li>
           </ul>
           <label className="flex items-start gap-2.5 rounded-xl border border-line p-3">
             <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={bio} onChange={(e) => setBio(e.target.checked)} />
@@ -158,7 +160,7 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
               <span className="mt-1 block text-xs text-muted">{config?.consent_texts.proctoring_photo}</span>
             </span>
           </label>
-          <Notice>Без проктора тест тоже доступен — согласие добровольное. С проктором в карточке будет отметка «Тест с проктором».</Notice>
+          <Notice>Без проктора тест тоже доступен — согласие добровольное. С проктором в карточке будет отметка «Тест с проктором», а в подборе работодателей вы будете стоять заметно выше: результату под наблюдением доверяют больше.</Notice>
           <ErrorBox error={error} />
           <div className="flex justify-end gap-2">
             <button className="btn-secondary" onClick={cancel}>
@@ -182,7 +184,7 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
                 <div className="h-full bg-ok-600 transition-all" style={{ width: `${Math.round(live.level * 100)}%` }} />
               </div>
             </div>
-            <p className="hint mt-2">Расположитесь так, чтобы лицо было по центру и хорошо освещено.</p>
+            <p className="hint mt-2">Расположитесь так, чтобы лицо было по центру и хорошо освещено. Во время теста своего видео вы не увидите — только индикатор «вы в кадре».</p>
           </div>
           <div className="space-y-4">
             <ul className="space-y-2.5">
@@ -219,26 +221,36 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
   )
 }
 
-/** Окно с собственным видео и индикаторами проктора во время теста. */
+/**
+ * Индикаторы проктора во время теста. Собственного видео нет намеренно: по нему легко найти слепые
+ * зоны камеры (например, чтобы сфотографировать задание). Положение в кадре кандидат выставляет на
+ * проверке перед стартом, а здесь видит только «вы в кадре / вас не видно».
+ */
 export function ProctorDock() {
   const live = useProctorLive()
   if (!live.active) return null
+  const lost = live.faces === 0 && live.noFaceMs >= 3000
   const items = [
     { ok: live.camOk, icon: live.camOk ? Camera : VideoOff, label: live.camOk ? 'Камера' : 'Камера выключена' },
     { ok: live.micOk, icon: live.micOk ? Mic : MicOff, label: live.micOk ? 'Микрофон' : 'Микрофон выключен' },
-    { ok: live.faces === 1, icon: live.faces > 1 ? Users : UserX, label: live.faces === 1 ? 'Лицо в кадре' : live.faces > 1 ? 'Несколько лиц' : 'Нет лица' },
+    { ok: live.faces === 1, icon: live.faces > 1 ? Users : UserX, label: live.faces === 1 ? 'Вы в кадре' : live.faces > 1 ? 'Несколько лиц' : 'Вас не видно' },
     { ok: !live.phone, icon: Smartphone, label: live.phone ? 'Телефон в кадре' : 'Телефона нет' },
   ]
   return (
-    <div className="fixed right-3 bottom-3 z-40 w-40 overflow-hidden rounded-xl border border-line bg-white shadow-lg sm:w-48" aria-label="Цифровой проктор">
-      <SelfView className="aspect-[4/3] w-full" />
-      <div className="flex items-center justify-between gap-1 px-2 py-1.5">
+    <div
+      className={clsx('fixed right-3 bottom-3 z-40 rounded-xl border bg-white shadow-lg transition-colors', lost ? 'border-accent-500 ring-2 ring-accent-500/30' : 'border-line')}
+      aria-label="Цифровой проктор"
+      aria-live="polite"
+    >
+      <div className="flex items-center gap-1 px-2 py-1.5">
+        <ShieldCheck className="mr-0.5 h-3.5 w-3.5 text-muted" aria-hidden />
         {items.map(({ ok, icon: Icon, label }) => (
           <span key={label} title={label} aria-label={label} className={clsx('rounded-md p-1', ok ? 'text-ok-600' : 'bg-accent-50 text-accent-600')}>
             <Icon className="h-3.5 w-3.5" />
           </span>
         ))}
       </div>
+      {lost && <div className="border-t border-accent-500/30 px-2.5 py-1 text-xs font-medium text-accent-600">Вас не видно в кадре</div>}
     </div>
   )
 }

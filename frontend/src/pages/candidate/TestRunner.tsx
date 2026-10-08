@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { SkillList } from '../../components/domain'
 import { ProctorDock, Watermark } from '../../components/proctor'
+import { clearScratch, Scratchpad } from '../../components/scratchpad'
 import { Badge, CodeBlock, ErrorBox, Md, Notice, PageLoader, Progress, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { useMe } from '../../lib/auth'
@@ -13,23 +14,30 @@ import { lookup, useCatalog } from '../../lib/catalog'
 import { proctor, proctorWarning, useProctorLive } from '../../lib/proctor/session'
 import type { Attempt, AttemptResult, GradeId, Item } from '../../lib/types'
 
+/** Секунды до конца рекомендуемого времени; после него — отрицательные (превышение). */
 function useCountdown(item: Item | null) {
   const [left, setLeft] = useState<number | null>(null)
   useEffect(() => {
     if (!item) return
     const started = Date.now()
     setLeft(item.time_limit)
-    const t = setInterval(() => setLeft(Math.max(0, item.time_limit - Math.floor((Date.now() - started) / 1000))), 500)
+    const t = setInterval(() => setLeft(item.time_limit - Math.floor((Date.now() - started) / 1000)), 500)
     return () => clearInterval(t)
   }, [item])
   return left
 }
 
+const clock = (sec: number) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`
+
 const MIN_AWAY_MS = 1500 // короче — случайный клик мимо окна, не считаем
 
-/** Сигналы надёжности по текущему заданию: уходы со страницы (вкладка или окно), копирование, вставка. */
+export type PasteEvent = { preventDefault: () => void; clipboardData?: DataTransfer | null }
+
+/** Сигналы надёжности по текущему заданию: уходы со страницы (вкладка или окно), копирование, вставка.
+ * Вставка текста, скопированного из черновика теста (его набрал сам кандидат), разрешена и не считается. */
 function useIntegrity(itemKey: unknown) {
   const s = useRef({ losses: 0, away: 0, pastes: 0, copies: 0 })
+  const internal = useRef<string | null>(null)
   const awaySince = useRef<number | null>(null)
   const [lastAway, setLastAway] = useState<number | null>(null)
   useEffect(() => {
@@ -64,9 +72,14 @@ function useIntegrity(itemKey: unknown) {
     e.preventDefault()
     s.current.copies += 1
   }, [])
-  const onPaste = useCallback((e: { preventDefault: () => void }) => {
+  const onPaste = useCallback((e: PasteEvent) => {
+    const text = e.clipboardData?.getData('text/plain')
+    if (text && text === internal.current) return
     e.preventDefault()
     s.current.pastes += 1
+  }, [])
+  const markCopied = useCallback((text: string) => {
+    internal.current = text || null
   }, [])
   const snapshot = () => {
     // если ответ отправляется, пока окно не в фокусе, — досчитать текущий уход
@@ -78,10 +91,10 @@ function useIntegrity(itemKey: unknown) {
       copy_attempts: s.current.copies,
     }
   }
-  return { onCopy, onPaste, snapshot, lastAway, flagged: s.current.losses > 0 && s.current.away >= 2000, dismiss: () => setLastAway(null) }
+  return { onCopy, onPaste, markCopied, snapshot, lastAway, flagged: s.current.losses > 0 && s.current.away >= 2000, dismiss: () => setLastAway(null) }
 }
 
-function ItemInput({ item, value, onChange, onPaste }: { item: Item; value: unknown; onChange: (v: unknown) => void; onPaste: (e: { preventDefault: () => void }) => void }) {
+function ItemInput({ item, value, onChange, onPaste }: { item: Item; value: unknown; onChange: (v: unknown) => void; onPaste: (e: PasteEvent) => void }) {
   if (item.kind === 'single')
     return (
       <div className="grid gap-2" role="radiogroup">
@@ -247,6 +260,16 @@ function IntegrityNote({ r }: { r: AttemptResult }) {
   )
 }
 
+function PaceNote({ r }: { r: AttemptResult }) {
+  const p = r.pace
+  if (!p?.overtime_items) return null
+  return (
+    <p className="flex items-center gap-1.5 text-xs text-muted">
+      <Clock className="h-3.5 w-3.5" /> С превышением рекомендуемого времени: {p.overtime_items} из {p.items} заданий. На оценку не влияет, работодатель видит это число.
+    </p>
+  )
+}
+
 function Result({ a }: { a: Attempt }) {
   const { data: cat } = useCatalog()
   const L = lookup(cat)
@@ -260,12 +283,12 @@ function Result({ a }: { a: Attempt }) {
   const start = useMutation({
     mutationFn: async (grade: GradeId) => {
       // предыдущая попытка шла с проктором и камера ещё открыта — следующая тоже с проктором
-      const emb = a.proctored && proctor.opened ? await proctor.capture() : null
-      const p = emb ? { proctored: true, embedding: emb, embedding_model: proctor.model } : {}
+      const emb = a.proctored && proctor.opened ? await proctor.capture() : []
+      const p = emb.length ? { proctored: true, embeddings: emb, embedding_model: proctor.model } : {}
       return { x: await api.post<Attempt>('/api/assessment/attempts', { grade, ...p, env: detectEnv() }), emb }
     },
     onSuccess: ({ x, emb }) => {
-      if (emb) proctor.start(emb)
+      if (emb.length) proctor.start(emb)
       qc.invalidateQueries()
       nav(`/candidate/test/${x.id}`)
     },
@@ -308,6 +331,7 @@ function Result({ a }: { a: Attempt }) {
         </div>
       </section>
       <IntegrityNote r={r} />
+      <PaceNote r={r} />
       <ScenarioResult r={r} />
       <Section title="Подоценки навыков">
         <SkillList scores={Object.fromEntries(Object.entries(r.skills).map(([k, v]) => [k, { ...v, title: '' }]))} />
@@ -341,6 +365,7 @@ export default function TestRunner() {
   // экран результата: наблюдение на паузе (камера открыта для следующей попытки); уход со страницы — выключить
   useEffect(() => {
     if (a && a.status !== 'in_progress') {
+      clearScratch(a.id)
       if (proctor.active) proctor.pause()
       exitFullscreen()
     }
@@ -385,10 +410,6 @@ export default function TestRunner() {
       nav('/candidate/test')
     },
   })
-  useEffect(() => {
-    if (left === 0 && item && !answer.isPending) answer.mutate(value)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [left])
   if (!a) return <PageLoader queries={[attempt]} />
   if (a.status === 'voided')
     return (
@@ -424,6 +445,7 @@ export default function TestRunner() {
   if (!item) return <PageLoader />
   const isText = item.kind === 'scenario' || item.kind === 'probe'
   const canSubmit = value !== null && value !== '' && !(Array.isArray(value) && item.kind === 'multi' && value.length === 0) && !(isText && String(value).trim().length < 10)
+  const overtime = left != null && left < 0
   const lowTime = left != null && left <= (isText ? 60 : 15)
   const stages = a.has_scenario ? 2 : 1
   const stageTitle = item.stage === 'knowledge' ? 'Тест знаний' : item.stage === 'scenario' ? 'Практический кейс' : 'Уточняющий вопрос'
@@ -488,9 +510,12 @@ export default function TestRunner() {
           {item.stage === 'knowledge' && <Badge tone="bg-brand-50 text-brand-700">Задание {item.position + 1}</Badge>}
           <Badge tone="bg-surface text-ink-soft">{item.skill_title}</Badge>
         </div>
-        <div className={clsx('flex items-center gap-1.5 font-mono text-sm', lowTime ? 'text-accent-600' : 'text-ink-soft')} aria-live="polite">
+        <div
+          className={clsx('flex items-center gap-1.5 font-mono text-sm', overtime ? 'text-warn-600' : lowTime ? 'text-accent-600' : 'text-ink-soft')}
+          title={overtime ? 'Рекомендуемое время вышло — ответ всё равно будет засчитан' : 'Рекомендуемое время на задание'}
+        >
           <Clock className="h-4 w-4" />
-          {left != null ? `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}` : '—'}
+          {left == null ? '—' : overtime ? `+${clock(-left)}` : clock(left)}
         </div>
       </div>
       {item.stage === 'knowledge' ? (
@@ -507,6 +532,14 @@ export default function TestRunner() {
         </Notice>
       ) : (
         <Notice tone="warn">Ответьте своими словами: вопрос задан по вашему решению. На ответ — 2 минуты.</Notice>
+      )}
+      {overtime && (
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-warn-600/30 bg-warn-50 px-4 py-3 text-sm text-warn-600" role="status">
+          <Clock className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            Рекомендуемое время вышло — ничего страшного, спокойно закончите ответ. Он будет засчитан по существу, а задание отмечено как решённое с превышением времени.
+          </div>
+        </div>
       )}
       <form
         className="card relative mt-5 overflow-hidden p-5 sm:p-7"
@@ -539,8 +572,9 @@ export default function TestRunner() {
           </div>
         </div>
       </form>
+      <Scratchpad attemptId={a.id} onPaste={guard.onPaste} onCopied={guard.markCopied} />
       <p className="mt-3 text-center text-xs text-muted">
-        Копирование заданий и вставка текста в ответы отключены. Уход со страницы теста дольше 2 секунд фиксируется. Задание помечено кодом вашей попытки.
+        Копирование заданий и вставка текста извне отключены; из черновика в ответ копировать можно. Ручка и лист для расчётов разрешены. Уход со страницы теста дольше 2 секунд фиксируется. Задание помечено кодом вашей попытки.
       </p>
     </div>
   )

@@ -45,28 +45,40 @@ export function loadHuman(): Promise<Human> {
 export interface Frame {
   faces: number
   phone: boolean
-  lookingAway: boolean
+  lookingAway: boolean // вбок или вверх: второй экран, подсказчик
+  lookingDown: boolean // вниз: лист с расчётами, клавиатура — разрешено, только счётчик
   embedding?: number[]
   real?: number
   live?: number
 }
 
 const PHONE_SCORE = 0.45
-// эмбеддинг мелкого лица ненадёжен (на снимках ниже ~150 px сходство разных людей завышено):
-// отпечаток берётся только с достаточно крупного лица — кандидата просят сесть ближе
+// Отпечаток лица берётся только с качественного кадра — иначе тот же человек «не совпадает»:
+// * лицо крупное (на снимках ниже ~150 px сходство разных людей завышено, а одного — занижено);
+// * детектор уверен в лице;
+// * лицо смотрит в камеру: при наклоне к листу или повороте эмбеддинг заметно уплывает.
 const EMBED_MIN_FACE_PX = 160
+const EMBED_MIN_SCORE = 0.8
+const EMBED_MAX_ANGLE = 0.35 // рад ≈ 20°
 const YAW_AWAY = 0.6 // рад ≈ 35°
 const PITCH_AWAY = 0.5
+// Знак наклона в Human: принимаем pitch > 0 за «голова опущена». Проверить на живой камере
+// и при необходимости поменять знак здесь.
+const PITCH_DOWN_SIGN = 1
 
 export function readFrame(r: Result): Frame {
   const faces = r.face.filter((f) => f.score >= 0.5)
   const main = faces[0]
   const a = main?.rotation?.angle
+  const down = !!a && a.pitch * PITCH_DOWN_SIGN > PITCH_AWAY
+  const frontal = !!a && Math.abs(a.yaw) < EMBED_MAX_ANGLE && Math.abs(a.pitch) < EMBED_MAX_ANGLE
+  const good = faces.length === 1 && main.box[2] >= EMBED_MIN_FACE_PX && (main.faceScore ?? main.score) >= EMBED_MIN_SCORE && frontal
   return {
     faces: faces.length,
     phone: r.object.some((o) => o.label === 'cell phone' && o.score >= PHONE_SCORE),
-    lookingAway: !!a && (Math.abs(a.yaw) > YAW_AWAY || Math.abs(a.pitch) > PITCH_AWAY),
-    embedding: faces.length === 1 && main.box[2] >= EMBED_MIN_FACE_PX && main.embedding?.length ? Array.from(main.embedding) : undefined,
+    lookingAway: !!a && (Math.abs(a.yaw) > YAW_AWAY || (Math.abs(a.pitch) > PITCH_AWAY && !down)),
+    lookingDown: down,
+    embedding: good && main.embedding?.length ? Array.from(main.embedding) : undefined,
     real: main?.real,
     live: main?.live,
   }
