@@ -82,6 +82,17 @@ export default function TestHub() {
       )}
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
         <Section title="Выберите уровень">
+          <label className={clsx('mb-4 flex cursor-pointer items-start gap-3 rounded-xl border p-4', withProctor ? 'border-brand-500 bg-brand-50' : 'border-line')}>
+            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={withProctor} onChange={(ev) => setWithProctor(ev.target.checked)} />
+            <span className="text-sm">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <ShieldCheck className="h-4 w-4 text-brand-600" /> Пройти с цифровым проктором
+              </span>
+              <span className="mt-0.5 block text-xs text-muted">
+                По желанию. Камера и микрофон анализируются в браузере, видео не записывается. Работодатель увидит отметку «Тест с проктором», и в выдаче такой профиль стоит выше, чем профиль с тестом без проктора.
+              </span>
+            </span>
+          </label>
           <div className="grid gap-3 sm:grid-cols-2">
             {e.options.map((o) => {
               const g = cat.grades.find((x) => x.id === o.grade)!
@@ -120,17 +131,6 @@ export default function TestHub() {
               <Notice tone="warn">Подключён второй монитор. Отключите его до начала теста — иначе работодатель увидит замечание.</Notice>
             </div>
           )}
-          <label className={clsx('mt-4 flex cursor-pointer items-start gap-3 rounded-xl border p-4', withProctor ? 'border-brand-500 bg-brand-50' : 'border-line')}>
-            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={withProctor} onChange={(ev) => setWithProctor(ev.target.checked)} />
-            <span className="text-sm">
-              <span className="flex items-center gap-1.5 font-semibold">
-                <ShieldCheck className="h-4 w-4 text-brand-600" /> Пройти с цифровым проктором
-              </span>
-              <span className="mt-0.5 block text-xs text-muted">
-                По желанию. Камера и микрофон анализируются в браузере, видео не записывается. Работодатель увидит отметку «Тест с проктором», а при равных результатах такой профиль стоит выше.
-              </span>
-            </span>
-          </label>
           <div className="mt-3">
             <ErrorBox error={start.error} />
           </div>

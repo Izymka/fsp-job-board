@@ -65,11 +65,49 @@ class CandidateFeatures:
     about: str = ""
     embedding: np.ndarray | None = None
     proctored: bool = False  # грейд подтверждён тестом с цифровым проктором без перерывов
+    integrity: str = "ok"  # уровень надёжности попытки, подтвердившей грейд: ok / review
+    experience_years: float | None = None  # заявленный стаж (из опроса или резюме), не проверяется
 
 
-# Тест с проктором надёжнее подтверждает результат: небольшой множитель силы теста. Это бонус, а не
-# штраф остальным — проктор добровольный (отказ от биометрии не должен ухудшать положение кандидата).
-PROCTOR_BONUS = 1.05
+# Доверие к подтверждённому грейду — множитель итогового скора: тест с проктором без перерывов
+# весит полностью, обычный тест — меньше, тест с замечаниями (review) — заметно меньше.
+TRUST = {"verified": 1.0, "plain": 0.85, "review": 0.6}
+TRUST_REASON = {
+    "verified": ("positive", "Тест пройден с цифровым проктором"),
+    "plain": ("neutral", "Тест без проктора"),
+    "review": ("negative", "Тест с замечаниями о самостоятельности прохождения"),
+}
+
+# Стаж: небольшая поправка относительно ожидаемого для грейда минимума. Грейд подтверждён тестом,
+# а стаж только заявлен, поэтому поправка ограничена: −5% … +6%.
+GRADE_MIN_YEARS = {"intern": 0.0, "junior": 0.5, "middle": 2.0, "senior": 4.0, "lead": 6.0}
+EXP_BELOW_STEP, EXP_ABOVE_STEP = 0.025, 0.015
+EXP_MIN, EXP_MAX = 0.95, 1.06
+
+
+def trust_level(c: CandidateFeatures) -> str | None:
+    """verified / plain / review; None — грейд не подтверждён тестом (множитель не применяется)."""
+    if c.theta is None or c.grade is None:
+        return None
+    if c.integrity == "review":
+        return "review"
+    return "verified" if c.proctored else "plain"
+
+
+def experience_factor(c: CandidateFeatures) -> float:
+    if c.experience_years is None or c.grade not in GRADE_MIN_YEARS:
+        return 1.0
+    d = c.experience_years - GRADE_MIN_YEARS[c.grade]
+    f = 1 + (EXP_ABOVE_STEP * d if d >= 0 else EXP_BELOW_STEP * d)
+    return min(EXP_MAX, max(EXP_MIN, f))
+
+
+def _years(y: float) -> str:
+    n = round(y)
+    if y < 1:
+        return "меньше года"
+    w = "лет" if 11 <= n % 100 <= 14 else {1: "год", 2: "года", 3: "года", 4: "года"}.get(n % 10, "лет")
+    return f"{n} {w}"
 
 
 @dataclass
@@ -168,8 +206,7 @@ def test_strength(c: CandidateFeatures, catalog: Catalog | None = None) -> float
     z = (c.theta - cut) / 0.8
     base = 0.5 * (1 + math.erf(z / math.sqrt(2)))
     penalty = min(0.15, max(0.0, (c.theta_se or 0.0) - 0.35) * 0.5)
-    strength = max(0.0, base - penalty)
-    return min(1.0, strength * PROCTOR_BONUS) if c.proctored else strength
+    return max(0.0, base - penalty)
 
 
 def profile_strength(
@@ -373,6 +410,12 @@ def score_candidate(
             "salary": _gate_salary(c, need, gates),
         }
         mult *= math.prod(gate.values())
+        # доверие к грейду и стаж — тоже множители: кандидат с проктором выше при сопоставимом
+        # соответствии, но заметно лучше подходящий без проктора его обгоняет
+        trust = trust_level(c)
+        gate["trust"] = TRUST[trust] if trust else 1.0
+        gate["experience"] = experience_factor(c)
+        mult *= gate["trust"] * gate["experience"]
     total = sum(raw.values()) * mult
     components = {k: v * mult for k, v in raw.items()}
 
@@ -388,8 +431,20 @@ def score_candidate(
             else f"θ = {c.theta:+.2f}"
         )
         reasons.append(Reason("positive" if ps_parts["test"] >= 0.6 else "neutral", f"Тест: {pct}"))
-        if c.proctored:
-            reasons.append(Reason("positive", "Тест пройден с цифровым проктором"))
+        trust = trust_level(c)
+        if trust:
+            reasons.append(Reason(*TRUST_REASON[trust]))
+    if c.experience_years is not None and c.grade in GRADE_MIN_YEARS:
+        enough = c.experience_years >= GRADE_MIN_YEARS[c.grade]
+        reasons.append(
+            Reason(
+                "positive"
+                if enough and c.experience_years > GRADE_MIN_YEARS[c.grade] + 1
+                else ("neutral" if enough else "negative"),
+                f"Опыт работы: {_years(c.experience_years)}"
+                + ("" if enough else " — меньше типичного для грейда"),
+            )
+        )
     if c.fsp is None:
         reasons.append(Reason("neutral", "ФСП ID не привязан"))
     elif c.fsp:
