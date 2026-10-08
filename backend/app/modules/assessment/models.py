@@ -26,6 +26,8 @@ class Attempt(Base):
     )  # in_progress | passed | failed | abandoned | voided (аннулирована: нарушение правил прохождения)
     blueprint: Mapped[dict] = mapped_column(default=dict)
     stack: Mapped[list] = mapped_column(default=list)
+    # семейства заданий, которые кандидат видел в прошлых попытках: выбираются в последнюю очередь
+    seen_families: Mapped[list] = mapped_column(default=list)
     started_at: Mapped[datetime] = mapped_column(default=utcnow)
     finished_at: Mapped[datetime | None] = mapped_column(default=None)
     result: Mapped[dict | None] = mapped_column(default=None)

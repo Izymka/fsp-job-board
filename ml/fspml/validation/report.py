@@ -136,6 +136,19 @@ def run(out_dir: Path, n_candidates: int = 1000, n_needs: int = 30, quick: bool 
             )
         }
     res["blueprint"] = va.run_blueprint_experiment(n=200 if quick else 600)
+    # та же популяция и те же сиды, что у основного прогона, — сравнение только по памяти о заданиях
+    no_memory = va.run_reliability(cands, truth, avoid_seen=False)
+    res["repeat_ablation"] = {
+        k: no_memory[k]
+        for k in (
+            "repeat_retest",
+            "repeat_onboarding",
+            "retest_agreement",
+            "retest_kappa_weighted",
+            "retest_theta_r",
+            "accuracy_exact",
+        )
+    }
     pooled = va.run_reliability(sub, truth, pool=True)
     res["pooling_ablation"] = {
         k: pooled[k] for k in ("retest_agreement", "accuracy_exact", "items_mean", "overgrade_rate")
@@ -199,6 +212,8 @@ def summary(r: dict) -> dict:
         "retest_agreement": rel["retest_agreement"],
         "retest_kappa_weighted": rel["retest_kappa_weighted"],
         "items_per_attempt": rel["items_per_attempt"],
+        "repeat_onboarding": rel["repeat_onboarding"],
+        "repeat_retest": rel["repeat_retest"],
         "leak_50": {k: lk[k]["0.50"] for k in lk},
         "drift_detection": r["drift"]["detection_rate"],
         "drift_delay_median": r["drift"]["delay_median"],
@@ -413,7 +428,9 @@ def render_md(r: dict) -> str:
 
     w("### 2.2 Точность и стабильность грейда\n")
     w(
-        "Онбординг: тест на заявленный грейд → при неудаче на ступень ниже → при уверенном успехе одна попытка на ступень выше. Повтор — полностью независимый прогон (другие семейства и экземпляры).\n"
+        "Онбординг: тест на заявленный грейд → при неудаче на ступень ниже → при уверенном успехе одна попытка на ступень выше. "
+        "Повтор (ретест) — второй онбординг того же кандидата; как и в продукте, система помнит семейства прошлых попыток и выбирает другие, "
+        "то есть ретест идёт на *параллельной форме*, а не на тех же шаблонах с другими числами.\n"
     )
     w("| Метрика | Значение |\n|---|---|")
     w(
@@ -427,6 +444,9 @@ def render_md(r: dict) -> str:
     w(f"| Ретест: совпадение решения по заявленному грейду | {pct(rel['first_decision_agreement'])} |")
     w(f"| Корреляция оценки θ с истинной | {rel['theta_true_r']:.2f} |")
     w(f"| Заданий за попытку / за онбординг | {rel['items_per_attempt']:.1f} / {rel['items_mean']:.1f} |")
+    w(
+        f"| Повтор по сути (то же семейство или группа): в следующей попытке онбординга / на ретесте | {pct(rel['repeat_onboarding'])} / {pct(rel['repeat_retest'])} |"
+    )
     w(
         f"| Точность вне пограничной зоны (|θ − порог| ≥ 0.25) / в ней | {pct(rel['accuracy_nonborder'])} / {pct(rel['accuracy_border'])} (доля пограничных — {pct(rel['share_border'])}) |\n"
     )
@@ -473,6 +493,19 @@ def render_md(r: dict) -> str:
             f"| {k} | {v['items_per_attempt']:.1f} | {pct(v['retest_agreement'])} | {v['retest_kappa_weighted']:.2f} | {pct(v['accuracy_exact'])} | {v['theta_true_r']:.2f} |"
         )
     w("\n![Длина теста](img/val_length.png)\n")
+    ra = r.get("repeat_ablation")
+    if ra:
+        w(
+            "**Память о показанных заданиях.** Без неё следующая попытка (например, Middle после Junior) на "
+            f"{pct(ra['repeat_onboarding'])} состоит из уже виденных шаблонов, ретест — на {pct(ra['repeat_retest'])}: кандидат узнаёт задачи, "
+            "отличаются только числа. С памятью — "
+            f"{pct(rel['repeat_onboarding'])} и {pct(rel['repeat_retest'])}; остаток — навыки, где семейств меньше, чем заданий за две попытки "
+            "(тогда берутся давно виденные, тест не обрывается). Точность грейда — "
+            f"{pct(rel['accuracy_exact'])} против {pct(ra['accuracy_exact'])} без памяти. Совпадение ретеста "
+            f"({pct(rel['retest_agreement'])} против {pct(ra['retest_agreement'])}, взвешенная κ {rel['retest_kappa_weighted']:.2f} против "
+            f"{ra['retest_kappa_weighted']:.2f}): повтор на тех же шаблонах завышал стабильность за счёт общей для шаблона ошибки "
+            "измерения, параллельная форма — более строгая и честная оценка.\n"
+        )
     pa = r["pooling_ablation"]
     w(
         f"*Проверенная и отклонённая гипотеза:* учитывать ответы предыдущих попыток онбординга в следующей (продолжать измерение). Это сокращает тест до {pa['items_mean']:.1f} заданий, но не повышает точность ({pct(pa['accuracy_exact'])}) и стабильность ({pct(pa['retest_agreement'])}); по умолчанию выключено.\n"

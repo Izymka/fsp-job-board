@@ -213,6 +213,10 @@ class Family:
     a: float = DEFAULT_A
     b: float | None = None
     time_limit: int | None = None
+    # Группа семейств, проверяющих одно и то же разными формулировками (GROUP BY в SQL и groupby
+    # в pandas): в одной попытке выдаётся не больше одного семейства группы, между попытками группа
+    # считается увиденной целиком.
+    group: str | None = None
     _c: float | None = field(default=None, repr=False)
 
     def __post_init__(self) -> None:
@@ -232,6 +236,11 @@ class Family:
     @property
     def params(self) -> ItemParams:
         return ItemParams(a=self.a, b=float(self.b), c=self.c)
+
+    @property
+    def content_key(self) -> str:
+        """Единица неповторяемости: группа, если задана, иначе само семейство."""
+        return f"group:{self.group}" if self.group else self.id
 
     def generate(self, seed: int) -> ItemInstance:
         inst = self.generator(random.Random(seed))

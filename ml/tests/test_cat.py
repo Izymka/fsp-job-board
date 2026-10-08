@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+from dataclasses import replace
 from datetime import datetime, timedelta
 
 import numpy as np
@@ -41,6 +42,35 @@ def test_cat_respects_length_limits_and_blueprint():
     assert cfg.min_items <= res.n_items <= cfg.max_items
     assert len({r.family_id for r in responses}) == len(responses), "семейства не повторяются в попытке"
     assert {r.skill for r in responses} <= set(plan.blueprint)
+
+
+def test_seen_families_are_avoided_across_attempts():
+    """DS: Junior, затем Middle — второй тест идёт на других семействах, пока в навыке есть новые."""
+    rng = random.Random(3)
+    first_plan = ENGINE.plan_for_specialization("data_science", "junior", ["pandas", "sql"])
+    _, first = simulate(-0.5, first_plan, "ds-1", rng)
+    seen = frozenset(r.family_id for r in first)
+    plan = replace(ENGINE.plan_for_specialization("data_science", "middle", ["pandas", "sql"]), seen=seen)
+    _, second = simulate(-0.5, plan, "ds-2", rng)
+    repeated = {r.family_id for r in second} & seen
+    assert not repeated, f"повторились семейства: {repeated}"
+
+
+def test_seen_falls_back_when_skill_exhausted():
+    """Если все семейства навыка уже видены, тест не обрывается, а берёт увиденные."""
+    plan = ENGINE.plan_for_specialization("backend", "middle")
+    seen = frozenset(f.id for f in ENGINE.bank.values())
+    _, responses = simulate(0.0, replace(plan, seen=seen), "all-seen", random.Random(5))
+    assert len(responses) >= plan.config.min_items
+
+
+def test_group_siblings_not_issued_together():
+    """Семейства одной группы (GROUP BY в SQL и groupby в pandas) — один вопрос; в попытке не больше одного."""
+    plan = ENGINE.plan_for_specialization("data_science", "middle", ["pandas", "sql", "metrics"])
+    for i in range(20):
+        _, responses = simulate(0.0, plan, f"grp-{i}", random.Random(i))
+        groups = [ENGINE.bank[r.family_id].group for r in responses if ENGINE.bank[r.family_id].group]
+        assert len(groups) == len(set(groups)), groups
 
 
 @pytest.mark.parametrize("spec", ["backend", "frontend", "data_science", "qa", "devops", "analyst", "mobile"])

@@ -58,7 +58,7 @@ def _(rng):
     return number(PREDICT, float(run_py(code)), tolerance=0.01, code=code, code_lang="python")
 
 
-@family("pd.groupby", "pandas", 2, "groupby и агрегаты")
+@family("pd.groupby", "pandas", 2, "groupby и агрегаты", group="group_aggregate")
 def _(rng):
     lit, _rows = _df_literal(rng, rng.randint(7, 9))
     agg = rng.choice(["mean", "max", "count", "size"])
@@ -76,7 +76,7 @@ def _(rng):
     )
 
 
-@family("pd.merge", "pandas", 3, "merge: число строк и дубликаты ключей")
+@family("pd.merge", "pandas", 3, "merge: число строк и дубликаты ключей", group="join_fanout")
 def _(rng):
     left_keys = [rng.randint(1, 4) for _ in range(rng.randint(4, 6))]
     right_keys = [rng.randint(1, 5) for _ in range(rng.randint(3, 5))]
@@ -224,7 +224,7 @@ def _(rng):
     )
 
 
-@family("stat.ab_z", "statistics", 4, "A/B-тест: z-статистика для конверсий")
+@family("stat.ab_z", "statistics", 4, "A/B-тест: z-статистика для конверсий", group="ab_test")
 def _(rng):
     n = rng.choice([1000, 2000, 5000])
     pa = rng.choice([0.10, 0.12, 0.15, 0.20])
@@ -455,3 +455,247 @@ def _(rng):
         "имеет какую accuracy (%)? Введите число."
     )
     return number(q, acc, tolerance=0.01)
+
+
+@family("ml.threshold", "ml", 3, "Порог классификации: precision и recall")
+def _(rng):
+    scores = rng.sample([x / 100 for x in range(5, 100, 5)], rng.randint(7, 9))
+    labels = [int(rng.random() < 0.45) for _ in scores]
+    labels[0], labels[1] = 1, 0  # хотя бы один объект каждого класса
+    t = rng.choice([0.3, 0.4, 0.5, 0.6, 0.7])
+    pred = [s >= t for s in scores]
+    tp = sum(p and y for p, y in zip(pred, labels))
+    fp = sum(p and not y for p, y in zip(pred, labels))
+    fn = sum(not p and y for p, y in zip(pred, labels))
+    metric = rng.choice(["precision", "recall"]) if tp + fp else "recall"
+    val = tp / (tp + fp) if metric == "precision" else tp / (tp + fn)
+    pairs = ", ".join(f"({s:.2f}; {y})" for s, y in sorted(zip(scores, labels), reverse=True))
+    q = (
+        f"Объекты в формате (скор модели; истинный класс): {pairs}. Объект относим к классу 1, если скор ≥ {t}. "
+        f"Найдите {metric}. Точность 0,01."
+    )
+    return number(q, round(val, 4), tolerance=0.01)
+
+
+@family("ml.cv_folds", "ml", 2, "Кросс-валидация: объём обучения и число запусков")
+def _(rng):
+    k = rng.choice([4, 5, 8, 10])
+    if rng.random() < 0.5:
+        n = k * rng.choice([100, 120, 150, 250])
+        q = f"Датасет из {n} объектов, {k}-fold кросс-валидация. Сколько объектов в обучающей части на каждой итерации?"
+        return number(q, n - n // k)
+    grid = [rng.choice([2, 3, 4]), rng.choice([2, 3, 5])]
+    q = (
+        f"Перебор по сетке: {grid[0]} значения глубины × {grid[1]} значения learning rate, оценка каждой комбинации "
+        f"{k}-fold кросс-валидацией, затем одно финальное обучение лучшей модели на всех данных. "
+        "Сколько всего раз обучается модель?"
+    )
+    return number(q, grid[0] * grid[1] * k + 1)
+
+
+@family("ml.knn", "ml", 2, "k ближайших соседей")
+def _(rng):
+    while True:
+        pts = [(rng.randint(0, 9), rng.randint(0, 9)) for _ in range(7)]
+        qx, qy = rng.randint(2, 7), rng.randint(2, 7)
+        d = [(x - qx) ** 2 + (y - qy) ** 2 for x, y in pts]
+        if len(set(d)) == len(d) and len(set(pts)) == len(pts) and (qx, qy) not in pts:
+            break
+    labels = [rng.choice("AB") for _ in pts]
+    k = rng.choice([3, 5])
+    nearest = sorted(range(len(pts)), key=lambda i: d[i])[:k]
+    n_a = sum(labels[i] == "A" for i in nearest)
+    listing = ", ".join(f"{p} — {c}" for p, c in zip(pts, labels))
+    q = (
+        f"Обучающие точки (x, y) — класс: {listing}. Для точки ({qx}, {qy}) найдите {k} ближайших соседей "
+        "по евклидову расстоянию. Сколько из них класса A?"
+    )
+    return number(q, n_a)
+
+
+@family("ml.logistic", "ml", 3, "Логистическая регрессия: вероятность класса")
+def _(rng):
+    w1, w2 = rng.choice([-1.5, -1, -0.5, 0.5, 1, 1.5, 2]), rng.choice([-1, -0.5, 0.5, 1])
+    b = rng.choice([-2, -1, -0.5, 0, 0.5, 1])
+    x1, x2 = rng.randint(0, 3), rng.randint(0, 4)
+    z = w1 * x1 + w2 * x2 + b
+    p = 1 / (1 + math.exp(-z))
+    q = (
+        f"Логистическая регрессия: w₁ = {w1}, w₂ = {w2}, b = {b}. Для объекта x₁ = {x1}, x₂ = {x2} найдите "
+        "вероятность класса 1: σ(w₁x₁ + w₂x₂ + b), где σ(z) = 1 / (1 + e^(−z)). Точность 0,01."
+    )
+    return number(q, round(p, 4), tolerance=0.01)
+
+
+@family("ml.ensembles", "ml", 3, "Ансамбли: бэггинг, бустинг, стекинг")
+def _(rng):
+    cases = [
+        (
+            "Модели обучаются независимо на бутстреп-выборках, предсказания усредняются. Что в первую очередь снижает такой ансамбль?",
+            "Дисперсию (variance) — это бэггинг",
+        ),
+        (
+            "Каждая следующая модель обучается на ошибках (антиградиенте) предыдущих. Что в первую очередь снижает такой ансамбль?",
+            "Смещение (bias) — это бустинг",
+        ),
+        (
+            "Чем случайный лес отличается от бэггинга обычных решающих деревьев?",
+            "Случайным подмножеством признаков при выборе каждого разбиения",
+        ),
+        (
+            "Метамодель обучается на out-of-fold предсказаниях нескольких базовых моделей. Как называется подход?",
+            "Стекинг",
+        ),
+    ]
+    q, a = rng.choice(cases)
+    return single(rng, q, a, [c[1] for c in cases if c[1] != a] + ["L1-регуляризация весов"])
+
+
+@family("ml.encoding", "ml", 2, "Кодирование и преобразование признаков")
+def _(rng):
+    cases = [
+        ("Категориальный признак «город» с 5 значениями для линейной модели", "One-hot encoding"),
+        (
+            "Признак «ID товара» с 50 000 значений для градиентного бустинга",
+            "Target encoding по out-of-fold схеме или нативные категории (как в CatBoost)",
+        ),
+        (
+            "Признак «уровень образования»: среднее < бакалавр < магистр < аспирантура",
+            "Порядковое кодирование (ordinal encoding)",
+        ),
+        (
+            "Числовой признак «доход» с длинным правым хвостом для линейной модели",
+            "Логарифмирование, затем стандартизация",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(
+        rng, f"{sit}. Как подготовить признак?", a, [c[1] for c in cases if c[1] != a] + ["Удалить признак"]
+    )
+
+
+@family("ml.logloss", "ml", 4, "Логистическая функция потерь")
+def _(rng):
+    n = rng.randint(3, 4)
+    ys = [rng.choice([0, 1]) for _ in range(n)]
+    ps = [rng.choice([0.1, 0.2, 0.3, 0.6, 0.7, 0.8, 0.9]) for _ in range(n)]
+    ll = -sum(y * math.log(p) + (1 - y) * math.log(1 - p) for y, p in zip(ys, ps)) / n
+    pairs = ", ".join(f"(y = {y}, p = {p})" for y, p in zip(ys, ps))
+    q = (
+        f"Истинные классы и предсказанные вероятности класса 1: {pairs}. Найдите log loss "
+        "(среднее −[y·ln p + (1 − y)·ln(1 − p)]). Точность 0,01."
+    )
+    return number(q, round(ll, 4), tolerance=0.01)
+
+
+@family("stat.ci_mean", "statistics", 3, "Доверительный интервал для среднего")
+def _(rng):
+    n = rng.choice([25, 36, 49, 64, 100, 144])
+    m = rng.randint(40, 300)
+    s = rng.choice([10, 12, 14, 20, 21, 28, 30])
+    side = rng.choice(["верхнюю", "нижнюю"])
+    half = 1.96 * s / math.sqrt(n)
+    val = m + half if side == "верхнюю" else m - half
+    q = (
+        f"Среднее время ответа сервиса по выборке из {n} запросов — {m} мс, стандартное отклонение — {s} мс. "
+        f"Найдите {side} границу 95%-го доверительного интервала для среднего (z = 1,96). Точность 0,05."
+    )
+    return number(q, round(val, 3), tolerance=0.05)
+
+
+@family("stat.binomial", "statistics", 3, "Биномиальное распределение")
+def _(rng):
+    n = rng.randint(4, 8)
+    p = rng.choice([0.1, 0.2, 0.3, 0.5])
+    if rng.random() < 0.5:
+        k = rng.randint(1, min(3, n))
+        val = math.comb(n, k) * p**k * (1 - p) ** (n - k)
+        q = (
+            f"Пользователь кликает по баннеру с вероятностью {p} независимо от других. Баннер показали {n} пользователям. "
+            f"Какова вероятность, что кликов будет ровно {k}? Точность 0,005."
+        )
+    else:
+        val = 1 - (1 - p) ** n
+        q = (
+            f"Каждый из {n} независимых серверов отказывает за сутки с вероятностью {p}. "
+            "Какова вероятность, что откажет хотя бы один? Точность 0,005."
+        )
+    return number(q, round(val, 4), tolerance=0.005)
+
+
+@family("stat.causality", "statistics", 2, "Корреляция, причинность и смещения выборки")
+def _(rng):
+    cases = [
+        (
+            "В каждой из двух больниц новый метод лечения успешнее старого, а в сумме по обеим — хуже. Как это возможно?",
+            "Парадокс Симпсона: группы разного размера и тяжести смешиваются при агрегации",
+        ),
+        (
+            "Пользователи, включившие функцию X, удерживаются лучше остальных. Значит ли это, что X повышает удержание?",
+            "Нет: самоотбор — активные пользователи чаще включают X; нужен A/B-тест",
+        ),
+        (
+            "Чем больше пожарных приезжает на пожар, тем больше ущерб. Что объясняет связь?",
+            "Общая причина: масштаб пожара влияет и на число пожарных, и на ущерб",
+        ),
+        (
+            "Удовлетворённость оценили по клиентам, которые дошли до конца опроса. Какая проблема?",
+            "Смещение отбора: недовольные чаще бросают опрос",
+        ),
+    ]
+    q, a = rng.choice(cases)
+    return single(
+        rng, q, a, [c[1] for c in cases if c[1] != a] + ["Ошибки нет: корреляция доказывает причинность"]
+    )
+
+
+@family("pd.value_counts", "pandas", 2, "value_counts, nunique и пропуски")
+def _(rng):
+    vals = [rng.choice(["'a'", "'b'", "'c'", "None"]) for _ in range(rng.randint(7, 10))]
+    vals[0], vals[1] = "None", "'b'"
+    rng.shuffle(vals)
+    variant = rng.choice(["nunique", "share", "share_all"])
+    expr = {
+        "nunique": "s.nunique()",
+        "share": "round(s.value_counts(normalize=True)['b'], 2)",
+        "share_all": "round(s.value_counts(normalize=True, dropna=False)['b'], 2)",
+    }[variant]
+    code = f"import pandas as pd\ns = pd.Series([{', '.join(vals)}])\nprint({expr})"
+    return number(
+        PREDICT + " Точность 0,01.", float(run_py(code)), tolerance=0.01, code=code, code_lang="python"
+    )
+
+
+@family("pd.pivot", "pandas", 3, "pivot_table и агрегаты")
+def _(rng):
+    months = ["jan", "feb"]
+    rows = [
+        (rng.choice(CITIES[:3]), rng.choice(months), rng.randrange(10, 100, 10))
+        for _ in range(rng.randint(6, 8))
+    ]
+    city, month = rows[0][0], rows[0][1]
+    agg = rng.choice(["sum", "mean", "count"])
+    code = (
+        "import pandas as pd\n"
+        f"df = pd.DataFrame({[dict(city=c, month=m, amount=a) for c, m, a in rows]!r})\n"
+        f"t = df.pivot_table(index='city', columns='month', values='amount', aggfunc='{agg}', fill_value=0)\n"
+        f"print(round(float(t.loc['{city}', '{month}']), 2))"
+    )
+    return number(
+        PREDICT + " Точность 0,01.", float(run_py(code)), tolerance=0.01, code=code, code_lang="python"
+    )
+
+
+@family("pd.duplicates", "pandas", 2, "drop_duplicates: subset и keep")
+def _(rng):
+    users = rng.sample(NAMES, 4)
+    rows = [(rng.choice(users), rng.choice(["mon", "tue"])) for _ in range(rng.randint(6, 9))]
+    variant = rng.choice(
+        ["subset=['user']", "subset=['user'], keep=False", "", "subset=['user', 'day'], keep=False"]
+    )
+    code = (
+        "import pandas as pd\n"
+        f"df = pd.DataFrame({rows!r}, columns=['user', 'day'])\n"
+        f"print(len(df.drop_duplicates({variant})))"
+    )
+    return number(PREDICT, int(run_py(code)), code=code, code_lang="python")

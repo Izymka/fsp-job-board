@@ -117,3 +117,29 @@ def test_short_leaves_ignored_single_leave_flagged(client):
     assert att["status"] == "passed"
     integ = att["result"]["integrity"]
     assert integ["level"] == "review" and integ["items_left"] == 1 and integ["paste_attempts"] == 1
+
+
+def _families(att_id: str) -> set[str]:
+    from app.core.db import SessionLocal
+
+    with SessionLocal() as db:
+        return set(
+            db.scalars(
+                select(AttemptItem.family_id).where(
+                    AttemptItem.attempt_id == uuid.UUID(att_id), AttemptItem.kind == "item"
+                )
+            ).all()
+        )
+
+
+def test_next_attempt_avoids_seen_families(client):
+    """Тест на уровень ниже после неудачи идёт на других семействах, а не на тех же с другими числами."""
+    from tests.conftest import pass_test
+
+    cand = make_candidate(client)
+    first = pass_test(cand, "middle", correct=False)
+    assert first["status"] == "failed"
+    second = pass_test(cand, "junior")
+    seen, now = _families(first["id"]), _families(second["id"])
+    assert seen and now
+    assert not seen & now, f"повторились семейства: {seen & now}"

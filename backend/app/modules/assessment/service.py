@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from fspml.assessment import grade_policy as gp
 from fspml.assessment import integrity as integ
@@ -26,6 +26,9 @@ from ..candidates.models import CandidateProfile
 from .models import Attempt, AttemptItem, FamilyStats
 
 STALE_AFTER = timedelta(hours=3)
+# Окно памяти о показанных заданиях: повторная попытка (не раньше чем через 14 дней) идёт на других
+# семействах; через полгода банк успевает обновиться, и ограничение снимается.
+SEEN_WINDOW = timedelta(days=180)
 TIME_GRACE_SEC = 20
 
 _engine_cache: tuple[float, AssessmentEngine] | None = None
@@ -104,7 +107,24 @@ def plan_for(attempt: Attempt, engine: AssessmentEngine) -> CatPlan:
         claimed_grade=attempt.grade,
         config=engine.config,
         kind=attempt.kind,
+        seen=frozenset(attempt.seen_families or ()),
     )
+
+
+def seen_families(db: Session, p: CandidateProfile, now: datetime) -> list[str]:
+    """Семейства заданий из прошлых попыток кандидата по специализации за SEEN_WINDOW."""
+    rows = db.scalars(
+        select(AttemptItem.family_id)
+        .join(Attempt, Attempt.id == AttemptItem.attempt_id)
+        .where(
+            Attempt.candidate_id == p.user_id,
+            Attempt.specialization == p.specialization,
+            Attempt.started_at >= now - SEEN_WINDOW,
+            AttemptItem.kind == "item",
+        )
+        .distinct()
+    ).all()
+    return sorted(f for f in rows if f)
 
 
 def responses_of(db: Session, attempt: Attempt, engine: AssessmentEngine) -> list[Response]:
@@ -188,6 +208,7 @@ def start_attempt(db: Session, p: CandidateProfile, grade: str) -> Attempt:
         kind=elig.kind,
         blueprint=plan.blueprint,
         stack=list(p.stack or []),
+        seen_families=seen_families(db, p, now),
         started_at=now,
     )
     db.add(attempt)

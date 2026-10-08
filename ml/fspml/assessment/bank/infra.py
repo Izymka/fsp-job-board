@@ -500,3 +500,223 @@ def _(rng):
         round(sum(restore) / len(restore), 2),
         tolerance=0.1,
     )
+
+
+# --------------------------------------------------------------------------- запас банка: Linux, Docker, K8s, CI/CD
+
+
+def _cron_field(spec: str, value: int, lo: int, hi: int) -> bool:
+    for part in spec.split(","):
+        rng_part, _, step = part.partition("/")
+        if rng_part == "*":
+            a, b = lo, hi
+        elif "-" in rng_part:
+            a, b = map(int, rng_part.split("-"))
+        else:
+            a = b = int(rng_part)
+        if a <= value <= b and (value - a) % int(step or 1) == 0:
+            return True
+    return False
+
+
+@family("linux.cron", "linux", 3, "Расписание cron")
+def _(rng):
+    minute = rng.choice(["0", "15", "*/5", "*/10", "*/15", "0,30", "*/20"])
+    hour = rng.choice(["*", "*/2", "*/3", "9-18", "8-20/4", "0,12", "2"])
+    runs = sum(
+        _cron_field(minute, m, 0, 59) and _cron_field(hour, h, 0, 23) for h in range(24) for m in range(60)
+    )
+    q = f"Задача в crontab: `{minute} {hour} * * * /opt/backup.sh`. Сколько раз в сутки она запустится?"
+    return number(q, runs)
+
+
+@family("linux.redirect", "linux", 3, "Перенаправление потоков")
+def _(rng):
+    cases = [
+        ("cmd > out.log 2>&1", "stdout и stderr — в out.log"),
+        ("cmd 2>&1 > out.log", "stdout — в out.log, stderr — в терминал"),
+        ("cmd 2> err.log > out.log", "stdout — в out.log, stderr — в err.log"),
+        ("cmd > /dev/null 2>&1", "Оба потока отброшены"),
+        ("cmd >> out.log", "stdout дописывается в конец out.log, stderr — в терминал"),
+    ]
+    cmd, a = rng.choice(cases)
+    return single(rng, f"Куда попадут потоки вывода команды `{cmd}`?", a, [c[1] for c in cases if c[1] != a])
+
+
+@family("linux.umask", "linux", 2, "umask и права новых файлов")
+def _(rng):
+    mask = rng.choice(["022", "027", "077", "002", "007", "037", "026"])
+    kind, base = rng.choice([("файла", 0o666), ("каталога", 0o777)])
+    perms = base & ~int(mask, 8)
+    q = (
+        f"При `umask {mask}` создаётся новый {'файл' if kind == 'файла' else 'каталог'} "
+        f"(базовые права {kind} — {oct(base)[2:]}). Какие права у него будут? Введите три восьмеричные цифры, например 640."
+    )
+    return number(q, int(oct(perms)[2:]))
+
+
+@family("linux.disk", "linux", 4, "Диагностика места на диске")
+def _(rng):
+    cases = [
+        (
+            "`df -h` показывает 100% заполнения раздела, а `du -sh` по всем каталогам набирает только 60%",
+            "Удалённый файл ещё открыт процессом — найти через `lsof +L1` и перезапустить процесс",
+        ),
+        (
+            "Запись падает с «No space left on device», хотя `df -h` показывает 40% свободного места",
+            "Закончились inode — проверить `df -i` (много мелких файлов)",
+        ),
+        (
+            "Нужно найти пять самых больших каталогов в /var",
+            "`du -sh /var/* | sort -h | tail -5`",
+        ),
+        (
+            "Лог приложения вырос до 30 ГБ, процесс пишет в него прямо сейчас; нужно освободить место без перезапуска",
+            "Обнулить файл (`truncate -s 0 app.log`), а не удалять его",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(rng, f"{sit}. Что делать?", a, [c[1] for c in cases if c[1] != a])
+
+
+@family("docker.image_size", "docker", 3, "Размер образа и слои")
+def _(rng):
+    cases = [
+        (
+            "Образ Go-сервиса весит 900 МБ: в нём компилятор и исходники",
+            "Multi-stage сборка: собрать в builder-стадии, в финальный образ скопировать только бинарник",
+        ),
+        (
+            "Сначала `RUN apt-get install …`, следующей строкой `RUN rm -rf /var/lib/apt/lists/*` — образ не уменьшился",
+            "Каждый RUN — отдельный слой: чистить кеш в том же RUN, где устанавливали пакеты",
+        ),
+        (
+            "В образ попадают локальные node_modules и каталог .git",
+            "Добавить их в .dockerignore",
+        ),
+        (
+            "Базовый образ python:3.12 весит 1 ГБ, а нужны только интерпретатор и пара библиотек",
+            "Взять slim-вариант базового образа",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(rng, f"{sit}. Как исправить?", a, [c[1] for c in cases if c[1] != a])
+
+
+@family("docker.restart", "docker", 2, "Политики перезапуска контейнеров")
+def _(rng):
+    cases = [
+        ("перезапускать только при падении с ненулевым кодом выхода", "on-failure"),
+        (
+            "перезапускать всегда, включая перезагрузку хоста, если контейнер не остановили вручную",
+            "unless-stopped",
+        ),
+        ("никогда не перезапускать автоматически (разовая задача миграции)", "no"),
+        (
+            "перезапускать всегда, даже если контейнер остановили вручную, — после рестарта демона Docker",
+            "always",
+        ),
+    ]
+    need, a = rng.choice(cases)
+    return single(
+        rng, f"Какую политику `restart` выбрать, чтобы {need}?", a, [c[1] for c in cases if c[1] != a]
+    )
+
+
+@family("docker.healthcheck", "docker", 4, "Healthcheck и порядок запуска")
+def _(rng):
+    cases = [
+        (
+            "В Compose у сервиса app указано `depends_on: [db]`, но app падает при старте: БД ещё не принимает соединения",
+            "Добавить healthcheck в db и `depends_on: db: condition: service_healthy`",
+        ),
+        (
+            "Процесс в контейнере жив, но приложение зависло и не отвечает на запросы. Как Docker это заметит?",
+            "Через HEALTHCHECK: контейнер получит статус unhealthy",
+        ),
+        (
+            "Healthcheck дёргает тяжёлый эндпоинт с запросами в БД каждую секунду, и БД перегружается",
+            "Сделать лёгкий эндпоинт проверки и увеличить interval",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(
+        rng,
+        f"{sit}. Что сделать?",
+        a,
+        [c[1] for c in cases if c[1] != a] + ["Добавить `sleep 30` в начало CMD"],
+    )
+
+
+@family("k8s.services", "kubernetes", 2, "Типы Service")
+def _(rng):
+    cases = [
+        ("доступ к подам только изнутри кластера по стабильному имени", "ClusterIP"),
+        ("открыть порт на каждой ноде кластера для доступа снаружи", "NodePort"),
+        ("получить внешний IP облачного балансировщика", "LoadBalancer"),
+        ("получить DNS-записи отдельных подов StatefulSet без балансировки", "Headless (clusterIP: None)"),
+        ("направить запросы на внешний домен по имени внутри кластера", "ExternalName"),
+    ]
+    need, a = rng.choice(cases)
+    return single(rng, f"Какой тип Service нужен, чтобы {need}?", a, [c[1] for c in cases if c[1] != a])
+
+
+@family("k8s.hpa", "kubernetes", 4, "HorizontalPodAutoscaler: расчёт реплик")
+def _(rng):
+    cur = rng.randint(2, 8)
+    target = rng.choice([50, 60, 70, 80])
+    usage = rng.randint(20, 160)
+    hi = rng.choice([10, 12, 15])
+    desired = min(hi, max(1, math.ceil(cur * usage / target)))
+    q = (
+        f"HPA: целевая загрузка CPU {target}%, сейчас реплик: {cur}, их средняя загрузка — {usage}%, minReplicas = 1, "
+        f"maxReplicas = {hi}. Сколько реплик выставит HPA (desired = ⌈текущие × текущая / целевая⌉)?"
+    )
+    return number(q, desired)
+
+
+@family("cicd.cache", "cicd", 3, "Кеширование зависимостей в CI")
+def _(rng):
+    cases = [
+        (
+            "От чего должен зависеть ключ кеша node_modules / pip, чтобы кеш обновлялся только при смене зависимостей?",
+            "От хеша lock-файла (package-lock.json, uv.lock)",
+        ),
+        (
+            "Кеш зависимостей восстанавливается, но сборка всё равно ставит пакеты с нуля. Наиболее вероятная причина?",
+            "Ключ кеша включает что-то меняющееся при каждом запуске (номер сборки, время)",
+        ),
+        (
+            "Чем артефакт сборки отличается от кеша?",
+            "Артефакт — результат, который передают дальше по конвейеру; кеш — ускорение, без него сборка обязана работать",
+        ),
+    ]
+    q, a = rng.choice(cases)
+    return single(
+        rng, q, a, [c[1] for c in cases if c[1] != a] + ["Кеш нужно хранить в репозитории вместе с кодом"]
+    )
+
+
+@family("cicd.rollback", "cicd", 3, "Откат и восстановление после неудачного релиза")
+def _(rng):
+    cases = [
+        (
+            "Новая версия сломала оформление заказа, проблема в коде, миграций БД не было",
+            "Передеплоить предыдущий собранный артефакт (образ) — без пересборки",
+        ),
+        (
+            "Сломана новая функция, включённая через фича-флаг",
+            "Выключить фича-флаг",
+        ),
+        (
+            "В релизе была миграция, удалившая столбец, а старая версия кода его читает",
+            "Откат кода не поможет: нужна совместимая миграция (expand/contract) или фикс вперёд",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(
+        rng,
+        f"{sit}. Как быстрее всего восстановить работу?",
+        a,
+        [c[1] for c in cases if c[1] != a] + ["Пересобрать ветку main и задеплоить"],
+    )

@@ -45,6 +45,9 @@ class CatConfig:
     warmup: int = 3
     randomesque: int = 4
     max_exposure: float = 0.35
+    # Семейства прошлых попыток: 0 — только если в навыке не осталось новых; >0 — конкурируют
+    # с новыми с информацией, умноженной на этот коэффициент.
+    seen_info_factor: float = 0.0
     prior_mean: float = 0.0
     prior_sd: float = 1.0
     # подоценки навыков
@@ -106,6 +109,10 @@ class CatPlan:
     # их семейства не повторяются. Тест «на уровень ниже/выше» продолжает измерение, а не
     # начинает с нуля — это повышает точность решения на границах грейдов.
     carry: tuple[Response, ...] = ()
+    # Семейства, которые кандидат уже видел в прошлых попытках (не учитываются в θ, в отличие от
+    # carry). Внутри навыка выбираются в последнюю очередь: повторная попытка идёт на параллельной
+    # форме, а не на тех же шаблонах с другими числами.
+    seen: frozenset[str] = frozenset()
 
     def limits(self) -> tuple[int, int]:
         if self.carry:
@@ -160,15 +167,17 @@ def select_next(
     catalog = catalog or get_catalog()
     cfg = plan.config
     used = {r.family_id for r in responses} | {r.family_id for r in plan.carry}
+    keys = {f.id: f.content_key for f in bank}
+    used_keys = {keys.get(fid, fid) for fid in used}
     exposure = exposure or {}
-    eligible = [
-        f
-        for f in bank
-        if f.skill in plan.blueprint and f.id not in used and exposure.get(f.id, 0.0) < cfg.max_exposure
-    ]
+    candidates = [f for f in bank if f.skill in plan.blueprint and f.id not in used]
+    # семейство из уже выданной группы — тот же вопрос другими словами; снимаем запрет, только
+    # если иначе выбирать не из чего
+    candidates = [f for f in candidates if f.content_key not in used_keys] or candidates
+    eligible = [f for f in candidates if exposure.get(f.id, 0.0) < cfg.max_exposure]
     if not eligible:
         # потолок экспозиции не должен обрывать тест: снимаем его, если иначе выбирать не из чего
-        eligible = [f for f in bank if f.skill in plan.blueprint and f.id not in used]
+        eligible = candidates
     if not eligible:
         return None
 
@@ -196,12 +205,19 @@ def select_next(
             candidates.append((abs(post.prob_above(next_cut) - 0.5), next_cut))
         target = min(candidates)[1]
 
-    # 3. Максимум информации в точке + randomesque среди top-k.
-    pool = sorted(
-        (f for f in eligible if f.skill == skill),
-        key=lambda f: float(information(target, f.a, f.b, f.c)),
-        reverse=True,
-    )
+    # 3. Максимум информации в точке + randomesque среди top-k. Семейства прошлых попыток —
+    #    только если в навыке не осталось новых.
+    in_skill = [f for f in eligible if f.skill == skill]
+    seen_keys = {keys.get(fid, fid) for fid in plan.seen}
+    fresh = [f for f in in_skill if f.content_key not in seen_keys]
+    if cfg.seen_info_factor > 0:
+        fresh = in_skill
+
+    def score(f: Family) -> float:
+        info = float(information(target, f.a, f.b, f.c))
+        return info * cfg.seen_info_factor if f.content_key in seen_keys else info
+
+    pool = sorted(fresh or in_skill, key=score, reverse=True)
     return rng.choice(pool[: cfg.randomesque])
 
 

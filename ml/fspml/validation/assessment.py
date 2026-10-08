@@ -16,7 +16,7 @@ import hashlib
 import math
 import random
 from collections import Counter, defaultdict
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field, replace
 
 import numpy as np
@@ -107,6 +107,7 @@ def simulate_attempt(
     leak: LeakFn | None = None,
     fixed_form: Sequence[Family] | None = None,
     carry: Sequence[Response] = (),
+    seen: Iterable[str] = (),
     kind: str = "initial",
     legacy: bool = False,
     off_stack_penalty: float = 0.0,
@@ -118,7 +119,7 @@ def simulate_attempt(
     bank = bank if bank is not None else list(REGISTRY.values())
     if legacy:  # прежний алгоритм целиком: и состав, и остановка без требования покрытия
         config = replace(config, cover_min_items=0)
-    plan = CatPlan(candidate_blueprint(cand, legacy), grade, config, kind, tuple(carry))
+    plan = CatPlan(candidate_blueprint(cand, legacy), grade, config, kind, tuple(carry), seen=frozenset(seen))
     practiced = _practiced_skills(cand) if off_stack_penalty else set()
     core = set(cat.specializations[cand.spec].core)
     responses: list[Response] = []
@@ -154,30 +155,70 @@ class OnboardingResult:
     items: int
     logs: list[AttemptLog]
 
+    @property
+    def families(self) -> set[str]:
+        return {r.family_id for lg in self.logs for r in lg.responses}
+
+
+def _keys(family_ids: Iterable[str]) -> set[str]:
+    """Единицы неповторяемости (группа или семейство) — то, что кандидат воспринимает как «тот же вопрос»."""
+    return {REGISTRY[f].content_key if f in REGISTRY else f for f in family_ids}
+
+
+def repeat_share(later: Iterable[str], earlier: Iterable[str]) -> float:
+    """Доля заданий более поздней попытки, уже встречавшихся (по группе/семейству) раньше."""
+    later = list(later)
+    if not later:
+        return 0.0
+    seen = _keys(earlier)
+    return sum(1 for f in later if _keys([f]) <= seen) / len(later)
+
 
 def simulate_onboarding(
-    cand: TrueCandidate, truth: TrueBank, rng: random.Random, *, pool: bool = False, **kw
+    cand: TrueCandidate,
+    truth: TrueBank,
+    rng: random.Random,
+    *,
+    pool: bool = False,
+    seen: Iterable[str] = (),
+    avoid_seen: bool = True,
+    **kw,
 ) -> OnboardingResult:
     """Путь кандидата: тест на заявленный грейд → при неудаче ниже → при уверенном успехе одна попытка выше.
 
     pool=True — ответы предыдущих попыток онбординга учитываются в следующей (CatPlan.carry);
     по результатам валидации выигрыша в точности это не дало, по умолчанию выключено.
+    seen — семейства прошлых попыток кандидата (до этого онбординга); avoid_seen=True — как в
+    продукте: увиденные семейства выбираются в последнюю очередь, в том числе внутри онбординга.
     """
     cat = get_catalog()
     g = cat.grade_index(cand.claimed_grade)
     logs: list[AttemptLog] = []
+    before = set(seen)
 
     def carry():
         return [r for l in logs for r in l.responses] if pool else []
 
+    def seen_now():
+        if not avoid_seen:
+            return ()
+        return before | {r.family_id for l in logs for r in l.responses}
+
     while True:
-        log = simulate_attempt(cand, cat.grades[g].id, truth, rng, carry=carry(), **kw)
+        log = simulate_attempt(cand, cat.grades[g].id, truth, rng, carry=carry(), seen=seen_now(), **kw)
         logs.append(log)
         if log.result.decision == "confirmed":
             final, theta = g, log.result.theta
             if log.result.suggestion == "upgrade":
                 up = simulate_attempt(
-                    cand, cat.grades[g + 1].id, truth, rng, carry=carry(), kind="upgrade", **kw
+                    cand,
+                    cat.grades[g + 1].id,
+                    truth,
+                    rng,
+                    carry=carry(),
+                    seen=seen_now(),
+                    kind="upgrade",
+                    **kw,
                 )
                 logs.append(up)
                 if up.result.decision == "confirmed":
@@ -211,7 +252,11 @@ def grade_idx(g: str | None) -> int:
     return get_catalog().grade_index(g) if g else 0
 
 
-def run_reliability(cands: Sequence[TrueCandidate], truth: TrueBank, seed: int = 1, **kw) -> dict:
+def run_reliability(
+    cands: Sequence[TrueCandidate], truth: TrueBank, seed: int = 1, avoid_seen: bool = True, **kw
+) -> dict:
+    """Повторное прохождение (ретест) — второй онбординг того же кандидата; при avoid_seen он знает
+    семейства первого и идёт на параллельной форме, как в продукте."""
     cat = get_catalog()
     k = len(cat.grades)
     rng1, rng2 = random.Random(seed), random.Random(seed + 1000)
@@ -220,9 +265,16 @@ def run_reliability(cands: Sequence[TrueCandidate], truth: TrueBank, seed: int =
     items, attempts = [], []
     border = []  # |θ − ближайший порог| < 0.25 — самые сложные для классификации
     decisions1, decisions2 = [], []
+    rep_retest, rep_onboarding = [], []
     for c in cands:
-        r1 = simulate_onboarding(c, truth, rng1, **kw)
-        r2 = simulate_onboarding(c, truth, rng2, **kw)
+        r1 = simulate_onboarding(c, truth, rng1, avoid_seen=avoid_seen, **kw)
+        r2 = simulate_onboarding(
+            c, truth, rng2, seen=r1.families if avoid_seen else (), avoid_seen=avoid_seen, **kw
+        )
+        rep_retest.append(repeat_share([r.family_id for lg in r2.logs for r in lg.responses], r1.families))
+        for i in range(1, len(r1.logs)):
+            prev = {r.family_id for lg in r1.logs[:i] for r in lg.responses}
+            rep_onboarding.append(repeat_share([r.family_id for r in r1.logs[i].responses], prev))
         first.append(grade_idx(r1.grade))
         second.append(grade_idx(r2.grade))
         true_g.append(cat.grade_index(c.grade))
@@ -263,6 +315,9 @@ def run_reliability(cands: Sequence[TrueCandidate], truth: TrueBank, seed: int =
         "items_mean": float(np.mean(items)),
         "items_per_attempt": float(np.sum(items) / np.sum(attempts)),
         "attempts_mean": float(np.mean(attempts)),
+        # доля заданий, повторяющих по сути уже виденные: на ретесте и во 2-й+ попытке онбординга
+        "repeat_retest": float(np.mean(rep_retest)),
+        "repeat_onboarding": float(np.mean(rep_onboarding)) if rep_onboarding else float("nan"),
         "confusion": confusion.tolist(),
         "retest_matrix": retest.tolist(),
     }
@@ -506,7 +561,7 @@ def run_blueprint_experiment(
             for c in cands:
                 kw = {"legacy": arm == "legacy", "off_stack_penalty": pen}
                 r1 = simulate_onboarding(c, truth, rng1, **kw)
-                r2 = simulate_onboarding(c, truth, rng2, **kw)
+                r2 = simulate_onboarding(c, truth, rng2, seen=r1.families, **kw)
                 first.append(grade_idx(r1.grade))
                 second.append(grade_idx(r2.grade))
                 bias.append(r1.logs[0].result.theta - c.theta)

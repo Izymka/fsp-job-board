@@ -651,3 +651,124 @@ def _(rng):
         ans,
         [c[1] for c in cases if c[1] != ans] + ["Изменить props напрямую"],
     )
+
+
+@family("css.units", "html_css", 2, "Единицы em и rem")
+def _(rng):
+    root = rng.choice([16, 18, 20])
+    parent = rng.choice([12, 14, 20, 24])
+    k = rng.choice([0.75, 1.25, 1.5, 2])
+    unit = rng.choice(["em", "rem"])
+    px = parent * k if unit == "em" else root * k
+    q = (
+        f"`html {{ font-size: {root}px }}`, у родителя `font-size: {parent}px`, у дочернего элемента "
+        f"`font-size: {k}{unit}`. Каков размер шрифта дочернего элемента в px?"
+    )
+    return number(q, px)
+
+
+@family("css.grid_fr", "html_css", 3, "CSS Grid: дробные единицы fr")
+def _(rng):
+    w = rng.choice([900, 1000, 1200, 1280])
+    fixed = rng.choice([200, 240, 300])
+    a, b = rng.choice([(1, 2), (1, 3), (2, 3), (1, 1)])
+    gap = rng.choice([0, 10, 20, 24])
+    free = w - fixed - 2 * gap
+    which = rng.choice(["второй", "третьей"])
+    width = free * (a if which == "второй" else b) / (a + b)
+    q = (
+        f"Контейнер шириной {w}px: `display: grid; grid-template-columns: {fixed}px {a}fr {b}fr; gap: {gap}px`. "
+        f"Какова ширина {which} колонки в px? Точность 0,5."
+    )
+    return number(q, round(width, 2), tolerance=0.5)
+
+
+@family("html.forms", "html_css", 2, "Доступные формы")
+def _(rng):
+    cases = [
+        (
+            "Как связать подпись с полем ввода, чтобы экранный диктор её озвучивал?",
+            '`<label for="email">` и `id="email"` у поля',
+        ),
+        (
+            "Как сообщить экранному диктору текст ошибки под полем?",
+            "Связать текст ошибки с полем через `aria-describedby`",
+        ),
+        (
+            "Какой тип поля даст мобильную клавиатуру для email и встроенную проверку формата?",
+            '`<input type="email">`',
+        ),
+        (
+            "Почему нельзя использовать placeholder вместо подписи поля?",
+            "Он исчезает при вводе и плохо читается — подпись должна быть видимой",
+        ),
+    ]
+    q, a = rng.choice(cases)
+    return single(rng, q, a, [c[1] for c in cases if c[1] != a] + ['Добавить `tabindex="-1"` полю'])
+
+
+@family("react.hooks_rules", "react", 2, "Правила хуков")
+def _(rng):
+    bad = [
+        "if (isOpen) { const [x, setX] = useState(0) }",
+        "for (const id of ids) { useEffect(() => load(id), [id]) }",
+        "function handleClick() { const ref = useRef(null) }",
+        "if (!user) return null; const [tab, setTab] = useState('a')",
+    ]
+    good = [
+        "const [x, setX] = useState(0); if (isOpen) { setX(1) }",
+        "useEffect(() => { if (isOpen) load() }, [isOpen])",
+        "const ref = useRef(null); function handleClick() { ref.current?.focus() }",
+        "function useUser(id) { return useQuery(['user', id], () => fetchUser(id)) }",
+    ]
+    if rng.random() < 0.5:
+        return single(
+            rng, "Какой фрагмент компонента **нарушает** правила хуков?", rng.choice(bad), rng.sample(good, 3)
+        )
+    return single(rng, "Какой фрагмент **соблюдает** правила хуков?", rng.choice(good), rng.sample(bad, 3))
+
+
+@family("react.controlled", "react", 2, "Управляемые и неуправляемые поля")
+def _(rng):
+    cases = [
+        (
+            "`<input value={name} />` без onChange — поле не редактируется. Почему?",
+            "Поле управляемое: значение задаёт состояние, а без onChange оно не меняется",
+        ),
+        (
+            "Нужно валидировать ввод на каждый символ и показывать ошибку сразу",
+            "Управляемое поле: value из состояния и onChange",
+        ),
+        (
+            "Форма из 40 полей тормозит, хотя значения нужны только при отправке",
+            "Неуправляемые поля (defaultValue, ref или FormData при отправке)",
+        ),
+        (
+            "Warning: «A component is changing an uncontrolled input to be controlled». Причина?",
+            "Начальное значение было undefined, затем стало строкой — нужно инициализировать ''",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(rng, sit, a, [c[1] for c in cases if c[1] != a])
+
+
+@family("react.context", "react", 3, "Context и лишние перерисовки")
+def _(rng):
+    cases = [
+        (
+            "Провайдер передаёт `value={{ user, setUser }}`, и все потребители перерисовываются при каждом рендере родителя. Почему?",
+            "Каждый рендер создаёт новый объект value — нужно мемоизировать его (useMemo)",
+        ),
+        (
+            "В одном контексте и тема, и часто меняющийся счётчик; компоненты, читающие только тему, перерисовываются",
+            "Разделить на два контекста по частоте изменений",
+        ),
+        (
+            "Компонент использует useContext, но получает значение по умолчанию, а не из провайдера",
+            "Компонент находится вне дерева соответствующего Provider",
+        ),
+    ]
+    sit, a = rng.choice(cases)
+    return single(
+        rng, sit, a, [c[1] for c in cases if c[1] != a] + ["Context нельзя менять после первого рендера"]
+    )

@@ -61,7 +61,7 @@ def _(rng):
     return number(prompt, ans, code=q, code_lang="sql")
 
 
-@family("sql.group_by", "sql", 2, "Группировка и агрегаты")
+@family("sql.group_by", "sql", 2, "Группировка и агрегаты", group="group_aggregate")
 def _(rng):
     setup, rows = _employees(rng, rng.randint(7, 9))
     agg = rng.choice(["AVG(salary)", "SUM(salary)", "MAX(salary)", "COUNT(*)"])
@@ -181,7 +181,7 @@ def _(rng):
     return number(prompt, ans, code=q, code_lang="sql")
 
 
-@family("sql.distinct_join", "sql", 4, "Размножение строк при JOIN")
+@family("sql.distinct_join", "sql", 4, "Размножение строк при JOIN", group="join_fanout")
 def _(rng):
     cats = [(i + 1, c) for i, c in enumerate(rng.sample(CITIES, 3))]
     shops = [(i + 1, rng.choice(cats)[0]) for i in range(rng.randint(4, 6))]
