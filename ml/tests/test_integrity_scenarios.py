@@ -66,6 +66,25 @@ def test_proctor_rules_are_conservative():
     assert lost.level == "clean" and lost.proctoring.status == "interrupted"
 
 
+def test_fullscreen_and_environment_rules():
+    S, E = integ.ItemSignals, integ.EnvSignals
+    # выход из полноэкранного режима — уход; вместе с уходом на вкладку не суммируется
+    r = integ.assess([S(fullscreen_off_ms=5000), S()])
+    assert r.level == "review" and r.items_left == 1 and "полноэкранного" in r.reasons[0]
+    both = integ.assess([S(1, 5000, fullscreen_off_ms=5200)])
+    assert both.away_ms == 5200
+    assert integ.assess([S(fullscreen_off_ms=5000)] * 3).level == "void"
+    assert integ.assess([S(fullscreen_off_ms=900)]).level == "clean"
+    # окно уменьшено, второй монитор, удалённый рабочий стол, автоматизация — пометки, не аннулирование
+    assert integ.assess([S(shrunk_ms=3000)]).level == "review"
+    assert integ.assess([S(extended_screen=True)]).level == "review"
+    rdp = integ.assess([S()], env=E(virtual="rdp", renderer="Microsoft Remote Display Adapter"))
+    assert rdp.level == "review" and "удалённого рабочего стола" in rdp.reasons[0]
+    assert integ.assess([S()], env=E(webdriver=True)).level == "review"
+    assert integ.assess([S(fullscreen_unavailable=True)]).level == "review"
+    assert integ.assess([S()], env=E(renderer="ANGLE (Apple, Apple M2, OpenGL 4.1)")).level == "clean"
+
+
 def test_integrity_levels():
     S = integ.ItemSignals
     assert integ.assess([S(), S(1, 1500)]).level == "clean"

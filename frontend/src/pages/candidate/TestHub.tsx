@@ -5,9 +5,10 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BlueprintBars, StatusBadge } from '../../components/domain'
 import { ProctorCheckModal, type ProctorStart } from '../../components/proctor'
-import { Badge, EmptyState, ErrorBox, PageHeader, PageLoader, Section } from '../../components/ui'
+import { Badge, EmptyState, ErrorBox, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, dateTime, lookup, useCatalog } from '../../lib/catalog'
+import { detectEnv, enterFullscreen, isDesktop, screenExtended } from '../../lib/environment'
 import { proctor } from '../../lib/proctor/session'
 import type { Attempt, Eligibility, GradeId, Profile } from '../../lib/types'
 
@@ -32,7 +33,7 @@ export default function TestHub() {
   const [withProctor, setWithProctor] = useState(false)
   const [checkFor, setCheckFor] = useState<GradeId | null>(null)
   const start = useMutation({
-    mutationFn: ({ grade, p }: { grade: GradeId; p?: ProctorStart }) => api.post<Attempt>('/api/assessment/attempts', { grade, ...p }),
+    mutationFn: ({ grade, p }: { grade: GradeId; p?: ProctorStart }) => api.post<Attempt>('/api/assessment/attempts', { grade, ...p, env: detectEnv() }),
     onSuccess: (a, v) => {
       qc.invalidateQueries({ queryKey: ['eligibility'] })
       if (v.p) proctor.start(v.p.embedding)
@@ -42,7 +43,11 @@ export default function TestHub() {
       if (v.p) proctor.stop()
     },
   })
-  const begin = (grade: GradeId) => (withProctor ? setCheckFor(grade) : start.mutate({ grade }))
+  const begin = (grade: GradeId) => {
+    if (withProctor) return setCheckFor(grade)
+    void enterFullscreen() // синхронно в обработчике клика — требование браузера
+    start.mutate({ grade })
+  }
   if (!elig.data || !prof.data || !cat) return <PageLoader queries={[elig, prof, catalog]} />
   const e = elig.data
   const p = prof.data
@@ -107,6 +112,14 @@ export default function TestHub() {
               )
             })}
           </div>
+          {isDesktop() && (
+            <p className="hint mt-4">Тест откроется в полноэкранном режиме. Выход из него засчитывается как уход со страницы.</p>
+          )}
+          {screenExtended() && (
+            <div className="mt-3">
+              <Notice tone="warn">Подключён второй монитор. Отключите его до начала теста — иначе работодатель увидит замечание.</Notice>
+            </div>
+          )}
           <label className={clsx('mt-4 flex cursor-pointer items-start gap-3 rounded-xl border p-4', withProctor ? 'border-brand-500 bg-brand-50' : 'border-line')}>
             <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={withProctor} onChange={(ev) => setWithProctor(ev.target.checked)} />
             <span className="text-sm">
@@ -127,6 +140,7 @@ export default function TestHub() {
             onReady={(p) => {
               const grade = checkFor!
               setCheckFor(null)
+              void enterFullscreen()
               start.mutate({ grade, p })
             }}
           />

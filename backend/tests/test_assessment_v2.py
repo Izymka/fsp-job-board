@@ -175,3 +175,33 @@ def test_unknown_direction_rejected(client):
     cand = make_candidate(client)
     r = cand.put("/api/candidate/survey", json={**SURVEY, "directions": ["cv"]})  # у backend нет направлений
     assert r.status_code == 422
+
+
+def test_environment_and_fullscreen_signals(client):
+    """Удалённый рабочий стол (по видеоадаптеру), второй монитор и выход из полноэкранного режима —
+    пометки для работодателя; три задания вне полноэкранного режима — аннулирование."""
+    cand = make_candidate(client)
+    env = {
+        "renderer": "ANGLE (Microsoft, Microsoft Remote Display Adapter)",
+        "webdriver": False,
+        "fullscreen": True,
+    }
+    att = cand.post("/api/assessment/attempts", json={"grade": "junior", "env": env}).json()
+    att = _answer(cand, att, fullscreen_off_ms=4000, fullscreen_exits=1)
+    att = _answer(cand, att, extended_screen=True)
+    att = _run_knowledge(cand, att)
+    assert att["status"] == "passed"
+    reasons = " ".join(att["result"]["integrity"]["reasons"])
+    assert (
+        "полноэкранного" in reasons and "удалённого рабочего стола" in reasons and "второй монитор" in reasons
+    )
+    from app.core.db import SessionLocal
+
+    with SessionLocal() as db:
+        assert db.get(Attempt, uuid.UUID(att["id"])).env["virtual"] == "rdp"  # классифицирует сервер
+
+    cand2 = make_candidate(client, email="c2@example.ru")
+    att = cand2.post("/api/assessment/attempts", json={"grade": "junior"}).json()
+    for _ in range(3):
+        att = _answer(cand2, att, fullscreen_off_ms=5000)
+    assert att["status"] == "voided"

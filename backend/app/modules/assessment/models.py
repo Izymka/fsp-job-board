@@ -35,6 +35,8 @@ class Attempt(Base):
     # {status: enrolled | match | mismatch, similarity, re_enrolled, provider}
     proctored: Mapped[bool] = mapped_column(default=False)
     identity: Mapped[dict | None] = mapped_column(default=None)
+    # окружение на старте: {renderer, virtual, webdriver, extended_screen, desktop, fullscreen}
+    env: Mapped[dict | None] = mapped_column(default=None)
 
 
 class AttemptItem(Base):
@@ -62,6 +64,8 @@ class AttemptItem(Base):
     meta: Mapped[dict | None] = mapped_column(default=None)  # кейс: {scenario, probe, grading}
     # счётчики проктора за задание (без изображений и эмбеддингов) + результат серверной сверки
     proctor: Mapped[dict | None] = mapped_column(default=None)
+    # полноэкранный режим и экран за задание: {fullscreen_off_ms, fullscreen_exits, shrunk_ms, extended_screen}
+    client: Mapped[dict | None] = mapped_column(default=None)
     score: Mapped[float | None] = mapped_column(default=None)  # кейс/вопрос: оценка 0..1
     expected_p: Mapped[float | None] = mapped_column(
         default=None

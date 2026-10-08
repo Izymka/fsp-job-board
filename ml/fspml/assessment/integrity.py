@@ -23,6 +23,15 @@
   попытки копирования/вставки или lz < `lz_threshold`;
 * `clean` — замечаний нет.
 
+**Окружение и полноэкранный режим** (все тесты на десктопе). Тест идёт в полноэкранном режиме:
+время вне него на задании засчитывается как уход со страницы (по тому же правилу; уход на вкладку
+и выход из полноэкранного режима не суммируются). Пометки без аннулирования: окно уменьшалось
+внутри полноэкранного режима (например, открыты инструменты разработчика), подключён второй
+монитор, видеоадаптер сеанса удалённого рабочего стола или виртуальной машины (имя рендерера
+WebGL), браузер под управлением автоматизации (`navigator.webdriver`). Удалённый доступ через
+TeamViewer/AnyDesk к физическому компьютеру браузер не видит — от него защищают проктор и формат
+кейса с уточняющим вопросом; в production — экзаменационный браузер (Safe Exam Browser).
+
 **Цифровой проктор** (по желанию кандидата, `ProctorSignals`). Детекторы работают в браузере, на
 сервер приходят только счётчики по заданию и эмбеддинг лица для серверной сверки 1:1 с эталоном.
 Правила консервативны — ложное срабатывание детектора не должно аннулировать честного кандидата:
@@ -37,6 +46,7 @@
 from __future__ import annotations
 
 import math
+import re
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass, field
 from typing import Literal
@@ -60,6 +70,7 @@ class IntegrityConfig:
     speech_items: int = 2
     look_away_ms: int = 15_000
     look_away_items: int = 3
+    shrunk_ms: int = 2_000  # окно уменьшено дольше — пометка
     mismatch_void: int = 2
     lost_ms: int = 30_000  # камера/микрофон отключены суммарно дольше — проктор прерван
 
@@ -73,6 +84,45 @@ class ItemSignals:
     away_ms: int = 0
     paste_attempts: int = 0
     copy_attempts: int = 0
+    fullscreen_off_ms: int = 0  # вне полноэкранного режима (тест на десктопе)
+    shrunk_ms: int = 0  # окно уменьшено внутри полноэкранного режима (инструменты разработчика)
+    extended_screen: bool = False  # подключён второй монитор
+    fullscreen_unavailable: bool = False  # браузер отказал в полноэкранном режиме
+
+    @property
+    def off_page_ms(self) -> int:
+        """Время вне теста: уход на другую вкладку/окно или выход из полноэкранного режима (не сумма —
+        переключение вкладки само выводит из полноэкранного режима)."""
+        return max(self.away_ms if self.focus_losses > 0 else 0, self.fullscreen_off_ms)
+
+
+_RDP = re.compile(r"remote display adapter|basic render driver|rdpdd|remotefx|citrix|vmware horizon", re.I)
+_VM = re.compile(r"vmware|virtualbox|parallels|hyper-v|qemu|virgl|virtio|red hat|bochs", re.I)
+
+
+def classify_renderer(renderer: str | None) -> Literal["rdp", "vm"] | None:
+    """Видеоадаптер сеанса удалённого рабочего стола Windows или виртуальной машины (WebGL renderer).
+
+    Программный рендеринг (SwiftShader, llvmpipe) не считается сигналом: он бывает и на обычных
+    компьютерах с отключённым ускорением.
+    """
+    if not renderer:
+        return None
+    if _RDP.search(renderer):
+        return "rdp"
+    if _VM.search(renderer):
+        return "vm"
+    return None
+
+
+@dataclass(frozen=True)
+class EnvSignals:
+    """Окружение на старте попытки."""
+
+    virtual: Literal["rdp", "vm"] | None = None  # по имени видеоадаптера WebGL
+    renderer: str | None = None
+    webdriver: bool = False
+    extended_screen: bool = False
 
 
 @dataclass(frozen=True)
@@ -191,28 +241,42 @@ def assess(
     config: IntegrityConfig = DEFAULT_INTEGRITY,
     proctor: Sequence[ProctorSignals] | None = None,
     identity: Literal["enrolled", "match", "mismatch"] | None = None,
+    env: EnvSignals | None = None,
 ) -> IntegrityReport:
     """proctor=None — тест без проктора; иначе счётчики проктора по тем же заданиям, что и signals."""
     pr = list(proctor) if proctor is not None else None
     no_face = [(pr[i].no_face_ms if pr is not None and i < len(pr) else 0) for i in range(len(signals))]
     # лицо пропало из кадра надолго — то же, что уход со страницы
     gone = [nf >= config.no_face_ms for nf in no_face]
-    left = [
-        i
-        for i, s in enumerate(signals)
-        if (s.focus_losses > 0 and s.away_ms >= config.min_away_ms) or gone[i]
-    ]
-    away = sum(
-        (signals[i].away_ms if signals[i].focus_losses > 0 else 0) + (no_face[i] if gone[i] else 0)
-        for i in left
-    )
+    off = [s.off_page_ms if s.off_page_ms >= config.min_away_ms else 0 for s in signals]
+    left = [i for i in range(len(signals)) if off[i] or gone[i]]
+    away = sum(off[i] + (no_face[i] if gone[i] else 0) for i in left)
     pastes = sum(s.paste_attempts for s in signals)
     copies = sum(s.copy_attempts for s in signals)
     lz = person_fit_lz(pairs, theta) if theta is not None and len(pairs) >= config.lz_min_items else None
     reasons: list[str] = []
     if left:
-        what = "уходы со страницы теста или из кадра" if any(gone) else "уходы со страницы теста"
+        where = ["со страницы теста"]
+        if any(s.fullscreen_off_ms >= config.min_away_ms for s in signals):
+            where.append("из полноэкранного режима")
+        if any(gone):
+            where.append("из кадра")
+        what = "уходы " + (", ".join(where[:-1]) + " или " + where[-1] if len(where) > 1 else where[0])
         reasons.append(f"{what}: {len(left)} задан., суммарно {_minutes(away)}")
+    shrunk = sum(1 for s in signals if s.shrunk_ms >= config.shrunk_ms)
+    if shrunk:
+        reasons.append(
+            f"окно теста уменьшалось в полноэкранном режиме (например, открывались инструменты разработчика): {shrunk} задан."
+        )
+    if any(s.fullscreen_unavailable for s in signals):
+        reasons.append("полноэкранный режим был недоступен в браузере кандидата")
+    if (env and env.extended_screen) or any(s.extended_screen for s in signals):
+        reasons.append("к компьютеру был подключён второй монитор")
+    if env and env.virtual:
+        where = "в сеансе удалённого рабочего стола" if env.virtual == "rdp" else "в виртуальной машине"
+        reasons.append(f"тест проходил {where} (видеоадаптер «{env.renderer}»)")
+    if env and env.webdriver:
+        reasons.append("браузер был под управлением программы автоматизации (webdriver)")
     if pastes:
         reasons.append(f"попытки вставить текст в ответ: {pastes}")
     if copies:

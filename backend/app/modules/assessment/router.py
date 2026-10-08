@@ -116,6 +116,17 @@ class StartIn(BaseModel):
         max_length=300_000,
         description="Кадр JPEG (base64) для работодателя — только при согласии proctoring_photo",
     )
+    env: EnvIn | None = None
+
+
+class EnvIn(BaseModel):
+    """Окружение на старте: для пометок о виртуальной машине, удалённом рабочем столе, втором мониторе."""
+
+    renderer: str | None = Field(default=None, max_length=256, description="WebGL UNMASKED_RENDERER")
+    webdriver: bool = False
+    extended_screen: bool | None = Field(default=None, description="screen.isExtended (Chromium)")
+    desktop: bool = True
+    fullscreen: bool = Field(default=False, description="тест запущен в полноэкранном режиме")
 
 
 class ProctorIn(BaseModel):
@@ -142,6 +153,15 @@ class AnswerIn(BaseModel):
     away_ms: int = Field(default=0, ge=0, le=86_400_000, description="Суммарно вне страницы за задание, мс")
     paste_attempts: int = Field(default=0, ge=0, le=1000)
     copy_attempts: int = Field(default=0, ge=0, le=1000)
+    fullscreen_off_ms: int = Field(
+        default=0, ge=0, le=86_400_000, description="Вне полноэкранного режима, мс"
+    )
+    fullscreen_exits: int = Field(default=0, ge=0, le=1000)
+    shrunk_ms: int = Field(
+        default=0, ge=0, le=86_400_000, description="Окно уменьшено внутри полноэкранного режима, мс"
+    )
+    extended_screen: bool = False
+    fullscreen_unavailable: bool = Field(default=False, description="браузер отказал в полноэкранном режиме")
     proctor: ProctorIn | None = None
     embedding: Embedding | None = Field(
         default=None, description="Эмбеддинг лица для серверной сверки с эталоном (примерно раз в минуту)"
@@ -253,6 +273,7 @@ RULES = [
     "Брошенная попытка засчитывается как неудачная.",
     "Для Middle, Senior и Lead после теста знаний — практический кейс (до 15–18 минут) и уточняющий вопрос по вашему решению (2 минуты). Кейс оценивается по рубрике и учитывается в решении о грейде.",
     "На каждое задание есть ограничение по времени. Копировать текст заданий и вставлять текст в ответы нельзя.",
+    "На компьютере тест идёт в полноэкранном режиме: выход из него считается уходом со страницы. Второй монитор, виртуальную машину и удалённый рабочий стол работодатель увидит в замечаниях — отключите их до начала.",
     "Уход со страницы теста (другая вкладка или окно) дольше 2 секунд фиксируется. Уходы на трёх заданиях или суммарно больше минуты — попытка аннулируется и засчитывается как неудачная. Единичные уходы видит работодатель рядом с результатом.",
     "По желанию тест можно пройти с цифровым проктором (камера и микрофон): работодатель увидит отметку «Тест с проктором». Видео и звук не записываются и не покидают ваше устройство; на сервер передаются только счётчики событий и числовой отпечаток лица для сверки с эталоном. Телефон в кадре на трёх заданиях или чужое лицо дважды аннулируют попытку.",
 ]
@@ -319,7 +340,7 @@ def start(body: StartIn, user: User = Depends(CandidateUser), db: Session = Depe
         if not body.embedding or not body.embedding_model:
             raise AppError(422, "embedding_required", "Для теста с проктором нужен эмбеддинг лица с проверки")
         pstart = proctoring.ProctorStart(body.embedding, body.embedding_model, body.snapshot)
-    attempt = service.start_attempt(db, p, body.grade, pstart)
+    attempt = service.start_attempt(db, p, body.grade, pstart, body.env.model_dump() if body.env else None)
     db.commit()
     return attempt_out(db, attempt)
 
@@ -368,6 +389,13 @@ def post_answer(
         copy_attempts=body.copy_attempts,
         proctor=body.proctor.model_dump() if body.proctor else None,
         embedding=body.embedding,
+        client={
+            "fullscreen_off_ms": body.fullscreen_off_ms,
+            "fullscreen_exits": body.fullscreen_exits,
+            "shrunk_ms": body.shrunk_ms,
+            "extended_screen": body.extended_screen,
+            "fullscreen_unavailable": body.fullscreen_unavailable,
+        },
     )
     db.commit()
     return attempt_out(db, a)

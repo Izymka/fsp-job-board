@@ -8,6 +8,7 @@ import { ProctorDock, Watermark } from '../../components/proctor'
 import { Badge, CodeBlock, ErrorBox, Md, Notice, PageLoader, Progress, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { useMe } from '../../lib/auth'
+import { detectEnv, enterFullscreen, exitFullscreen, isDesktop, useFullscreenGuard } from '../../lib/environment'
 import { lookup, useCatalog } from '../../lib/catalog'
 import { proctor, proctorWarning, useProctorLive } from '../../lib/proctor/session'
 import type { Attempt, AttemptResult, GradeId, Item } from '../../lib/types'
@@ -261,7 +262,7 @@ function Result({ a }: { a: Attempt }) {
       // предыдущая попытка шла с проктором и камера ещё открыта — следующая тоже с проктором
       const emb = a.proctored && proctor.opened ? await proctor.capture() : null
       const p = emb ? { proctored: true, embedding: emb, embedding_model: proctor.model } : {}
-      return { x: await api.post<Attempt>('/api/assessment/attempts', { grade, ...p }), emb }
+      return { x: await api.post<Attempt>('/api/assessment/attempts', { grade, ...p, env: detectEnv() }), emb }
     },
     onSuccess: ({ x, emb }) => {
       if (emb) proctor.start(emb)
@@ -289,12 +290,12 @@ function Result({ a }: { a: Attempt }) {
         </ul>
         <div className="mt-6 flex flex-wrap gap-2">
           {ok && r.suggestion === 'upgrade' && next && (
-            <button className="btn-primary" onClick={() => start.mutate(next)} disabled={start.isPending}>
+            <button className="btn-primary" onClick={() => (void enterFullscreen(), start.mutate(next))} disabled={start.isPending}>
               <ArrowUp className="h-4 w-4" /> Пройти тест на {L.grade(next)}
             </button>
           )}
           {!ok && prev && (
-            <button className="btn-primary" onClick={() => start.mutate(prev)} disabled={start.isPending}>
+            <button className="btn-primary" onClick={() => (void enterFullscreen(), start.mutate(prev))} disabled={start.isPending}>
               <RotateCcw className="h-4 w-4" /> Пройти тест на {L.grade(prev)}
             </button>
           )}
@@ -329,6 +330,7 @@ export default function TestRunner() {
   const guard = useIntegrity(item)
   const live = useProctorLive()
   const me = useMe().data
+  const fs = useFullscreenGuard(item, a?.status === 'in_progress' && isDesktop())
   const loadedAt = useRef(Date.now())
   const [resumeError, setResumeError] = useState<unknown>(null)
   useEffect(() => {
@@ -338,10 +340,14 @@ export default function TestRunner() {
   }, [item])
   // экран результата: наблюдение на паузе (камера открыта для следующей попытки); уход со страницы — выключить
   useEffect(() => {
-    if (a && a.status !== 'in_progress' && proctor.active) proctor.pause()
+    if (a && a.status !== 'in_progress') {
+      if (proctor.active) proctor.pause()
+      exitFullscreen()
+    }
   }, [a])
   useEffect(() => () => proctor.stop(), [])
   const resume = async () => {
+    void enterFullscreen()
     setResumeError(null)
     try {
       await proctor.open()
@@ -358,6 +364,7 @@ export default function TestRunner() {
         value: v,
         time_ms: Date.now() - t0.current,
         ...guard.snapshot(),
+        ...fs.snapshot(),
         ...(a?.proctored && proctor.active ? { proctor: proctor.counts(), embedding: proctor.embeddingForServer() } : {}),
       }),
     onSuccess: (d) => {
@@ -433,7 +440,22 @@ export default function TestRunner() {
         </Section>
       </div>
     )
-  const warning = proctorWarning(live)
+  if (!fs.full)
+    return (
+      <div className="mx-auto max-w-xl">
+        <Section title="Тест идёт в полноэкранном режиме">
+          <p className="text-sm text-ink-soft">Задание показывается только в полноэкранном режиме. Время вне него засчитывается как уход со страницы.</p>
+          <button className="btn-primary mt-4" onClick={() => void enterFullscreen()}>
+            Перейти в полноэкранный режим
+          </button>
+        </Section>
+      </div>
+    )
+  const warning = fs.extended
+    ? 'Подключён второй монитор. Отключите его — работодатель увидит замечание.'
+    : fs.unavailable
+      ? 'Браузер не разрешил полноэкранный режим. Тест можно продолжить, но работодатель увидит замечание — лучше откройте его в Chrome, Edge, Firefox или Safari.'
+      : proctorWarning(live)
   const mark = `${a.id.slice(0, 8)} · ${(me?.id ?? '').slice(0, 6)}`
   return (
     <div className="mx-auto max-w-3xl">

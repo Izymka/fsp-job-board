@@ -183,7 +183,11 @@ def issue_next(
 
 
 def start_attempt(
-    db: Session, p: CandidateProfile, grade: str, proctor: proctoring.ProctorStart | None = None
+    db: Session,
+    p: CandidateProfile,
+    grade: str,
+    proctor: proctoring.ProctorStart | None = None,
+    env: dict | None = None,
 ) -> Attempt:
     if not p.survey_completed_at or not p.specialization:
         raise AppError(
@@ -214,6 +218,7 @@ def start_attempt(
         blueprint=plan.blueprint,
         stack=list(p.stack or []),
         seen_families=seen_families(db, p, now),
+        env=client_env(env),
         started_at=now,
     )
     db.add(attempt)
@@ -242,9 +247,37 @@ def _update_family_stats(db: Session, item: AttemptItem, cfg: CusumConfig = Cusu
 
 
 def _signals(it: AttemptItem) -> integ.ItemSignals:
+    c = it.client or {}
     return integ.ItemSignals(
-        it.tab_switches or 0, it.away_ms or 0, it.paste_attempts or 0, it.copy_attempts or 0
+        it.tab_switches or 0,
+        it.away_ms or 0,
+        it.paste_attempts or 0,
+        it.copy_attempts or 0,
+        fullscreen_off_ms=int(c.get("fullscreen_off_ms") or 0),
+        shrunk_ms=int(c.get("shrunk_ms") or 0),
+        extended_screen=bool(c.get("extended_screen")),
+        fullscreen_unavailable=bool(c.get("fullscreen_unavailable")),
     )
+
+
+def _env(attempt: Attempt) -> integ.EnvSignals | None:
+    e = attempt.env
+    if not e:
+        return None
+    return integ.EnvSignals(
+        virtual=e.get("virtual"),
+        renderer=e.get("renderer"),
+        webdriver=bool(e.get("webdriver")),
+        extended_screen=bool(e.get("extended_screen")),
+    )
+
+
+def client_env(raw: dict | None) -> dict | None:
+    """Окружение со старта попытки; тип видеоадаптера определяет сервер, а не клиент."""
+    if not raw:
+        return None
+    renderer = (raw.get("renderer") or "")[:256] or None
+    return {**raw, "renderer": renderer, "virtual": integ.classify_renderer(renderer)}
 
 
 def _proctor_signals(it: AttemptItem) -> integ.ProctorSignals:
@@ -264,6 +297,7 @@ def integrity_report(db: Session, attempt: Attempt, engine: AssessmentEngine) ->
         theta=theta,
         proctor=[_proctor_signals(it) for it in items] if attempt.proctored else None,
         identity=(attempt.identity or {}).get("status") if attempt.proctored else None,
+        env=_env(attempt),
     )
 
 
@@ -342,6 +376,7 @@ def answer(
     copy_attempts: int = 0,
     proctor: dict | None = None,
     embedding: list[float] | None = None,
+    client: dict | None = None,
 ) -> CatResult | None:
     if attempt.status != "in_progress":
         raise AppError(409, "attempt_finished", "Попытка уже завершена")
@@ -359,6 +394,7 @@ def answer(
     item.paste_attempts = max(0, int(paste_attempts or 0))
     item.copy_attempts = max(0, int(copy_attempts or 0))
     item.proctor = proctoring.item_signals(db, attempt, proctor, embedding)
+    item.client = client
     p.last_active_at = utcnow()
 
     if item.kind == "item":
