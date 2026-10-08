@@ -259,10 +259,23 @@ function inline(s: string): ReactNode[] {
   return out
 }
 
+const CODE_LANG_LABELS: Record<string, string> = {
+  javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  jsx: 'JSX',
+  csharp: 'C#',
+  php: 'PHP',
+  vue: 'Vue',
+}
+
 export function CodeBlock({ code, lang }: { code: string; lang?: string | null }) {
   return (
     <div className="my-3 overflow-hidden rounded-xl border border-ink/10 bg-ink">
-      {lang && <div className="border-b border-white/10 px-3 py-1.5 font-mono text-[11px] tracking-wider text-steel uppercase">{lang}</div>}
+      {lang && (
+        <div className="border-b border-white/10 px-3 py-1.5 font-mono text-[11px] tracking-wider text-steel uppercase">
+          {CODE_LANG_LABELS[lang] ?? lang}
+        </div>
+      )}
       <pre className="overflow-x-auto p-4 text-[13px] leading-relaxed text-fog">
         <code>{code}</code>
       </pre>

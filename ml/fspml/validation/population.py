@@ -102,6 +102,10 @@ LEGACY_BLUEPRINTS: dict[str, dict[str, float]] = {
     "analyst": {"requirements": 0.35, "sql": 0.25, "http": 0.15, "metrics": 0.25},
 }
 LEGACY_STACK_LANGUAGES: dict[str, tuple[str, ...]] = {"backend": ("python", "javascript")}
+# Технологии, по которым на момент заморозки популяции в банке не было заданий: они не попадали
+# в пул «накрутки» стека. Пул заморожен так же, как состав теста выше, — иначе появление заданий
+# по Java/Go/C#/PHP сдвинуло бы поток случайных чисел и сменило скрытую истину.
+LEGACY_NO_TASKS = frozenset({"Java", "Go", "C#", "PHP"})
 
 
 def legacy_blueprint(spec: str, stack: list[str] | None = None) -> dict[str, float]:
@@ -339,7 +343,11 @@ def make_candidates(
         p_stuff = min(0.95, stuffing_rate * (1.5 if theta < 0.1 else 0.5))
         if rng.random() < p_stuff:
             dic = get_dictionary()
-            pool = [t for t, _ in spec_techs(spec) if t not in techs and dic.techs[t].assess]
+            pool = [
+                t
+                for t, _ in spec_techs(spec)
+                if t not in techs and dic.techs[t].assess and t not in LEGACY_NO_TASKS
+            ]
 
             def weakness(t, dic=dic, skill_theta=skill_theta, theta=theta):
                 vals = [skill_theta[a] for a in dic.techs[t].assess if a in skill_theta]

@@ -103,3 +103,70 @@ def test_js_families_match_node():
             if not inst.check(got):
                 mismatches.append((fam.id, seed, got, inst.answer))
     assert not mismatches, mismatches[:5]
+
+
+# Языки, где ответ задания вычисляет Python-модель семантики: код — полная программа, её запускает
+# настоящий компилятор/интерпретатор. Без тулчейна тест пропускается локально; в CI тулчейны ставятся.
+CSPROJ = """<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net{ver}</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>CS0162;CS0219;CS8321</NoWarn>
+  </PropertyGroup>
+</Project>
+"""
+
+
+def _dotnet_major() -> str:
+    out = subprocess.run(["dotnet", "--version"], capture_output=True, text=True, timeout=60).stdout
+    return ".".join(out.strip().split(".")[:1]) + ".0"
+
+
+def _runner(lang: str, workdir) -> list[str] | None:
+    """Готовит рабочий каталог и возвращает команду запуска; None — тулчейна нет."""
+    match lang:
+        case "php":
+            return ["php", str(workdir / "main.php")] if shutil.which("php") else None
+        case "java":
+            ok = (
+                shutil.which("java")
+                and subprocess.run(["java", "-version"], capture_output=True).returncode == 0
+            )
+            return ["java", str(workdir / "Main.java")] if ok else None
+        case "go":
+            if not shutil.which("go"):
+                return None
+            (workdir / "go.mod").write_text("module item\n\ngo 1.22\n")
+            return ["go", "run", "."]
+        case "csharp":
+            if not shutil.which("dotnet"):
+                return None
+            (workdir / "item.csproj").write_text(CSPROJ.format(ver=_dotnet_major()))
+            return ["dotnet", "run", "--nologo"]
+    return None
+
+
+SOURCE_FILE = {"php": "main.php", "java": "Main.java", "go": "main.go", "csharp": "Program.cs"}
+RUNTIME_SEEDS = {"php": 15, "java": 5, "go": 5, "csharp": 3}
+
+
+@pytest.mark.parametrize("lang", sorted(SOURCE_FILE))
+def test_lang_families_match_runtime(lang, tmp_path):
+    """Python-модель семантики Java, Go, C# и PHP сверяется с настоящими рантаймами."""
+    cmd = _runner(lang, tmp_path)
+    if cmd is None:
+        pytest.skip(f"нет тулчейна для {lang}")
+    fams = [f for f in FAMILIES if f.generate(0).explanation == lang]
+    assert len(fams) >= 4, f"{lang}: мало исполняемых семейств"
+    mismatches = []
+    for fam in fams:
+        for seed in range(RUNTIME_SEEDS[lang]):
+            inst = fam.generate(seed)
+            (tmp_path / SOURCE_FILE[lang]).write_text(inst.code)
+            out = subprocess.run(cmd, cwd=tmp_path, capture_output=True, text=True, timeout=180)
+            got = " ".join(out.stdout.split("\n")).strip()
+            if out.returncode != 0 or not inst.check(got):
+                mismatches.append((fam.id, seed, got or out.stderr[-500:], inst.answer))
+    assert not mismatches, mismatches[:5]

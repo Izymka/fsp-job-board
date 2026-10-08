@@ -36,9 +36,24 @@ def test_no_skills_outside_declared_stack(spec, stack, foreign):
 
 
 def test_language_without_tasks_is_reported_not_replaced():
-    tb = ENGINE.blueprint_for("backend", ["Java", "Spring", "Docker"])
-    assert "Java" in tb.untested and "python" not in tb.weights
-    assert any("Java" in line for line in tb.explanation())
+    tb = ENGINE.blueprint_for("backend", ["Rust", "Docker"])
+    assert "Rust" in tb.untested and "python" not in tb.weights
+    assert any("Rust" in line for line in tb.explanation())
+
+
+def test_stack_languages_get_own_modules():
+    """Java, Go, C#, PHP и Vue проверяются заданиями на своём языке, а не подменяются Python/React."""
+    cases = {
+        ("backend", ("Java", "Spring", "Docker")): "java",
+        ("backend", ("Go", "Gin")): "go",
+        ("backend", ("C#", "PostgreSQL")): "csharp",
+        ("backend", ("PHP", "Laravel")): "php",
+        ("frontend", ("Vue", "TypeScript")): "vue",
+    }
+    for (spec, stack), skill in cases.items():
+        tb = ENGINE.blueprint_for(spec, list(stack))
+        assert skill in tb.modules and stack[0] in tb.modules[skill], (stack, tb.modules)
+        assert not tb.untested and "python" not in tb.weights and "react" not in tb.weights
 
 
 def test_modules_follow_stack_and_core_keeps_majority():
@@ -52,7 +67,7 @@ def test_modules_follow_stack_and_core_keeps_majority():
         assert sum(bp[s] for s in spec.core) >= 0.6 - 1e-9, f"{spec.id}: ядро меньше 60%"
     py = weights("backend", ["Python", "Django", "FastAPI", "Docker", "Git"])
     assert py["python"] > py["docker"] == py["git"], "язык с фреймворками весит больше Git"
-    assert weights("backend", []) == weights("backend", ["Java"]) == cat.blueprint("backend")
+    assert weights("backend", []) == weights("backend", ["Rust"]) == cat.blueprint("backend")
 
 
 def test_skill_ids_are_accepted_as_stack_items():

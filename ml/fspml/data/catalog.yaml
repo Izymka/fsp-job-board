@@ -17,7 +17,7 @@ grades:
 #             общепринятый фундамент (алгоритмы для разработчиков, статистика для DS).
 #   modules — навыки, которые зависят от стека: входят в тест, только если их подтверждают
 #             заявленные технологии (Django → python, React → react). Порядок — приоритет при
-#             равенстве. Язык, по которому нет заданий (Java, Go, C#), ничем не подменяется:
+#             равенстве. Язык, по которому нет заданий (Rust, Ruby, Scala), ничем не подменяется:
 #             тест опирается на ядро, а технология остаётся «заявленной».
 blueprint_rules:
   max_modules: 3          # больше модулей — меньше заданий на навык и шумнее подоценки
@@ -30,19 +30,19 @@ specializations:
     title: "Backend-разработка"
     description: "Серверная логика, API, базы данных, интеграции, производительность и надёжность сервисов"
     core: {algorithms: 0.25, sql: 0.3, http: 0.25, architecture: 0.2}
-    modules: [python, javascript, typescript, docker, linux, security, kubernetes, cicd, git]
+    modules: [python, java, go, csharp, php, javascript, typescript, docker, linux, security, kubernetes, cicd, git]
   - id: frontend
     name: Frontend
     title: "Frontend-разработка"
     description: "Веб-интерфейсы, браузер, JavaScript/TypeScript, React, вёрстка, взаимодействие с API"
     core: {javascript: 0.4, html_css: 0.3, http: 0.15, algorithms: 0.15}
-    modules: [react, typescript, git]
+    modules: [react, vue, typescript, git]
   - id: mobile
     name: Mobile
     title: "Мобильная разработка"
     description: "Приложения для Android и iOS: жизненный цикл, UI, хранение данных, сеть, публикация"
     core: {mobile: 0.5, http: 0.2, algorithms: 0.15, architecture: 0.15}
-    modules: [sql, react, javascript, typescript, git]
+    modules: [sql, react, javascript, typescript, java, git]
   - id: data_science
     name: Data Science
     title: "Data Science / ML"
@@ -62,13 +62,13 @@ specializations:
     title: "QA / тестирование"
     description: "Тест-дизайн, ручное и автоматизированное тестирование, API и баг-репорты"
     core: {testing: 0.7, http: 0.3}
-    modules: [sql, python, javascript, mobile, cicd, git]
+    modules: [sql, python, java, csharp, javascript, mobile, cicd, git]
   - id: devops
     name: DevOps
     title: "DevOps / SRE"
     description: "Инфраструктура, контейнеры, CI/CD, наблюдаемость, сети и безопасность эксплуатации"
     core: {linux: 0.35, docker: 0.25, cicd: 0.2, http: 0.2}
-    modules: [kubernetes, security, python, git, sql]
+    modules: [kubernetes, security, python, go, git, sql]
   - id: analyst
     name: Analyst
     title: "Системный / бизнес-аналитик"
@@ -93,6 +93,11 @@ assessment_skills:
   - {id: typescript, title: "TypeScript"}
   - {id: html_css, title: "HTML и CSS"}
   - {id: react, title: "React"}
+  - {id: vue, title: "Vue"}
+  - {id: java, title: "Java"}
+  - {id: go, title: "Go"}
+  - {id: csharp, title: "C# / .NET"}
+  - {id: php, title: "PHP"}
   - {id: pandas, title: "pandas / NumPy"}
   - {id: statistics, title: "Статистика и вероятность"}
   - {id: ml, title: "Машинное обучение"}

@@ -1,6 +1,21 @@
 """Банк параметризованных семейств заданий. Импорт модулей регистрирует семейства в REGISTRY."""
 
 from ..items import REGISTRY
-from . import algorithms, data, ds_directions, frontend, infra, practice, python_, sql, web  # noqa: F401
+from . import (  # noqa: F401
+    algorithms,
+    csharp,
+    data,
+    ds_directions,
+    frontend,
+    go_,
+    infra,
+    java,
+    php,
+    practice,
+    python_,
+    sql,
+    vue,
+    web,
+)
 
 __all__ = ["REGISTRY"]
