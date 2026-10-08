@@ -163,6 +163,28 @@ export interface IntegrityReport {
   lz: number | null
   reasons: string[]
   leaves_left: number
+  proctoring?: ProctoringReport | null
+}
+
+/** Отчёт цифрового проктора (детекторы — в браузере, сверка лица 1:1 — на сервере) */
+export interface ProctoringReport {
+  status: 'verified' | 'interrupted' | 'off'
+  identity: 'enrolled' | 'match' | 'mismatch' | null
+  reasons: string[]
+  phone_items: number
+  mismatches: number
+  checks: number
+  lost_ms: number
+}
+
+/** Что видит работодатель о прокторе */
+export interface ProctoringSummary {
+  status: 'verified' | 'interrupted' | 'off'
+  identity: 'enrolled' | 'match' | 'mismatch' | null
+  re_enrolled: boolean
+  checks: number
+  mismatches: number
+  reasons: string[]
 }
 
 export interface ScenarioOutcome {
@@ -194,6 +216,8 @@ export interface Attempt {
   result: AttemptResult | null
   has_scenario: boolean
   integrity: { items_left: number; leaves_left: number; level: string } | null
+  proctored: boolean
+  identity: 'enrolled' | 'match' | 'mismatch' | null
 }
 
 export interface Eligibility {
@@ -251,8 +275,10 @@ export interface CandidateCard {
   salary_fit: string | null
   assessment: {
     integrity: { level: 'clean' | 'review' | 'void'; reasons: string[] }
+    proctoring?: ProctoringSummary | null
     scenario: { title: string; category: number; category_title: string; method: string } | null
   } | null
+  test_photo_available?: boolean
 }
 
 export interface Ranked {

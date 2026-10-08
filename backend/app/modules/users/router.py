@@ -12,6 +12,8 @@ from ...core.config import Settings, get_settings
 from ...core.db import get_db, utcnow
 from ...core.errors import AppError, conflict, responses
 from ...core.security import get_current_user, issue_dev_token
+from ..assessment.proctoring import delete_snapshots
+from ..biometrics.provider import get_provider
 from ..candidates.models import CandidateProfile
 from ..employers.models import Company
 from .models import Consent, User
@@ -23,6 +25,15 @@ CONSENT_TEXTS = {
     "для целей подбора работы: ФИО, контакты, сведения об образовании, опыте, навыках, результатах тестирования и достижениях ФСП.",
     "profile_publication": "Согласие на публикацию обезличенного профиля (специализация, грейд, навыки, результаты тестирования, "
     "достижения ФСП) для работодателей платформы. Контактные данные раскрываются только после принятия приглашения или отклика.",
+    "proctoring_biometric": "Согласие на обработку биометрических персональных данных (ст. 11 Федерального закона № 152-ФЗ) "
+    "для теста с цифровым проктором. Цель — подтвердить, что все попытки теста проходит владелец профиля. "
+    "Видео и звук обрабатываются только на вашем устройстве и не передаются. Платформа получает числовой "
+    "отпечаток лица (эмбеддинг, не изображение) и хранит его в зашифрованном виде как эталон для сверки "
+    "один-к-одному с вашими следующими попытками; поиск по базе лиц не выполняется. Эталон удаляется при отзыве "
+    "согласия. Согласие добровольно: без него тест можно пройти без проктора.",
+    "proctoring_photo": "Согласие на передачу одного кадра с камеры, снятого при проверке перед тестом с проктором, "
+    "работодателю, чьё приглашение вы приняли или на чью вакансию откликнулись, — чтобы он мог убедиться на "
+    "собеседовании, что тест проходили вы. Кадр хранится 180 дней и удаляется раньше при отзыве согласия.",
 }
 
 
@@ -44,7 +55,7 @@ class RoleIn(BaseModel):
 
 
 class ConsentIn(BaseModel):
-    kind: Literal["pd_processing", "profile_publication"]
+    kind: Literal["pd_processing", "profile_publication", "proctoring_biometric", "proctoring_photo"]
     accepted: bool
 
 
@@ -128,7 +139,17 @@ def _set_consent(db: Session, user: User, kind: str, accepted: bool, ip: str | N
         select(Consent).where(Consent.user_id == user.id, Consent.kind == kind, Consent.revoked_at.is_(None))
     ).all()
     if accepted and not active:
-        db.add(Consent(user_id=user.id, kind=kind, version=version, ip=ip))
+        # повторное согласие после отзыва: запись той же версии текста активируется заново
+        # (уникальность user/kind/version), иначе — новая запись
+        prev = db.scalar(
+            select(Consent).where(
+                Consent.user_id == user.id, Consent.kind == kind, Consent.version == version
+            )
+        )
+        if prev is not None:
+            prev.accepted_at, prev.revoked_at, prev.ip = utcnow(), None, ip
+        else:
+            db.add(Consent(user_id=user.id, kind=kind, version=version, ip=ip))
     if not accepted:
         for c in active:
             c.revoked_at = utcnow()
@@ -195,6 +216,10 @@ def set_consent(
         request.client.host if request.client else None,
         settings.consent_version,
     )
+    if not body.accepted and body.kind == "proctoring_biometric":
+        get_provider(settings).delete(db, user.id)
+    if not body.accepted and body.kind == "proctoring_photo":
+        delete_snapshots(db, user.id)
     if user.role == "candidate":
         p = db.get(CandidateProfile, user.id)
         if p is not None and body.kind in ("profile_publication", "pd_processing"):

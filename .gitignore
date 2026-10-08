@@ -223,6 +223,7 @@ __marimo__/
 backend/dev.db
 docs/fsp-job-board-docs.html
 frontend/dist/
+frontend/public/models/human/
 *.rar
 
 # Техническая документация ведётся локально

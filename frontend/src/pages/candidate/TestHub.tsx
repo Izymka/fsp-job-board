@@ -1,11 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Clock, Lock, Play } from 'lucide-react'
+import { Clock, Lock, Play, ShieldCheck } from 'lucide-react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BlueprintBars, StatusBadge } from '../../components/domain'
+import { ProctorCheckModal, type ProctorStart } from '../../components/proctor'
 import { Badge, EmptyState, ErrorBox, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, dateTime, lookup, useCatalog } from '../../lib/catalog'
+import { proctor } from '../../lib/proctor/session'
 import type { Attempt, Eligibility, GradeId, Profile } from '../../lib/types'
 
 const ATTEMPT_STATUS = {
@@ -26,13 +29,20 @@ export default function TestHub() {
   const prof = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
   const elig = useQuery({ queryKey: ['eligibility'], queryFn: () => api.get<Eligibility>('/api/assessment/eligibility') })
   const hist = useQuery({ queryKey: ['attempts'], queryFn: () => api.get<Attempt[]>('/api/assessment/attempts') })
+  const [withProctor, setWithProctor] = useState(false)
+  const [checkFor, setCheckFor] = useState<GradeId | null>(null)
   const start = useMutation({
-    mutationFn: (grade: GradeId) => api.post<Attempt>('/api/assessment/attempts', { grade }),
-    onSuccess: (a) => {
+    mutationFn: ({ grade, p }: { grade: GradeId; p?: ProctorStart }) => api.post<Attempt>('/api/assessment/attempts', { grade, ...p }),
+    onSuccess: (a, v) => {
       qc.invalidateQueries({ queryKey: ['eligibility'] })
+      if (v.p) proctor.start(v.p.embedding)
       nav(`/candidate/test/${a.id}`)
     },
+    onError: (_e, v) => {
+      if (v.p) proctor.stop()
+    },
   })
+  const begin = (grade: GradeId) => (withProctor ? setCheckFor(grade) : start.mutate({ grade }))
   if (!elig.data || !prof.data || !cat) return <PageLoader queries={[elig, prof, catalog]} />
   const e = elig.data
   const p = prof.data
@@ -81,7 +91,7 @@ export default function TestHub() {
                     {g.title} · {g.experience}
                   </div>
                   {o.allowed ? (
-                    <button className={clsx('mt-3 w-full', recommended ? 'btn-primary' : 'btn-secondary')} disabled={start.isPending || !!e.in_progress} onClick={() => start.mutate(o.grade)}>
+                    <button className={clsx('mt-3 w-full', recommended ? 'btn-primary' : 'btn-secondary')} disabled={start.isPending || !!e.in_progress} onClick={() => begin(o.grade)}>
                       <Play className="h-4 w-4" /> Начать ({KIND[o.kind] ?? o.kind})
                     </button>
                   ) : (
@@ -97,9 +107,29 @@ export default function TestHub() {
               )
             })}
           </div>
+          <label className={clsx('mt-4 flex cursor-pointer items-start gap-3 rounded-xl border p-4', withProctor ? 'border-brand-500 bg-brand-50' : 'border-line')}>
+            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={withProctor} onChange={(ev) => setWithProctor(ev.target.checked)} />
+            <span className="text-sm">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <ShieldCheck className="h-4 w-4 text-brand-600" /> Пройти с цифровым проктором
+              </span>
+              <span className="mt-0.5 block text-xs text-muted">
+                По желанию. Камера и микрофон анализируются в браузере, видео не записывается. Работодатель увидит отметку «Тест с проктором», а при равных результатах такой профиль стоит выше.
+              </span>
+            </span>
+          </label>
           <div className="mt-3">
             <ErrorBox error={start.error} />
           </div>
+          <ProctorCheckModal
+            open={checkFor != null}
+            onClose={() => setCheckFor(null)}
+            onReady={(p) => {
+              const grade = checkFor!
+              setCheckFor(null)
+              start.mutate({ grade, p })
+            }}
+          />
         </Section>
         <div className="space-y-6">
           <Section title="Правила">

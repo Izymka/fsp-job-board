@@ -36,6 +36,36 @@ def test_lz_false_alarm_rate_on_honest_responses():
     assert flags / 400 < 0.06  # одностороннее α ≈ 2.3% — у честных почти нет ложных пометок
 
 
+def test_proctor_rules_are_conservative():
+    S, P = integ.ItemSignals, integ.ProctorSignals
+    clean = [S()] * 10
+
+    def run(pr, identity="match"):
+        return integ.assess(clean, proctor=pr, identity=identity)
+
+    ok = run([P(checks=1)] * 10)
+    assert ok.level == "clean" and ok.proctoring.status == "verified"
+    # без проктора отчёта проктора нет
+    assert integ.assess(clean).proctoring is None
+    # телефон на двух заданиях — пометка, на трёх — аннулирование
+    assert run([P(phone_hits=2)] * 2 + [P()] * 8).level == "review"
+    assert run([P(phone_hits=1)] * 3 + [P()] * 7).level == "void"
+    # несовпадение с эталоном: на старте — пометка, дважды за тест — аннулирование
+    assert run([P()] * 10, identity="mismatch").level == "review"
+    assert run([P(mismatch=1, checks=1)] + [P()] * 9).level == "review"
+    assert run([P(mismatch=1, checks=1)] * 2 + [P()] * 8).level == "void"
+    # лицо пропало из кадра надолго — считается уходом; три таких задания — как три ухода
+    assert run([P(no_face_ms=25_000)] + [P()] * 9).level == "review"
+    assert run([P(no_face_ms=25_000)] * 3 + [P()] * 7).level == "void"
+    assert run([P(no_face_ms=5_000)] * 10).level == "clean"
+    # речь на одном задании — не сигнал, на двух — пометка
+    assert run([P(speech_ms=4_000)] + [P()] * 9).level == "clean"
+    assert run([P(speech_ms=4_000)] * 2 + [P()] * 8).level == "review"
+    # отключённая камера — не нарушение: тест засчитан без замечаний, но бейдж проктора снят
+    lost = run([P(cam_lost_ms=40_000)] + [P()] * 9)
+    assert lost.level == "clean" and lost.proctoring.status == "interrupted"
+
+
 def test_integrity_levels():
     S = integ.ItemSignals
     assert integ.assess([S(), S(1, 1500)]).level == "clean"

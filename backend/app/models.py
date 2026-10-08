@@ -2,6 +2,7 @@
 
 from .core.db import Base
 from .modules.assessment.models import Attempt, AttemptItem, FamilyStats
+from .modules.biometrics.models import AttemptSnapshot, BiometricTemplate
 from .modules.candidates.models import CandidateProfile
 from .modules.employers.models import Company, Search, SearchVersion, ShortlistItem
 from .modules.invitations.models import Invitation
@@ -18,6 +19,8 @@ __all__ = [
     "Attempt",
     "AttemptItem",
     "FamilyStats",
+    "BiometricTemplate",
+    "AttemptSnapshot",
     "Company",
     "Search",
     "SearchVersion",

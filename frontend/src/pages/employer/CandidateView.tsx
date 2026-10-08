@@ -1,12 +1,58 @@
 import { useQuery } from '@tanstack/react-query'
-import { AlertTriangle, Download, Lock, Medal, Send, ShieldCheck } from 'lucide-react'
-import { useState } from 'react'
+import { AlertTriangle, BadgeCheck, Download, Lock, Medal, ScanFace, Send, ShieldCheck } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FspList, InviteModal, SkillList } from '../../components/domain'
 import { Badge, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, lookup, pct, SKILL_STATUS, useCatalog } from '../../lib/catalog'
 import type { CandidateCard } from '../../lib/types'
+
+/** Кадр с теста с проктором: работодатель сверяет лицо на собеседовании (после принятого приглашения). */
+function TestPhoto({ id }: { id: string }) {
+  const [url, setUrl] = useState<string | null>(null)
+  useEffect(() => {
+    let u: string | null = null
+    api.blob(`/api/employer/candidates/${id}/test-photo`).then((b) => setUrl((u = URL.createObjectURL(b))), () => setUrl(null))
+    return () => {
+      if (u) URL.revokeObjectURL(u)
+    }
+  }, [id])
+  if (!url) return null
+  return (
+    <div className="mt-4 flex items-start gap-3 rounded-xl border border-line p-3">
+      <img src={url} alt="Кадр кандидата с проверки перед тестом" className="h-24 w-32 shrink-0 rounded-lg object-cover" />
+      <div className="text-xs text-muted">
+        <div className="flex items-center gap-1.5 text-sm font-medium text-ink">
+          <ScanFace className="h-4 w-4" /> Кадр с теста
+        </div>
+        Снят при проверке перед тестом с проктором. Сверьте на собеседовании, что тест проходил этот же человек. Кандидат дал согласие на показ кадра; кадр хранится 180 дней.
+      </div>
+    </div>
+  )
+}
+
+function ProctorBadges({ c }: { c: CandidateCard }) {
+  const pr = c.assessment?.proctoring
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {pr?.status === 'verified' && (
+        <Badge tone="bg-ok-50 text-ok-600">
+          <ShieldCheck className="mr-1 inline h-3.5 w-3.5" />
+          Тест с проктором{pr.identity === 'match' ? ' · лицо совпало с эталоном' : ''}
+        </Badge>
+      )}
+      {pr?.status === 'interrupted' && <Badge tone="bg-surface text-muted">Проктор прерывался</Badge>}
+      {pr?.re_enrolled && <Badge tone="bg-warn-50 text-warn-600">Эталон лица создан заново</Badge>}
+      {c.fsp_linked && (
+        <Badge tone="bg-brand-50 text-brand-700">
+          <BadgeCheck className="mr-1 inline h-3.5 w-3.5" />
+          Личность подтверждена · ФСП ID
+        </Badge>
+      )}
+    </div>
+  )
+}
 
 export default function CandidateView() {
   const { id } = useParams()
@@ -42,6 +88,8 @@ export default function CandidateView() {
               <Badge tone="bg-brand-500 text-white">{c.category}</Badge>
               <span className="text-sm text-muted">подтверждено {date(c.confirmed_at)}</span>
             </div>
+            <ProctorBadges c={c} />
+            {c.test_photo_available && <TestPhoto id={c.id} />}
             <div className="mt-4 grid grid-cols-3 gap-3 text-center">
               <div className="rounded-xl bg-surface p-3">
                 <div className="font-mono text-xl font-bold">{pct(c.test_percentile)}</div>

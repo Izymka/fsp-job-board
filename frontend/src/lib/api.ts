@@ -57,6 +57,10 @@ export const api = {
     form.append('file', file)
     return request<T>('POST', url, undefined, { form })
   },
+  async blob(url: string): Promise<Blob> {
+    const res = await request<Response>('GET', url, undefined, { raw: true })
+    return res.blob()
+  },
   async download(url: string, filename: string) {
     const res = await request<Response>('GET', url, undefined, { raw: true })
     const blob = await res.blob()

@@ -150,6 +150,8 @@ export default function CandidateSettings() {
           {[
             { kind: 'pd_processing', title: 'Обработка персональных данных', note: 'Без него работа с платформой невозможна; отзыв скрывает профиль.' },
             { kind: 'profile_publication', title: 'Публикация обезличенного профиля для работодателей', note: 'Без него вы не появляетесь в поиске.' },
+            { kind: 'proctoring_biometric', title: 'Биометрия для теста с цифровым проктором', note: 'По желанию. Отзыв удаляет эталон лица; следующий тест с проктором создаст его заново, и работодатель увидит пометку об этом.' },
+            { kind: 'proctoring_photo', title: 'Показ кадра с теста работодателю', note: 'По желанию. Отзыв удаляет сохранённые кадры.' },
           ].map((c) => (
             <div key={c.kind} className="flex flex-col justify-between gap-2 rounded-xl border border-line p-3 sm:flex-row sm:items-center">
               <div>

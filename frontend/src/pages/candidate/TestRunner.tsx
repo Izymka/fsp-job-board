@@ -1,12 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { AlertTriangle, ArrowDown, ArrowUp, Ban, CheckCircle2, Clock, Flag, PartyPopper, RotateCcw, ShieldCheck, XCircle } from 'lucide-react'
+import { AlertTriangle, ArrowDown, ArrowUp, Ban, Camera, CheckCircle2, Clock, Flag, PartyPopper, RotateCcw, ShieldCheck, XCircle } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { SkillList } from '../../components/domain'
+import { ProctorDock, Watermark } from '../../components/proctor'
 import { Badge, CodeBlock, ErrorBox, Md, Notice, PageLoader, Progress, Section } from '../../components/ui'
 import { api } from '../../lib/api'
+import { useMe } from '../../lib/auth'
 import { lookup, useCatalog } from '../../lib/catalog'
+import { proctor, proctorWarning, useProctorLive } from '../../lib/proctor/session'
 import type { Attempt, AttemptResult, GradeId, Item } from '../../lib/types'
 
 function useCountdown(item: Item | null) {
@@ -209,19 +212,37 @@ function ScenarioResult({ r }: { r: AttemptResult }) {
   )
 }
 
+function ProctorNote({ r }: { r: AttemptResult }) {
+  const pr = r.integrity?.proctoring
+  if (!pr) return null
+  if (pr.status === 'verified')
+    return (
+      <p className="flex items-center gap-1.5 text-xs text-ok-600">
+        <ShieldCheck className="h-3.5 w-3.5" /> Тест пройден с цифровым проктором{pr.identity === 'enrolled' ? ' — эталон лица создан' : pr.identity === 'match' ? ', лицо совпало с эталоном профиля' : ''}.
+      </p>
+    )
+  return <p className="text-xs text-muted">Проктор был прерван: камера или микрофон отключались дольше 30 секунд — отметка «Тест с проктором» не ставится.</p>
+}
+
 function IntegrityNote({ r }: { r: AttemptResult }) {
   const i = r.integrity
   if (!i) return null
   if (i.level === 'clean')
     return (
-      <p className="flex items-center gap-1.5 text-xs text-ok-600">
-        <ShieldCheck className="h-3.5 w-3.5" /> Замечаний к прохождению нет.
-      </p>
+      <div className="space-y-1">
+        <p className="flex items-center gap-1.5 text-xs text-ok-600">
+          <ShieldCheck className="h-3.5 w-3.5" /> Замечаний к прохождению нет.
+        </p>
+        <ProctorNote r={r} />
+      </div>
     )
   return (
-    <Notice tone="warn">
-      <b>Замечания к прохождению</b> (работодатель увидит их рядом с результатом): {i.reasons.join('; ')}.
-    </Notice>
+    <div className="space-y-1">
+      <Notice tone="warn">
+        <b>Замечания к прохождению</b> (работодатель увидит их рядом с результатом): {i.reasons.join('; ')}.
+      </Notice>
+      <ProctorNote r={r} />
+    </div>
   )
 }
 
@@ -236,8 +257,14 @@ function Result({ a }: { a: Attempt }) {
   const next = order[order.indexOf(a.grade) + 1] as GradeId | undefined
   const prev = order[order.indexOf(a.grade) - 1] as GradeId | undefined
   const start = useMutation({
-    mutationFn: (grade: GradeId) => api.post<Attempt>('/api/assessment/attempts', { grade }),
-    onSuccess: (x) => {
+    mutationFn: async (grade: GradeId) => {
+      // предыдущая попытка шла с проктором и камера ещё открыта — следующая тоже с проктором
+      const emb = a.proctored && proctor.opened ? await proctor.capture() : null
+      const p = emb ? { proctored: true, embedding: emb, embedding_model: proctor.model } : {}
+      return { x: await api.post<Attempt>('/api/assessment/attempts', { grade, ...p }), emb }
+    },
+    onSuccess: ({ x, emb }) => {
+      if (emb) proctor.start(emb)
       qc.invalidateQueries()
       nav(`/candidate/test/${x.id}`)
     },
@@ -300,12 +327,39 @@ export default function TestRunner() {
   const item = a?.status === 'in_progress' ? a.item : null
   const left = useCountdown(item)
   const guard = useIntegrity(item)
+  const live = useProctorLive()
+  const me = useMe().data
+  const loadedAt = useRef(Date.now())
+  const [resumeError, setResumeError] = useState<unknown>(null)
   useEffect(() => {
     setValue(item?.kind === 'order' ? item.options!.map((_, i) => i) : item?.kind === 'multi' ? [] : null)
     t0.current = Date.now()
+    proctor.resetItem()
   }, [item])
+  // экран результата: наблюдение на паузе (камера открыта для следующей попытки); уход со страницы — выключить
+  useEffect(() => {
+    if (a && a.status !== 'in_progress' && proctor.active) proctor.pause()
+  }, [a])
+  useEffect(() => () => proctor.stop(), [])
+  const resume = async () => {
+    setResumeError(null)
+    try {
+      await proctor.open()
+      // время без камеры после перезагрузки страницы засчитывается как отключение камеры
+      proctor.start(await proctor.capture(), Date.now() - loadedAt.current)
+    } catch (e) {
+      setResumeError(e)
+    }
+  }
   const answer = useMutation({
-    mutationFn: (v: unknown) => api.post<Attempt>(`/api/assessment/attempts/${attemptId}/answer`, { position: item!.position, value: v, time_ms: Date.now() - t0.current, ...guard.snapshot() }),
+    mutationFn: (v: unknown) =>
+      api.post<Attempt>(`/api/assessment/attempts/${attemptId}/answer`, {
+        position: item!.position,
+        value: v,
+        time_ms: Date.now() - t0.current,
+        ...guard.snapshot(),
+        ...(a?.proctored && proctor.active ? { proctor: proctor.counts(), embedding: proctor.embeddingForServer() } : {}),
+      }),
     onSuccess: (d) => {
       qc.setQueryData(['attempt', attemptId], d)
       if (d.status !== 'in_progress') {
@@ -367,8 +421,29 @@ export default function TestRunner() {
   const stages = a.has_scenario ? 2 : 1
   const stageTitle = item.stage === 'knowledge' ? 'Тест знаний' : item.stage === 'scenario' ? 'Практический кейс' : 'Уточняющий вопрос'
   const leavesLeft = Math.max(0, (a.integrity?.leaves_left ?? 3) - (guard.flagged ? 1 : 0))
+  if (a.proctored && !live.active)
+    return (
+      <div className="mx-auto max-w-xl">
+        <Section title="Тест идёт с цифровым проктором">
+          <p className="text-sm text-ink-soft">Страница была перезагружена, и камера отключилась. Включите камеру и микрофон, чтобы продолжить. Время без камеры фиксируется: дольше 30 секунд — отметка «Тест с проктором» снимается, но попытка продолжается.</p>
+          <ErrorBox error={resumeError} />
+          <button className="btn-primary mt-4" onClick={() => void resume()}>
+            <Camera className="h-4 w-4" /> Включить камеру и продолжить
+          </button>
+        </Section>
+      </div>
+    )
+  const warning = proctorWarning(live)
+  const mark = `${a.id.slice(0, 8)} · ${(me?.id ?? '').slice(0, 6)}`
   return (
     <div className="mx-auto max-w-3xl">
+      <ProctorDock />
+      {warning && (
+        <div className="mb-4 flex items-start gap-3 rounded-xl border border-warn-600/30 bg-warn-50 px-4 py-3 text-sm text-warn-600" role="alert">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="flex-1">{warning}</div>
+        </div>
+      )}
       {guard.lastAway != null && (
         <div className="mb-4 flex items-start gap-3 rounded-xl border border-accent-500/30 bg-accent-50 px-4 py-3 text-sm text-accent-600" role="alert">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -412,12 +487,13 @@ export default function TestRunner() {
         <Notice tone="warn">Ответьте своими словами: вопрос задан по вашему решению. На ответ — 2 минуты.</Notice>
       )}
       <form
-        className="card mt-5 p-5 sm:p-7"
+        className="card relative mt-5 overflow-hidden p-5 sm:p-7"
         onSubmit={(e) => {
           e.preventDefault()
           if (canSubmit) answer.mutate(item.kind === 'number' ? String(value).replace(',', '.') : value)
         }}
       >
+        <Watermark text={mark} />
         <div className="select-none" onCopy={guard.onCopy} onCut={guard.onCopy} onContextMenu={(e) => e.preventDefault()} onDragStart={(e) => e.preventDefault()}>
           <Md text={item.prompt} className="text-[15px]" />
           {item.code && <CodeBlock code={item.code} lang={item.code_lang} />}
@@ -442,7 +518,7 @@ export default function TestRunner() {
         </div>
       </form>
       <p className="mt-3 text-center text-xs text-muted">
-        Копирование заданий и вставка текста в ответы отключены. Уход со страницы теста дольше 2 секунд фиксируется.
+        Копирование заданий и вставка текста в ответы отключены. Уход со страницы теста дольше 2 секунд фиксируется. Задание помечено кодом вашей попытки.
       </p>
     </div>
   )

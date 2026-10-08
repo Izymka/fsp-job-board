@@ -31,6 +31,10 @@ class Attempt(Base):
     started_at: Mapped[datetime] = mapped_column(default=utcnow)
     finished_at: Mapped[datetime | None] = mapped_column(default=None)
     result: Mapped[dict | None] = mapped_column(default=None)
+    # цифровой проктор (по желанию кандидата) и сверка с эталоном лица на старте:
+    # {status: enrolled | match | mismatch, similarity, re_enrolled, provider}
+    proctored: Mapped[bool] = mapped_column(default=False)
+    identity: Mapped[dict | None] = mapped_column(default=None)
 
 
 class AttemptItem(Base):
@@ -56,6 +60,8 @@ class AttemptItem(Base):
     paste_attempts: Mapped[int] = mapped_column(default=0)
     copy_attempts: Mapped[int] = mapped_column(default=0)
     meta: Mapped[dict | None] = mapped_column(default=None)  # кейс: {scenario, probe, grading}
+    # счётчики проктора за задание (без изображений и эмбеддингов) + результат серверной сверки
+    proctor: Mapped[dict | None] = mapped_column(default=None)
     score: Mapped[float | None] = mapped_column(default=None)  # кейс/вопрос: оценка 0..1
     expected_p: Mapped[float | None] = mapped_column(
         default=None

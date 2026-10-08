@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 import uuid
 from datetime import datetime
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends
 from fspml.assessment import grade_policy as gp
@@ -23,7 +23,7 @@ from ...core.errors import AppError, not_found, responses
 from ...core.security import require_role
 from ..candidates.router import get_profile
 from ..users.models import User
-from . import service
+from . import proctoring, service
 from .models import Attempt, AttemptItem
 
 router = APIRouter(prefix="/api/assessment", tags=["Тестирование"])
@@ -62,6 +62,8 @@ class AttemptOut(BaseModel):
     result: dict | None
     has_scenario: bool = False  # для грейдов Middle+ после теста знаний будет практический кейс
     integrity: dict | None = None  # живое состояние: сколько уходов со страницы ещё допустимо
+    proctored: bool = False  # тест с цифровым проктором
+    identity: str | None = None  # сверка с эталоном на старте: enrolled | match | mismatch
 
 
 class EligibilityOption(BaseModel):
@@ -99,8 +101,33 @@ class EligibilityOut(BaseModel):
     blueprint: BlueprintOut | None = None
 
 
+Embedding = Annotated[list[float], Field(min_length=64, max_length=2048)]
+
+
 class StartIn(BaseModel):
     grade: GRADES
+    proctored: bool = Field(default=False, description="Пройти с цифровым проктором (по желанию)")
+    embedding: Embedding | None = Field(
+        default=None, description="Эмбеддинг лица из браузера (Human faceres) — вектор, не изображение"
+    )
+    embedding_model: str | None = Field(default=None, max_length=64)
+    snapshot: str | None = Field(
+        default=None,
+        max_length=300_000,
+        description="Кадр JPEG (base64) для работодателя — только при согласии proctoring_photo",
+    )
+
+
+class ProctorIn(BaseModel):
+    """Счётчики проктора за задание (детекторы работают в браузере)."""
+
+    no_face_ms: int = Field(default=0, ge=0, le=86_400_000)
+    multi_face_ms: int = Field(default=0, ge=0, le=86_400_000)
+    phone_hits: int = Field(default=0, ge=0, le=10_000)
+    look_away_ms: int = Field(default=0, ge=0, le=86_400_000)
+    speech_ms: int = Field(default=0, ge=0, le=86_400_000)
+    cam_lost_ms: int = Field(default=0, ge=0, le=86_400_000)
+    mic_lost_ms: int = Field(default=0, ge=0, le=86_400_000)
 
 
 class AnswerIn(BaseModel):
@@ -115,6 +142,10 @@ class AnswerIn(BaseModel):
     away_ms: int = Field(default=0, ge=0, le=86_400_000, description="Суммарно вне страницы за задание, мс")
     paste_attempts: int = Field(default=0, ge=0, le=1000)
     copy_attempts: int = Field(default=0, ge=0, le=1000)
+    proctor: ProctorIn | None = None
+    embedding: Embedding | None = Field(
+        default=None, description="Эмбеддинг лица для серверной сверки с эталоном (примерно раз в минуту)"
+    )
 
 
 def _item_out(db: Session, attempt: Attempt, engine: AssessmentEngine) -> ItemOut | None:
@@ -197,6 +228,8 @@ def attempt_out(db: Session, attempt: Attempt) -> AttemptOut:
         has_scenario=scn.needs_scenario(attempt.grade)
         and scn.pick_scenario(attempt.specialization, attempt.grade, 0) is not None,
         integrity=live,
+        proctored=attempt.proctored,
+        identity=(attempt.identity or {}).get("status") if attempt.proctored else None,
     )
 
 
@@ -220,6 +253,7 @@ RULES = [
     "Для Middle, Senior и Lead после теста знаний — практический кейс (до 15–18 минут) и уточняющий вопрос по вашему решению (2 минуты). Кейс оценивается по рубрике и учитывается в решении о грейде.",
     "На каждое задание есть ограничение по времени. Копировать текст заданий и вставлять текст в ответы нельзя.",
     "Уход со страницы теста (другая вкладка или окно) дольше 2 секунд фиксируется. Уходы на трёх заданиях или суммарно больше минуты — попытка аннулируется и засчитывается как неудачная. Единичные уходы видит работодатель рядом с результатом.",
+    "По желанию тест можно пройти с цифровым проктором (камера и микрофон): работодатель увидит отметку «Тест с проктором». Видео и звук не записываются и не покидают ваше устройство; на сервер передаются только счётчики событий и числовой отпечаток лица для сверки с эталоном. Телефон в кадре на трёх заданиях или чужое лицо дважды аннулируют попытку.",
 ]
 
 
@@ -277,7 +311,12 @@ def eligibility(user: User = Depends(CandidateUser), db: Session = Depends(get_d
 )
 def start(body: StartIn, user: User = Depends(CandidateUser), db: Session = Depends(get_db)):
     p = get_profile(db, user)
-    attempt = service.start_attempt(db, p, body.grade)
+    pstart = None
+    if body.proctored:
+        if not body.embedding or not body.embedding_model:
+            raise AppError(422, "embedding_required", "Для теста с проктором нужен эмбеддинг лица с проверки")
+        pstart = proctoring.ProctorStart(body.embedding, body.embedding_model, body.snapshot)
+    attempt = service.start_attempt(db, p, body.grade, pstart)
     db.commit()
     return attempt_out(db, attempt)
 
@@ -324,6 +363,8 @@ def post_answer(
         away_ms=body.away_ms,
         paste_attempts=body.paste_attempts,
         copy_attempts=body.copy_attempts,
+        proctor=body.proctor.model_dump() if body.proctor else None,
+        embedding=body.embedding,
     )
     db.commit()
     return attempt_out(db, a)

@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session
 from ...core.db import get_db, utcnow
 from ...core.errors import AppError, not_found, responses
 from ...core.security import require_role
+from ..assessment import proctoring
 from ..candidates.models import CandidateProfile
 from ..candidates.pdf import render_profile_pdf
 from ..candidates.service import features
@@ -593,7 +594,41 @@ def candidate_card(
         db.commit()
     pct = service._percentiles(service.visible_profiles(db, p.specialization, [p.confirmed_grade]))
     offer = (salary_from, salary_to) if (salary_from or salary_to) else None
-    return service.card(p, revealed=revealed, percentile=pct.get(p.user_id), offer=offer)
+    c = service.card(p, revealed=revealed, percentile=pct.get(p.user_id), offer=offer)
+    c.test_photo_available = revealed and proctoring.latest_snapshot(db, p.user_id) is not None
+    return c
+
+
+@router.get(
+    "/candidates/{candidate_id}/test-photo",
+    response_class=Response,
+    summary="Кадр с теста с проктором — после принятого приглашения или отклика, при согласии кандидата",
+    responses={200: {"content": {"image/jpeg": {}}}, **responses(401, 403, 404, 409)},
+)
+def candidate_test_photo(
+    candidate_id: str, user: User = Depends(EmployerUser), db: Session = Depends(get_db)
+):
+    company = get_company(db, user)
+    p = _visible_candidate(db, candidate_id)
+    if not contacts_revealed(db, company.id, p.user_id):
+        raise AppError(
+            403,
+            "photo_locked",
+            "Кадр с теста доступен после того, как кандидат принял приглашение или откликнулся",
+        )
+    snap = proctoring.latest_snapshot(db, p.user_id)
+    if snap is None:
+        raise not_found("Кадр с теста")
+    db.add(
+        AuditLog(
+            actor_id=user.id,
+            action="test_photo_viewed",
+            subject_id=p.user_id,
+            details={"company_id": str(company.id), "attempt_id": str(snap.attempt_id)},
+        )
+    )
+    db.commit()
+    return Response(snap.jpeg, media_type="image/jpeg", headers={"Cache-Control": "private, no-store"})
 
 
 @router.get(

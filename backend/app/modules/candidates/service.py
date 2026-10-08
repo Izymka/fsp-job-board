@@ -98,6 +98,7 @@ def features(p: CandidateProfile, embedding: np.ndarray | None = None) -> Candid
         tested_at=confirmed_at.date() if confirmed_at else None,
         about=profile_text(p),
         embedding=embedding,
+        proctored=((p.assessment_summary or {}).get("proctoring") or {}).get("status") == "verified",
     )
 
 

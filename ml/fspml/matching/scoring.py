@@ -64,6 +64,12 @@ class CandidateFeatures:
     tested_at: date | None = None
     about: str = ""
     embedding: np.ndarray | None = None
+    proctored: bool = False  # грейд подтверждён тестом с цифровым проктором без перерывов
+
+
+# Тест с проктором надёжнее подтверждает результат: небольшой множитель силы теста. Это бонус, а не
+# штраф остальным — проктор добровольный (отказ от биометрии не должен ухудшать положение кандидата).
+PROCTOR_BONUS = 1.05
 
 
 @dataclass
@@ -162,7 +168,8 @@ def test_strength(c: CandidateFeatures, catalog: Catalog | None = None) -> float
     z = (c.theta - cut) / 0.8
     base = 0.5 * (1 + math.erf(z / math.sqrt(2)))
     penalty = min(0.15, max(0.0, (c.theta_se or 0.0) - 0.35) * 0.5)
-    return max(0.0, base - penalty)
+    strength = max(0.0, base - penalty)
+    return min(1.0, strength * PROCTOR_BONUS) if c.proctored else strength
 
 
 def profile_strength(
@@ -381,6 +388,8 @@ def score_candidate(
             else f"θ = {c.theta:+.2f}"
         )
         reasons.append(Reason("positive" if ps_parts["test"] >= 0.6 else "neutral", f"Тест: {pct}"))
+        if c.proctored:
+            reasons.append(Reason("positive", "Тест пройден с цифровым проктором"))
     if c.fsp is None:
         reasons.append(Reason("neutral", "ФСП ID не привязан"))
     elif c.fsp:

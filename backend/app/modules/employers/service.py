@@ -72,8 +72,10 @@ class CandidateCard(BaseModel):
     fsp: list[FspItem]
     profile_strength: float
     salary_fit: str | None = None
-    # надёжность прохождения теста и практический кейс (Middle+): {integrity: {level, reasons}, scenario}
+    # надёжность прохождения теста, проктор и практический кейс (Middle+):
+    # {integrity: {level, reasons}, proctoring: {status, identity, re_enrolled, ...} | None, scenario}
     assessment: dict | None = None
+    test_photo_available: bool = False  # кадр с теста с проктором (после принятого приглашения/отклика)
 
 
 class RankedCandidate(BaseModel):

@@ -37,6 +37,13 @@ class Settings(BaseSettings):
     # Тестирование: секрет для seed экземпляров заданий (HMAC). Сменить в production!
     assessment_secret: str = "assessment-secret-change-me-0123456789abcdef"
 
+    # Цифровой проктор: сверка лица 1:1. local_demo — эталон в нашей БД (AES-GCM, только демо);
+    # ebs — Единая биометрическая система (production, 572-ФЗ). Ключ сменить в production!
+    biometric_provider: str = "local_demo"
+    biometric_key: str = "biometric-demo-key-change-me-0123456789abcdef"
+    biometric_threshold: float = 0.5  # сходство Human ≥ порога — то же лицо
+    snapshot_retention_days: int = 180
+
     # Механика подбора: v5 — формула (специфичность требований + «ворота»); hybrid — v5 +
     # кросс-энкодер (нужен WITH_EMBEDDINGS=1, без пакета/весов работает как v5); v1 — исходная
     # формула; v4 — прежний гибрид на v1. См. docs/matching.md и docs/bench.md.

@@ -23,6 +23,7 @@ from ...core.config import get_settings
 from ...core.db import aware, utcnow
 from ...core.errors import AppError
 from ..candidates.models import CandidateProfile
+from . import proctoring
 from .models import Attempt, AttemptItem, FamilyStats
 
 STALE_AFTER = timedelta(hours=3)
@@ -181,7 +182,9 @@ def issue_next(
     return issued
 
 
-def start_attempt(db: Session, p: CandidateProfile, grade: str) -> Attempt:
+def start_attempt(
+    db: Session, p: CandidateProfile, grade: str, proctor: proctoring.ProctorStart | None = None
+) -> Attempt:
     if not p.survey_completed_at or not p.specialization:
         raise AppError(
             409, "survey_required", "Сначала пройдите опрос: специализация и стек определяют содержание теста"
@@ -213,6 +216,8 @@ def start_attempt(db: Session, p: CandidateProfile, grade: str) -> Attempt:
     )
     db.add(attempt)
     db.flush()
+    if proctor is not None:
+        proctoring.start(db, attempt, proctor)
     issue_next(db, attempt, engine, [])
     p.last_active_at = now
     return attempt
@@ -240,6 +245,13 @@ def _signals(it: AttemptItem) -> integ.ItemSignals:
     )
 
 
+def _proctor_signals(it: AttemptItem) -> integ.ProctorSignals:
+    d = it.proctor or {}
+    return integ.ProctorSignals(
+        **{k: int(d.get(k) or 0) for k in (*proctoring.SIGNAL_FIELDS, "mismatch", "checks")}
+    )
+
+
 def integrity_report(db: Session, attempt: Attempt, engine: AssessmentEngine) -> integ.IntegrityReport:
     items = answered_items(db, attempt)
     resp = responses_of(db, attempt, engine)
@@ -248,6 +260,8 @@ def integrity_report(db: Session, attempt: Attempt, engine: AssessmentEngine) ->
         [_signals(it) for it in items],
         pairs=[(r.params, r.correct) for r in resp],
         theta=theta,
+        proctor=[_proctor_signals(it) for it in items] if attempt.proctored else None,
+        identity=(attempt.identity or {}).get("status") if attempt.proctored else None,
     )
 
 
@@ -313,6 +327,8 @@ def answer(
     away_ms: int = 0,
     paste_attempts: int = 0,
     copy_attempts: int = 0,
+    proctor: dict | None = None,
+    embedding: list[float] | None = None,
 ) -> CatResult | None:
     if attempt.status != "in_progress":
         raise AppError(409, "attempt_finished", "Попытка уже завершена")
@@ -329,6 +345,7 @@ def answer(
     item.away_ms = max(0, int(away_ms or 0))
     item.paste_attempts = max(0, int(paste_attempts or 0))
     item.copy_attempts = max(0, int(copy_attempts or 0))
+    item.proctor = proctoring.item_signals(db, attempt, proctor, embedding)
     p.last_active_at = utcnow()
 
     if item.kind == "item":
@@ -353,7 +370,7 @@ def answer(
             item.meta = {**(item.meta or {}), "grading": g.to_dict()}
     db.flush()
 
-    # Надёжность: систематические уходы со страницы аннулируют попытку сразу
+    # Надёжность: систематические уходы со страницы (и грубые нарушения при прокторе) аннулируют попытку сразу
     report = integrity_report(db, attempt, engine)
     if report.level == "void":
         void(db, attempt, report)
@@ -468,6 +485,7 @@ def finish(
         p.assessment_summary = {
             "attempt_id": str(attempt.id),
             "integrity": {"level": report.level, "reasons": report.reasons},
+            "proctoring": proctoring.summary(attempt, report),
             "scenario": (
                 {k: sc_out[k] for k in ("title", "category", "category_title", "method")} if sc_out else None
             ),
@@ -482,9 +500,7 @@ def void(db: Session, attempt: Attempt, report: integ.IntegrityReport) -> None:
         "decision": "voided",
         "integrity": report.to_dict(),
         "explanation": [
-            "Попытка аннулирована: во время теста вы систематически уходили со страницы ("
-            + "; ".join(report.reasons)
-            + ").",
+            "Попытка аннулирована: нарушены правила прохождения (" + "; ".join(report.reasons) + ").",
             "Аннулированная попытка засчитывается как неудачная: повторить тест на этот уровень можно "
             "через 14 дней, на уровень ниже — сразу.",
         ],
