@@ -11,7 +11,10 @@
 * **модули** — навыки, которые подтверждают заявленные технологии: тест проверяет то, что
   кандидат о себе заявил, и не проверяет того, чего он не заявлял;
 * технологии без заданий в банке (Java, Go, Kafka вне ядра) ничем не подменяются и остаются
-  в профиле «заявленными».
+  в профиле «заявленными»;
+* **направление** внутри специализации (CV, NLP, рекомендации, временные ряды для DS), выбранное
+  в опросе, входит модулем с приоритетом над стеком: CV-инженер получает задания по зрению, даже
+  если не перечислил OpenCV.
 """
 
 from __future__ import annotations
@@ -22,6 +25,8 @@ from dataclasses import dataclass, field
 
 from ..catalog import Catalog, get_catalog
 from ..nlp.skills import SkillDictionary, get_dictionary
+
+DIRECTION_BONUS = 2  # направление весит как две заявленные технологии: выигрывает у стека при отборе модулей
 
 
 @dataclass(frozen=True)
@@ -47,8 +52,9 @@ class TestBlueprint:
             t for t in dict.fromkeys(t for src in self.via_core.values() for t in src) if t not in in_modules
         ]
         if self.modules:
+            by_direction = any(t.startswith("направление") for src in self.modules.values() for t in src)
             lines.append(
-                "Модули по вашему стеку: "
+                ("Модули по направлению и стеку: " if by_direction else "Модули по вашему стеку: ")
                 + "; ".join(f"{title(s)} ({', '.join(src)})" for s, src in self.modules.items())
                 + "."
             )
@@ -95,6 +101,7 @@ def personal_blueprint(
     spec_id: str,
     stack: Iterable[str] = (),
     *,
+    directions: Iterable[str] = (),
     available: Container[str] | None = None,
     catalog: Catalog | None = None,
 ) -> TestBlueprint:
@@ -103,7 +110,14 @@ def personal_blueprint(
     spec = cat.specializations[spec_id]
     stack = list(dict.fromkeys(str(s).strip() for s in stack if str(s).strip()))
     ev = stack_evidence(stack, dic)
-    weights = cat.blueprint(spec_id, Counter({s: len(v) for s, v in ev.items()}), available)
+    counts = Counter({s: len(v) for s, v in ev.items()})
+    for d in directions:
+        skill = spec.direction_skill(d)
+        if skill:
+            title = next(x["title"] for x in spec.directions if x["id"] == d)
+            ev.setdefault(skill, []).insert(0, f"направление «{title}»")
+            counts[skill] += DIRECTION_BONUS
+    weights = cat.blueprint(spec_id, counts, available)
     modules = {s: tuple(ev[s]) for s in weights if s not in spec.core}
     via_core = {s: tuple(ev[s]) for s in spec.core if s in ev}
     covered = {t for s in weights for t in ev.get(s, ())}

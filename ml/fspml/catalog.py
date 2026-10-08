@@ -31,6 +31,11 @@ class Specialization:
     description: str
     core: dict[str, float]  # фундамент: проверяется у всех кандидатов категории
     modules: tuple[str, ...] = ()  # навыки стека: входят в тест, только если заявлены
+    # направления внутри специализации (CV, NLP…): {id, title, skill?} — навык-модуль направления
+    directions: tuple[dict, ...] = ()
+
+    def direction_skill(self, direction_id: str) -> str | None:
+        return next((d.get("skill") for d in self.directions if d["id"] == direction_id), None)
 
     @property
     def skills(self) -> tuple[str, ...]:
@@ -137,6 +142,7 @@ def get_catalog() -> Catalog:
             description=s["description"],
             core=dict(s["core"]),
             modules=tuple(s.get("modules", [])),
+            directions=tuple(s.get("directions", [])),
         )
         for s in raw["specializations"]
     }

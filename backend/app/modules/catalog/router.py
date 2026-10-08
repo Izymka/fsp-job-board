@@ -47,6 +47,7 @@ def _catalog() -> CatalogOut:
                 "core": list(s.core),
                 "modules": list(s.modules),
                 "skills": list(s.skills),
+                "directions": list(s.directions),
             }
             for s in cat.specializations.values()
         ],

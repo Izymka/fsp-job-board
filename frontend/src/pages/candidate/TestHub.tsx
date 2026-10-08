@@ -148,7 +148,7 @@ export default function TestHub() {
               <BlueprintBars blueprint={pick(bp.core)} label={L.skill} max={bpMax} />
               {bp.modules.length > 0 && (
                 <>
-                  <div className="mt-4 mb-2 text-xs font-medium text-muted">Модули по вашему стеку</div>
+                  <div className="mt-4 mb-2 text-xs font-medium text-muted">Модули по направлению и стеку</div>
                   <BlueprintBars blueprint={pick(bp.modules.map((m) => m.skill))} label={L.skill} max={bpMax} />
                   <p className="hint mt-2">
                     {bp.modules.map((m) => `${L.skill(m.skill)} — ${m.techs.join(', ')}`).join('; ')}

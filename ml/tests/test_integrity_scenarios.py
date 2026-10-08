@@ -84,17 +84,74 @@ def test_bank_covers_all_specializations_and_upper_grades():
             assert scn.pick_scenario(spec, g, 0) is not None, (spec, g)
     for s in bank.values():
         assert s.skill in cat.assessment_skills
-        for seed in range(4):
-            i = s.instance(seed)
-            texts = (
-                [i.context, i.task, i.code or ""]
-                + [p.text for p in i.probes]
-                + [c.expect for c in i.criteria]
+        for skin in [None, *(k.id for k in s.skins)]:
+            for seed in range(4):
+                i = s.instance(seed, skin)
+                texts = (
+                    [i.title, i.context, i.task, i.code or ""]
+                    + [p.text for p in i.probes]
+                    + [p.expect for p in i.probes]
+                    + [c.expect for c in i.criteria]
+                    + [c.strong for c in i.criteria]
+                    + ([i.twist.text, i.twist.expect] if i.twist else [])
+                    + [k for c in i.criteria for k in c.keywords]
+                    + [k for p in i.probes for k in p.keywords]
+                )
+                assert not any("{{" in t for t in texts), (s.id, skin)
+                for c in i.criteria:
+                    for k in c.keywords:
+                        re.compile(k)
+        for k in s.skins:
+            assert set(k.industries) <= {x["id"] for x in cat.industries}, (s.id, k.id)
+            assert set(k.directions) <= {d["id"] for d in cat.specializations[s.spec].directions}, (
+                s.id,
+                k.id,
             )
-            assert not any("{{" in t for t in texts), s.id
-            for c in i.criteria:
-                for k in c.keywords:
-                    re.compile(k)
+
+
+def _reference(inst) -> str:
+    """Эталонный сильный ответ из рубрики самой версии кейса."""
+    return "\n".join(f"{c.title}: {c.expect}. {c.strong}." for c in inst.criteria) * 2
+
+
+def test_skins_keep_rubric_and_difficulty():
+    """Обёртка меняет сюжет, а не оценку: те же критерии и веса, эталонный ответ оценивается одинаково,
+    слабый ответ — одинаково слабо."""
+    for s in scn.load_scenarios().values():
+        base = s.instance(0)
+        ref = scn.total_score(base, keyword_grade(base, _reference(base)).scores, None)
+        for k in s.skins:
+            inst = s.instance(0, k.id)
+            assert [(c.id, c.weight) for c in inst.criteria] == [(c.id, c.weight) for c in base.criteria]
+            assert len(inst.probes) == len(base.probes)
+            got = scn.total_score(inst, keyword_grade(inst, _reference(inst)).scores, None)
+            assert abs(got - ref) < 0.15, (s.id, k.id, got, ref)
+            weak = keyword_grade(inst, "Надо подумать, собрать больше данных и попробовать другую модель.")
+            assert scn.total_score(inst, weak.scores, None) < 0.35, (s.id, k.id)
+
+
+def test_skin_follows_direction_and_industry():
+    sc = scn.load_scenarios()["ds.middle.churn_accuracy"]
+    assert scn.pick_skin(sc, 0, industries=["sport"], directions=["cv"]) == "sport_cv"
+    assert scn.pick_skin(sc, 0, industries=["sport"]) in {"sport_cv", "sport_injury"}
+    assert scn.pick_skin(sc, 0, directions=["nlp"]) == "support_nlp"
+    assert scn.pick_skin(sc, 0, industries=["fintech"], directions=["tabular"]) is None  # базовая версия
+    # повтор кейса — новая версия, если она есть
+    assert scn.pick_skin(sc, 0, directions=["cv"], seen={"sport_cv"}) != "sport_cv"
+    inst = sc.instance(3, "sport_cv")
+    assert "фол" in inst.title.lower() and "матч" in inst.context and "свисток" in inst.criteria[1].expect
+
+
+def test_direction_becomes_test_module():
+    from fspml.assessment.engine import AssessmentEngine
+
+    e = AssessmentEngine(b"t")
+    plain = e.blueprint_for("data_science", ["Python", "pandas"])
+    cv = e.blueprint_for("data_science", ["Python", "pandas"], ["cv"])
+    assert "cv" not in plain.weights and cv.weights.get("cv", 0) >= 0.15
+    assert abs(sum(cv.weights.values()) - 1) < 1e-9
+    assert sum(cv.weights[k] for k in cv.core) >= 0.6 - 1e-9  # ядро не меньше 60% — грейды сопоставимы
+    assert any("направление" in t for t in cv.modules["cv"])
 
 
 def test_grm_is_proper_and_anchored_at_grade_cut():

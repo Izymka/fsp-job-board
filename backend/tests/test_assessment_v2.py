@@ -143,3 +143,35 @@ def test_next_attempt_avoids_seen_families(client):
     seen, now = _families(first["id"]), _families(second["id"])
     assert seen and now
     assert not seen & now, f"повторились семейства: {seen & now}"
+
+
+def test_case_follows_direction_and_industry(client):
+    """CV-специалист из спорта получает кейс про видео матчей, а не про отток клиентов банка."""
+    from tests.conftest import SURVEY
+
+    survey = {
+        **SURVEY,
+        "specialization": "data_science",
+        "industries": ["sport"],
+        "directions": ["cv"],
+        "stack": ["Python", "PyTorch"],
+    }
+    cand = make_candidate(client, survey=survey)
+    assert cand.get("/api/candidate/profile").json()["directions"] == ["cv"]
+    elig = cand.get("/api/assessment/eligibility").json()
+    assert "cv" in elig["blueprint"]["weights"]
+    att = _run_knowledge(cand, cand.post("/api/assessment/attempts", json={"grade": "middle"}).json())
+    assert att["item"]["kind"] == "scenario"
+    assert "фол" in att["item"]["prompt"].lower() and "банк" not in att["item"]["prompt"].lower()
+    att = _answer(cand, att)
+    assert "фол" in att["item"]["prompt"].lower()  # уточняющий вопрос — по той же версии кейса
+    att = _answer(cand, att)
+    assert att["result"]["scenario"]["title"].startswith("Детектор фолов")
+
+
+def test_unknown_direction_rejected(client):
+    from tests.conftest import SURVEY
+
+    cand = make_candidate(client)
+    r = cand.put("/api/candidate/survey", json={**SURVEY, "directions": ["cv"]})  # у backend нет направлений
+    assert r.status_code == 422

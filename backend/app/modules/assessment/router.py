@@ -178,7 +178,7 @@ def _item_out(db: Session, attempt: Attempt, engine: AssessmentEngine) -> ItemOu
             kind="probe",
             stage="probe",
             task=None,
-            prompt=f"Уточняющий вопрос по вашему решению кейса «{inst.scenario.title}»:\n\n{probe.text}",
+            prompt=f"Уточняющий вопрос по вашему решению кейса «{inst.title}»:\n\n{probe.text}",
             code=None,
             code_lang=None,
             options=None,
@@ -245,7 +245,8 @@ def _own_attempt(db: Session, user: User, attempt_id: str) -> Attempt:
 
 RULES = [
     "Тест адаптивный: следующее задание подбирается по вашим ответам, у каждого кандидата — свой набор и свои варианты заданий.",
-    "Состав теста — ядро специализации (общее для всех в категории) и модули по технологиям, которые вы заявили в опросе. Технологии, которых нет в вашем стеке, в тест не попадают.",
+    "Состав теста — ядро специализации (общее для всех в категории) и модули по направлению и технологиям, которые вы указали в опросе. Технологии, которых нет в вашем стеке, в тест не попадают.",
+    "Практический кейс — из вашей области: сюжет подбирается по направлению и отраслям из опроса, а критерии оценки одинаковы для всех вариантов кейса.",
     "Грейд по результату теста не понижается. Если заявленный уровень не подтверждён, можно сразу пройти тест на уровень ниже.",
     "Повторная попытка на тот же или более высокий уровень после неудачи — через 14 дней.",
     "Смена подтверждённого грейда — не чаще одного раза в 90 дней.",
@@ -281,7 +282,9 @@ def eligibility(user: User = Depends(CandidateUser), db: Session = Depends(get_d
     db.commit()
     bp = None
     if p.specialization:
-        tb = service.get_engine(db).blueprint_for(p.specialization, list(p.stack or []))
+        tb = service.get_engine(db).blueprint_for(
+            p.specialization, list(p.stack or []), list(p.directions or [])
+        )
         bp = BlueprintOut(
             weights={k: round(v, 4) for k, v in tb.weights.items()},
             core=list(tb.core),

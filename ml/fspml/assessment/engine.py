@@ -54,18 +54,29 @@ class AssessmentEngine:
         counts = Counter(f.skill for f in self.bank.values())
         return {s for s, n in counts.items() if n >= self.config.skill_min_items}
 
-    def blueprint_for(self, spec_id: str, stack: Sequence[str] | None = None) -> TestBlueprint:
-        """Состав теста кандидата: ядро специализации + модули по заявленному стеку (с объяснением)."""
+    def blueprint_for(
+        self, spec_id: str, stack: Sequence[str] | None = None, directions: Sequence[str] = ()
+    ) -> TestBlueprint:
+        """Состав теста кандидата: ядро специализации + модули по направлению и стеку (с объяснением)."""
         return personal_blueprint(
-            spec_id, stack or (), available=self.measurable_skills(), catalog=self.catalog
+            spec_id,
+            stack or (),
+            directions=directions,
+            available=self.measurable_skills(),
+            catalog=self.catalog,
         )
 
     def plan_for_specialization(
-        self, spec_id: str, grade: str, stack: Sequence[str] | None = None, kind: str = "initial"
+        self,
+        spec_id: str,
+        grade: str,
+        stack: Sequence[str] | None = None,
+        kind: str = "initial",
+        directions: Sequence[str] = (),
     ) -> CatPlan:
         """stack — технологии из профиля кандидата (канонические имена или id навыков теста)."""
         return CatPlan(
-            blueprint=self.blueprint_for(spec_id, stack).weights,
+            blueprint=self.blueprint_for(spec_id, stack, directions).weights,
             claimed_grade=grade,
             config=self.config,
             kind=kind,

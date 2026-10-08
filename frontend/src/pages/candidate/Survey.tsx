@@ -19,6 +19,7 @@ export default function CandidateSurvey() {
   const hint = (p?.resume_parsed ?? {}) as { specialization_hint?: string; grade_hint?: GradeId; grade_reason?: string; skills?: string[] }
   const [industries, setIndustries] = useState<string[]>([])
   const [spec, setSpec] = useState('')
+  const [directions, setDirections] = useState<string[]>([])
   const [stack, setStack] = useState<string[]>([])
   const [formats, setFormats] = useState<string[]>(['remote'])
   const [from, setFrom] = useState('')
@@ -29,6 +30,7 @@ export default function CandidateSurvey() {
     if (!p) return
     setIndustries(p.industries)
     setSpec(p.specialization ?? hint.specialization_hint ?? '')
+    setDirections(p.directions ?? [])
     setStack(p.stack.length ? p.stack : (hint.skills ?? []).slice(0, 15))
     if (p.work_formats.length) setFormats(p.work_formats)
     setFrom(p.salary_from ? String(p.salary_from) : '')
@@ -41,11 +43,13 @@ export default function CandidateSurvey() {
     const all = cat?.technologies ?? []
     return [...all].sort((a, b) => (b.specializations[spec] ?? 0) - (a.specializations[spec] ?? 0)).map((t) => t.name)
   }, [cat, spec])
+  const specDirections = cat?.specializations.find((s) => s.id === spec)?.directions ?? []
   const m = useMutation({
     mutationFn: () =>
       api.put<Profile>('/api/candidate/survey', {
         industries,
         specialization: spec,
+        directions: specDirections.length ? directions.filter((d) => specDirections.some((x) => x.id === d)) : [],
         stack,
         work_formats: formats,
         salary_from: Number(from),
@@ -97,10 +101,32 @@ export default function CandidateSurvey() {
               <Notice tone="warn">Смена специализации — это новая категория: текущий подтверждённый грейд будет сброшен, понадобится пройти тест заново.</Notice>
             </div>
           )}
+          {specDirections.length > 0 && (
+            <div className="mt-5">
+              <div className="label">Направление (до 2, по желанию)</div>
+              <div className="flex flex-wrap gap-2">
+                {specDirections.map((d) => {
+                  const on = directions.includes(d.id)
+                  return (
+                    <button
+                      type="button"
+                      key={d.id}
+                      disabled={!on && directions.length >= 2}
+                      onClick={() => toggle(directions, d.id, setDirections)}
+                      className={clsx('chip border px-3 py-1.5 text-sm disabled:opacity-40', on ? 'border-brand-500 bg-brand-500 text-white' : 'border-line bg-white text-ink-soft hover:border-brand-300')}
+                    >
+                      {d.title}
+                    </button>
+                  )
+                })}
+              </div>
+              <p className="hint">Направление добавляет в тест задания по нему, а практический кейс будет из вашей области — например, CV-специалист получит задачу про видео, а не про отток клиентов.</p>
+            </div>
+          )}
         </Section>
 
         <Section title="Отрасль">
-          <p className="mb-3 text-sm text-muted">В каких отраслях вам интересно работать (до 6).</p>
+          <p className="mb-3 text-sm text-muted">В каких отраслях вам интересно работать (до 6). Отрасль учитывается в подборе и в сюжете практического кейса теста.</p>
           <div className="flex flex-wrap gap-2">
             {cat.industries.map((i) => (
               <button

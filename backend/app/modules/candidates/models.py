@@ -39,6 +39,8 @@ class CandidateProfile(TimestampMixin, Base):
     survey_completed_at: Mapped[datetime | None] = mapped_column(default=None)
     industries: Mapped[list] = mapped_column(default=list)
     specialization: Mapped[str | None] = mapped_column(String(32), index=True)
+    # направления внутри специализации (CV, NLP…): модули теста и сюжет практического кейса
+    directions: Mapped[list] = mapped_column(default=list)
     stack: Mapped[list] = mapped_column(default=list)  # заявленные технологии
     work_formats: Mapped[list] = mapped_column(default=list)
     salary_from: Mapped[int | None] = mapped_column(default=None)

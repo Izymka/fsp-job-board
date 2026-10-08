@@ -13,12 +13,21 @@
 Правдоподобие кейса умножается на апостериорное распределение θ после теста знаний — решение о
 грейде принимается по общей шкале, без отдельных «весов». Параметры экспертные, как и у
 семейств заданий; уточняются по пилоту (MML-EM для GRM) — честно указано в документации.
+
+**Отраслевые и предметные обёртки (skins).** Один кейс — один скелет: критерии, веса, вопросы
+и параметры GRM общие. Обёртка меняет только сюжет (заголовок, контекст, задачу) и значения
+переменных `{{var}}`, которые подставляются и в рубрику, и в её ключевые слова. CV-специалист из
+спорта получает «детектор фолов по видео» вместо «оттока клиентов банка» — те же ловушки
+(дисбаланс, утечка будущего, группировка по матчу вместо клиента), та же оценка. Обёртка
+выбирается по направлению кандидата (2 балла) и отраслям из опроса (1 балл); при повторе кейса
+берётся ещё не виденная обёртка.
 """
 
 from __future__ import annotations
 
 import random
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from functools import lru_cache
 
@@ -56,6 +65,23 @@ class Probe:
 
 
 @dataclass(frozen=True)
+class Skin:
+    id: str
+    title: str
+    context: str
+    task: str | None = None
+    code: str | None = None
+    industries: tuple[str, ...] = ()
+    directions: tuple[str, ...] = ()
+    vars: dict[str, str] = field(default_factory=dict)
+
+    def score(self, industries: Sequence[str], directions: Sequence[str]) -> int:
+        return 2 * len(set(self.directions) & set(directions)) + (
+            1 if set(self.industries) & set(industries) else 0
+        )
+
+
+@dataclass(frozen=True)
 class Scenario:
     id: str
     spec: str
@@ -71,23 +97,37 @@ class Scenario:
     twist: Probe | None
     params: dict[str, list] = field(default_factory=dict)
     derived: dict[str, str] = field(default_factory=dict)
+    vars: dict[str, str] = field(default_factory=dict)  # сюжетные переменные базовой версии
+    skins: tuple[Skin, ...] = ()
+    industries: tuple[str, ...] = ()  # сюжет базовой версии: отрасли и направления
+    directions: tuple[str, ...] = ()
 
     @property
     def time_limit(self) -> int:
         return MAIN_TIME_LIMIT[self.grade]
 
-    def instance(self, seed: int) -> ScenarioInstance:
+    def skin(self, skin_id: str | None) -> Skin | None:
+        return next((k for k in self.skins if k.id == skin_id), None) if skin_id else None
+
+    def instance(self, seed: int, skin: str | None = None) -> ScenarioInstance:
+        """Экземпляр кейса: параметры по seed, сюжет — базовый или обёртки `skin`."""
         rng = random.Random(seed)
-        values = {k: rng.choice(v) for k, v in sorted(self.params.items())}
+        values: dict = {k: rng.choice(v) for k, v in sorted(self.params.items())}
         for k, expr in self.derived.items():
             values[k] = _eval_simple(expr, values)
+        sk = self.skin(skin)
+        values.update(self.vars)
+        if sk is not None:
+            values.update(sk.vars)
         sub = lambda s: _substitute(s, values) if s else s  # noqa: E731
         return ScenarioInstance(
             scenario=self,
             values=values,
-            context=sub(self.context),
-            task=sub(self.task),
-            code=sub(self.code),
+            skin=sk.id if sk else None,
+            title=sub(sk.title if sk else self.title),
+            context=sub(sk.context if sk else self.context),
+            task=sub(sk.task if sk and sk.task else self.task),
+            code=sub(sk.code if sk and sk.code else self.code),
             criteria=tuple(
                 Criterion(
                     c.id, c.title, c.weight, sub(c.expect), sub(c.strong), tuple(sub(k) for k in c.keywords)
@@ -115,6 +155,8 @@ class Scenario:
 class ScenarioInstance:
     scenario: Scenario
     values: dict
+    skin: str | None
+    title: str
     context: str
     task: str
     code: str | None
@@ -124,7 +166,7 @@ class ScenarioInstance:
 
     @property
     def prompt(self) -> str:
-        return f"**{self.scenario.title}**\n\n{self.context.strip()}"
+        return f"**{self.title}**\n\n{self.context.strip()}"
 
     def probe(self, index: int) -> Probe:
         """index ≥ 0 — вопрос из `probes`, −1 — смена требований."""
@@ -185,6 +227,22 @@ def load_scenarios() -> dict[str, Scenario]:
             twist=Probe(None, tw["text"], tw["expect"], tuple(tw.get("keywords", ()))) if tw else None,
             params={k: list(v) for k, v in (r.get("params") or {}).items()},
             derived=dict(r.get("derived") or {}),
+            vars={k: str(v) for k, v in (r.get("vars") or {}).items()},
+            industries=tuple(r.get("industries", ())),
+            directions=tuple(r.get("directions", ())),
+            skins=tuple(
+                Skin(
+                    id=k["id"],
+                    title=k["title"],
+                    context=k["context"],
+                    task=k.get("task"),
+                    code=k.get("code"),
+                    industries=tuple(k.get("industries", ())),
+                    directions=tuple(k.get("directions", ())),
+                    vars={a: str(b) for a, b in (k.get("vars") or {}).items()},
+                )
+                for k in r.get("skins", ())
+            ),
         )
     return out
 
@@ -202,6 +260,29 @@ def pick_scenario(
     if not fresh:
         return None
     return sorted(fresh, key=lambda s: s.id)[seed % len(fresh)]
+
+
+def pick_skin(
+    sc: Scenario,
+    seed: int,
+    *,
+    industries: Sequence[str] = (),
+    directions: Sequence[str] = (),
+    seen: set[str | None] | frozenset = frozenset(),
+) -> str | None:
+    """Сюжет кейса для кандидата: обёртка с наибольшим совпадением по направлению и отраслям.
+
+    None — базовая версия. Уже виденные кандидатом версии (seen; None — базовая) выбираются,
+    только если новых не осталось; среди равных — по seed.
+    """
+    base = Skin("", sc.title, sc.context, industries=sc.industries, directions=sc.directions)
+    options: list[tuple[int, str | None]] = [(base.score(industries, directions), None)] + [
+        (k.score(industries, directions), k.id) for k in sc.skins
+    ]
+    fresh = [o for o in options if o[1] not in seen] or options
+    best = max(score for score, _ in fresh)
+    top = sorted((sid for score, sid in fresh if score == best), key=lambda x: x or "")
+    return top[seed % len(top)]
 
 
 def choose_probe(inst: ScenarioInstance, scores: dict[str, int]) -> int:

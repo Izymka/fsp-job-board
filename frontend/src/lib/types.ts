@@ -26,7 +26,7 @@ export interface AuthConfig {
 export interface Catalog {
   grades: { id: GradeId; name: string; title: string; experience: string; order: number }[]
   // blueprint — состав теста без заявленного стека (ядро); core — фундамент, modules — навыки по стеку
-  specializations: { id: string; name: string; title: string; description: string; blueprint: Record<string, number>; core: string[]; modules: string[]; skills: string[] }[]
+  specializations: { id: string; name: string; title: string; description: string; blueprint: Record<string, number>; core: string[]; modules: string[]; skills: string[]; directions?: { id: string; title: string; skill?: string }[] }[]
   assessment_skills: { id: string; title: string; anchor?: boolean; families: number }[]
   industries: { id: string; title: string }[]
   work_formats: { id: string; title: string }[]
@@ -84,6 +84,7 @@ export interface Profile {
   education: string | null
   survey_completed_at: string | null
   industries: string[]
+  directions?: string[]
   specialization: string | null
   stack: string[]
   work_formats: string[]

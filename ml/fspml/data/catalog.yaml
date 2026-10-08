@@ -48,7 +48,15 @@ specializations:
     title: "Data Science / ML"
     description: "Анализ данных, статистика, машинное обучение, подготовка признаков, оценка моделей"
     core: {ml: 0.4, statistics: 0.3, python: 0.3}
-    modules: [pandas, sql, metrics]
+    modules: [cv, nlp, recsys, timeseries, pandas, sql, metrics]
+    # Направления: кандидат выбирает в опросе (до 2). Навык направления входит в тест модулем с
+    # приоритетом над стеком, а практический кейс берётся в предметной обёртке направления.
+    directions:
+      - {id: tabular, title: "Табличные данные и классический ML"}
+      - {id: cv, title: "Компьютерное зрение (CV)", skill: cv}
+      - {id: nlp, title: "Обработка текста (NLP)", skill: nlp}
+      - {id: recsys, title: "Рекомендательные системы", skill: recsys}
+      - {id: timeseries, title: "Временные ряды и прогнозирование", skill: timeseries}
   - id: qa
     name: QA
     title: "QA / тестирование"
@@ -92,6 +100,10 @@ assessment_skills:
   - {id: requirements, title: "Требования и моделирование"}
   - {id: metrics, title: "Продуктовые метрики"}
   - {id: mobile, title: "Мобильные платформы"}
+  - {id: cv, title: "Компьютерное зрение"}
+  - {id: nlp, title: "Обработка естественного языка"}
+  - {id: recsys, title: "Рекомендательные системы"}
+  - {id: timeseries, title: "Временные ряды"}
 
 industries:
   - {id: fintech, title: "Финтех и банки"}
@@ -105,6 +117,7 @@ industries:
   - {id: media, title: "Медиа и развлечения"}
   - {id: logistics, title: "Логистика и транспорт"}
   - {id: security, title: "Информационная безопасность"}
+  - {id: sport, title: "Спорт и фитнес"}
   - {id: other, title: "Другое"}
 
 work_formats:

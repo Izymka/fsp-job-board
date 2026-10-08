@@ -54,6 +54,9 @@ class SurveyIn(BaseModel):
 
     industries: list[str] = Field(default_factory=list, max_length=6)
     specialization: str
+    directions: list[str] = Field(
+        default_factory=list, max_length=2, description="Направления специализации (CV, NLP…), до 2"
+    )
     stack: list[str] = Field(default_factory=list, max_length=40)
     work_formats: list[Literal["office", "hybrid", "remote"]] = Field(min_length=1)
     salary_from: int = Field(gt=0, le=10_000_000)
@@ -81,6 +84,10 @@ class SurveyIn(BaseModel):
     def _salary(self):
         if self.salary_to is not None and self.salary_to < self.salary_from:
             raise ValueError("верхняя граница ожиданий меньше нижней")
+        known = {d["id"] for d in get_catalog().specializations[self.specialization].directions}
+        bad = [d for d in self.directions if d not in known]
+        if bad:
+            raise ValueError(f"неизвестные направления специализации: {bad}")
         return self
 
 
@@ -118,6 +125,7 @@ class ProfileOut(BaseModel):
     survey_completed_at: datetime | None
     industries: list[str]
     specialization: str | None
+    directions: list[str] = []
     stack: list[str]
     work_formats: list[str]
     salary_from: int | None
@@ -169,6 +177,7 @@ def profile_out(p: CandidateProfile) -> ProfileOut:
         education=p.education,
         survey_completed_at=p.survey_completed_at,
         industries=p.industries or [],
+        directions=p.directions or [],
         specialization=p.specialization,
         stack=p.stack or [],
         work_formats=p.work_formats or [],
@@ -258,6 +267,7 @@ def survey(body: SurveyIn, user: User = Depends(CandidateUser), db: Session = De
         p.assessment_summary = None
     p.industries = body.industries
     p.specialization = body.specialization
+    p.directions = list(dict.fromkeys(body.directions))
     p.stack = _normalize_stack(body.stack)
     p.work_formats = list(body.work_formats)
     p.salary_from, p.salary_to = body.salary_from, body.salary_to

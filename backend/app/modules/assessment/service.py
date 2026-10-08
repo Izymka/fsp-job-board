@@ -202,7 +202,9 @@ def start_attempt(
             {"available_at": elig.available_at.isoformat() if elig.available_at else None},
         )
     engine = get_engine(db)
-    plan = engine.plan_for_specialization(p.specialization, grade, list(p.stack or []), kind=elig.kind)
+    plan = engine.plan_for_specialization(
+        p.specialization, grade, list(p.stack or []), kind=elig.kind, directions=list(p.directions or [])
+    )
     attempt = Attempt(
         id=uuid.uuid4(),
         candidate_id=p.user_id,
@@ -276,29 +278,40 @@ def scenario_instance(attempt: Attempt, item: AttemptItem) -> scn.ScenarioInstan
     meta = item.meta or {}
     sc = scn.load_scenarios()[meta["scenario"]]
     pos = meta.get("main_position", item.position)
-    return sc.instance(instance_seed(get_settings().assessment_secret.encode(), str(attempt.id), pos))
+    seed = instance_seed(get_settings().assessment_secret.encode(), str(attempt.id), pos)
+    return sc.instance(seed, meta.get("skin"))
 
 
 def _issue_scenario(db: Session, attempt: Attempt, position: int) -> AttemptItem | None:
     seed = instance_seed(get_settings().assessment_secret.encode(), str(attempt.id), position)
-    seen = {
-        (it.meta or {}).get("scenario")
+    seen_items = [
+        it.meta or {}
         for it in db.scalars(
             select(AttemptItem)
             .join(Attempt, Attempt.id == AttemptItem.attempt_id)
             .where(Attempt.candidate_id == attempt.candidate_id, AttemptItem.kind == "scenario")
         ).all()
-    }
+    ]
+    seen = {m.get("scenario") for m in seen_items}
     sc = scn.pick_scenario(attempt.specialization, attempt.grade, seed, exclude={x for x in seen if x})
     if sc is None:
         return None
+    # сюжет — по направлению и отраслям кандидата; уже виденные версии кейса — в последнюю очередь
+    p = db.get(CandidateProfile, attempt.candidate_id)
+    skin = scn.pick_skin(
+        sc,
+        seed,
+        industries=list(p.industries or []) if p else [],
+        directions=list(p.directions or []) if p else [],
+        seen={m.get("skin") for m in seen_items if m.get("scenario") == sc.id},
+    )
     it = AttemptItem(
         attempt_id=attempt.id,
         position=position,
         kind="scenario",
         family_id=f"scn:{sc.id}",
         skill=sc.skill,
-        meta={"scenario": sc.id, "main_position": position},
+        meta={"scenario": sc.id, "main_position": position, "skin": skin},
     )
     db.add(it)
     db.flush()
@@ -394,6 +407,7 @@ def answer(
                 skill=item.skill,
                 meta={
                     "scenario": (item.meta or {})["scenario"],
+                    "skin": (item.meta or {}).get("skin"),
                     "main_position": item.position,
                     "probe": (item.meta or {}).get("probe", 0),
                 },
@@ -419,7 +433,7 @@ def scenario_outcome(db: Session, attempt: Attempt) -> dict | None:
     probe_q = inst.probe((main.meta or {}).get("probe", 0)) if probe is not None else None
     return {
         "scenario_id": inst.scenario.id,
-        "title": inst.scenario.title,
+        "title": inst.title,
         "grade": inst.scenario.grade,
         "category": k,
         "category_title": scn.CATEGORY_TITLES[k],
