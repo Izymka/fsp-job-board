@@ -109,6 +109,7 @@ class NeedParseOut(BaseModel):
     salary_from: int | None
     salary_to: int | None
     work_format: str | None
+    min_years: float | None = None
     blueprint: dict[str, float]
     explanation: list[str]
 
@@ -132,6 +133,7 @@ def parse(body: NeedParseIn, user: User = Depends(EmployerUser)):
         salary_from=n.salary_from,
         salary_to=n.salary_to,
         work_format=n.work_format,
+        min_years=n.min_years,
         blueprint=n.blueprint,
         explanation=n.explanation,
     )
@@ -165,6 +167,9 @@ class SearchIn(BaseModel):
     salary_to: int | None = Field(default=None, gt=0)
     work_format: Literal["office", "hybrid", "remote"] | None = None
     industry: str | None = None
+    min_years: float | None = Field(
+        default=None, ge=0, le=20, description="требуемый опыт, лет; если не задано — из текста"
+    )
     include_adjacent: bool = True
 
     @model_validator(mode="after")
@@ -242,6 +247,7 @@ def search_out(db: Session, company: Company, s: Search) -> SearchOut:
             "salary_to": s.salary_to,
             "work_format": s.work_format,
             "industry": s.industry,
+            "min_years": s.min_years,
             "include_adjacent": s.include_adjacent,
             "explanation": (s.parsed or {}).get("explanation", []),
         },
@@ -292,6 +298,7 @@ def create_search(body: SearchIn, user: User = Depends(EmployerUser), db: Sessio
         salary_to=body.salary_to or n.salary_to,
         work_format=body.work_format or n.work_format,
         industry=body.industry or company.industry,
+        min_years=body.min_years if body.min_years is not None else n.min_years,
         include_adjacent=body.include_adjacent,
         parsed={
             "spec_scores": n.spec_scores,

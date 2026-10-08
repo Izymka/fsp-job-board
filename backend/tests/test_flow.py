@@ -411,3 +411,44 @@ def test_test_composition_follows_declared_stack(client):
     assert all(abs(att["blueprint"][k] - v) < 1e-3 for k, v in bp["weights"].items())
     assert set(att["blueprint"]) == set(bp["weights"])
     assert att["item"]["skill"] in bp["weights"]
+
+
+def test_relevant_experience_in_search(client):
+    """Опыт по местам работы: релевантный (та же специализация) и требование из текста потребности."""
+    a = make_candidate(client, "a@example.ru")
+    b = make_candidate(client, "b@example.ru")
+    jobs_a = [{"title": "Python-разработчик, «Банк»", "start": "2021", "end": None, "industry": "fintech"}]
+    jobs_b = [
+        {"title": "Менеджер по продажам", "start": "2016", "end": "2024"},
+        {"title": "Junior-разработчик", "start": "2025", "end": None, "specialization": "backend"},
+    ]
+    for api, jobs in ((a, jobs_a), (b, jobs_b)):
+        r = api.put("/api/candidate/profile", json={"experience": jobs})
+        assert r.status_code == 200, r.text
+        pass_test(api, "middle", correct=True)
+    bad = a.put("/api/candidate/profile", json={"experience": [{"title": "x", "specialization": "astro"}]})
+    assert bad.status_code == 422
+
+    emp = make_employer(client)
+    r = emp.post(
+        "/api/employer/searches",
+        json={
+            "title": "Python-разработчик (Middle)",
+            "text": "Бэкенд на Python, FastAPI, PostgreSQL, Docker. Опыт коммерческой разработки от 3 лет. Вилка 230-300 тыс ₽, удалённо.",
+        },
+    )
+    assert r.status_code == 201, r.text
+    s = r.json()
+    assert s["need"]["min_years"] == 3
+    res = s["results"]
+    assert len(res) == 2
+    top, second = res
+    assert top["card"]["relevant_years"] >= 5 and top["card"]["industry_years"] == {
+        "fintech": top["card"]["relevant_years"]
+    }
+    assert second["card"]["relevant_years"] < 2 and second["card"]["experience_years"] > 9
+    assert any(
+        x["text"].startswith("Релевантный опыт") and "требуется от 3 лет" in x["text"] for x in top["reasons"]
+    )
+    assert "Релевантный опыт: 1,8 года; требуется от 3 лет" in [x["text"] for x in second["reasons"]]
+    assert top["score"] > second["score"]

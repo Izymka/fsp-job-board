@@ -24,6 +24,7 @@ import numpy as np
 
 from ..catalog import Catalog, get_catalog
 from ..nlp.skills import get_dictionary
+from .experience import effective_years, years_from, years_ru
 
 # --------------------------------------------------------------------------------------- данные
 
@@ -66,7 +67,10 @@ class CandidateFeatures:
     embedding: np.ndarray | None = None
     proctored: bool = False  # грейд подтверждён тестом с цифровым проктором без перерывов
     integrity: str = "ok"  # уровень надёжности попытки, подтвердившей грейд: ok / review
-    experience_years: float | None = None  # заявленный стаж (из опроса или резюме), не проверяется
+    experience_years: float | None = None  # общий стаж (из опроса или резюме), не проверяется
+    relevant_years: float | None = None  # стаж в той же специализации; None — нет разбивки по местам работы
+    it_years: float | None = None  # стаж в IT (любая специализация)
+    industry_years: dict[str, float] = field(default_factory=dict)  # отрасль → годы
 
 
 # Доверие к подтверждённому грейду — множитель итогового скора: тест с проктором без перерывов
@@ -78,11 +82,15 @@ TRUST_REASON = {
     "review": ("negative", "Тест с замечаниями о самостоятельности прохождения"),
 }
 
-# Стаж: небольшая поправка относительно ожидаемого для грейда минимума. Грейд подтверждён тестом,
-# а стаж только заявлен, поэтому поправка ограничена: −5% … +6%.
+# Опыт работы — множитель относительно требования вакансии (если не указано — типичного для грейда).
+# Засчитывается релевантный опыт (та же специализация) и 30% прочего IT-опыта. Нехватка опыта
+# штрафуется заметно: без опыта при требовании «от N лет» множитель 0.5 — так рассуждает работодатель.
+# Превышение даёт небольшой плюс (стаж заявлен кандидатом, а грейд проверен тестом).
 GRADE_MIN_YEARS = {"intern": 0.0, "junior": 0.5, "middle": 2.0, "senior": 4.0, "lead": 6.0}
-EXP_BELOW_STEP, EXP_ABOVE_STEP = 0.025, 0.015
-EXP_MIN, EXP_MAX = 0.95, 1.06
+EXP_SHORT_SLOPE, EXP_FLOOR = 0.5, 0.5
+EXP_ABOVE_STEP, EXP_MAX = 0.015, 1.06
+EXP_UNKNOWN = 0.9  # опыт не указан, а вакансия его требует
+EXP_INDUSTRY = 1.04  # от года опыта в отрасли вакансии
 
 
 def trust_level(c: CandidateFeatures) -> str | None:
@@ -94,20 +102,50 @@ def trust_level(c: CandidateFeatures) -> str | None:
     return "verified" if c.proctored else "plain"
 
 
-def experience_factor(c: CandidateFeatures) -> float:
-    if c.experience_years is None or c.grade not in GRADE_MIN_YEARS:
-        return 1.0
-    d = c.experience_years - GRADE_MIN_YEARS[c.grade]
-    f = 1 + (EXP_ABOVE_STEP * d if d >= 0 else EXP_BELOW_STEP * d)
-    return min(EXP_MAX, max(EXP_MIN, f))
+def required_years(need: Need) -> tuple[float, bool]:
+    """Требуемый опыт и признак, что он указан в вакансии (а не взят по грейду)."""
+    if need.min_years is not None:
+        return need.min_years, True
+    return GRADE_MIN_YEARS.get(need.grade, 0.0), False
 
 
-def _years(y: float) -> str:
-    n = round(y)
-    if y < 1:
-        return "меньше года"
-    w = "лет" if 11 <= n % 100 <= 14 else {1: "год", 2: "года", 3: "года", 4: "года"}.get(n % 10, "лет")
-    return f"{n} {w}"
+def experience_fit(c: CandidateFeatures, need: Need) -> tuple[float, list[Reason]]:
+    req, explicit = required_years(need)
+    req_t = (
+        f"требуется {years_from(req)}"
+        if explicit
+        else f"для {need.grade.capitalize()} обычно {years_from(req)}"
+    )
+    if c.relevant_years is None and c.experience_years is None:
+        return (EXP_UNKNOWN if req > 0 else 1.0), [Reason("neutral", "Опыт работы не указан")]
+    rel = c.relevant_years if c.relevant_years is not None else c.experience_years or 0.0
+    it = c.it_years if c.it_years is not None else rel
+    eff = effective_years(rel, it)
+    if req <= 0:
+        f = 1 + min(0.04, 0.02 * eff)
+    elif eff >= req:
+        f = 1 + min(EXP_MAX - 1, EXP_ABOVE_STEP * (eff - req))
+    else:
+        f = max(EXP_FLOOR, 1 - EXP_SHORT_SLOPE * (req - eff) / req)
+    reasons = []
+    if it <= 0 and (c.experience_years or 0) <= 0:
+        text, kind = "Нет коммерческого опыта", "negative" if req > 0 else "neutral"
+    elif rel <= 0:
+        text, kind = f"Нет опыта в этой роли (в IT — {years_ru(it)})", "negative" if req > 0 else "neutral"
+    else:
+        text = f"Релевантный опыт: {years_ru(rel)}"
+        if it > rel + 0.4:
+            text += f" (всего в IT — {years_ru(it)})"
+        kind = "positive" if eff >= req else "negative"
+    if req > 0:
+        text += f"; {req_t}"
+    reasons.append(Reason(kind, text))
+    if need.industry and c.industry_years.get(need.industry, 0.0) >= 1.0:
+        f *= EXP_INDUSTRY
+        reasons.append(
+            Reason("positive", f"Опыт в отрасли вакансии: {years_ru(c.industry_years[need.industry])}")
+        )
+    return f, reasons
 
 
 @dataclass
@@ -123,6 +161,7 @@ class Need:
     text: str = ""
     embedding: np.ndarray | None = None
     include_adjacent: bool = True
+    min_years: float | None = None  # требуемый опыт из вакансии; None — типичный для грейда
 
 
 @dataclass(frozen=True)
@@ -414,8 +453,10 @@ def score_candidate(
         # соответствии, но заметно лучше подходящий без проктора его обгоняет
         trust = trust_level(c)
         gate["trust"] = TRUST[trust] if trust else 1.0
-        gate["experience"] = experience_factor(c)
+        gate["experience"], exp_reasons = experience_fit(c, need)
         mult *= gate["trust"] * gate["experience"]
+    else:
+        exp_reasons = []
     total = sum(raw.values()) * mult
     components = {k: v * mult for k, v in raw.items()}
 
@@ -434,17 +475,7 @@ def score_candidate(
         trust = trust_level(c)
         if trust:
             reasons.append(Reason(*TRUST_REASON[trust]))
-    if c.experience_years is not None and c.grade in GRADE_MIN_YEARS:
-        enough = c.experience_years >= GRADE_MIN_YEARS[c.grade]
-        reasons.append(
-            Reason(
-                "positive"
-                if enough and c.experience_years > GRADE_MIN_YEARS[c.grade] + 1
-                else ("neutral" if enough else "negative"),
-                f"Опыт работы: {_years(c.experience_years)}"
-                + ("" if enough else " — меньше типичного для грейда"),
-            )
-        )
+    reasons.extend(exp_reasons)
     if c.fsp is None:
         reasons.append(Reason("neutral", "ФСП ID не привязан"))
     elif c.fsp:

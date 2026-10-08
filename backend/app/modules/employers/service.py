@@ -24,7 +24,7 @@ from sqlalchemy.orm import Session
 from ...core.config import get_settings
 from ...core.db import aware, utcnow
 from ..candidates.models import CandidateProfile
-from ..candidates.service import anonymous_alias, category_label, embeddings_for, features
+from ..candidates.service import anonymous_alias, category_label, embeddings_for, experience_summary, features
 from ..invitations.access import revealed_set
 from .models import Company, Search
 
@@ -59,6 +59,9 @@ class CandidateCard(BaseModel):
     headline: str | None
     about: str | None
     experience_years: float | None
+    relevant_years: float | None = None  # опыт в специализации (по местам работы)
+    it_years: float | None = None
+    industry_years: dict[str, float] = {}
     stack: list[str]
     confirmed_skills: list[str]
     skill_scores: dict[str, str]
@@ -117,6 +120,18 @@ def _percentiles(profiles: list[CandidateProfile]) -> dict[uuid.UUID, float]:
     return out
 
 
+def _experience_card(p: CandidateProfile) -> dict:
+    s = experience_summary(p)
+    if s is None:
+        return {}
+    return {
+        "experience_years": max(s.total_years, p.experience_years or 0.0),
+        "relevant_years": s.relevant_years,
+        "it_years": s.it_years,
+        "industry_years": s.industry_years,
+    }
+
+
 def card(
     p: CandidateProfile,
     *,
@@ -168,7 +183,7 @@ def card(
         city=p.city,
         headline=p.headline,
         about=p.about,
-        experience_years=p.experience_years,
+        **{"experience_years": p.experience_years, **_experience_card(p)},
         stack=list(p.stack or []),
         confirmed_skills=[
             cat.assessment_skills.get(k, {}).get("title", k)
@@ -199,6 +214,7 @@ def need_of(s: Search) -> Need:
         salary_to=s.salary_to,
         work_format=s.work_format,
         industry=s.industry,
+        min_years=s.min_years,
         text="\n".join(x for x in (s.title, s.team_description or "", s.text or "") if x),
         include_adjacent=s.include_adjacent and not (s.filters or {}).get("exclude_adjacent", False),
     )

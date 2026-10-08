@@ -28,6 +28,7 @@ export default function SearchNew() {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [format, setFormat] = useState('')
+  const [years, setYears] = useState('')
   const [adjacent, setAdjacent] = useState(true)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const parse = useMutation({ mutationFn: () => api.post<NeedParse>('/api/employer/needs/parse', { text, title }) })
@@ -46,6 +47,7 @@ export default function SearchNew() {
     if (!touched.from && p.salary_from) setFrom(String(p.salary_from))
     if (!touched.to && p.salary_to) setTo(String(p.salary_to))
     if (!touched.format && p.work_format) setFormat(p.work_format)
+    if (!touched.years && p.min_years != null) setYears(String(p.min_years))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [p])
   const create = useMutation({
@@ -59,6 +61,7 @@ export default function SearchNew() {
         salary_from: from ? Number(from) : null,
         salary_to: to ? Number(to) : null,
         work_format: format || null,
+        min_years: years === '' ? null : Number(years),
         include_adjacent: adjacent,
       }),
     onSuccess: (d) => nav(`/employer/searches/${d.search.id}`),
@@ -157,6 +160,9 @@ export default function SearchNew() {
                     <input className="input" type="number" value={to} onChange={(e) => (setTo(e.target.value), touch('to'))} />
                   </Field>
                 </div>
+                <Field label="Опыт работы от, лет" hint="Учитывается релевантный опыт — в той же роли. Пусто — типичный для грейда">
+                  <input className="input" type="number" min={0} max={20} step={0.5} value={years} onChange={(e) => (setYears(e.target.value), touch('years'))} />
+                </Field>
                 <Field label="Формат">
                   <select className="input" value={format} onChange={(e) => (setFormat(e.target.value), touch('format'))}>
                     <option value="">любой</option>

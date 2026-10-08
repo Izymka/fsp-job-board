@@ -66,6 +66,8 @@ export interface Job {
   start?: string | null
   end?: string | null
   description?: string | null
+  specialization?: string | null // роль на этом месте — для релевантного опыта
+  industry?: string | null
 }
 
 export interface Profile {
@@ -261,6 +263,9 @@ export interface CandidateCard {
   headline: string | null
   about: string | null
   experience_years: number | null
+  relevant_years?: number | null
+  it_years?: number | null
+  industry_years?: Record<string, number>
   stack: string[]
   confirmed_skills: string[]
   skill_scores: Record<string, string>
@@ -340,6 +345,7 @@ export interface SearchOut {
     salary_to: number | null
     work_format: string | null
     industry: string | null
+    min_years: number | null
     include_adjacent: boolean
     explanation: string[]
   }
@@ -361,6 +367,7 @@ export interface NeedParse {
   salary_from: number | null
   salary_to: number | null
   work_format: string | null
+  min_years: number | null
   blueprint: Record<string, number>
   explanation: string[]
 }
@@ -425,6 +432,7 @@ export interface Vacancy {
   salary_to: number
   work_format: string | null
   city: string | null
+  min_years: number | null
   status: string
   blueprint: Record<string, number>
   created_at: string

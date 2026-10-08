@@ -168,7 +168,7 @@ def seed(n_candidates: int = 300) -> None:
             return
         now = utcnow()
         # ---------------------------------------------------------------- кандидаты
-        pop = make_candidates(n_candidates, seed=2026, stuffing_rate=0.2)
+        pop = make_candidates(n_candidates, seed=2026, stuffing_rate=0.2, history=True)
         truth = make_true_bank()
         sim_rng = random.Random(7)
         registry_ok = True
@@ -219,11 +219,16 @@ def seed(n_candidates: int = 300) -> None:
                 ),
                 experience=[
                     {
-                        "title": f"{rng.choice(HEADLINES[c.spec])} в компании «{rng.choice(['Вектор', 'Цифра', 'Платформа', 'Датасфера', 'Север', 'Код'])}»",
-                        "start": str(2026 - max(1, int(years))),
-                        "end": None,
-                        "description": "Стек: " + ", ".join(sorted(c.claimed)[:6]),
+                        "title": j["title"],
+                        "start": j["start"],
+                        "end": j["end"],
+                        "description": ("Стек: " + ", ".join(sorted(c.claimed)[:6]))
+                        if j["specialization"] == c.spec
+                        else None,
+                        "specialization": j["specialization"],
+                        "industry": j["industry"],
                     }
+                    for j in c.jobs
                 ],
                 survey_completed_at=now - timedelta(days=rng.randint(1, 120)),
                 industries=sorted(c.industries),
@@ -298,6 +303,7 @@ def seed(n_candidates: int = 300) -> None:
                     salary_from=n.salary_from or 150000,
                     salary_to=n.salary_to or 250000,
                     work_format=n.work_format,
+                    min_years=n.min_years,
                     city=comp.city,
                     status="published",
                     blueprint=n.blueprint,
@@ -405,6 +411,8 @@ def seed(n_candidates: int = 300) -> None:
                         "start": "03.2023",
                         "end": None,
                         "description": "FastAPI, PostgreSQL, Kafka, Docker",
+                        "specialization": "backend",
+                        "industry": "fintech",
                     }
                 ],
                 survey_completed_at=now - timedelta(days=10),

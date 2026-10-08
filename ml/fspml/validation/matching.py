@@ -74,6 +74,10 @@ def observe(
                 tested_at=TODAY,
                 about=c.resume_text,
                 embedding=v,
+                experience_years=c.years if c.relevant_years is not None else None,
+                relevant_years=c.relevant_years,
+                it_years=c.it_years,
+                industry_years=dict(c.industry_years),
             )
         )
     return Observed(feats, {c.id: c for c in cands})
@@ -88,6 +92,7 @@ def to_need(n: TrueNeed, emb: HashingEmbedder) -> Need:
         salary_to=n.salary_to,
         work_format=n.work_format,
         industry=n.industry,
+        min_years=n.min_years,
         text=n.text,
         embedding=emb.encode([n.text])[0],
     )
@@ -190,6 +195,17 @@ def evaluate(
         results[name] = {k: float(np.mean([r[k] for r in rows])) for k in rows[0]}
     stuffed_in_top = _stuffing_exposure(obs, needs, emb, rel_cache)
     return {"systems": results, "stuffing": stuffed_in_top, "n_needs": len(needs), "n_candidates": len(cands)}
+
+
+def without_experience(obs: Observed) -> Observed:
+    """Те же кандидаты без истории работы — абляция вклада опыта в подбор."""
+    from dataclasses import replace
+
+    feats = [
+        replace(f, experience_years=None, relevant_years=None, it_years=None, industry_years={})
+        for f in obs.features
+    ]
+    return Observed(feats, obs.by_id)
 
 
 def _stuffing_exposure(obs: Observed, needs, emb, rel_cache) -> dict[str, float]:

@@ -76,3 +76,14 @@ export const SKILL_STATUS: Record<string, { label: string; tone: string; dot: st
   weak: { label: 'не подтверждено', tone: 'bg-accent-50 text-accent-600', dot: 'bg-accent-500' },
   no_data: { label: 'нет данных', tone: 'bg-surface text-muted', dot: 'bg-steel' },
 }
+
+const yrs = (y: number) => (y < 1 ? (y > 0 ? 'меньше года' : '0') : `${String(Math.round(y * 10) / 10).replace('.', ',')} г.`)
+
+/** «опыт 6 г., в роли 2 г.» — общий и релевантный стаж кандидата. */
+export function experienceText(c: { experience_years: number | null; relevant_years?: number | null }): string | null {
+  if (c.experience_years == null && c.relevant_years == null) return null
+  if (!c.experience_years && !c.relevant_years) return 'без опыта работы'
+  const total = c.experience_years ?? c.relevant_years ?? 0
+  if (c.relevant_years == null || Math.abs(total - c.relevant_years) < 0.4) return `опыт ${yrs(total)}`
+  return `опыт ${yrs(total)}, в роли ${yrs(c.relevant_years)}`
+}

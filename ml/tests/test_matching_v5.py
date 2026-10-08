@@ -83,19 +83,62 @@ def test_much_better_fit_without_proctor_still_wins():
     assert ids == ["strong", "weak"]
 
 
-def test_experience_small_bounded_bonus():
+def test_experience_relative_to_vacancy_requirement():
     from dataclasses import replace
 
-    from fspml.matching.scoring import experience_factor
+    from fspml.matching.scoring import experience_fit
 
+    need = replace(GO_NEED, min_years=3.0)
     base = cand("x", claimed={"Go", "PostgreSQL"}, theta=0.3)
-    assert experience_factor(base) == 1.0  # стаж не указан
-    assert experience_factor(replace(base, experience_years=2.0)) == pytest.approx(1.0)
-    assert experience_factor(replace(base, experience_years=5.0)) == pytest.approx(1.045)
-    assert experience_factor(replace(base, experience_years=30.0)) == pytest.approx(1.06)
-    assert experience_factor(replace(base, experience_years=0.0)) == pytest.approx(0.95)
+    f = lambda **kw: experience_fit(replace(base, **kw), need)[0]  # noqa: E731
+    assert f() == pytest.approx(0.9)  # опыт не указан
+    assert f(experience_years=0.0, relevant_years=0.0, it_years=0.0) == pytest.approx(0.5)
+    assert f(experience_years=3.0, relevant_years=3.0, it_years=3.0) == pytest.approx(1.0)
+    assert f(experience_years=7.0, relevant_years=7.0, it_years=7.0) == pytest.approx(1.06)
+    # 5 лет в IT, но не в этой роли: засчитывается 30% → 1.5 года из 3
+    assert f(experience_years=5.0, relevant_years=0.0, it_years=5.0) == pytest.approx(0.75)
+    # стаж без разбивки по местам работы считается релевантным (заявлен кандидатом)
+    assert f(experience_years=3.0) == pytest.approx(1.0)
+    # опыт в отрасли вакансии
+    ind = replace(need, industry="fintech")
+    c = replace(base, experience_years=3.0, relevant_years=3.0, it_years=3.0, industry_years={"fintech": 2.0})
+    fac, reasons = experience_fit(c, ind)
+    assert fac == pytest.approx(1.04)
+    assert any("отрасли" in r.text for r in reasons)
+
+
+def test_relevant_experience_outranks_career_switcher():
+    from dataclasses import replace
+
+    need = replace(GO_NEED, min_years=3.0)
+    base = cand("x", claimed={"Go", "PostgreSQL", "Kafka", "Docker", "Git"}, theta=0.3)
     pool_ = [
-        replace(base, id="junior_exp", experience_years=1.0),
-        replace(base, id="exp", experience_years=6.0),
+        replace(base, id="switcher", experience_years=6.0, relevant_years=1.0, it_years=6.0),
+        replace(base, id="relevant", experience_years=4.0, relevant_years=4.0, it_years=4.0),
+        replace(base, id="none", experience_years=0.0, relevant_years=0.0, it_years=0.0),
     ]
-    assert [s.candidate_id for s in rank(pool_, GO_NEED, TODAY)] == ["exp", "junior_exp"]
+    out = rank(pool_, need, TODAY)
+    assert [s.candidate_id for s in out] == ["relevant", "switcher", "none"]
+    texts = {s.candidate_id: " ".join(r.text for r in s.reasons) for s in out}
+    assert "Нет коммерческого опыта; требуется от 3 лет" in texts["none"]
+    assert "Релевантный опыт: 1 год (всего в IT — 6 лет)" in texts["switcher"]
+
+
+def test_summarize_jobs():
+    from datetime import date
+
+    from fspml.matching.experience import job_specialization, summarize
+
+    assert job_specialization("Python-разработчик, Банк") == "backend"
+    assert job_specialization("Аналитик данных") == "data_science"
+    assert job_specialization("Менеджер по продажам") is None
+    jobs = [
+        {"title": "Python-разработчик", "start": "2021", "end": "2023", "industry": "fintech"},
+        {"title": "Менеджер по продажам", "start": "2018", "end": "2020"},
+        {"title": "Тестировщик", "start": "2024-01", "end": None, "industry": "ecommerce"},
+    ]
+    s = summarize(jobs, "backend", date(2026, 1, 1))
+    assert s.relevant_years == 3.0
+    assert s.total_years == pytest.approx(3 + 3 + 2.1, abs=0.1)
+    assert s.it_years == pytest.approx(5.1, abs=0.1)
+    assert s.industry_years["fintech"] == 3.0

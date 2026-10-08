@@ -8,6 +8,7 @@ from datetime import date
 
 import numpy as np
 from fspml.catalog import get_catalog
+from fspml.matching.experience import ExperienceSummary, summarize
 from fspml.matching.scoring import CandidateFeatures, FspAchievement
 from fspml.nlp.embed import SentenceEmbedder, get_embedder
 
@@ -70,6 +71,12 @@ def fsp_achievements(p: CandidateProfile) -> list[FspAchievement] | None:
     return out
 
 
+def experience_summary(p: CandidateProfile, today: date | None = None) -> ExperienceSummary | None:
+    """Стаж по местам работы профиля; None — мест работы нет (остаётся только заявленный стаж)."""
+    s = summarize(list(p.experience or []), p.specialization, today or date.today())
+    return s if s.total_years > 0 else None
+
+
 def features(p: CandidateProfile, embedding: np.ndarray | None = None) -> CandidateFeatures:
     scores = p.skill_scores or {}
     last_active = aware(p.last_active_at)
@@ -100,8 +107,21 @@ def features(p: CandidateProfile, embedding: np.ndarray | None = None) -> Candid
         embedding=embedding,
         proctored=((p.assessment_summary or {}).get("proctoring") or {}).get("status") == "verified",
         integrity=((p.assessment_summary or {}).get("integrity") or {}).get("level") or "ok",
-        experience_years=p.experience_years,
+        **_experience_kw(p),
     )
+
+
+def _experience_kw(p: CandidateProfile) -> dict:
+    s = experience_summary(p)
+    if s is None:
+        # заявленный стаж без мест работы; 0 — «нет опыта», явно указанный кандидатом
+        return {"experience_years": p.experience_years}
+    return {
+        "experience_years": max(s.total_years, p.experience_years or 0.0),
+        "relevant_years": s.relevant_years,
+        "it_years": s.it_years,
+        "industry_years": s.industry_years,
+    }
 
 
 def category_label(p: CandidateProfile) -> str | None:

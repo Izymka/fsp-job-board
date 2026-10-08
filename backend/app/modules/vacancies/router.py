@@ -31,6 +31,18 @@ CandidateUser = require_role("candidate")
 GRADES = Literal["intern", "junior", "middle", "senior", "lead"]
 
 
+def vacancy_need(v: Vacancy) -> Need:
+    return Need(
+        v.specialization,
+        v.grade,
+        v.skills or {},
+        v.salary_from,
+        v.salary_to,
+        v.work_format,
+        min_years=v.min_years,
+    )
+
+
 class VacancyIn(BaseModel):
     title: str = Field(min_length=3, max_length=255)
     text: str = Field(min_length=20, max_length=20000)
@@ -40,6 +52,9 @@ class VacancyIn(BaseModel):
     salary_to: int = Field(gt=0, le=10_000_000, description="Вилка «до», ₽ — обязательно")
     work_format: Literal["office", "hybrid", "remote"] | None = None
     city: str | None = Field(default=None, max_length=128)
+    min_years: float | None = Field(
+        default=None, ge=0, le=20, description="требуемый опыт, лет; если не задано — из текста"
+    )
     status: Literal["draft", "published", "closed"] = "published"
 
     @model_validator(mode="after")
@@ -65,6 +80,7 @@ class VacancyOut(BaseModel):
     salary_to: int
     work_format: str | None
     city: str | None
+    min_years: float | None = None
     status: str
     blueprint: dict[str, float]
     created_at: datetime
@@ -105,6 +121,7 @@ def vac_out(
         salary_to=v.salary_to,
         work_format=v.work_format,
         city=v.city,
+        min_years=v.min_years,
         status=v.status,
         blueprint=v.blueprint or {},
         created_at=v.created_at,
@@ -131,6 +148,7 @@ def _apply_body(v: Vacancy, body: VacancyIn) -> None:
     v.salary_from, v.salary_to = body.salary_from, body.salary_to
     v.work_format = body.work_format or n.work_format
     v.city = body.city
+    v.min_years = body.min_years if body.min_years is not None else n.min_years
     v.status = body.status
     v.blueprint = n.blueprint
     v.parsed = {"must": n.must, "plus": n.plus, "explanation": n.explanation, "spec_scores": n.spec_scores}
@@ -231,9 +249,7 @@ def app_out(db: Session, a: Application, *, with_candidate: bool) -> Application
             if v and p.specialization:
                 s = score_candidate(
                     features(p),
-                    Need(
-                        v.specialization, v.grade, v.skills or {}, v.salary_from, v.salary_to, v.work_format
-                    ),
+                    vacancy_need(v),
                     utcnow().date(),
                 )
                 match = {
@@ -335,9 +351,7 @@ def feed(
             if f_spec and p.confirmed_grade:
                 s = score_candidate(
                     f,
-                    Need(
-                        v.specialization, v.grade, v.skills or {}, v.salary_from, v.salary_to, v.work_format
-                    ),
+                    vacancy_need(v),
                     today,
                 )
                 match = {

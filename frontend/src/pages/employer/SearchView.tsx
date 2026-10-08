@@ -124,6 +124,7 @@ export default function SearchView() {
               ))}
             <span className="ml-1">{range(s.need.salary_from, s.need.salary_to)}</span>
             {s.need.work_format && <span>· {L.format(s.need.work_format)}</span>}
+            {s.need.min_years != null && <span>· {s.need.min_years ? `опыт от ${String(s.need.min_years).replace('.', ',')} г.` : 'можно без опыта'}</span>}
           </span>
         }
         actions={

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { FspList, InviteModal, SkillList } from '../../components/domain'
 import { Badge, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
-import { date, lookup, pct, SKILL_STATUS, useCatalog } from '../../lib/catalog'
+import { date, experienceText, lookup, pct, SKILL_STATUS, useCatalog } from '../../lib/catalog'
 import type { CandidateCard } from '../../lib/types'
 
 /** Кадр с теста с проктором: работодатель сверяет лицо на собеседовании (после принятого приглашения). */
@@ -67,7 +67,7 @@ export default function CandidateView() {
       <PageHeader
         eyebrow={c.revealed ? 'Контакты открыты' : 'Обезличенный профиль'}
         title={c.revealed && c.full_name ? c.full_name : c.alias}
-        subtitle={[c.headline, c.city, c.experience_years != null ? `опыт ${c.experience_years} г.` : null].filter(Boolean).join(' · ')}
+        subtitle={[c.headline, c.city, experienceText(c)].filter(Boolean).join(' · ')}
         actions={
           <>
             <button className="btn-secondary" onClick={() => api.download(`/api/employer/candidates/${c.id}/profile.pdf`, 'candidate.pdf')}>

@@ -19,10 +19,11 @@ function VacancyForm({ v, onClose }: { v: Vacancy | null; onClose: () => void })
   const [to, setTo] = useState(v ? String(v.salary_to) : '')
   const [fmt, setFmt] = useState(v?.work_format ?? '')
   const [city, setCity] = useState(v?.city ?? '')
+  const [years, setYears] = useState(v?.min_years != null ? String(v.min_years) : '')
   const [status, setStatus] = useState(v?.status ?? 'published')
   const save = useMutation({
     mutationFn: () => {
-      const body = { title, text, specialization: spec || null, grade: grade || null, salary_from: Number(from), salary_to: Number(to), work_format: fmt || null, city: city || null, status }
+      const body = { title, text, specialization: spec || null, grade: grade || null, salary_from: Number(from), salary_to: Number(to), work_format: fmt || null, city: city || null, min_years: years === '' ? null : Number(years), status }
       return v ? api.put<Vacancy>(`/api/employer/vacancies/${v.id}`, body) : api.post<Vacancy>('/api/employer/vacancies', body)
     },
     onSuccess: () => {
@@ -84,6 +85,9 @@ function VacancyForm({ v, onClose }: { v: Vacancy | null; onClose: () => void })
           </Field>
           <Field label="Город">
             <input className="input" value={city} onChange={(e) => setCity(e.target.value)} />
+          </Field>
+          <Field label="Опыт работы от, лет" hint="Пусто — из текста вакансии, 0 — можно без опыта">
+            <input className="input" type="number" min={0} max={20} step={0.5} value={years} onChange={(e) => setYears(e.target.value)} />
           </Field>
         </div>
         <Field label="Статус">

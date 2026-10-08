@@ -105,7 +105,7 @@ def run(out_dir: Path, n_candidates: int = 1000, n_needs: int = 30, quick: bool 
     cat = get_catalog()
     if quick:
         n_candidates, n_needs = 300, 12
-    cands = make_candidates(n_candidates, stuffing_rate=0.3)
+    cands = make_candidates(n_candidates, stuffing_rate=0.3, history=True)
     truth = va.make_true_bank()
     res: dict = {"config": {"n_candidates": n_candidates, "n_needs": n_needs, "cat": DEFAULT_CONFIG.__dict__}}
 
@@ -161,11 +161,13 @@ def run(out_dir: Path, n_candidates: int = 1000, n_needs: int = 30, quick: bool 
     res["drift"] = va.run_drift()
 
     # ---------------------------------------------------------------- подбор
-    needs = make_needs(n_needs)
+    needs = make_needs(n_needs, history=True)
     obs = vm.observe(cands, truth)
     res["categorization"] = vm.category_accuracy(obs)
     res["matching"] = vm.evaluate(cands, needs, truth, obs=obs)
-    cands0 = make_candidates(n_candidates, stuffing_rate=0.0)
+    # вклад опыта: те же кандидаты и потребности, у кандидатов скрыта история работы
+    res["matching_no_experience"] = vm.evaluate(cands, needs, truth, obs=vm.without_experience(obs))
+    cands0 = make_candidates(n_candidates, stuffing_rate=0.0, history=True)
     res["matching_no_stuffing"] = vm.evaluate(cands0, needs, truth)
     res["sensitivity"] = vm.weight_sensitivity(cands, needs, truth, obs=obs)
     res["composition_matching"] = vm.composition_effect(cands, needs, truth, obs=obs)
@@ -221,6 +223,9 @@ def summary(r: dict) -> dict:
         "ndcg": {k: m[k]["ndcg@10"] for k in m},
         "ndcg_clean": {k: m0[k]["ndcg@10"] for k in m0},
         "accepted": {k: m[k]["accepted@10"] for k in m},
+        "ndcg_no_experience": r["matching_no_experience"]["systems"]["ours"]["ndcg@10"]
+        if "matching_no_experience" in r
+        else None,
         "p10": {k: m[k]["p@10"] for k in m},
     }
 
@@ -608,6 +613,16 @@ def render_md(r: dict) -> str:
         f"При накрутке стека у 30% кандидатов качество BM25 падает на {max(0.0, 1 - m['bm25_in_specialization']['ndcg@10'] / m0['bm25_in_specialization']['ndcg@10']) * 100:.0f}%, "
         f"нашей механики — на {max(0.0, 1 - ours['ndcg@10'] / m0['ours']['ndcg@10']) * 100:.0f}%.\n"
     )
+    if "matching_no_experience" in r:
+        ne = r["matching_no_experience"]["systems"]["ours"]
+        w(
+            f"**Опыт работы.** У синтетических кандидатов есть история работы: часть джунов без коммерческого опыта, "
+            f"около 20% сменили роль (общий стаж больше релевантного); в потребностях указан требуемый опыт. "
+            f"С учётом релевантного опыта NDCG@10 = {ours['ndcg@10']:.3f}, без него (история скрыта) — {ne['ndcg@10']:.3f}; "
+            f"ожидаемые принятые приглашения в топ-10: {ours['accepted@10']:.2f} против {ne['accepted@10']:.2f}. "
+            "Оговорка: эталонная релевантность сама понижает кандидатов с нехваткой опыта (так рассуждает работодатель), "
+            "поэтому прирост показывает согласованность механики с этим правилом, а не независимое подтверждение веса.\n"
+        )
     if "ours_v1" in m:
         v1 = m["ours_v1"]
         w(

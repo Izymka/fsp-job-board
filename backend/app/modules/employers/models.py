@@ -43,6 +43,7 @@ class Search(TimestampMixin, Base):
     salary_to: Mapped[int | None] = mapped_column(default=None)
     work_format: Mapped[str | None] = mapped_column(String(16))
     industry: Mapped[str | None] = mapped_column(String(32))
+    min_years: Mapped[float | None] = mapped_column(default=None)  # требуемый опыт; None — по грейду
     include_adjacent: Mapped[bool] = mapped_column(default=True)
     parsed: Mapped[dict | None] = mapped_column(default=None)
     filters: Mapped[dict] = mapped_column(default=dict)

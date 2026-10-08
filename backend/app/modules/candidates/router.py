@@ -6,6 +6,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, File, UploadFile
 from fastapi.responses import Response
 from fspml.catalog import get_catalog
+from fspml.matching.experience import job_specialization
 from fspml.nlp.resume import parse_resume_pdf, parse_resume_text
 from fspml.nlp.skills import get_dictionary
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -32,6 +33,17 @@ class JobIn(BaseModel):
     start: str | None = Field(default=None, max_length=32)
     end: str | None = Field(default=None, max_length=32)
     description: str | None = Field(default=None, max_length=2000)
+    specialization: str | None = Field(default=None, max_length=32, description="роль на этом месте работы")
+    industry: str | None = Field(default=None, max_length=32)
+
+    @model_validator(mode="after")
+    def _known(self):
+        cat = get_catalog()
+        if self.specialization and self.specialization not in cat.specializations:
+            raise ValueError(f"неизвестная специализация: {self.specialization}")
+        if self.industry and self.industry not in {x["id"] for x in cat.industries}:
+            raise ValueError(f"неизвестная отрасль: {self.industry}")
+        return self
 
 
 class ProfileIn(BaseModel):
@@ -340,7 +352,16 @@ async def upload_resume(
         "experience_years": d["it_experience_years"] if d["jobs"] else d["experience_years"],
         "soft_skills": d["soft_skills"],
         "experience": [
-            {"title": j["title"], "start": j["start"], "end": j["end"], "description": j["description"]}
+            {
+                "title": j["title"],
+                "start": j["start"],
+                "end": j["end"],
+                "description": j["description"],
+                # роль на месте работы — для расчёта релевантного опыта; кандидат может поправить
+                "specialization": job_specialization(j["position"] or j["title"], j["description"] or "")
+                if j["it"]
+                else None,
+            }
             for j in d["jobs"]
         ],
         "stack": d["skills"][:30],

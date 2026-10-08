@@ -24,6 +24,7 @@ class Vacancy(TimestampMixin, Base):
     salary_to: Mapped[int]
     work_format: Mapped[str | None] = mapped_column(String(16))
     city: Mapped[str | None] = mapped_column(String(128))
+    min_years: Mapped[float | None] = mapped_column(default=None)  # требуемый опыт; None — по грейду
     status: Mapped[str] = mapped_column(
         String(16), default="published", index=True
     )  # draft | published | closed

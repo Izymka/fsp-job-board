@@ -17,6 +17,7 @@ import numpy as np
 import yaml
 
 from ..catalog import DATA_DIR, get_catalog
+from ..matching.experience import effective_years, years_from, years_ru
 from ..matching.scoring import FspAchievement
 from ..nlp.skills import get_dictionary
 
@@ -42,6 +43,24 @@ SPEC_SALARY = {
     "mobile": 1.02,
 }
 YEARS_BY_GRADE = {"intern": (0, 0.5), "junior": (0.5, 2), "middle": (2, 4), "senior": (4, 7), "lead": (6, 12)}
+
+# История работы (history=True). Генерируется отдельным потоком случайных чисел на кандидата,
+# чтобы не сдвигать остальные скрытые признаки: замороженные бенчмарки строятся без истории.
+JOB_TITLES = {
+    "backend": ["Backend-разработчик", "Python-разработчик", "Java-разработчик", "Go-разработчик"],
+    "frontend": ["Frontend-разработчик", "React-разработчик", "Верстальщик"],
+    "data_science": ["Data Scientist", "ML-инженер", "Аналитик данных"],
+    "qa": ["QA-инженер", "Тестировщик", "Инженер по автотестам"],
+    "devops": ["DevOps-инженер", "SRE-инженер", "Системный администратор"],
+    "analyst": ["Системный аналитик", "Бизнес-аналитик"],
+    "mobile": ["Android-разработчик", "iOS-разработчик", "Flutter-разработчик"],
+}
+NON_IT_TITLES = ["Менеджер по продажам", "Инженер-конструктор", "Бухгалтер", "Преподаватель", "Логист"]
+COMPANIES = ["Вектор", "Цифра", "Платформа", "Датасфера", "Север", "Код", "Горизонт", "Сфера", "Альфа-Тех"]
+P_GRADUATE = {"intern": 0.7, "junior": 0.35}  # без коммерческого опыта
+P_SWITCHER = 0.2  # пришёл из другой роли или профессии
+# Требование вакансии к опыту по грейду (как пишут в объявлениях)
+NEED_YEARS = {"junior": [0, 1, 1, 1], "middle": [2, 3, 3], "senior": [3, 4, 5, 5], "lead": [5, 6, 6]}
 
 # Прежний общий состав теста специализации («$language» — язык по стеку, по умолчанию первый).
 # Заморожен здесь: по нему сгенерированы навыки синтетической популяции и карточки размеченных
@@ -123,6 +142,11 @@ class TrueCandidate:
     practical: float = 0.0  # практический навык (то, что подтверждают соревнования ФСП)
     resume_text: str = ""
     lang: str | None = None
+    # история работы (history=True); None — без истории (замороженные бенчмарки)
+    relevant_years: float | None = None
+    it_years: float | None = None
+    industry_years: dict[str, float] = field(default_factory=dict)
+    jobs: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -137,6 +161,7 @@ class TrueNeed:
     industry: str
     text: str = ""
     must: list[str] = field(default_factory=list)
+    min_years: float | None = None  # требуемый опыт (history=True)
 
 
 def spec_techs(spec: str) -> list[tuple[str, float]]:
@@ -257,12 +282,15 @@ def make_candidates(
     *,
     realistic: bool = False,
     force_language: bool = True,
+    history: bool = False,
 ) -> list[TrueCandidate]:
     """realistic=True — стек из архетипов (реальные связки технологий) вместо независимой выборки.
 
     force_language=False — backend-кандидат не получает Python/Node.js «в нагрузку» к архетипу:
     Java-, Go-, C#-разработчики знают только свой стек (для проверки состава теста). По умолчанию
     True — так построены популяции бенчмарков.
+
+    history=True — история работы: выпускники без опыта, сменившие профессию, опыт по отраслям.
     """
     rng = random.Random(seed)
     cat = get_catalog()
@@ -357,11 +385,82 @@ def make_candidates(
             f"Опыт {years:.1f} лет. Стек: {', '.join(sorted(c.claimed))}. "
             + " ".join(f"Работал с {t}." for t in rng.sample(sorted(c.claimed), min(3, len(c.claimed))))
         )
+        if history:
+            _add_history(c, random.Random(f"history-{seed}-{i}"))
         out.append(c)
     return out
 
 
-def make_needs(n: int = 30, seed: int = 11, *, realistic: bool = False) -> list[TrueNeed]:
+def _add_history(c: TrueCandidate, rng: random.Random) -> None:
+    """Места работы: релевантный опыт (та же специализация) и предыдущая карьера у части кандидатов."""
+    cat = get_catalog()
+    inds = [x["id"] for x in cat.industries if x["id"] != "other"]
+
+    def industry() -> str:
+        return rng.choice(sorted(c.industries)) if c.industries and rng.random() < 0.6 else rng.choice(inds)
+
+    relevant, prior, prior_it = c.years, 0.0, False
+    if rng.random() < P_GRADUATE.get(c.grade, 0.0):
+        relevant = 0.0
+    elif c.grade != "intern" and rng.random() < P_SWITCHER:
+        relevant = round(c.years * rng.uniform(0.25, 0.6), 1)
+        prior = round(rng.uniform(1.5, 6.0), 1)
+        prior_it = rng.random() < 0.5
+    jobs: list[dict] = []
+    end_m = TODAY.year * 12 + TODAY.month - 1
+
+    def add(title: str, spec: str | None, years: float, current: bool) -> None:
+        nonlocal end_m
+        months = max(1, round(years * 12))
+        start_m = end_m - months + 1
+        jobs.append(
+            {
+                "title": f"{title}, «{rng.choice(COMPANIES)}»",
+                "start": f"{start_m // 12}-{start_m % 12 + 1:02d}",
+                "end": None if current else f"{end_m // 12}-{end_m % 12 + 1:02d}",
+                "specialization": spec,
+                "industry": industry() if spec else None,
+                "years": round(months / 12, 1),
+            }
+        )
+        end_m = start_m - rng.randint(0, 3)  # перерыв между работами
+
+    # релевантный опыт — 1–3 места, последнее — текущее
+    left = relevant
+    n_rel = 1 if relevant < 2 else rng.randint(1, min(3, int(relevant // 1.5) + 1))
+    for k in range(n_rel):
+        part = left if k == n_rel - 1 else round(left * rng.uniform(0.3, 0.7), 1)
+        if part >= 0.1:
+            add(rng.choice(JOB_TITLES[c.spec]), c.spec, part, current=k == 0)
+        left -= part
+    if prior > 0:
+        if prior_it:
+            other = rng.choice([s for s in JOB_TITLES if s != c.spec])
+            add(rng.choice(JOB_TITLES[other]), other, prior, current=not jobs)
+        else:
+            add(rng.choice(NON_IT_TITLES), None, prior, current=not jobs)
+    c.jobs = jobs
+    c.relevant_years = round(sum(j["years"] for j in jobs if j["specialization"] == c.spec), 1)
+    c.it_years = round(sum(j["years"] for j in jobs if j["specialization"]), 1)
+    c.years = round(sum(j["years"] for j in jobs), 1)
+    by_ind: dict[str, float] = {}
+    for j in jobs:
+        if j["industry"]:
+            by_ind[j["industry"]] = round(by_ind.get(j["industry"], 0.0) + j["years"], 1)
+    c.industry_years = by_ind
+    head = c.resume_text.split(" Опыт ")[0]
+    tail = c.resume_text.split(" Стек: ", 1)[1]
+    exp = (
+        "Опыт работы: " + "; ".join(f"{j['title']} — {years_ru(j['years'])}" for j in jobs) + "."
+        if jobs
+        else "Коммерческого опыта пока нет."
+    )
+    c.resume_text = f"{head} {exp} Стек: {tail}"
+
+
+def make_needs(
+    n: int = 30, seed: int = 11, *, realistic: bool = False, history: bool = False
+) -> list[TrueNeed]:
     rng = random.Random(seed)
     cat = get_catalog()
     specs, shares = zip(*SPEC_SHARE.items())
@@ -392,6 +491,11 @@ def make_needs(n: int = 30, seed: int = 11, *, realistic: bool = False) -> list[
             f"Будет плюсом: {', '.join(t for t in techs if t not in must) or 'опыт в отрасли'}. "
             f"Вилка {sal_from}–{sal_to} ₽, формат: {fmt}."
         )
+        min_years = None
+        if history:
+            min_years = float(random.Random(f"need-years-{seed}-{i}").choice(NEED_YEARS[grade]))
+            req = f"Опыт работы {years_from(min_years)}." if min_years else "Можно без опыта."
+            text = text.replace(" Обязательно:", f" {req} Обязательно:", 1)
         out.append(
             TrueNeed(
                 id=f"n{i:02d}",
@@ -404,6 +508,7 @@ def make_needs(n: int = 30, seed: int = 11, *, realistic: bool = False) -> list[
                 industry=industry,
                 text=text,
                 must=must,
+                min_years=min_years,
             )
         )
     return out
@@ -438,7 +543,16 @@ def true_relevance(c: TrueCandidate, need: TrueNeed) -> int:
     format_ok = need.work_format in c.work_formats or "hybrid" in (need.work_format, *c.work_formats)
     cond = 1.0 if (salary_ok and format_ok) else 0.6 if (salary_ok or format_ok) else 0.35
     rel = grade_match * (0.55 * know + 0.45 * strength) * cond
-    return 3 if rel >= 0.62 else 2 if rel >= 0.45 else 1 if rel >= 0.28 else 0
+    level = 3 if rel >= 0.62 else 2 if rel >= 0.45 else 1 if rel >= 0.28 else 0
+    # Опыт (если у потребности есть требование, а у кандидата — история): нехватка релевантного
+    # опыта снижает оценку работодателя, его отсутствие при требовании — до «слабо подходит».
+    if need.min_years and c.relevant_years is not None:
+        eff = effective_years(c.relevant_years, c.it_years or 0.0)
+        if eff < 0.5 * need.min_years:
+            level = min(level, 1)
+        elif eff < need.min_years:
+            level = max(0, level - 1)
+    return level
 
 
 def accept_probability(c: TrueCandidate, need: TrueNeed) -> float:

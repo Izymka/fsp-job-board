@@ -4,7 +4,7 @@ import { BadgeCheck, CircleAlert, CircleMinus, Medal, Pin, PinOff, Send } from '
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
-import { INVITE_STATUS, SALARY_FIT, SKILL_STATUS, date, lookup, pct, useCatalog } from '../lib/catalog'
+import { INVITE_STATUS, SALARY_FIT, SKILL_STATUS, date, experienceText, lookup, pct, useCatalog } from '../lib/catalog'
 import type { CandidateCard, FspAchievement, Invitation, Ranked, Reason, SkillScore } from '../lib/types'
 import { Badge, ErrorBox, Field, Modal, Notice } from './ui'
 
@@ -166,7 +166,7 @@ export function CandidateRow({ r, onInvite, onPin, searchHref }: { r: Ranked; on
             {c.revealed && <Badge tone="bg-ok-50 text-ok-600">контакты открыты</Badge>}
           </div>
           <div className="mt-1 text-sm text-muted">
-            {[c.headline, c.city, c.experience_years != null ? `опыт ${c.experience_years} г.` : null].filter(Boolean).join(' · ')}
+            {[c.headline, c.city, experienceText(c)].filter(Boolean).join(' · ')}
           </div>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {c.stack.slice(0, 10).map((s) => (

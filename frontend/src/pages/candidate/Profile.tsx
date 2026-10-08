@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ErrorBox, Field, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
+import { useCatalog } from '../../lib/catalog'
 import type { Job, Profile } from '../../lib/types'
 
 interface ResumeParse {
@@ -49,6 +50,7 @@ export default function CandidateProfile() {
   const qc = useQueryClient()
   const profile = useQuery({ queryKey: ['profile'], queryFn: () => api.get<Profile>('/api/candidate/profile') })
   const p = profile.data
+  const { data: cat } = useCatalog()
   const [f, setF] = useState<Form>(empty)
   const [parsed, setParsed] = useState<ResumeParse | null>(null)
   const [saved, setSaved] = useState(false)
@@ -183,6 +185,7 @@ export default function CandidateProfile() {
               </button>
             }
           >
+            <p className="hint mb-3">Укажите роль на каждом месте работы: работодателю важен опыт именно в вашей специализации.</p>
             {f.experience.length === 0 && <p className="text-sm text-muted">Пока пусто.</p>}
             <div className="space-y-3">
               {f.experience.map((j, i) => (
@@ -194,6 +197,24 @@ export default function CandidateProfile() {
                     <button type="button" className="btn-ghost px-2" onClick={() => setF({ ...f, experience: f.experience.filter((_, k) => k !== i) })} aria-label="Удалить">
                       <Trash2 className="h-4 w-4" />
                     </button>
+                  </div>
+                  <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                    <select className="input" aria-label="Роль на этом месте" value={j.specialization ?? ''} onChange={(e) => setF({ ...f, experience: f.experience.map((x, k) => (k === i ? { ...x, specialization: e.target.value || null } : x)) })}>
+                      <option value="">Роль: не IT / другое</option>
+                      {cat?.specializations.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.title}
+                        </option>
+                      ))}
+                    </select>
+                    <select className="input" aria-label="Отрасль компании" value={j.industry ?? ''} onChange={(e) => setF({ ...f, experience: f.experience.map((x, k) => (k === i ? { ...x, industry: e.target.value || null } : x)) })}>
+                      <option value="">Отрасль не указана</option>
+                      {cat?.industries.map((x) => (
+                        <option key={x.id} value={x.id}>
+                          {x.title}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <textarea className="input mt-2 min-h-14" placeholder="Задачи и стек" value={j.description ?? ''} onChange={(e) => setF({ ...f, experience: f.experience.map((x, k) => (k === i ? { ...x, description: e.target.value } : x)) })} />
                 </div>
