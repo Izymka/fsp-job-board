@@ -160,6 +160,30 @@ def _fsp_for(fsp_id: str, fallback, offline: bool = False) -> tuple[list[dict], 
         return ach, None, False
 
 
+def _proctored_summary(rng: random.Random) -> dict:
+    """Сводка теста, пройденного с цифровым проктором без замечаний (как её пишет
+    `assessment.service.finish` для реальной попытки): лицо совпало с эталоном профиля."""
+    checks = rng.randint(4, 9)
+    return {
+        "attempt_id": None,
+        "integrity": {"level": "clean", "severity": "none", "reasons": []},
+        "proctoring": {
+            "status": "verified",
+            "identity": "match",
+            "re_enrolled": False,
+            "checks": checks,
+            "mismatches": 0,
+            "episodes": 0,
+            "uncertain": 0,
+            "look_down_items": 0,
+            "severity": "none",
+            "reasons": [],
+        },
+        "pace": None,
+        "scenario": None,
+    }
+
+
 def seed(n_candidates: int = 300) -> None:
     rng = random.Random(42)
     with SessionLocal() as db:
@@ -171,6 +195,7 @@ def seed(n_candidates: int = 300) -> None:
         pop = make_candidates(n_candidates, seed=2026, stuffing_rate=0.2, history=True)
         truth = make_true_bank()
         sim_rng = random.Random(7)
+        proc_rng = random.Random(11)  # отдельный генератор: не сдвигает остальные демо-данные
         registry_ok = True
         profiles: list[CandidateProfile] = []
         fsp_counter = 0
@@ -260,6 +285,7 @@ def seed(n_candidates: int = 300) -> None:
                 fsp_profile=fsp_profile,
                 last_active_at=now - timedelta(days=(POP_TODAY - c.last_active).days),
                 tasks_score=round(rng.random() * 0.5, 2) if rng.random() < 0.25 else 0.0,
+                assessment_summary=_proctored_summary(proc_rng) if ob.grade else None,
             )
             db.add(p)
             profiles.append(p)
@@ -433,6 +459,7 @@ def seed(n_candidates: int = 300) -> None:
                     "python": {"status": "confirmed", "theta": 0.9, "se": 0.4, "n": 4, "n_correct": 4},
                     "sql": {"status": "confirmed", "theta": 0.7, "se": 0.42, "n": 4, "n_correct": 3},
                 },
+                assessment_summary=_proctored_summary(proc_rng),
                 fsp_id="FSP-000123",
                 fsp_linked_at=now - timedelta(days=8),
                 fsp_synced_at=now,
