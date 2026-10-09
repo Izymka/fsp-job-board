@@ -75,6 +75,7 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
   // проверка повторяется, пока окно открыто: кандидат поправляет свет и положение
   useEffect(() => {
     if (stage !== 'check') return
+    proctor.resetCheck()
     let stop = false
     const run = async () => {
       while (!stop) {
@@ -85,7 +86,7 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
         } catch (e) {
           if (!stop) setError(e)
         }
-        await new Promise((r) => setTimeout(r, 700))
+        await new Promise((r) => setTimeout(r, 400)) // чаще, чтобы не пропустить поворот головы
       }
     }
     void run()
@@ -113,8 +114,8 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
     }
   }
 
-  const ready = !!res && res.camOk && res.light && res.faces === 1 && !res.phone && !!res.embedding && heard
-  const liveOk = res?.real == null || res?.live == null ? null : res.real >= 0.4 && res.live >= 0.4
+  const ready = !!res && res.camOk && res.light && res.faces === 1 && !res.phone && !!res.embedding && res.lively && heard
+  const turnHint = !res?.turned ? 'Медленно поверните голову в одну сторону, затем в другую' : res.turned === 1 ? 'Теперь — в другую сторону' : 'Посмотрите прямо в камеру'
 
   const go = () => {
     const embeddings = proctor.startEmbeddings()
@@ -202,11 +203,14 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
               <Check ok={heard} hint="Скажите вслух «раз, два, три»">
                 Микрофон слышит вас
               </Check>
+              <Check ok={!!res?.lively} pending={!res} hint={turnHint}>
+                Живое лицо: поворот головы влево и вправо
+              </Check>
               <Check ok={!!res?.embedding} pending={!res} hint="Сядьте ближе и посмотрите прямо в камеру">
                 Отпечаток лица получен
               </Check>
             </ul>
-            {liveOk === false && <Notice tone="warn">Похоже, в кадре фото или экран, а не живое лицо. Если это ошибка — поправьте свет и посмотрите в камеру.</Notice>}
+            {res?.spoof && !res.lively && <Notice tone="warn">Похоже, в кадре фото или экран, а не живое лицо. Если это ошибка — поправьте свет и поверните голову влево и вправо.</Notice>}
             <ErrorBox error={error} />
             <div className="flex flex-wrap justify-end gap-2">
               <button className="btn-secondary" onClick={cancel}>

@@ -48,6 +48,7 @@ export interface Frame {
   lookingAway: boolean // вбок или вверх: второй экран, подсказчик
   lookingDown: boolean // вниз: лист с расчётами, клавиатура — разрешено, только счётчик
   embedding?: number[]
+  yaw?: number // рад; для активной проверки «живое лицо» (знак не важен — нужны обе стороны)
   real?: number
   live?: number
 }
@@ -79,6 +80,7 @@ export function readFrame(r: Result): Frame {
     lookingAway: !!a && (Math.abs(a.yaw) > YAW_AWAY || (Math.abs(a.pitch) > PITCH_AWAY && !down)),
     lookingDown: down,
     embedding: good && main.embedding?.length ? Array.from(main.embedding) : undefined,
+    yaw: faces.length === 1 ? a?.yaw : undefined,
     real: main?.real,
     live: main?.live,
   }

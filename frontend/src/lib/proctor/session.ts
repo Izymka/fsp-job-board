@@ -35,9 +35,10 @@ export interface CheckResult {
   light: boolean
   faces: number
   phone: boolean
-  real: number | null
-  live: number | null
   embedding: number[] | null
+  turned: number // сторон, в которые кандидат повернул голову (0–2)
+  lively: boolean // активная проверка пройдена: поворот в обе стороны и снова лицом к камере
+  spoof: boolean | null // пассивные модели стабильно считают лицо фото или экраном; null — мало кадров
 }
 
 const ZERO: ProctorCounters = { no_face_ms: 0, multi_face_ms: 0, phone_hits: 0, look_away_ms: 0, look_down_ms: 0, speech_ms: 0, cam_lost_ms: 0, mic_lost_ms: 0 }
@@ -52,6 +53,14 @@ const MATCH = 0.5
 const MISMATCH = 0.35
 const MISMATCH_RUN = 2 // предупреждать только после стольких уверенно плохих сверок подряд
 const START_FRAMES = 3 // кадров в эталоне со старта
+// Живое лицо. Пассивные модели (antispoof, liveness) на одном кадре шумят: решение — по медиане
+// фронтальных кадров, и «фото» — только если обе модели стабильно низкие. Главная проверка — активная:
+// фото и экран не повернут голову в обе стороны.
+const PASSIVE_FRAMES = 10
+const PASSIVE_MIN = 5
+const PASSIVE_SPOOF = 0.3
+const TURN_YAW = 0.35 // рад ≈ 20°: поворот засчитан
+const CENTER_YAW = 0.15 // рад ≈ 9°: снова лицом к камере
 
 class ProctorSession {
   stream: MediaStream | null = null
@@ -62,6 +71,9 @@ class ProctorSession {
   private audio: AudioMonitor | null = null
   private ref: number[][] = []
   private recent: number[][] = [] // качественные отпечатки с проверки перед стартом
+  private passive: { real: number; live: number }[] = []
+  private turns = { pos: false, neg: false }
+  private lively = false
   private badRun = 0
   private counters: ProctorCounters = { ...ZERO }
   private live: ProctorLive = IDLE
@@ -109,7 +121,31 @@ class ProctorSession {
     const camOk = !!track && track.readyState === 'live' && !track.muted
     const fr = await detect(this.human, this.video, { embed: true, liveness: true })
     if (fr.embedding) this.recent = [...this.recent, fr.embedding].slice(-START_FRAMES)
-    return { camOk, light: !isDark(l), faces: fr.faces, phone: fr.phone, real: fr.real ?? null, live: fr.live ?? null, embedding: fr.embedding ?? null }
+    if (fr.yaw != null) {
+      const yaw = fr.yaw
+      if (Math.abs(yaw) < CENTER_YAW && fr.real != null && fr.live != null) this.passive = [...this.passive, { real: fr.real, live: fr.live }].slice(-PASSIVE_FRAMES)
+      if (yaw > TURN_YAW) this.turns.pos = true
+      if (yaw < -TURN_YAW) this.turns.neg = true
+      if (this.turns.pos && this.turns.neg && Math.abs(yaw) < CENTER_YAW) this.lively = true
+    }
+    const spoof = this.passive.length < PASSIVE_MIN ? null : median(this.passive.map((p) => p.real)) < PASSIVE_SPOOF && median(this.passive.map((p) => p.live)) < PASSIVE_SPOOF
+    return {
+      camOk,
+      light: !isDark(l),
+      faces: fr.faces,
+      phone: fr.phone,
+      embedding: fr.embedding ?? null,
+      turned: +this.turns.pos + +this.turns.neg,
+      lively: this.lively,
+      spoof,
+    }
+  }
+
+  /** Сброс проверки «живое лицо» — при каждом новом открытии окна проверки. */
+  resetCheck() {
+    this.passive = []
+    this.turns = { pos: false, neg: false }
+    this.lively = false
   }
 
   /** Отпечатки последних качественных кадров проверки (эталон и сверка на старте). */
@@ -290,6 +326,12 @@ class ProctorSession {
 }
 
 export const proctor = new ProctorSession()
+
+function median(xs: number[]): number {
+  const s = [...xs].sort((a, b) => a - b)
+  const m = s.length >> 1
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2
+}
 
 export function useProctorLive(): ProctorLive {
   return useSyncExternalStore(proctor.subscribe, proctor.getLive)
