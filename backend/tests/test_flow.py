@@ -453,3 +453,31 @@ def test_relevant_experience_in_search(client):
     )
     assert "Релевантный опыт: 1,8 года; требуется от 3 лет" in [x["text"] for x in second["reasons"]]
     assert top["score"] > second["score"]
+
+
+def test_vacancy_match_uses_required_experience(client):
+    """Скор по вакансии — та же формула v5, что в подборке: учитывает «Опыт от, лет» вакансии."""
+    cand = make_candidate(client)
+    r = cand.put(
+        "/api/candidate/profile",
+        json={
+            "experience": [
+                {"title": "Python-разработчик", "start": "2024", "end": None, "specialization": "backend"}
+            ]
+        },
+    )
+    assert r.status_code == 200, r.text
+    pass_test(cand)
+    emp = make_employer(client)
+    body = {
+        "title": "Python-разработчик (Middle)",
+        "text": "Разработка сервисов на Python и FastAPI, PostgreSQL, Docker.",
+        "grade": "middle",
+        "salary_from": 200000,
+        "salary_to": 260000,
+    }
+    for years in (0, 6):
+        assert emp.post("/api/employer/vacancies", json={**body, "min_years": years}).status_code == 201
+    feed = {v["min_years"]: v["match"] for v in cand.get("/api/vacancies").json()}
+    assert feed[0]["score"] > feed[6]["score"]
+    assert any("требуется от 6 лет" in x["text"] for x in feed[6]["reasons"])

@@ -6,12 +6,20 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, Query
 from fspml.catalog import get_catalog
-from fspml.matching.scoring import Need, score_candidate
+from fspml.matching.scoring import (
+    DEFAULT_WEIGHTS_V2,
+    CandidateFeatures,
+    Need,
+    Scored,
+    score_candidate,
+    specificity,
+)
 from fspml.nlp.vacancy import parse_need
 from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from ...core.config import get_settings
 from ...core.db import get_db, utcnow
 from ...core.errors import AppError, conflict, not_found, responses
 from ...core.security import require_role
@@ -20,7 +28,7 @@ from ..candidates.router import get_profile
 from ..candidates.service import category_label, features
 from ..employers.models import Company
 from ..employers.router import get_company
-from ..employers.service import CandidateCard, card
+from ..employers.service import CandidateCard, card, visible_profiles
 from ..invitations.router import company_stats
 from ..users.models import User
 from .models import Application, Vacancy
@@ -41,6 +49,31 @@ def vacancy_need(v: Vacancy) -> Need:
         v.work_format,
         min_years=v.min_years,
     )
+
+
+def score_for_vacancy(
+    db: Session, f: CandidateFeatures, v: Vacancy, pools: dict[str, list[set[str]]] | None = None
+) -> Scored:
+    """Скор кандидата относительно вакансии — та же формула, что в подборке работодателя (FSP_RANKER):
+    v5 — специфичность требований по пулу специализации, «ворота», доверие к тесту и стаж
+    (`min_years` вакансии). pools — кэш стеков пула по специализации на время запроса."""
+    need = vacancy_need(v)
+    if get_settings().fsp_ranker in ("v1", "v4"):
+        return score_candidate(f, need, utcnow().date())
+    pools = pools if pools is not None else {}
+    if need.specialization not in pools:
+        pools[need.specialization] = [set(p.stack or []) for p in visible_profiles(db, need.specialization)]
+    spec_w = specificity([_Claimed(c) for c in pools[need.specialization]], need.skills)
+    return score_candidate(f, need, utcnow().date(), spec_weights=spec_w, gates=DEFAULT_WEIGHTS_V2)
+
+
+class _Claimed:
+    """Минимальная обёртка для `specificity`: ей нужен только набор заявленных технологий."""
+
+    __slots__ = ("claimed",)
+
+    def __init__(self, claimed: set[str]):
+        self.claimed = claimed
 
 
 class VacancyIn(BaseModel):
@@ -247,11 +280,7 @@ def app_out(db: Session, a: Application, *, with_candidate: bool) -> Application
         if p:
             cand = card(p, revealed=True)  # кандидат откликнулся сам — контакты открыты
             if v and p.specialization:
-                s = score_candidate(
-                    features(p),
-                    vacancy_need(v),
-                    utcnow().date(),
-                )
+                s = score_for_vacancy(db, features(p), v)
                 match = {
                     "score": s.score,
                     "reasons": [{"kind": r.kind, "text": r.text} for r in s.reasons],
@@ -341,19 +370,14 @@ def feed(
         db.scalars(select(Application.vacancy_id).where(Application.candidate_id == p.user_id)).all()
     )
     f = features(p)
-    today = utcnow().date()
+    pools: dict[str, list[set[str]]] = {}
     scored = []
     for v in rows:
         match = None
         if p.specialization:
-            # «обратный» подбор: та же формула, кандидат оценивается относительно вакансии
-            f_spec = f if f.specialization == v.specialization else None
-            if f_spec and p.confirmed_grade:
-                s = score_candidate(
-                    f,
-                    vacancy_need(v),
-                    today,
-                )
+            # «обратный» подбор: та же формула, что в подборке работодателя
+            if f.specialization == v.specialization and p.confirmed_grade:
+                s = score_for_vacancy(db, f, v, pools)
                 match = {
                     "score": s.score,
                     "reasons": [{"kind": r.kind, "text": r.text} for r in s.reasons if "ФСП" not in r.text][
