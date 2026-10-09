@@ -8,3 +8,12 @@ backend/dev.db
 docs
 *.rar
 *.pdf
+ml/bench*/data
+ml/bench/cache
+ml/bench/calib
+.idea
+.claude
+**/.DS_Store
+*.pptx
+*.zip
+.env

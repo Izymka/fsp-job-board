@@ -226,8 +226,17 @@ frontend/dist/
 frontend/public/models/human/
 *.rar
 
-# Техническая документация ведётся локально
-docs/
+# Техническая документация ведётся локально; в репозитории — только собранный PDF
+docs/*
+!docs/fsp-job-board-docs.pdf
+
+# Локальные материалы хакатона и IDE
+.idea/
+.claude/
+.DS_Store
+*.pptx
+/*.pdf
+/*.zip
 
 # Бенчмарк подбора: кэш ответов LLM (данные и результаты коммитятся)
 ml/bench/cache/

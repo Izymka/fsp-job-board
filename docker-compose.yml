@@ -19,6 +19,23 @@ x-backend-env: &backend-env
   ASSESSMENT_SECRET: ${ASSESSMENT_SECRET:-change-me-in-production-0123456789abcdef}
   SMTP_HOST: mailpit
   SMTP_PORT: "1025"
+  EMAIL_ENABLED: ${EMAIL_ENABLED:-true}
+  # Цифровой проктор: сверка лица 1:1 (local_demo — эталон в БД под AES-GCM; ebs — ЕБС)
+  BIOMETRIC_PROVIDER: ${BIOMETRIC_PROVIDER:-local_demo}
+  BIOMETRIC_KEY: ${BIOMETRIC_KEY:-biometric-demo-key-change-me-0123456789abcdef}
+  SNAPSHOT_RETENTION_DAYS: ${SNAPSHOT_RETENTION_DAYS:-180}
+  INVITE_QUOTA_PER_WEEK: ${INVITE_QUOTA_PER_WEEK:-30}
+  # Механика подбора: v5 | hybrid | v1 | v4
+  FSP_RANKER: ${FSP_RANKER:-v5}
+  FSP_EMBEDDINGS: ${FSP_EMBEDDINGS:-auto}
+  # Опциональный LLM (Yandex AI Studio): только запасной разбор резюме, по умолчанию выключен
+  LLM_ENABLED: ${LLM_ENABLED:-0}
+  RESUME_LLM_FALLBACK: ${RESUME_LLM_FALLBACK:-true}
+  YC_FOLDER_ID: ${YC_FOLDER_ID:-}
+  YC_API_KEY: ${YC_API_KEY:-}
+  YC_LLM_BASE_URL: ${YC_LLM_BASE_URL:-https://ai.api.cloud.yandex.net/v1}
+  YC_DATA_LOGGING: ${YC_DATA_LOGGING:-false}
+  LLM_MODEL_EXTRACT: ${LLM_MODEL_EXTRACT:-yandexgpt-5-lite}
 
 services:
   postgres:
@@ -68,7 +85,7 @@ services:
     restart: unless-stopped
 
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.31
     ports:
       - "8025:8025"
     mem_limit: 64m

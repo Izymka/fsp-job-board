@@ -1,9 +1,10 @@
-.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick seed reset dev dev-backend dev-registry dev-frontend
+.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick docs seed reset dev dev-backend dev-registry dev-frontend
 
 help:
 	@echo "make up            — весь стек в Docker (http://localhost)"
 	@echo "make test          — тесты ML-ядра и API"
 	@echo "make validate      — процедура валидации (отчёт в docs/)"
+	@echo "make docs          — пересборка PDF документации (нужны исходники docs/)"
 	@echo "make dev           — реестр ФСП, API и фронтенд локально одной командой (Ctrl+C — остановить всё)"
 	@echo "make dev-backend   — API локально (AUTH_MODE=dev, SQLite)"
 	@echo "make dev-registry  — имитация реестра ФСП локально (:8090)"
@@ -42,6 +43,12 @@ fmt:
 
 validate:
 	uv run python -m fspml.validation --out docs
+
+# Сопроводительная документация: OpenAPI, api.md, components.md → один PDF (docs/fsp-job-board-docs.pdf).
+# Исходники документации (docs/*.md, docs/tools) ведутся вне репозитория; в репозитории — собранный PDF.
+docs:
+	uv run python docs/tools/gen_docs.py
+	uv run --with markdown python docs/build_pdf.py
 
 validate-quick:
 	uv run python -m fspml.validation --out docs --quick
