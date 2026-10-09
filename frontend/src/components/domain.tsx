@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
 import { INVITE_STATUS, SALARY_FIT, SKILL_STATUS, date, experienceText, lookup, pct, useCatalog } from '../lib/catalog'
 import type { CandidateCard, FspAchievement, Invitation, Ranked, Reason, SkillScore } from '../lib/types'
-import { Badge, ErrorBox, Field, Modal, Notice } from './ui'
+import { Badge, ErrorBox, Field, Modal, More, Notice } from './ui'
 
 export function BlueprintBars({ blueprint, label, max: scale }: { blueprint: Record<string, number>; label: (k: string) => string; max?: number }) {
   const rows = Object.entries(blueprint).sort((a, b) => b[1] - a[1])
@@ -73,23 +73,18 @@ const COMPONENT_COLOR: Record<string, string> = {
 }
 
 export function ScoreBar({ score, components }: { score: number; components: Record<string, number> }) {
+  const breakdown = Object.entries(components)
+    .map(([k, v]) => `${COMPONENT_LABEL[k] ?? k} ${Math.round(v * 100)}`)
+    .join(' · ')
   return (
-    <div>
+    <div title={`${breakdown}; итог учитывает множители: доверие к тесту, стаж, ключевые требования`}>
       <div className="mb-1 flex items-baseline justify-between">
         <span className="text-xs text-muted">Соответствие</span>
-        <span className="font-mono text-lg font-bold text-brand-600">{Math.round(score * 100)}</span>
+        <span className="font-mono text-lg font-bold text-brand-600">{Math.min(100, Math.round(score * 100))}</span>
       </div>
-      <div className="flex h-2 overflow-hidden rounded-full bg-fog" title="Вклад компонентов в итоговый скор">
+      <div className="flex h-2 overflow-hidden rounded-full bg-fog">
         {Object.entries(components).map(([k, v]) => (
           <div key={k} className={COMPONENT_COLOR[k] ?? 'bg-steel'} style={{ width: `${v * 100}%` }} />
-        ))}
-      </div>
-      <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-muted">
-        {Object.entries(components).map(([k, v]) => (
-          <span key={k} className="inline-flex items-center gap-1">
-            <span className={clsx('h-2 w-2 rounded-full', COMPONENT_COLOR[k])} />
-            {COMPONENT_LABEL[k] ?? k} {Math.round(v * 100)}
-          </span>
         ))}
       </div>
     </div>
@@ -161,7 +156,6 @@ export function CandidateRow({ r, onInvite, onPin, searchHref }: { r: Ranked; on
             <Link to={`/employer/candidates/${c.id}${searchHref ?? ''}`} className="font-mono text-base font-bold hover:text-brand-600">
               {c.revealed && c.full_name ? c.full_name : c.alias}
             </Link>
-            <Badge tone="bg-brand-50 text-brand-700">{c.category} ✓</Badge>
             {r.adjacent && <Badge tone="bg-warn-50 text-warn-600">соседняя категория</Badge>}
             {c.revealed && <Badge tone="bg-ok-50 text-ok-600">контакты открыты</Badge>}
           </div>
@@ -169,14 +163,20 @@ export function CandidateRow({ r, onInvite, onPin, searchHref }: { r: Ranked; on
             {[c.headline, c.city, experienceText(c)].filter(Boolean).join(' · ')}
           </div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {c.stack.slice(0, 10).map((s) => (
+            {c.stack.slice(0, 5).map((s) => (
               <Badge key={s} tone="bg-surface text-ink-soft">
                 {s}
               </Badge>
             ))}
+            {c.stack.length > 5 && <Badge tone="text-muted">+{c.stack.length - 5}</Badge>}
           </div>
           <div className="mt-4">
-            <Reasons reasons={r.reasons} compact />
+            <Reasons reasons={r.reasons.slice(0, 3)} compact />
+            {r.reasons.length > 3 && (
+              <More label={`ещё ${r.reasons.length - 3}`} className="mt-1.5">
+                <Reasons reasons={r.reasons.slice(3)} compact />
+              </More>
+            )}
           </div>
         </div>
         <div className="flex w-full shrink-0 flex-col gap-3 md:w-64">
@@ -211,7 +211,7 @@ export function CandidateMini({ c, right }: { c: CandidateCard; right?: ReactNod
           {c.fsp.length > 0 && <Badge tone="bg-accent-50 text-accent-600">ФСП · {c.fsp.length}</Badge>}
         </div>
         <div className="mt-1 text-xs text-muted">
-          {[c.headline, c.city, c.test_percentile != null ? `тест: ${pct(c.test_percentile)} перцентиль` : null, c.last_active_days != null ? `активен ${c.last_active_days} дн. назад` : null].filter(Boolean).join(' · ')}
+          {[c.headline, c.city, c.test_percentile != null ? `тест: ${pct(c.test_percentile)} перцентиль` : null].filter(Boolean).join(' · ')}
         </div>
         <div className="mt-2 flex flex-wrap gap-1">
           {c.confirmed_skills.slice(0, 6).map((s) => (

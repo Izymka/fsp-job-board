@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { FspList, InviteModal, SkillList } from '../../components/domain'
 import { Badge, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
-import { date, experienceText, lookup, pct, SKILL_STATUS, useCatalog } from '../../lib/catalog'
+import { date, experienceText, lookup, pct, useCatalog } from '../../lib/catalog'
 import type { CandidateCard } from '../../lib/types'
 
 /** Кадр с теста с проктором: работодатель сверяет лицо на собеседовании (после принятого приглашения). */
@@ -26,7 +26,7 @@ function TestPhoto({ id }: { id: string }) {
         <div className="flex items-center gap-1.5 text-sm font-medium text-ink">
           <ScanFace className="h-4 w-4" /> Кадр с теста
         </div>
-        Снят при проверке перед тестом с проктором. Сверьте на собеседовании, что тест проходил этот же человек. Кандидат дал согласие на показ кадра; кадр хранится 180 дней.
+        Сверьте на собеседовании, что тест проходил этот же человек.
       </div>
     </div>
   )
@@ -44,7 +44,7 @@ function ProctorBadges({ c }: { c: CandidateCard }) {
         </Badge>
       )}
       {pr?.status === 'interrupted' && <Badge tone="bg-surface text-muted">Проктор прерывался</Badge>}
-      {pr?.re_enrolled && <Badge tone="bg-warn-50 text-warn-600">Эталон лица создан заново</Badge>}
+      {c.confirmed_at && (!pr || pr.status === 'off') && <Badge tone="bg-surface text-muted">Тест без проктора</Badge>}
       {!!pace?.overtime_items && (
         <Badge tone="bg-surface text-ink-soft">
           С превышением времени: {pace.overtime_items} из {pace.items} заданий
@@ -71,7 +71,6 @@ export default function CandidateView() {
   return (
     <div>
       <PageHeader
-        eyebrow={c.revealed ? 'Контакты открыты' : 'Обезличенный профиль'}
         title={c.revealed && c.full_name ? c.full_name : c.alias}
         subtitle={[c.headline, c.city, experienceText(c)].filter(Boolean).join(' · ')}
         actions={
@@ -96,14 +95,10 @@ export default function CandidateView() {
             </div>
             <ProctorBadges c={c} />
             {c.test_photo_available && <TestPhoto id={c.id} />}
-            <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+            <div className="mt-4 grid grid-cols-2 gap-3 text-center">
               <div className="rounded-xl bg-surface p-3">
                 <div className="font-mono text-xl font-bold">{pct(c.test_percentile)}</div>
                 <div className="text-[11px] text-muted">перцентиль в категории</div>
-              </div>
-              <div className="rounded-xl bg-surface p-3">
-                <div className="font-mono text-xl font-bold">{Math.round(c.profile_strength * 100)}</div>
-                <div className="text-[11px] text-muted">сила профиля</div>
               </div>
               <div className="rounded-xl bg-surface p-3">
                 <div className="font-mono text-xl font-bold">{c.last_active_days ?? '—'}</div>
@@ -120,7 +115,7 @@ export default function CandidateView() {
                 )}
                 {c.assessment.integrity.level === 'clean' ? (
                   <p className="flex items-center gap-1.5 text-ok-600">
-                    <ShieldCheck className="h-4 w-4" /> Тест пройден без замечаний: без уходов со страницы, копирования и вставки.
+                    <ShieldCheck className="h-4 w-4" /> Тест пройден без замечаний.
                   </p>
                 ) : (
                   <Notice tone="warn">
@@ -137,10 +132,6 @@ export default function CandidateView() {
             <div className="mt-5">
               <SkillList scores={c.skill_scores} />
             </div>
-            <p className="hint mt-3">
-              <span className="mr-2 inline-block h-2 w-2 rounded-full bg-ok-600" />
-              {SKILL_STATUS.confirmed.label} — навык проверен адаптивным тестом на уровне грейда.
-            </p>
           </Section>
           <Section title="Стек (заявлено кандидатом)">
             <div className="flex flex-wrap gap-1.5">
@@ -185,7 +176,7 @@ export default function CandidateView() {
           <Section title="Условия">
             <div className="text-sm text-ink-soft">Формат: {c.work_formats.map(L.format).join(', ') || '—'}</div>
             <div className="mt-2">
-              <Notice>Ожидания по зарплате не раскрываются — при отправке приглашения вы увидите, укладывается ли ваша вилка.</Notice>
+              <p className="hint">Ожидания скрыты; совпадение вилки покажем в приглашении.</p>
             </div>
           </Section>
         </div>

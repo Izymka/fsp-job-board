@@ -3,9 +3,8 @@ import clsx from 'clsx'
 import { Sparkles, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BlueprintBars } from '../../components/domain'
 import { TagInput } from '../../components/TagInput'
-import { Badge, ErrorBox, Field, PageHeader, Section, Spinner } from '../../components/ui'
+import { Badge, ErrorBox, Field, More, PageHeader, Section, Spinner } from '../../components/ui'
 import { api } from '../../lib/api'
 import { lookup, useCatalog } from '../../lib/catalog'
 import type { GradeId, NeedParse, SearchOut } from '../../lib/types'
@@ -70,7 +69,7 @@ export default function SearchNew() {
   const touch = (k: string) => setTouched((x) => ({ ...x, [k]: true }))
   return (
     <div>
-      <PageHeader eyebrow="Новая подборка" title="Опишите, кого вы ищете" subtitle="Обычным текстом — как в вакансии или в письме коллеге. Система выделит стек, специализацию и грейд; всё можно поправить вручную." />
+      <PageHeader title="Опишите, кого вы ищете" subtitle="Обычным текстом — стек, специализацию и грейд выделим сами." />
       <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
         <Section>
           <div className="space-y-4">
@@ -100,11 +99,13 @@ export default function SearchNew() {
             {p && (
               <div className="space-y-4">
                 {p.explanation.length > 0 && (
-                  <ul className="space-y-1 text-xs text-muted">
-                    {p.explanation.map((e) => (
-                      <li key={e}>• {e}</li>
-                    ))}
-                  </ul>
+                  <More label="Как разобрали текст">
+                    <ul className="space-y-1 text-xs text-muted">
+                      {p.explanation.map((e) => (
+                        <li key={e}>• {e}</li>
+                      ))}
+                    </ul>
+                  </More>
                 )}
                 <div className="grid grid-cols-2 gap-3">
                   <Field label="Специализация" required>
@@ -160,7 +161,7 @@ export default function SearchNew() {
                     <input className="input" type="number" value={to} onChange={(e) => (setTo(e.target.value), touch('to'))} />
                   </Field>
                 </div>
-                <Field label="Опыт работы от, лет" hint="Учитывается релевантный опыт — в той же роли. Пусто — типичный для грейда">
+                <Field label="Опыт работы от, лет" hint="Опыт в той же роли (+30 % прочего ИТ-опыта). Пусто — из текста или типичный для грейда">
                   <input className="input" type="number" min={0} max={20} step={0.5} value={years} onChange={(e) => (setYears(e.target.value), touch('years'))} />
                 </Field>
                 <Field label="Формат">
@@ -180,11 +181,6 @@ export default function SearchNew() {
               </div>
             )}
           </Section>
-          {p && Object.keys(p.blueprint).length > 0 && (
-            <Section title="Тест под эту вакансию проверил бы">
-              <BlueprintBars blueprint={p.blueprint} label={L.skill} />
-            </Section>
-          )}
           <ErrorBox error={create.error} />
           <button className="btn-primary w-full py-3" disabled={!spec || !grade || create.isPending} onClick={() => create.mutate()}>
             {create.isPending ? <Spinner className="h-4 w-4 text-white" /> : <Sparkles className="h-4 w-4" />} Показать подборку

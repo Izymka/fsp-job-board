@@ -40,7 +40,7 @@ export default function EmployerBank() {
   const toggle = (k: string, arr: string[], v: string) => update(k, arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
   return (
     <div>
-      <PageHeader eyebrow="Банк кандидатов" title="Вся база по категориям" subtitle="Порядок — сила подтверждённого профиля внутри категории: результат теста, достижения ФСП, регулярные задания. Контакты скрыты до принятия приглашения." />
+      <PageHeader title="Банк кандидатов" subtitle="Сортировка — по силе подтверждённого профиля: тест, ФСП, регулярные задания." />
       <div className="grid gap-6 lg:grid-cols-[17rem_1fr]">
         <aside>
           <Section title="Фильтры">

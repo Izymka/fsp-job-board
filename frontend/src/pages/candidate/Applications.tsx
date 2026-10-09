@@ -12,7 +12,7 @@ export default function CandidateApplications() {
   if (!data) return <PageLoader queries={[apps]} />
   return (
     <div>
-      <PageHeader eyebrow="Вакансии" title="Мои отклики" actions={<Link to="/candidate/vacancies" className="btn-secondary">К вакансиям</Link>} />
+      <PageHeader title="Мои отклики" actions={<Link to="/candidate/vacancies" className="btn-secondary">К вакансиям</Link>} />
       {data.length === 0 ? (
         <EmptyState title="Вы ещё не откликались" text="Главный сценарий платформы — приглашения от работодателей, но откликнуться самостоятельно тоже можно." action={<Link to="/candidate/vacancies" className="btn-primary">Смотреть вакансии</Link>} />
       ) : (

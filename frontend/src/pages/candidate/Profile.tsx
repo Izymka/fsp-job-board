@@ -115,9 +115,8 @@ export default function CandidateProfile() {
   return (
     <div>
       <PageHeader
-        eyebrow="Профиль"
         title="Профиль и резюме"
-        subtitle="Заполните вручную или загрузите PDF — поля распознаются автоматически. ФИО и контакты работодатель увидит только после того, как вы примете приглашение или откликнетесь сами."
+        subtitle="Заполните вручную или загрузите PDF — поля распознаются автоматически."
         actions={
           <button className="btn-secondary" onClick={() => api.download('/api/candidate/profile.pdf', 'fsp-profile.pdf')}>
             <Download className="h-4 w-4" /> Стандартизированный PDF
@@ -232,7 +231,7 @@ export default function CandidateProfile() {
 
         <aside className="space-y-6">
           <Section title="Резюме из PDF">
-            <p className="text-sm text-muted">Распознаём ФИО, контакты, стек, стаж, роли и софт-скиллы. Ничего не сохраняется в профиль без вашего подтверждения.</p>
+            <p className="text-sm text-muted">Распознаём ФИО, контакты, стек и опыт. Ничего не сохраним без вашего подтверждения.</p>
             <input
               ref={fileRef}
               type="file"

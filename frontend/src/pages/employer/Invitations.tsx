@@ -20,7 +20,7 @@ export default function EmployerInvitations() {
   const rows = tab === 'all' ? data : data.filter((i) => i.status === tab)
   return (
     <div>
-      <PageHeader eyebrow="Выход на контакт" title="Приглашения" subtitle="Статусы обновляются, когда кандидат открывает приглашение и отвечает. После принятия здесь появятся его ФИО и контакты." />
+      <PageHeader title="Приглашения" subtitle="После принятия здесь появятся ФИО и контакты кандидата." />
       <Tabs
         value={tab}
         onChange={setTab}

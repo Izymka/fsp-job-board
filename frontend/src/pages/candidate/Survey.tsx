@@ -70,9 +70,8 @@ export default function CandidateSurvey() {
   return (
     <div className="mx-auto max-w-3xl">
       <PageHeader
-        eyebrow="Шаг 2 из 3 · Опрос"
         title="Специализация, стек и ожидания"
-        subtitle="Специализация, стек и заявленный грейд определяют содержание теста; стек и ожидания используются и в подборе. Резюме лишь подсказывает — категорию определит тест."
+        subtitle="Определяет содержание теста и подбор. Категорию определит тест, а не резюме."
       />
       <form
         className="space-y-6"
@@ -120,13 +119,13 @@ export default function CandidateSurvey() {
                   )
                 })}
               </div>
-              <p className="hint">Направление добавляет в тест задания по нему, а практический кейс будет из вашей области — например, CV-специалист получит задачу про видео, а не про отток клиентов.</p>
+              <p className="hint">Добавит задания и практический кейс из вашей области.</p>
             </div>
           )}
         </Section>
 
         <Section title="Отрасль">
-          <p className="mb-3 text-sm text-muted">В каких отраслях вам интересно работать (до 6). Отрасль учитывается в подборе и в сюжете практического кейса теста.</p>
+          <p className="mb-3 text-sm text-muted">До 6 отраслей — учитываются в подборе и в кейсе теста.</p>
           <div className="flex flex-wrap gap-2">
             {cat.industries.map((i) => (
               <button
@@ -143,7 +142,7 @@ export default function CandidateSurvey() {
 
         <Section title="Стек">
           <TagInput value={stack} onChange={setStack} suggestions={techSuggestions} placeholder="Python, PostgreSQL, Docker…" />
-          <p className="hint">Заявленные технологии видны работодателю как «заявлено». Подтверждёнными их сделает тест и регулярные задания: стек определяет модули теста — проверяется то, что вы заявили, и не проверяется то, чего нет в стеке.</p>
+          <p className="hint">Тест проверит заявленный стек — подтверждённое работодатель увидит отдельно.</p>
         </Section>
 
         <Section title="Грейд, на который вы претендуете">
@@ -161,7 +160,7 @@ export default function CandidateSurvey() {
             ))}
           </div>
           {hint.grade_hint && <p className="hint mt-2">Подсказка из резюме: {L.grade(hint.grade_hint)} ({hint.grade_reason}).</p>}
-          <p className="hint">Тест проверит именно этот уровень. Если не подтвердится — грейд не понизят: можно сразу пройти тест на уровень ниже.</p>
+          <p className="hint">Тест проверит этот уровень. Не подтвердится — грейд не понизим.</p>
         </Section>
 
         <Section title="Условия">

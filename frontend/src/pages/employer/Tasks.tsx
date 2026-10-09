@@ -134,9 +134,8 @@ export default function EmployerTasks() {
   return (
     <div>
       <PageHeader
-        eyebrow="Регулярные задания"
         title="Задания для кандидатов"
-        subtitle="Кандидатам вашей специализации раз в две недели предлагается одно задание. Свежие решения обновляют их профиль — вы получаете актуальный сигнал о навыках."
+        subtitle="Раз в две недели — короткая задача кандидатам вашей специализации."
         actions={
           <button className="btn-primary" onClick={() => setCreating(true)}>
             <Plus className="h-4 w-4" /> Новое задание

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowRight, ClipboardCheck, Download, Mail, Medal } from 'lucide-react'
+import { ArrowRight, ClipboardCheck, Mail, Medal } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { FspList, SkillList, StatusBadge } from '../../components/domain'
-import { Badge, PageHeader, PageLoader, Progress, Section, Stat } from '../../components/ui'
+import { Badge, More, PageHeader, PageLoader, Progress, Section, Stat } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, lookup, range, useCatalog } from '../../lib/catalog'
 import type { Dashboard, Invitation, Profile } from '../../lib/types'
@@ -19,13 +19,7 @@ export default function CandidateHome() {
   return (
     <div>
       <PageHeader
-        eyebrow="Кабинет кандидата"
         title={p.full_name ? `Здравствуйте, ${p.full_name.split(' ')[1] ?? p.full_name}` : 'Ваш кабинет'}
-        actions={
-          <button className="btn-secondary" onClick={() => api.download('/api/candidate/profile.pdf', 'fsp-profile.pdf')}>
-            <Download className="h-4 w-4" /> PDF-профиль
-          </button>
-        }
       />
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-6">
@@ -48,6 +42,11 @@ export default function CandidateHome() {
                     Приглашения {d.invitations_new > 0 && <span className="rounded-full bg-white/25 px-1.5">{d.invitations_new}</span>}
                   </Link>
                 </div>
+                {Object.keys(p.skill_scores).length > 0 && (
+                  <More label="Навыки по результатам теста" className="mt-4">
+                    <SkillList scores={p.skill_scores} />
+                  </More>
+                )}
               </>
             ) : (
               <>
@@ -61,12 +60,6 @@ export default function CandidateHome() {
               </>
             )}
           </section>
-
-          {Object.keys(p.skill_scores).length > 0 && (
-            <Section title="Навыки по результатам теста">
-              <SkillList scores={p.skill_scores} />
-            </Section>
-          )}
 
           <Section
             title="Последние приглашения"
@@ -100,10 +93,8 @@ export default function CandidateHome() {
 
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <Stat label="Новые приглашения" value={d.invitations_new} hint={`всего ${d.invitations_total}`} />
             <Stat label="Отклики" value={d.applications_total} />
             <Stat label="Задания" value={d.tasks_open} hint="ожидают решения" />
-            <Stat label="Профиль заполнен" value={`${Math.round(d.profile_completeness * 100)}%`} />
           </div>
           {d.next_actions.length > 0 && (
             <Section title="Что сделать дальше">

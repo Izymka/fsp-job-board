@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { ChevronDown, Wand2 } from 'lucide-react'
 import { useState } from 'react'
 import { BlueprintBars } from '../../components/domain'
-import { Badge, CodeBlock, ErrorBox, Md, PageHeader, Section } from '../../components/ui'
+import { Badge, CodeBlock, ErrorBox, Md, More, PageHeader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { lookup, useCatalog } from '../../lib/catalog'
 import type { GradeId, PreviewOut } from '../../lib/types'
@@ -39,7 +39,7 @@ export default function TestDemo() {
       <PageHeader
         eyebrow="Механика тестирования"
         title="Как тест формируется из описания вакансии"
-        subtitle="Система выделяет навыки и их важность, строит blueprint теста и подбирает задания адаптивно. Ниже — два кандидата одинаковой силы проходят тест по одной вакансии: задания у них разные, а состав навыков и сложность — сопоставимы."
+        subtitle="Иллюстрация: из текста вакансии выделяются навыки, по ним строится состав теста. Два кандидата одинаковой силы получают разные задания сопоставимой сложности. Тест кандидата собирается так же — из ядра специализации и модулей его стека."
       />
       <div className="grid gap-6 lg:grid-cols-[1fr_1.3fr]">
         <Section title="Описание вакансии">
@@ -108,12 +108,15 @@ export default function TestDemo() {
       {d && (
         <div className="mt-6">
           <h2 className="mb-1 text-xl font-bold">3. Два кандидата — два разных теста</h2>
-          <p className="mb-4 text-sm text-muted">
-            Совпавших формулировок: <b className="text-ink">{d.shared_instances}</b> из {d.tests[0]?.items.length ?? 0}
-            {d.shared_instances > 0 && ' (концептуальные вопросы с выбором — у них немного формулировок, варианты ответов перемешаны; их доля в банке ограничена, а за аномалиями следит мониторинг утечек)'}
-            , общих семейств: {d.shared_families}. Средняя сложность:{' '}
-            {d.tests.map((t) => `${t.label} — ${t.mean_b.toFixed(2)}`).join(', ')}. Информативность в точке порога грейда: {d.tests.map((t) => t.total_information.toFixed(1)).join(' и ')}.
+          <p className="mb-2 text-sm text-muted">
+            Совпавших формулировок: <b className="text-ink">{d.shared_instances}</b> из {d.tests[0]?.items.length ?? 0}, общих семейств: {d.shared_families}.
           </p>
+          <More label="Технические детали" className="mb-4">
+            <p className="text-sm text-muted">
+              Средняя сложность (b): {d.tests.map((t) => `${t.label} — ${t.mean_b.toFixed(2)}`).join(', ')}. Информативность в точке порога грейда: {d.tests.map((t) => t.total_information.toFixed(1)).join(' и ')}.
+              {d.shared_instances > 0 && ' Совпадают концептуальные вопросы с выбором: формулировок у них немного, варианты ответов перемешаны, а их доля в банке ограничена.'}
+            </p>
+          </More>
           <div className="grid gap-6 lg:grid-cols-2">
             {d.tests.map((t) => (
               <Section key={t.label} title={t.label} actions={<span className="text-xs text-muted">{Object.entries(t.skill_mix).map(([k, n]) => `${L.skill(k)} ×${n}`).join(' · ')}</span>}>
@@ -127,7 +130,7 @@ export default function TestDemo() {
                           <span className="flex-1 text-sm">
                             <span className="font-medium">{it.family_title}</span>
                             <span className="block text-xs text-muted">
-                              {it.skill_title} · уровень {it.level} ({LEVEL[it.level]}) · b = {it.difficulty_b}
+                              {it.skill_title} · уровень {it.level} ({LEVEL[it.level]})
                             </span>
                           </span>
                           <ChevronDown className={clsx('h-4 w-4 text-muted transition-transform', open === key && 'rotate-180')} />

@@ -115,7 +115,7 @@ export function Footer() {
               <Link to="/how-it-works" className="hover:text-white">Механика подбора и тестирования</Link>
             </li>
             <li>
-              <Link to="/test-demo" className="hover:text-white">Тест из описания вакансии</Link>
+              <Link to="/test-demo" className="hover:text-white">Демо теста</Link>
             </li>
             <li>
               <a href="/api/docs" className="hover:text-white">API (Swagger)</a>
@@ -124,7 +124,7 @@ export function Footer() {
         </div>
         <div className="text-sm text-steel">
           <div className="mb-2 font-mono text-xs tracking-wider text-fog uppercase">Данные</div>
-          <p>Обработка персональных данных — по 152-ФЗ, с вашего согласия. Контакты кандидата видны работодателю только после принятия приглашения.</p>
+          <p>Обработка персональных данных — по 152-ФЗ, с вашего согласия. Контакты кандидата видны работодателю только после принятия приглашения или отклика.</p>
         </div>
       </div>
     </footer>

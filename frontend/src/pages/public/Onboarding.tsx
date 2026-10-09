@@ -36,7 +36,6 @@ export default function Onboarding() {
   const texts = config?.consent_texts ?? {}
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="mb-1 font-mono text-xs tracking-wider text-brand-500 uppercase">Шаг 1 из 3</div>
       <h1 className="text-3xl font-bold">Кто вы на платформе?</h1>
       <p className="mt-2 text-muted">Роль выбирается один раз. Для другой роли используйте отдельную учётную запись.</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">

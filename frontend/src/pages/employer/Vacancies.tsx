@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Pencil, Plus, Users } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BlueprintBars, Reasons, StatusBadge } from '../../components/domain'
+import { Reasons, StatusBadge } from '../../components/domain'
 import { Badge, EmptyState, ErrorBox, Field, Modal, PageHeader, PageLoader } from '../../components/ui'
 import { api } from '../../lib/api'
 import { APP_STATUS, date, lookup, range, useCatalog } from '../../lib/catalog'
@@ -116,7 +116,7 @@ function ApplicationsModal({ v, onClose }: { v: Vacancy; onClose: () => void }) 
       {!data ? (
         <PageLoader queries={[apps]} />
       ) : data.length === 0 ? (
-        <p className="text-sm text-muted">Откликов пока нет. Главный сценарий — пригласить кандидатов из подборки самостоятельно.</p>
+        <p className="text-sm text-muted">Откликов пока нет.</p>
       ) : (
         <div className="space-y-3">
           {data.map((a) => (
@@ -167,9 +167,8 @@ export default function EmployerVacancies() {
   return (
     <div>
       <PageHeader
-        eyebrow="Классический сценарий"
         title="Вакансии и отклики"
-        subtitle="Опубликованные вакансии видят кандидаты, пока не получили приглашений. Вилка обязательна. Откликнувшийся кандидат сразу открывает вам контакты."
+        subtitle="Вилка обязательна."
         actions={
           <button className="btn-primary" onClick={() => setEdit('new')}>
             <Plus className="h-4 w-4" /> Новая вакансия
@@ -196,10 +195,6 @@ export default function EmployerVacancies() {
                 </button>
               </div>
               <div className="mt-3 font-mono text-lg font-bold text-brand-600">{range(v.salary_from, v.salary_to)}</div>
-              <div className="mt-4">
-                <div className="mb-2 text-xs text-muted">Blueprint теста для вакансии</div>
-                <BlueprintBars blueprint={Object.fromEntries(Object.entries(v.blueprint).slice(0, 5))} label={L.skill} />
-              </div>
               <button className="btn-secondary mt-4 w-full" onClick={() => setApps(v)}>
                 <Users className="h-4 w-4" /> Отклики ({v.applications ?? 0})
               </button>

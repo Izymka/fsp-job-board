@@ -114,7 +114,7 @@ export default function CandidateInvitations() {
   const rows = tab === 'active' ? data.filter((i) => i.status === 'sent' || i.status === 'viewed') : data
   return (
     <div>
-      <PageHeader eyebrow="Входящие" title="Приглашения от работодателей" subtitle="Компания, предложение и зарплата видны сразу. Ваши контакты откроются компании, только если вы примете приглашение." />
+      <PageHeader title="Приглашения от работодателей" />
       <Tabs value={tab} onChange={setTab} items={[{ id: 'active', label: `Ожидают ответа (${data.filter((i) => i.status === 'sent' || i.status === 'viewed').length})` }, { id: 'all', label: `Все (${data.length})` }]} />
       {rows.length === 0 ? (
         <EmptyState icon={<Mail className="h-6 w-6" />} title="Пока нет приглашений" text="Работодатели находят кандидатов в категориях после подтверждения грейда. Поддерживайте профиль актуальным — решайте регулярные задания." />

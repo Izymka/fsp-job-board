@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { AlertCircle, Loader2, X } from 'lucide-react'
+import { AlertCircle, ChevronDown, Loader2, X } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 
 export function Spinner({ className }: { className?: string }) {
@@ -142,6 +142,19 @@ export function Section({ title, children, actions, className }: { title?: React
       )}
       {children}
     </section>
+  )
+}
+
+/** Свёрнутый блок «Подробнее»: второстепенные объяснения не занимают экран. */
+export function More({ label = 'Подробнее', children, className }: { label?: ReactNode; children: ReactNode; className?: string }) {
+  return (
+    <details className={clsx('group', className)}>
+      <summary className="flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700 [&::-webkit-details-marker]:hidden">
+        {label}
+        <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="mt-3">{children}</div>
+    </details>
   )
 }
 

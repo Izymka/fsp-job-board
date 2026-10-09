@@ -68,9 +68,8 @@ export default function CandidateVacancies() {
   return (
     <div>
       <PageHeader
-        eyebrow="Классический сценарий"
         title="Вакансии"
-        subtitle="Пока приглашений нет, можно проявить инициативу. Вакансии отсортированы по соответствию вашему подтверждённому профилю; зарплата указана в каждой."
+        subtitle="Отсортированы по соответствию вашему подтверждённому профилю."
         actions={
           <Link to="/candidate/applications" className="btn-secondary">
             Мои отклики

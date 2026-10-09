@@ -7,7 +7,7 @@ import { api } from '../lib/api'
 import { useAuth, useMe } from '../lib/auth'
 import { proctor, useProctorLive, type CheckResult } from '../lib/proctor/session'
 import type { Me } from '../lib/types'
-import { ErrorBox, Modal, Notice } from './ui'
+import { ErrorBox, Modal, More, Notice } from './ui'
 
 export interface ProctorStart {
   proctored: true
@@ -137,8 +137,11 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
       {stage === 'consent' ? (
         <div className="space-y-4 text-sm">
           <p className="text-ink-soft">
-            Проктор подтверждает работодателю, что тест проходили вы и без посторонней помощи. Камера и микрофон анализируются <b>прямо в браузере</b>: видео и звук не записываются и не передаются. На сервер уходят только счётчики событий (нет лица в кадре, телефон, речь) и числовой отпечаток лица — для сверки с эталоном вашего профиля.
+            Камера и микрофон анализируются <b>прямо в браузере</b>: видео и звук не записываются и не передаются.
           </p>
+          <More label="Что уходит на сервер">
+            <p className="text-ink-soft">Только счётчики событий (нет лица в кадре, телефон, речь) и числовой отпечаток лица — для сверки с эталоном вашего профиля. Работодатель увидит отметку «Тест с проктором».</p>
+          </More>
           <ul className="grid gap-1.5 text-ink-soft sm:grid-cols-2">
             <li className="flex gap-2"><Smartphone className="mt-0.5 h-4 w-4 shrink-0 text-muted" />Телефон в кадре — нарушение</li>
             <li className="flex gap-2"><Users className="mt-0.5 h-4 w-4 shrink-0 text-muted" />В кадре — только вы</li>
@@ -160,7 +163,6 @@ export function ProctorCheckModal({ open, onClose, onReady }: { open: boolean; o
               <span className="mt-1 block text-xs text-muted">{config?.consent_texts.proctoring_photo}</span>
             </span>
           </label>
-          <Notice>Без проктора тест тоже доступен — согласие добровольное. С проктором в карточке будет отметка «Тест с проктором», а в подборе работодателей вы будете стоять заметно выше: результату под наблюдением доверяют больше.</Notice>
           <ErrorBox error={error} />
           <div className="flex justify-end gap-2">
             <button className="btn-secondary" onClick={cancel}>

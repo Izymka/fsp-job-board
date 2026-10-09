@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { History, RotateCcw, SlidersHorizontal, Users } from 'lucide-react'
+import { SlidersHorizontal, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CandidateRow, InviteModal } from '../../components/domain'
 import { Badge, EmptyState, PageHeader, PageLoader, Section, Tabs } from '../../components/ui'
 import { api } from '../../lib/api'
-import { dateTime, lookup, money, pct, range, useCatalog } from '../../lib/catalog'
+import { lookup, money, pct, range, useCatalog } from '../../lib/catalog'
 import type { Filters, GradeId, SearchOut } from '../../lib/types'
 
 function FilterPanel({ s, onApply, pending }: { s: SearchOut; onApply: (f: Filters, note: string) => void; pending: boolean }) {
@@ -99,7 +99,6 @@ export default function SearchView() {
   const [invite, setInvite] = useState<{ id: string; label: string } | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   const apply = useMutation({ mutationFn: (v: { filters: Filters; note: string }) => api.put<SearchOut>(`/api/employer/searches/${id}/filters`, v), onSuccess: (d) => qc.setQueryData(key, d) })
-  const revert = useMutation({ mutationFn: (v: number) => api.post<SearchOut>(`/api/employer/searches/${id}/revert/${v}`), onSuccess: (d) => qc.setQueryData(key, d) })
   const pin = useMutation({
     mutationFn: (v: { cid: string; on: boolean }) => (v.on ? api.put(`/api/employer/searches/${id}/shortlist/${v.cid}`, {}) : api.del(`/api/employer/searches/${id}/shortlist/${v.cid}`)),
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
@@ -110,18 +109,10 @@ export default function SearchView() {
   return (
     <div>
       <PageHeader
-        eyebrow={`Подборка · версия ${s.search.version}`}
         title={s.search.title}
         subtitle={
           <span className="flex flex-wrap items-center gap-1.5">
             <Badge tone="bg-brand-50 text-brand-700">{s.search.category}</Badge>
-            {Object.entries(s.need.skills)
-              .slice(0, 8)
-              .map(([k, v]) => (
-                <Badge key={k} tone={v >= 0.6 ? 'bg-ink text-white' : 'bg-surface text-ink-soft'}>
-                  {k}
-                </Badge>
-              ))}
             <span className="ml-1">{range(s.need.salary_from, s.need.salary_to)}</span>
             {s.need.work_format && <span>· {L.format(s.need.work_format)}</span>}
             {s.need.min_years != null && <span>· {s.need.min_years ? `опыт от ${String(s.need.min_years).replace('.', ',')} г.` : 'можно без опыта'}</span>}
@@ -134,22 +125,17 @@ export default function SearchView() {
         }
       />
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 flex flex-wrap gap-2">
         {s.categories.map((c) => (
-          <div key={`${c.specialization}-${c.grade}`} className={clsx('card p-4', c.relation === 'target' && 'border-brand-500 ring-2 ring-brand-100')}>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-sm font-bold">{c.label}</span>
-              <Badge tone={c.relation === 'target' ? 'bg-brand-500 text-white' : 'bg-surface text-muted'}>{c.relation === 'target' ? 'целевая' : c.relation === 'adjacent' ? 'соседний грейд' : 'смежная'}</Badge>
-            </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="font-mono text-2xl font-bold">{c.total}</span>
-              <span className="text-xs text-muted">кандидатов · {c.with_fsp} с ФСП</span>
-            </div>
-            <div className="mt-1 text-xs text-muted">
-              медиана ожиданий {money(c.salary_median)}
-              {c.in_budget_share != null && ` · ${pct(c.in_budget_share)} в вашей вилке`}
-            </div>
-          </div>
+          <span
+            key={`${c.specialization}-${c.grade}`}
+            title={`${c.with_fsp} с ФСП · медиана ожиданий ${money(c.salary_median)}${c.in_budget_share != null ? ` · ${pct(c.in_budget_share)} в вашей вилке` : ''}`}
+            className={clsx('chip border px-3 py-1.5 text-sm', c.relation === 'target' ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-line text-ink-soft')}
+          >
+            <span className="font-mono font-bold">{c.label}</span>
+            <span className="ml-1.5 font-mono">{c.total}</span>
+            {c.relation !== 'target' && <span className="ml-1.5 text-xs text-muted">{c.relation === 'adjacent' ? 'соседний грейд' : 'смежная'}</span>}
+          </span>
         ))}
       </div>
 
@@ -157,32 +143,6 @@ export default function SearchView() {
         <aside className={clsx('space-y-6', !showFilters && 'hidden lg:block')}>
           <Section title="Уточнить">
             <FilterPanel s={s} pending={apply.isPending} onApply={(filters, note) => apply.mutate({ filters, note })} />
-          </Section>
-          <Section
-            title={
-              <span className="flex items-center gap-2">
-                <History className="h-4 w-4" /> Версии
-              </span>
-            }
-          >
-            <ul className="space-y-2 text-xs">
-              {[...s.versions].reverse().map((v) => (
-                <li key={v.version} className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="font-medium">
-                      v{v.version} {v.version === s.search.version && <span className="text-brand-500">· текущая</span>}
-                    </div>
-                    <div className="text-muted">{v.note || 'без комментария'}</div>
-                    <div className="text-muted">{dateTime(v.created_at)}</div>
-                  </div>
-                  {v.version !== s.search.version && (
-                    <button className="btn-ghost btn-sm" onClick={() => revert.mutate(v.version)} title="Вернуться к этой версии">
-                      <RotateCcw className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
           </Section>
         </aside>
         <div>
@@ -196,13 +156,16 @@ export default function SearchView() {
               ]}
             />
             {filtered && (
-              <span className="text-xs text-muted">
-                Показано {s.filtered_total} из {s.base_total} — исходная подборка сохранена, фильтры можно откатить.
+              <span className="flex items-center gap-2 text-xs text-muted">
+                Показано {s.filtered_total} из {s.base_total}
+                <button className="btn-ghost btn-sm" disabled={apply.isPending} onClick={() => apply.mutate({ filters: {}, note: 'Сброс уточнений' })}>
+                  Сбросить уточнения
+                </button>
               </span>
             )}
           </div>
           {rows.length === 0 ? (
-            <EmptyState icon={<Users className="h-6 w-6" />} title={tab === 'short' ? 'Шорт-лист пуст' : 'Никого не нашлось'} text={tab === 'short' ? 'Закрепляйте кандидатов кнопкой с булавкой.' : 'Ослабьте фильтры или откатитесь к прошлой версии подборки.'} />
+            <EmptyState icon={<Users className="h-6 w-6" />} title={tab === 'short' ? 'Шорт-лист пуст' : 'Никого не нашлось'} text={tab === 'short' ? 'Закрепляйте кандидатов кнопкой с булавкой.' : 'Ослабьте фильтры или сбросьте уточнения.'} />
           ) : (
             <div className="space-y-3">
               {rows.map((r) => (

@@ -4,7 +4,7 @@ import { ArrowRight, Plus } from 'lucide-react'
 import { Link, Navigate } from 'react-router-dom'
 import { EmptyState, PageHeader, PageLoader, Section, Stat } from '../../components/ui'
 import { api } from '../../lib/api'
-import { date, lookup, money, pct, useCatalog } from '../../lib/catalog'
+import { date, lookup, pct, useCatalog } from '../../lib/catalog'
 import type { CategoryCell, Company, Insights, SearchSummary } from '../../lib/types'
 
 export default function EmployerHome() {
@@ -25,18 +25,17 @@ export default function EmployerHome() {
       <PageHeader
         eyebrow={company.data.name}
         title="Найдите кандидата и пригласите сами"
-        subtitle="Кандидаты распределены по категориям по результатам теста. Опишите потребность — получите подборку с объяснением, почему каждый кандидат в ней."
+        subtitle="Опишите потребность — получите подборку с объяснениями."
         actions={
           <Link to="/employer/searches/new" className="btn-primary">
             <Plus className="h-4 w-4" /> Новая подборка
           </Link>
         }
       />
-      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mb-6 grid grid-cols-3 gap-4">
         <Stat label="Кандидатов в базе" value={cells.data.reduce((a, c) => a + c.total, 0)} hint={`${cells.data.reduce((a, c) => a + c.with_fsp, 0)} с достижениями ФСП`} />
         <Stat label="Приглашений отправлено" value={sent} />
         <Stat label="Принимают приглашения" value={pct(ins.data?.acceptance_rate)} />
-        <Stat label="Медиана ответа" value={ins.data?.median_response_hours != null ? `${ins.data.median_response_hours} ч` : '—'} />
       </div>
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <Section title="Категории кандидатов" actions={<span className="text-xs text-muted">клик — банк кандидатов категории</span>}>
@@ -67,7 +66,6 @@ export default function EmployerHome() {
                             title={`${L.spec(s.id)} · ${L.grade(g.id)}: ${v} кандидатов, ${c?.with_fsp ?? 0} с ФСП`}
                           >
                             {v}
-                            {c && c.with_fsp > 0 && <span className="text-[9px] leading-none opacity-80">ФСП {c.with_fsp}</span>}
                           </Link>
                         </td>
                       )
@@ -115,11 +113,6 @@ export default function EmployerHome() {
                   </li>
                 ))}
               </ul>
-              {ins.data.market.map((m) => (
-                <p key={m.category} className="mt-3 text-xs text-muted">
-                  {m.category}: медиана ожиданий {money(m.salary_median)} (25–75%: {money(m.salary_p25)} – {money(m.salary_p75)}), отказов по ЗП — {pct(m.declines_salary_share)}.
-                </p>
-              ))}
             </Section>
           )}
         </div>

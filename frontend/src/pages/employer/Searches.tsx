@@ -13,9 +13,8 @@ export default function Searches() {
   return (
     <div>
       <PageHeader
-        eyebrow="Подборки"
         title="Сохранённые подборки"
-        subtitle="Каждая подборка — описание потребности и версии уточнений. Результаты пересчитываются при открытии: новые кандидаты попадают в выдачу автоматически."
+        subtitle="Подборки пересчитываются при открытии — новые кандидаты попадают в выдачу сами."
         actions={
           <Link to="/employer/searches/new" className="btn-primary">
             <Plus className="h-4 w-4" /> Новая подборка
@@ -31,7 +30,6 @@ export default function Searches() {
               <div className="font-mono font-bold">{s.title}</div>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 <Badge tone="bg-brand-50 text-brand-700">{s.category}</Badge>
-                <Badge>версия {s.version}</Badge>
                 <Badge>шорт-лист {s.shortlist}</Badge>
               </div>
               <div className="mt-2 text-xs text-muted">обновлена {date(s.updated_at)}</div>

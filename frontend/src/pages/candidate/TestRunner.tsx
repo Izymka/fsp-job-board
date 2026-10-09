@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { SkillList } from '../../components/domain'
 import { ProctorDock, Watermark } from '../../components/proctor'
 import { clearScratch, Scratchpad } from '../../components/scratchpad'
-import { Badge, CodeBlock, ErrorBox, Md, Notice, PageLoader, Progress, Section } from '../../components/ui'
+import { Badge, CodeBlock, ErrorBox, Md, More, Notice, PageLoader, Progress, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { useMe } from '../../lib/auth'
 import { detectEnv, enterFullscreen, exitFullscreen, isDesktop, useFullscreenGuard } from '../../lib/environment'
@@ -197,11 +197,9 @@ function ScenarioResult({ r }: { r: AttemptResult }) {
     <Section title={`Практический кейс: ${sc.title}`}>
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone={SCORE_TONE[sc.category]}>{sc.category_title}</Badge>
-        <span className="text-xs text-muted">
-          {sc.method === 'llm' ? 'оценено по рубрике' : 'предварительная автоматическая оценка по рубрике'} · тест знаний: {Math.round((r.knowledge_p_claimed ?? r.p_claimed) * 100)}% → с кейсом: {Math.round(r.p_claimed * 100)}%
-        </span>
       </div>
-      <ul className="mt-4 space-y-2.5">
+      <More label="Оценка по критериям" className="mt-4">
+      <ul className="space-y-2.5" title="0 — не раскрыто, 1 — в общих словах, 2 — на уровне грейда, 3 — сверх уровня">
         {sc.criteria.map((c) => (
           <li key={c.id} className="flex items-start gap-3 text-sm">
             <span className={clsx('mt-0.5 w-10 shrink-0 rounded-md py-0.5 text-center font-mono text-xs font-bold', SCORE_TONE[c.score])}>{c.score}/3</span>
@@ -221,7 +219,7 @@ function ScenarioResult({ r }: { r: AttemptResult }) {
           </li>
         )}
       </ul>
-      <p className="hint mt-3">0 — не раскрыто, 1 — в общих словах, 2 — на уровне грейда, 3 — сверх уровня. Кейс учитывается в общей оценке вместе с тестом знаний.</p>
+      </More>
     </Section>
   )
 }
@@ -232,7 +230,7 @@ function ProctorNote({ r }: { r: AttemptResult }) {
   if (pr.status === 'verified')
     return (
       <p className="flex items-center gap-1.5 text-xs text-ok-600">
-        <ShieldCheck className="h-3.5 w-3.5" /> Тест пройден с цифровым проктором{pr.identity === 'enrolled' ? ' — эталон лица создан' : pr.identity === 'match' ? ', лицо совпало с эталоном профиля' : ''}.
+        <ShieldCheck className="h-3.5 w-3.5" /> Тест пройден с цифровым проктором{pr.identity === 'match' ? ', лицо совпало с эталоном профиля' : ''}.
       </p>
     )
   return <p className="text-xs text-muted">Проктор был прерван: камера или микрофон отключались дольше 30 секунд — отметка «Тест с проктором» не ставится.</p>
@@ -301,7 +299,7 @@ function Result({ a }: { a: Attempt }) {
             {ok ? <PartyPopper className="h-6 w-6" /> : <Flag className="h-6 w-6" />}
           </div>
           <div>
-            <div className="text-xs tracking-wider text-muted uppercase">Результат теста · {r.n_items} заданий</div>
+            <div className="text-xs tracking-wider text-muted uppercase">Результат теста</div>
             <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{ok ? `Грейд ${L.grade(a.grade)} подтверждён` : `${L.grade(a.grade)} пока не подтверждён`}</h1>
             <p className="mt-1 text-sm text-muted">{ok ? `Ваша категория: ${L.spec(a.specialization)} · ${L.grade(a.grade)}. Работодатели уже могут вас найти.` : 'Грейд не понижается. Выберите, как продолжить.'}</p>
           </div>
@@ -335,7 +333,6 @@ function Result({ a }: { a: Attempt }) {
       <ScenarioResult r={r} />
       <Section title="Подоценки навыков">
         <SkillList scores={Object.fromEntries(Object.entries(r.skills).map(([k, v]) => [k, { ...v, title: '' }]))} />
-        <p className="hint mt-3">Подтверждение навыка учитывает и общий уровень: при малом числе заданий оценка навыка осторожно «сжимается» к общей — так статус не скачет от случайностей.</p>
       </Section>
     </div>
   )
@@ -522,13 +519,13 @@ export default function TestRunner() {
         <>
           <Progress value={a.answered / a.max_items} />
           <p className="mt-1.5 text-xs text-muted">
-            Отвечено {a.answered}. Тест адаптивный: он закончится, как только результат станет надёжным (от {a.min_items} до {a.max_items} заданий).
+            Отвечено {a.answered}. Тест закончится, как только результат станет надёжным.
             {a.has_scenario && ' Затем — практический кейс.'}
           </p>
         </>
       ) : item.stage === 'scenario' ? (
         <Notice>
-          Задача уровня вашего грейда, как в реальной работе. Важны ход мысли, конкретика и компромиссы, а не объём. После ответа будет уточняющий вопрос по вашему решению — на него 2 минуты.
+          Практический кейс: важны ход мысли и компромиссы, а не объём. Затем — уточняющий вопрос (2 мин).
         </Notice>
       ) : (
         <Notice tone="warn">Ответьте своими словами: вопрос задан по вашему решению. На ответ — 2 минуты.</Notice>
@@ -537,7 +534,7 @@ export default function TestRunner() {
         <div className="mt-4 flex items-start gap-3 rounded-xl border border-warn-600/30 bg-warn-50 px-4 py-3 text-sm text-warn-600" role="status">
           <Clock className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
-            Рекомендуемое время вышло — ничего страшного, спокойно закончите ответ. Он будет засчитан по существу, а задание отмечено как решённое с превышением времени.
+            Рекомендуемое время вышло — ответ всё равно засчитаем.
           </div>
         </div>
       )}
@@ -573,9 +570,6 @@ export default function TestRunner() {
         </div>
       </form>
       <Scratchpad attemptId={a.id} onPaste={guard.onPaste} onCopied={guard.markCopied} />
-      <p className="mt-3 text-center text-xs text-muted">
-        Копирование заданий и вставка текста извне отключены; из черновика в ответ копировать можно. Ручка и лист для расчётов разрешены. Уход со страницы теста дольше 2 секунд фиксируется. Задание помечено кодом вашей попытки.
-      </p>
     </div>
   )
 }

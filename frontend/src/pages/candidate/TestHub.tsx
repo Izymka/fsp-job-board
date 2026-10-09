@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { AlertTriangle, Clock, Lock, Play, ShieldCheck } from 'lucide-react'
+import { AlertTriangle, Lock, Play, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BlueprintBars, StatusBadge } from '../../components/domain'
 import { ProctorCheckModal, type ProctorStart } from '../../components/proctor'
-import { Badge, EmptyState, ErrorBox, Modal, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
+import { Badge, EmptyState, ErrorBox, Modal, More, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { date, dateTime, lookup, useCatalog } from '../../lib/catalog'
 import { detectEnv, enterFullscreen, isDesktop, screenExtended } from '../../lib/environment'
@@ -19,7 +19,6 @@ const ATTEMPT_STATUS = {
   abandoned: { label: 'Прервана', tone: 'bg-surface text-muted' },
   voided: { label: 'Аннулирована', tone: 'bg-accent-50 text-accent-600' },
 }
-const KIND = { initial: 'первичный', upgrade: 'повышение', downgrade: 'уровень ниже', refresh: 'обновление результата' } as Record<string, string>
 
 export default function TestHub() {
   const catalog = useCatalog()
@@ -61,12 +60,11 @@ export default function TestHub() {
   return (
     <div>
       <PageHeader
-        eyebrow="Шаг 3 из 3 · Тестирование"
         title={e.confirmed_grade ? `${L.spec(e.specialization)} · ${L.grade(e.confirmed_grade)}` : 'Тест на заявленный грейд'}
         subtitle={
           e.confirmed_grade
-            ? `Грейд подтверждён ${date(e.confirmed_at)}. Можно попробовать подтвердить уровень выше — по правилам смены грейда.`
-            : `Специализация: ${spec?.title}. Заявленный грейд: ${L.grade(e.claimed_grade)}. Тест займёт 20–30 минут: 10–25 заданий, подобранных под ваши ответы.`
+            ? `Грейд подтверждён ${date(e.confirmed_at)}. Можно подтвердить уровень выше.`
+            : `${spec?.title} · заявлено ${L.grade(e.claimed_grade)}. Около 30–40 минут, задания подстраиваются под ваши ответы.`
         }
       />
       {e.in_progress && (
@@ -98,7 +96,7 @@ export default function TestHub() {
                   </div>
                   {o.allowed ? (
                     <button className={clsx('mt-3 w-full', recommended ? 'btn-primary' : 'btn-secondary')} disabled={start.isPending || !!e.in_progress} onClick={() => setLaunchFor(o.grade)}>
-                      <Play className="h-4 w-4" /> Начать ({KIND[o.kind] ?? o.kind})
+                      <Play className="h-4 w-4" /> Начать
                     </button>
                   ) : (
                     <div className="mt-3 flex items-start gap-2 text-xs text-muted">
@@ -136,8 +134,11 @@ export default function TestHub() {
             }}
           />
         </Section>
-        <div className="space-y-6">
-          <Section title="Правила">
+        <Section title="О тесте">
+          <p className="text-sm text-ink-soft">
+            Проверяем ядро специализации и только заявленный стек. Не подтвердили — грейд не понизим. У заданий есть рекомендуемое время; уходы со страницы на трёх заданиях аннулируют попытку.
+          </p>
+          <More label="Правила" className="mt-4">
             <ul className="space-y-2 text-sm text-ink-soft">
               {e.rules.map((r) => (
                 <li key={r} className="flex gap-2">
@@ -146,28 +147,23 @@ export default function TestHub() {
                 </li>
               ))}
             </ul>
-          </Section>
+          </More>
           {bp && (
-            <Section title="Что проверяет тест">
-              <div className="mb-2 text-xs font-medium text-muted">Ядро специализации — общее для всех в категории</div>
+            <More label="Что проверяет тест" className="mt-3">
+              <div className="mb-2 text-xs font-medium text-muted">Ядро специализации</div>
               <BlueprintBars blueprint={pick(bp.core)} label={L.skill} max={bpMax} />
               {bp.modules.length > 0 && (
                 <>
-                  <div className="mt-4 mb-2 text-xs font-medium text-muted">Модули по направлению и стеку</div>
+                  <div className="mt-4 mb-2 text-xs font-medium text-muted">Модули по вашему стеку</div>
                   <BlueprintBars blueprint={pick(bp.modules.map((m) => m.skill))} label={L.skill} max={bpMax} />
-                  <p className="hint mt-2">
-                    {bp.modules.map((m) => `${L.skill(m.skill)} — ${m.techs.join(', ')}`).join('; ')}
-                  </p>
                 </>
               )}
               <p className="hint mt-3">
-                Технологии, которых нет в вашем стеке, в тест не попадают.
-                {bp.untested.length > 0 && ` Без отдельных заданий: ${bp.untested.join(', ')} — вместо них ничего не подставляется, в профиле они остаются заявленными.`}{' '}
                 Стек можно изменить в <Link to="/candidate/survey" className="link">опросе</Link>.
               </p>
-            </Section>
+            </More>
           )}
-        </div>
+        </Section>
       </div>
 
       {hist.data && hist.data.length > 0 && (
@@ -178,8 +174,6 @@ export default function TestHub() {
                 <tr>
                   <th className="py-2 pr-3 font-medium">Дата</th>
                   <th className="py-2 pr-3 font-medium">Грейд</th>
-                  <th className="py-2 pr-3 font-medium">Тип</th>
-                  <th className="py-2 pr-3 font-medium">Заданий</th>
                   <th className="py-2 pr-3 font-medium">Результат</th>
                   <th />
                 </tr>
@@ -189,8 +183,6 @@ export default function TestHub() {
                   <tr key={a.id}>
                     <td className="py-2.5 pr-3 whitespace-nowrap">{dateTime(a.started_at)}</td>
                     <td className="py-2.5 pr-3 font-mono font-semibold">{L.grade(a.grade)}</td>
-                    <td className="py-2.5 pr-3 text-muted">{KIND[a.kind] ?? a.kind}</td>
-                    <td className="py-2.5 pr-3">{a.result?.n_items ?? a.answered}</td>
                     <td className="py-2.5 pr-3">
                       <StatusBadge status={a.status} map={ATTEMPT_STATUS} />
                     </td>
@@ -206,9 +198,6 @@ export default function TestHub() {
           </div>
         </Section>
       )}
-      <p className="mt-4 flex items-center gap-1.5 text-xs text-muted">
-        <Clock className="h-3.5 w-3.5" /> У каждого задания есть рекомендуемое время. Не успели — ответьте позже: ответ засчитается, а задание будет отмечено «с превышением времени». Уход со страницы теста фиксируется: уходы на трёх заданиях аннулируют попытку.
-      </p>
     </div>
   )
 }
@@ -237,8 +226,7 @@ function LaunchModal({ grade, label, onClose, onStart }: { grade: GradeId | null
         <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-warn-600/30 bg-warn-50 p-4 text-sm text-warn-600">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
-            <b>Без проктора вы заметно потеряете в выдаче.</b> Результату без наблюдения работодатели доверяют меньше: итоговый скор профиля в поиске снижается на 40%,
-            и кандидаты с тестом под проктором — даже с замечаниями — будут стоять выше вас. Работодатель увидит пометку «Тест без проктора».
+            <b>Без проктора вы будете ниже в выдаче.</b> При сопоставимом соответствии вакансии кандидаты с проктором стоят выше. Работодатель увидит пометку «Тест без проктора».
           </span>
         </div>
       )}

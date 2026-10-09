@@ -32,7 +32,7 @@ export default function EmployerCompany() {
   const set = (k: keyof Form) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader eyebrow={data ? 'Компания' : 'Шаг 2 из 2'} title="Профиль компании" subtitle="Кандидат видит компанию в приглашении: название, направление деятельности и описание помогают принять решение." />
+      <PageHeader title="Профиль компании" subtitle="Кандидат видит эти данные в приглашении." />
       <form
         className="space-y-6"
         onSubmit={(e) => {
@@ -81,9 +81,9 @@ export default function EmployerCompany() {
             </Field>
           </div>
         </Section>
-        <Section title="Дополнительно">
+        <Section title="Интеграции">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="ИНН" hint="Задел для верификации работодателя (вне MVP)">
+            <Field label="ИНН" hint="Для будущей верификации работодателя">
               <input className="input" value={f.inn} onChange={set('inn')} pattern="\d{10}(\d{2})?" />
             </Field>
             <Field label="Webhook для ATS" hint="POST-событие при принятии приглашения (JSON с контактами кандидата)">

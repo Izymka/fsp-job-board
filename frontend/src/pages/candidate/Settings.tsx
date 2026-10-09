@@ -4,7 +4,7 @@ import { Link2, RefreshCw, Unlink } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { FspList } from '../../components/domain'
-import { ErrorBox, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
+import { ErrorBox, More, Notice, PageHeader, PageLoader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
 import { useAuth, useMe } from '../../lib/auth'
 import { date, dateTime, useCatalog } from '../../lib/catalog'
@@ -63,7 +63,7 @@ export default function CandidateSettings() {
   if (!p || !cat || !me) return <PageLoader queries={[profile, catalog, meQ]} />
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <PageHeader eyebrow="Настройки" title="Приватность, ФСП ID и согласия" />
+      <PageHeader title="Приватность, ФСП ID и согласия" />
       {fspMsg && <Notice tone={fspMsg.tone}>{fspMsg.text}</Notice>}
 
       <Section title="ФСП ID">
@@ -90,7 +90,7 @@ export default function CandidateSettings() {
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm text-muted">Войдите в ФСП ID — платформа получит ваш идентификатор участника и подтянет результаты соревнований из реестра ФСП. Если истории нет — ничего страшного: профиль ранжируется по тесту.</p>
+            <p className="text-sm text-muted">Подтянем результаты соревнований из реестра ФСП. Нет истории — не страшно: профиль ранжируется по тесту.</p>
             {config?.mode === 'dev' && (
               <div className="flex items-center gap-2">
                 <input className="input w-44 font-mono" value={demoId} onChange={(e) => setDemoId(e.target.value)} />
@@ -106,11 +106,13 @@ export default function CandidateSettings() {
       </Section>
 
       <Section title="Что видит работодатель">
-        <ul className="mb-4 space-y-1 text-sm text-muted">
-          <li>• До контакта: категория, навыки и их подтверждение, стек, опыт, город, формат — без ФИО и контактов.</li>
-          <li>• После принятия приглашения или вашего отклика: ФИО и контакты.</li>
-          <li>• Ожидания по зарплате не раскрываются — работодатель видит только, укладывается ли его вилка.</li>
-        </ul>
+        <More label="Что видно до и после контакта" className="mb-4">
+          <ul className="space-y-1 text-sm text-muted">
+            <li>• До контакта: категория, навыки, стек, опыт, город, формат — без ФИО и контактов.</li>
+            <li>• После принятия приглашения или вашего отклика: ФИО и контакты.</li>
+            <li>• Ожидания по зарплате скрыты — работодатель видит только, укладывается ли его вилка.</li>
+          </ul>
+        </More>
         <div className="space-y-4">
           <label className="flex items-center gap-3 text-sm">
             <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={showFsp} onChange={(e) => setShowFsp(e.target.checked)} />
