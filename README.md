@@ -42,11 +42,11 @@ make up                 # = docker compose up -d --build + HTTP для адми�
 
 | Адрес | Что там |
 |---|---|
-| http://localhost | Платформа |
-| http://localhost/api/docs | Swagger UI (OpenAPI) |
-| http://localhost:8080 | Keycloak (админ — из `.env`, по умолчанию `admin` / `admin`) |
-| http://localhost:8025 | Mailpit — письма подтверждения email и уведомления |
-| http://localhost:8090/docs | Реестр ФСП (имитация) |
+| http://localhost:18088 | Платформа |
+| http://localhost:18088/api/docs | Swagger UI (OpenAPI) |
+| http://localhost:18080 | Keycloak (админ — из `.env`, по умолчанию `admin` / `admin`) |
+| http://localhost:18025 | Mailpit — письма подтверждения email и уведомления |
+| http://localhost:18090/docs | Реестр ФСП (имитация) |
 
 При старте бэкенд применяет миграции и загружает демо-данные: ~300 кандидатов, прошедших симулированный тест, 7 компаний с вакансиями, регулярные задания, историю приглашений.
 
@@ -66,7 +66,7 @@ make up                 # = docker compose up -d --build + HTTP для адми�
 
 ## Локальный запуск без Docker
 
-Требования: Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 20.19+ или 22.12+.
+Требования: Python 3.12+ (в Docker — 3.14), [uv](https://docs.astral.sh/uv/), Node.js 22.12+ (в Docker — 24 LTS).
 
 ```bash
 uv sync --all-packages   # Python-зависимости всех модулей
@@ -104,4 +104,4 @@ fsp-registry-mock/  имитация реестра ФСП с предложен
 keycloak/           realm-ы Keycloak: платформа (fsp-jobs) и имитация ФСП ID (fsp-id)
 ```
 
-Стек: Python 3.12, FastAPI, SQLAlchemy 2, PostgreSQL 16, Keycloak 26, React 19, TypeScript, Tailwind CSS 4. ML работает локально на CPU: по умолчанию персональные данные кандидатов не передаются во внешние сервисы (152-ФЗ); Yandex AI Studio (контур РФ) — только опционально, как запасной разбор опыта в резюме (`LLM_ENABLED=1`).
+Стек: Python 3.14, FastAPI, SQLAlchemy 2, PostgreSQL 18, Keycloak 26, React 19, TypeScript, Tailwind CSS 4. ML работает локально на CPU: по умолчанию персональные данные кандидатов не передаются во внешние сервисы (152-ФЗ); Yandex AI Studio (контур РФ) — только опционально, как запасной разбор опыта в резюме (`LLM_ENABLED=1`).

@@ -1,7 +1,7 @@
 .PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick docs seed reset dev dev-backend dev-registry dev-frontend
 
 help:
-	@echo "make up            — весь стек в Docker (http://localhost)"
+	@echo "make up            — весь стек в Docker (http://localhost:18088)"
 	@echo "make test          — тесты ML-ядра и API"
 	@echo "make validate      — процедура валидации (отчёт в docs/)"
 	@echo "make docs          — пересборка PDF документации (нужны исходники docs/)"

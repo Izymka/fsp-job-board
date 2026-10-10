@@ -22,7 +22,8 @@
       "directAccessGrantsEnabled": false,
       "redirectUris": [
         "http://localhost:8000/api/fsp/link/callback",
-        "http://localhost/api/fsp/link/callback"
+        "http://localhost/api/fsp/link/callback",
+        "http://localhost:18088/api/fsp/link/callback"
       ],
       "webOrigins": [
         "+"
