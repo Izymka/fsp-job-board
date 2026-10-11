@@ -1,7 +1,8 @@
-.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo down logs ps test lint fmt validate validate-quick docs seed reset dev dev-backend dev-registry dev-frontend
+.PHONY: bench-build bench-estimate bench-judge bench-label bench-eval help up kc-demo kc-public down logs ps test lint fmt validate validate-quick docs seed reset dev dev-backend dev-registry dev-frontend
 
 help:
 	@echo "make up            — весь стек в Docker (http://localhost:18088)"
+	@echo "make kc-public     — добавить PUBLIC_URL (по умолчанию https://fsp.prowebcraft.ru) в redirect URI Keycloak"
 	@echo "make test          — тесты ML-ядра и API"
 	@echo "make validate      — процедура валидации (отчёт в docs/)"
 	@echo "make docs          — пересборка PDF документации (нужны исходники docs/)"
@@ -18,6 +19,12 @@ up:
 kc-demo:
 	@until docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user $${KEYCLOAK_ADMIN:-admin} --password $${KEYCLOAK_ADMIN_PASSWORD:-admin} >/dev/null 2>&1; do sleep 3; done
 	docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh update realms/master -s sslRequired=NONE
+
+# Публичный стенд: домен фронтенда в redirect URI клиентов уже импортированных realm (идемпотентно)
+PUBLIC_URL ?= https://fsp.prowebcraft.ru
+kc-public:
+	@until docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user $${KEYCLOAK_ADMIN:-admin} --password $${KEYCLOAK_ADMIN_PASSWORD:-admin} >/dev/null 2>&1; do sleep 3; done
+	python3 infra/kc_public_url.py $(PUBLIC_URL)
 
 down:
 	docker compose down

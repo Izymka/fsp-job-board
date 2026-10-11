@@ -40,6 +40,7 @@
       "redirectUris": [
         "http://localhost/*",
         "http://localhost:18088/*",
+        "https://fsp.prowebcraft.ru/*",
         "http://localhost:5173/*",
         "http://localhost:3000/*",
         "http://127.0.0.1/*",

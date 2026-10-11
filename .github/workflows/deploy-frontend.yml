@@ -1,0 +1,145 @@
+name: Build and deploy frontend
+
+# Фронтенд публикуется отдельно (https://fsp.prowebcraft.ru): nginx-образ со SPA проксирует /api/ и /auth/
+# на стенд с бэкендом и Keycloak по внешнему адресу (vars.BACKEND_URL). TLS — на прокси хостинга.
+
+on:
+  push:
+    branches: [main]
+    paths: ['frontend/**', '.github/workflows/deploy-frontend.yml']
+  pull_request:
+    paths: ['frontend/**', '.github/workflows/deploy-frontend.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.image.outputs.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Image name
+        id: image
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: echo "name=ghcr.io/${REPOSITORY,,}-web:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v3
+      - name: Build nginx image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          load: true
+          tags: ${{ steps.image.outputs.name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Smoke test SPA and backend proxy
+        env:
+          IMAGE: ${{ steps.image.outputs.name }}
+        run: frontend/scripts/smoke.sh "$IMAGE"
+      - name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push tested image
+        if: github.event_name != 'pull_request'
+        env:
+          IMAGE: ${{ steps.image.outputs.name }}
+        run: docker push "$IMAGE"
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    env:
+      IMAGE: ${{ needs.build.outputs.image }}
+      REGISTRY_USER: ${{ github.actor }}
+      REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      WEB_PORT: ${{ vars.WEB_PORT || '5100' }}
+      # Внешний адрес стенда (nginx фронтенда стека, порт HTTP_PORT), например http://203.0.113.10:18088
+      BACKEND_URL: ${{ vars.BACKEND_URL }}
+      # Keycloak; по умолчанию — тот же стенд под /auth
+      KEYCLOAK_URL: ${{ vars.KEYCLOAK_URL }}
+    steps:
+      - name: Validate backend URLs
+        run: |
+          node --input-type=module -e '
+            const check = (name, value, allowPath) => {
+              const url = new URL(value);
+              if (!["http:", "https:"].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
+                throw new Error(`${name} must be an HTTP(S) URL without credentials, query or fragment`);
+              }
+              if (!allowPath && url.pathname !== "/") throw new Error(`${name} must not contain a path`);
+            };
+            check("BACKEND_URL", process.env.BACKEND_URL, false);
+            if (process.env.KEYCLOAK_URL) check("KEYCLOAK_URL", process.env.KEYCLOAK_URL, true);
+          '
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ vars.SSH_PORT || '22' }}
+          fingerprint: ${{ secrets.SSH_HOST_FINGERPRINT }}
+          envs: IMAGE,REGISTRY_USER,REGISTRY_PASSWORD,WEB_PORT,BACKEND_URL,KEYCLOAK_URL
+          command_timeout: 10m
+          script: |
+            set -eu
+            case "$WEB_PORT" in ''|*[!0-9]*) echo 'Invalid WEB_PORT'; exit 1;; esac
+            test "$WEB_PORT" -ge 1 && test "$WEB_PORT" -le 65535
+            test -n "$BACKEND_URL"
+            BACKEND_URL=${BACKEND_URL%/}
+            KEYCLOAK_URL=${KEYCLOAK_URL:-$BACKEND_URL/auth}
+            KEYCLOAK_URL=${KEYCLOAK_URL%/}
+            command -v curl >/dev/null
+            DOCKER_CONFIG=$(mktemp -d)
+            export DOCKER_CONFIG
+            trap 'rm -rf "$DOCKER_CONFIG"' EXIT
+            printf '%s' "$REGISTRY_PASSWORD" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+            docker pull "$IMAGE"
+            name=fsp-job-board-web
+            previous=fsp-job-board-web-previous
+            docker rm -f "$previous" 2>/dev/null || true
+            if docker container inspect "$name" >/dev/null 2>&1; then
+              docker stop "$name"
+              docker rename "$name" "$previous"
+            fi
+            if docker run -d --name "$name" --restart unless-stopped \
+              -e BACKEND_URL="$BACKEND_URL" -e KEYCLOAK_URL="$KEYCLOAK_URL" \
+              -p "127.0.0.1:$WEB_PORT:80" "$IMAGE"; then
+              attempt=0
+              while [ "$attempt" -lt 30 ]; do
+                if curl --fail --silent --max-time 3 \
+                  "http://127.0.0.1:$WEB_PORT/" -o /dev/null; then
+                  docker rm "$previous" 2>/dev/null || true
+                  # бэкенд живёт на другой машине: его недоступность не откатывает фронтенд, но видна в логе
+                  curl --fail --silent --max-time 10 "http://127.0.0.1:$WEB_PORT/api/health" -o /dev/null \
+                    || echo "WARNING: backend is not reachable via $BACKEND_URL"
+                  exit 0
+                fi
+                attempt=$((attempt + 1))
+                sleep 2
+              done
+            fi
+            docker logs "$name" 2>/dev/null || true
+            docker rm -f "$name" 2>/dev/null || true
+            if docker container inspect "$previous" >/dev/null 2>&1; then
+              docker rename "$previous" "$name"
+              docker start "$name"
+            fi
+            exit 1

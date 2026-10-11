@@ -67,6 +67,8 @@ services:
       # Токены выпускаются с публичным issuer; бэкенд ходит во внутреннюю сеть (backchannel)
       KC_HOSTNAME: ${KEYCLOAK_PUBLIC_URL:-http://localhost:18080}
       KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+      # За прокси фронтенда (/auth/) — схема и хост из X-Forwarded-*; прямые запросы на :18080 работают как раньше
+      KC_PROXY_HEADERS: xforwarded
       KC_HTTP_ENABLED: "true"
       KC_HEALTH_ENABLED: "true"
       JAVA_OPTS_KC_HEAP: "-XX:MaxRAMPercentage=65"
@@ -119,10 +121,15 @@ services:
 
   frontend:
     build: ./frontend
+    environment:
+      # Куда nginx фронтенда проксирует /api/ и /auth/ (см. frontend/nginx.conf.template)
+      BACKEND_URL: http://backend:8000
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
       - "${HTTP_PORT:-18088}:80"
     depends_on:
       - backend
+      - keycloak
     mem_limit: 64m
     restart: unless-stopped
 
