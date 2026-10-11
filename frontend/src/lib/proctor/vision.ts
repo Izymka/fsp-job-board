@@ -51,7 +51,8 @@ export function loadHuman(): Promise<Human> {
 
 export interface Frame {
   faces: number
-  phone: boolean
+  phone: boolean // телефон в кадре — решение по одному кадру
+  phoneHint: boolean // ниже порога, но похоже на телефон: следующий кадр проверить раньше
   lookingAway: boolean // вбок или вверх: второй экран, подсказчик
   lookingDown: boolean // вниз: лист с расчётами, клавиатура — разрешено, только счётчик
   embedding?: number[]
@@ -60,8 +61,13 @@ export interface Frame {
   live?: number
 }
 
-const PHONE_SCORE = 0.35 // centernet (Human)
-const PHONE_SCORE_EFFDET = 0.5 // EfficientDet-Lite0: ниже — ложные срабатывания на портретах
+// Телефон: centernet (Human) и EfficientDet-Lite0 — свои шкалы уверенности, свои пороги.
+const PHONE_SCORE = 0.35
+const PHONE_SCORE_EFFDET = 0.4
+const PHONE_HINT = 0.2 // для обоих детекторов
+// Второй проход EfficientDet по области вокруг лица: телефон у лица в ней крупнее, чем во всём кадре
+const ROI_SCALE = 3 // сторона квадрата — во столько раз больше лица
+const ROI_MAX_SHARE = 0.8 // область почти во весь кадр ничего не даёт — второй проход пропускается
 // Отпечаток лица берётся только с качественного кадра — иначе тот же человек «не совпадает»:
 // * лицо крупное (на снимках ниже ~150 px сходство разных людей завышено, а одного — занижено);
 // * детектор уверен в лице;
@@ -84,7 +90,8 @@ export function readFrame(r: Result): Frame {
   const good = faces.length === 1 && main.box[2] >= EMBED_MIN_FACE_PX && (main.faceScore ?? main.score) >= EMBED_MIN_SCORE && frontal
   return {
     faces: faces.length,
-    phone: r.object.some((o) => o.label === 'cell phone' && o.score >= PHONE_SCORE),
+    phone: centernetPhone(r) >= PHONE_SCORE,
+    phoneHint: centernetPhone(r) >= PHONE_HINT,
     lookingAway: !!a && (Math.abs(a.yaw) > YAW_AWAY || (Math.abs(a.pitch) > PITCH_AWAY && !down)),
     lookingDown: down,
     embedding: good && main.embedding?.length ? Array.from(main.embedding) : undefined,
@@ -94,13 +101,39 @@ export function readFrame(r: Result): Frame {
   }
 }
 
-export async function detect(h: Human, video: HTMLVideoElement, opts: { embed?: boolean; liveness?: boolean } = {}): Promise<Frame> {
+export async function detect(h: Human, video: HTMLVideoElement | HTMLCanvasElement, opts: { embed?: boolean; liveness?: boolean } = {}): Promise<Frame> {
   const r = await h.detect(video, {
     face: { description: { enabled: !!opts.embed }, antispoof: { enabled: !!opts.liveness }, liveness: { enabled: !!opts.liveness } },
   } as Partial<Config>)
   const fr = readFrame(r)
-  if (!fr.phone && phoneDetector) fr.phone = phoneScore(phoneDetector, video) >= PHONE_SCORE_EFFDET
+  if (!fr.phone && phoneDetector) {
+    let s = phoneScore(phoneDetector, video)
+    const roi = s < PHONE_SCORE_EFFDET ? faceRoi(r, video) : null
+    if (roi) s = Math.max(s, phoneScore(phoneDetector, roi))
+    fr.phone = s >= PHONE_SCORE_EFFDET
+    fr.phoneHint ||= s >= PHONE_HINT
+  }
   return fr
+}
+
+export const centernetPhone = (r: Result) => Math.max(0, ...r.object.filter((o) => o.label === 'cell phone').map((o) => o.score))
+
+const roiCanvas = document.createElement('canvas')
+
+/** Квадрат вокруг лица (с запасом вниз — телефон держат у лица и ниже); null — нет лица или область почти весь кадр. */
+export function faceRoi(r: Result, src: HTMLVideoElement | HTMLCanvasElement): HTMLCanvasElement | null {
+  const face = r.face.find((f) => f.score >= 0.5)
+  const W = src instanceof HTMLVideoElement ? src.videoWidth : src.width
+  const H = src instanceof HTMLVideoElement ? src.videoHeight : src.height
+  if (!face || !W || !H) return null
+  const [x, y, w, h] = face.box
+  const side = Math.min(Math.max(w, h) * ROI_SCALE, W, H)
+  if (side > ROI_MAX_SHARE * Math.min(W, H)) return null
+  const sx = Math.min(Math.max(x + w / 2 - side / 2, 0), W - side)
+  const sy = Math.min(Math.max(y + h * 0.75 - side / 2, 0), H - side)
+  roiCanvas.width = roiCanvas.height = Math.round(Math.min(side, 480))
+  roiCanvas.getContext('2d')?.drawImage(src, sx, sy, side, side, 0, 0, roiCanvas.width, roiCanvas.height)
+  return roiCanvas
 }
 
 export function similarity(h: Human, a: number[], b: number[]): number {

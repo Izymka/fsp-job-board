@@ -45,6 +45,7 @@ const ZERO: ProctorCounters = { no_face_ms: 0, multi_face_ms: 0, phone_hits: 0, 
 const IDLE: ProctorLive = { active: false, faces: 0, phone: false, lookingAway: false, speaking: false, camOk: false, micOk: false, mismatch: false, level: 0, noFaceMs: 0 }
 
 const VISION_MS = 500
+const QUICK_MS = 150 // похоже на телефон, но ниже порога — следующий кадр раньше
 const AUDIO_MS = 100
 const EMBED_EVERY_MS = 10_000
 const SERVER_EVERY_MS = 60_000 // эмбеддинг на сервер — примерно раз в минуту, в случайный момент
@@ -80,12 +81,13 @@ class ProctorSession {
   private listeners = new Set<() => void>()
   private audioTimer: number | null = null
   private visionTimer: number | null = null
+  private quickTimer: number | null = null
   private busy = false
   private lastVision = 0
   private lastEmbedAt = 0
   private fresh: { v: number[]; at: number } | null = null
   private nextServerAt = 0
-  private phoneRun = 0
+  private phoneOn = false
   private phoneOff = 0
   private noFace = 0
 
@@ -187,7 +189,8 @@ class ProctorSession {
     this.ref = ref
     this.badRun = 0
     this.counters = { ...ZERO, cam_lost_ms: lostBeforeMs }
-    this.phoneRun = this.phoneOff = 0
+    this.phoneOn = false
+    this.phoneOff = 0
     this.fresh = ref.length ? { v: ref[ref.length - 1], at: performance.now() } : null
     this.nextServerAt = performance.now() + SERVER_EVERY_MS * (0.5 + Math.random())
     this.lastVision = performance.now()
@@ -203,7 +206,7 @@ class ProctorSession {
 
   /** Новое задание — новые счётчики. Телефон, который остаётся в кадре, засчитывается и новому заданию. */
   resetItem() {
-    this.counters = { ...ZERO, phone_hits: this.phoneRun >= 2 ? 1 : 0 }
+    this.counters = { ...ZERO, phone_hits: this.phoneOn ? 1 : 0 }
   }
 
   /** Счётчики для сервера: интервалы копятся из performance.now() (дробные мс), а API ждёт целые. */
@@ -223,6 +226,7 @@ class ProctorSession {
   pause() {
     if (this.visionTimer != null) clearInterval(this.visionTimer)
     this.visionTimer = null
+    this.cancelQuick()
     this.live = { ...IDLE }
     this.emit()
   }
@@ -230,6 +234,7 @@ class ProctorSession {
   stop() {
     for (const t of [this.audioTimer, this.visionTimer]) if (t != null) clearInterval(t)
     this.audioTimer = this.visionTimer = null
+    this.cancelQuick()
     this.audio?.close()
     this.audio = null
     this.stream?.getTracks().forEach((t) => t.stop())
@@ -274,6 +279,11 @@ class ProctorSession {
       }, AUDIO_MS)
   }
 
+  private cancelQuick() {
+    if (this.quickTimer != null) clearTimeout(this.quickTimer)
+    this.quickTimer = null
+  }
+
   private async visionTick() {
     if (this.busy || !this.human || !this.video || !this.live.active) return
     this.busy = true
@@ -297,12 +307,19 @@ class ProctorSession {
       if (fr.faces >= 2) this.counters.multi_face_ms += dt
       if (fr.lookingAway) this.counters.look_away_ms += dt
       if (fr.lookingDown) this.counters.look_down_ms += dt
-      // телефон: эпизод засчитывается после двух кадров подряд, заканчивается после двух кадров без него
+      // телефон: эпизод начинается с первого кадра с телефоном, заканчивается после двух кадров без него
+      // (одиночный пропуск детектора не дробит эпизод на несколько нарушений)
       if (fr.phone) {
-        this.phoneRun += 1
+        if (!this.phoneOn) this.counters.phone_hits += 1
+        this.phoneOn = true
         this.phoneOff = 0
-        if (this.phoneRun === 2) this.counters.phone_hits += 1
-      } else if (++this.phoneOff >= 2) this.phoneRun = 0
+      } else if (++this.phoneOff >= 2) this.phoneOn = false
+      if (fr.phoneHint && !fr.phone && this.quickTimer == null) {
+        this.quickTimer = window.setTimeout(() => {
+          this.quickTimer = null
+          void this.visionTick()
+        }, QUICK_MS)
+      }
       let mismatch = this.live.mismatch
       if (embed) {
         this.lastEmbedAt = now
@@ -317,7 +334,7 @@ class ProctorSession {
           }
         }
       }
-      this.set({ camOk: true, faces: fr.faces, phone: this.phoneRun >= 2, lookingAway: fr.lookingAway, mismatch, noFaceMs: Math.round(this.noFace / 1000) * 1000 })
+      this.set({ camOk: true, faces: fr.faces, phone: this.phoneOn, lookingAway: fr.lookingAway, mismatch, noFaceMs: Math.round(this.noFace / 1000) * 1000 })
     } catch {
       // единичная ошибка инференса не должна останавливать наблюдение
     } finally {
