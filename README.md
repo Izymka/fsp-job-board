@@ -64,6 +64,40 @@ make up                 # = docker compose up -d --build + HTTP для адми�
 
 Полезные команды: `make ps`, `make logs`, `make seed`, `make reset` (пересоздать демо-данные), `make down`.
 
+### Публикация фронтенда отдельно от стека
+
+Фронтенд публикуется на https://fsp.prowebcraft.ru, стек (API, Keycloak, БД) остаётся на своей машине и доступен по внешнему IP через проброс одного порта — `HTTP_PORT` (18088, nginx фронтенда стека).
+
+Адрес бэкенда задаётся явно при старте контейнера фронтенда (`frontend/nginx.conf.template`): nginx проксирует `/api/` на `BACKEND_URL`, а `/auth/` (Keycloak) — на `KEYCLOAK_URL`. Браузер работает только с доменом фронтенда, поэтому нет mixed content (HTTPS-страница → HTTP-бэкенд) и CORS, а камера цифрового проктора получает HTTPS. Админка Keycloak через `/auth/admin/` закрыта.
+
+```
+браузер ──HTTPS──▶ fsp.prowebcraft.ru (TLS-прокси → контейнер фронтенда :5100)
+                      │  /api/, /auth/
+                      ▼
+               http://<внешний IP>:18088 (nginx стека) ──▶ backend:8000, keycloak:8080
+```
+
+На машине со стеком — в `.env`:
+
+```bash
+PUBLIC_URL=https://fsp.prowebcraft.ru
+KEYCLOAK_PUBLIC_URL=https://fsp.prowebcraft.ru/auth
+```
+
+затем `make up` и `make kc-public` (добавляет домен в redirect URI клиентов Keycloak, если realm уже был импортирован раньше).
+
+Сборка и деплой — `.github/workflows/deploy-frontend.yml`: на PR образ собирается и проходит smoke-тест (`frontend/scripts/smoke.sh`), на `main` публикуется в GHCR и разворачивается по SSH на `127.0.0.1:$WEB_PORT` хостинга; при неудачной проверке возвращается предыдущий контейнер. TLS и домен — на прокси хостинга (`proxy_pass http://127.0.0.1:5100;` с `X-Forwarded-Proto $scheme`).
+
+| Настройка репозитория | Тип | Значение |
+|---|---|---|
+| `BACKEND_URL` | variable | Внешний адрес стека без пути, например `http://203.0.113.10:18088` |
+| `KEYCLOAK_URL` | variable, необязательно | По умолчанию `<BACKEND_URL>/auth` |
+| `WEB_PORT` | variable, необязательно | Порт контейнера на хостинге, по умолчанию `5100` |
+| `SSH_PORT` | variable, необязательно | По умолчанию `22` |
+| `SERVER_HOST`, `SERVER_USER`, `SSH_PRIVATE_KEY`, `SSH_HOST_FINGERPRINT` | secrets | Доступ к хостингу фронтенда по SSH |
+
+Тот же образ можно запустить вручную: `docker run -e BACKEND_URL=http://203.0.113.10:18088 -e KEYCLOAK_URL=http://203.0.113.10:18088/auth -p 5100:80 <образ>`.
+
 ## Локальный запуск без Docker
 
 Требования: Python 3.12+ (в Docker — 3.14), [uv](https://docs.astral.sh/uv/), Node.js 22.12+ (в Docker — 24 LTS).
