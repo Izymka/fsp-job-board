@@ -227,6 +227,7 @@ backend/dev.db
 docs/fsp-job-board-docs.html
 frontend/dist/
 frontend/public/models/human/
+frontend/public/models/mediapipe/wasm/
 *.rar
 
 # Техническая документация ведётся локально; в репозитории — только собранный PDF

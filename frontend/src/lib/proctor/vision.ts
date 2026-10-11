@@ -1,7 +1,10 @@
 // Зрение цифрового проктора на устройстве кандидата: Human (TF.js) — лица, поворот головы,
-// эмбеддинг лица (faceres), живое лицо (liveness/antispoof) и объекты COCO («cell phone»).
-// Модели раздаются своим сервером из /models/human (scripts/copy-human-models.mjs).
+// эмбеддинг лица (faceres), живое лицо (liveness/antispoof) и объекты COCO («cell phone»); телефон
+// дополнительно ищет EfficientDet (phone.ts). Модели раздаются своим сервером из /models
+// (scripts/copy-proctor-models.mjs).
+import type { ObjectDetector } from '@mediapipe/tasks-vision'
 import type { Config, Human, Result } from '@vladmandic/human'
+import { loadPhoneDetector, phoneScore } from './phone'
 
 export const EMBEDDING_MODEL = 'human-3.3-faceres'
 
@@ -29,13 +32,17 @@ const BASE: Partial<Config> = {
 } as Partial<Config>
 
 let instance: Promise<Human> | null = null
+let phoneDetector: ObjectDetector | null = null
 
 export function loadHuman(): Promise<Human> {
   instance ??= (async () => {
     const { Human } = await import('@vladmandic/human')
     const h = new Human(BASE)
+    // второй детектор телефона грузится параллельно; не загрузился — телефон ищет только centernet
+    const phone = loadPhoneDetector().catch(() => null)
     await h.load()
     await h.warmup()
+    phoneDetector = await phone
     return h
   })()
   instance.catch(() => (instance = null))
@@ -53,7 +60,8 @@ export interface Frame {
   live?: number
 }
 
-const PHONE_SCORE = 0.35
+const PHONE_SCORE = 0.35 // centernet (Human)
+const PHONE_SCORE_EFFDET = 0.5 // EfficientDet-Lite0: ниже — ложные срабатывания на портретах
 // Отпечаток лица берётся только с качественного кадра — иначе тот же человек «не совпадает»:
 // * лицо крупное (на снимках ниже ~150 px сходство разных людей завышено, а одного — занижено);
 // * детектор уверен в лице;
@@ -90,7 +98,9 @@ export async function detect(h: Human, video: HTMLVideoElement, opts: { embed?: 
   const r = await h.detect(video, {
     face: { description: { enabled: !!opts.embed }, antispoof: { enabled: !!opts.liveness }, liveness: { enabled: !!opts.liveness } },
   } as Partial<Config>)
-  return readFrame(r)
+  const fr = readFrame(r)
+  if (!fr.phone && phoneDetector) fr.phone = phoneScore(phoneDetector, video) >= PHONE_SCORE_EFFDET
+  return fr
 }
 
 export function similarity(h: Human, a: number[], b: number[]): number {
