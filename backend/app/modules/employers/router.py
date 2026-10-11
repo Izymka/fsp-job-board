@@ -457,12 +457,17 @@ def shortlist_remove(
 # ------------------------------------------------------------------------------ банк кандидатов
 
 
-def _visible_candidate(db: Session, candidate_id: str) -> CandidateProfile:
+def _visible_candidate(db: Session, candidate_id: str, company_id: uuid.UUID | None = None) -> CandidateProfile:
     try:
         p = db.get(CandidateProfile, uuid.UUID(candidate_id))
     except ValueError:
         p = None
-    if p is None or p.hidden or not p.confirmed_grade:
+    if p is None or p.hidden:
+        raise not_found("Кандидат")
+    # Отклик разрешён до теста: получатель уже имеет доступ к профилю и контактам.
+    if not p.confirmed_grade and not (
+        company_id is not None and contacts_revealed(db, company_id, p.user_id)
+    ):
         raise not_found("Кандидат")
     return p
 
@@ -585,7 +590,7 @@ def candidate_card(
     db: Session = Depends(get_db),
 ):
     company = get_company(db, user)
-    p = _visible_candidate(db, candidate_id)
+    p = _visible_candidate(db, candidate_id, company.id)
     if str(company.id) in (p.excluded_companies or []):
         raise not_found("Кандидат")
     revealed = contacts_revealed(db, company.id, p.user_id)
@@ -616,7 +621,7 @@ def candidate_test_photo(
     candidate_id: str, user: User = Depends(EmployerUser), db: Session = Depends(get_db)
 ):
     company = get_company(db, user)
-    p = _visible_candidate(db, candidate_id)
+    p = _visible_candidate(db, candidate_id, company.id)
     if not contacts_revealed(db, company.id, p.user_id):
         raise AppError(
             403,
@@ -646,7 +651,7 @@ def candidate_test_photo(
 )
 def candidate_pdf(candidate_id: str, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     company = get_company(db, user)
-    p = _visible_candidate(db, candidate_id)
+    p = _visible_candidate(db, candidate_id, company.id)
     revealed = contacts_revealed(db, company.id, p.user_id)
     return Response(
         render_profile_pdf(p, reveal_contacts=revealed),

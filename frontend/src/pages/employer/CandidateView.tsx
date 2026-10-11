@@ -90,8 +90,8 @@ export default function CandidateView() {
         <div className="space-y-6">
           <Section title="Категория и результат теста">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone="bg-brand-500 text-white">{c.category}</Badge>
-              <span className="text-sm text-muted">подтверждено {date(c.confirmed_at)}</span>
+              <Badge tone="bg-brand-500 text-white">{c.category ?? 'Грейд ещё не подтверждён'}</Badge>
+              {c.confirmed_at && <span className="text-sm text-muted">подтверждено {date(c.confirmed_at)}</span>}
             </div>
             <ProctorBadges c={c} />
             {c.test_photo_available && <TestPhoto id={c.id} />}

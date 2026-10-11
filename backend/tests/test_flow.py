@@ -273,6 +273,44 @@ def test_vacancy_and_application_reveal_contacts(client):
     assert cand.get("/api/candidate/applications").json()[0]["status"] == "interview"
 
 
+def test_applicant_without_confirmed_grade_can_open_profile(client):
+    emp = make_employer(client)
+    other = make_employer(client, "other-hr@example.ru")
+    cand = make_candidate(client)
+    cid = cand.get("/api/candidate/profile").json()["user_id"]
+    url = f"/api/employer/candidates/{cid}"
+    assert emp.get(url).status_code == 404
+    vacancy = emp.post(
+        "/api/employer/vacancies",
+        json={
+            "title": "Python-разработчик (Middle)",
+            "text": "Разработка сервисов на Python и FastAPI, PostgreSQL, Docker.",
+            "salary_from": 200000,
+            "salary_to": 260000,
+        },
+    )
+    assert vacancy.status_code == 201, vacancy.text
+    assert cand.post(f"/api/vacancies/{vacancy.json()['id']}/apply", json={}).status_code == 201
+    applications = emp.get(f"/api/employer/vacancies/{vacancy.json()['id']}/applications").json()
+    assert applications[0]["candidate"]["id"] == cid
+    response = emp.get(url)
+    assert response.status_code == 200, response.text
+    profile = response.json()
+    assert profile["grade"] is None and profile["confirmed_at"] is None
+    assert profile["revealed"] and profile["contacts"]["phone"] == "+79161234567"
+    pdf = emp.get(f"{url}/profile.pdf")
+    assert pdf.status_code == 200 and pdf.content.startswith(b"%PDF")
+    assert emp.get(f"{url}/test-photo").json()["error"]["message"] == "Кадр с теста не найден"
+    assert other.get(url).status_code == 404
+    assert other.get(f"{url}/profile.pdf").status_code == 404
+    assert other.get(f"{url}/test-photo").status_code == 404
+    assert emp.get("/api/employer/candidates").json()["total"] == 0
+    # Отзыв публикации по-прежнему скрывает профиль, даже после отклика.
+    cand.post("/api/me/consents", json={"kind": "profile_publication", "accepted": False})
+    assert emp.get(url).status_code == 404
+    assert emp.get(f"{url}/profile.pdf").status_code == 404
+
+
 def test_regular_tasks(client):
     emp = make_employer(client)
     t = emp.post(
