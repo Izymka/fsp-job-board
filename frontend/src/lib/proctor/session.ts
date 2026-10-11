@@ -187,6 +187,7 @@ class ProctorSession {
     this.ref = ref
     this.badRun = 0
     this.counters = { ...ZERO, cam_lost_ms: lostBeforeMs }
+    this.phoneRun = this.phoneOff = 0
     this.fresh = ref.length ? { v: ref[ref.length - 1], at: performance.now() } : null
     this.nextServerAt = performance.now() + SERVER_EVERY_MS * (0.5 + Math.random())
     this.lastVision = performance.now()
@@ -200,9 +201,9 @@ class ProctorSession {
     return this.live.active
   }
 
-  /** Новое задание — новые счётчики. */
+  /** Новое задание — новые счётчики. Телефон, который остаётся в кадре, засчитывается и новому заданию. */
   resetItem() {
-    this.counters = { ...ZERO }
+    this.counters = { ...ZERO, phone_hits: this.phoneRun >= 2 ? 1 : 0 }
   }
 
   /** Счётчики для сервера: интервалы копятся из performance.now() (дробные мс), а API ждёт целые. */
