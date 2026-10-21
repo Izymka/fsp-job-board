@@ -76,6 +76,10 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     settings = get_settings()
+    if bad := settings.insecure_defaults():
+        if settings.environment == "production":
+            raise RuntimeError("ENVIRONMENT=production с небезопасными настройками: " + ", ".join(bad))
+        logging.getLogger("config").warning("небезопасные настройки (допустимо только для стенда): %s", bad)
     app = FastAPI(
         title=settings.app_name,
         version="0.1.0",

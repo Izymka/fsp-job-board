@@ -124,6 +124,16 @@ def formula_version(ranker: str | None = None) -> int:
     return FORMULA_VERSIONS.get(ranker or get_settings().fsp_ranker, 7)
 
 
+def excluded_for(p: CandidateProfile, company: Company) -> bool:
+    """Кандидат скрыл себя от этой компании или от её отрасли (настройки приватности).
+
+    Отрасль берётся у компании, а не у подборки: подборка с другой отраслью не должна открывать
+    кандидата, скрывшегося от отрасли работодателя."""
+    if str(company.id) in (p.excluded_companies or []):
+        return True
+    return bool(company.industry and company.industry in (p.excluded_industries or []))
+
+
 def visible_profiles(
     db: Session, spec: str | None = None, grades: list[str] | None = None
 ) -> list[CandidateProfile]:
@@ -283,7 +293,7 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
     need = need_of(s)
     g_idx = cat.grade_index(s.grade)
     grades = [g.id for g in cat.grades if abs(g.order - g_idx) <= 1]
-    profiles = visible_profiles(db, s.specialization, grades)
+    profiles = [p for p in visible_profiles(db, s.specialization, grades) if not excluded_for(p, company)]
     embs = embeddings_for(profiles) if profiles else []
     feats = [features(p, e) for p, e in zip(profiles, embs)]
     if need.text:

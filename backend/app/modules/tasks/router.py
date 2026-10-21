@@ -212,7 +212,10 @@ def list_tasks(user: User = Depends(EmployerUser), db: Session = Depends(get_db)
 )
 def submissions(task_id: str, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     company = get_company(db, user)
-    t = db.get(RegularTask, uuid.UUID(task_id))
+    try:
+        t = db.get(RegularTask, uuid.UUID(task_id))
+    except ValueError:
+        t = None
     if t is None or t.company_id != company.id:
         raise not_found("Задание")
     rows = db.scalars(
@@ -233,7 +236,10 @@ def review(
     assignment_id: str, body: ReviewIn, user: User = Depends(EmployerUser), db: Session = Depends(get_db)
 ):
     company = get_company(db, user)
-    a = db.get(TaskAssignment, uuid.UUID(assignment_id))
+    try:
+        a = db.get(TaskAssignment, uuid.UUID(assignment_id))
+    except ValueError:
+        a = None
     t = db.get(RegularTask, a.task_id) if a else None
     if a is None or t is None or t.company_id != company.id:
         raise not_found("Решение")

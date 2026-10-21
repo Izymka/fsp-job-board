@@ -8,6 +8,7 @@ name: fsp-job-board
 x-backend-env: &backend-env
   DATABASE_URL: postgresql+psycopg://fsp:${POSTGRES_PASSWORD:-fsp}@postgres:5432/fsp_jobs
   AUTH_MODE: ${AUTH_MODE:-keycloak}
+  ENVIRONMENT: ${ENVIRONMENT:-dev}
   KEYCLOAK_PUBLIC_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:18080}
   KEYCLOAK_INTERNAL_URL: http://keycloak:8080
   FRONTEND_URL: ${PUBLIC_URL:-http://localhost:18088}
@@ -18,6 +19,7 @@ x-backend-env: &backend-env
   FSP_ID_CLIENT_SECRET: ${FSP_ID_CLIENT_SECRET:-fsp-jobs-link-secret}
   ASSESSMENT_SECRET: ${ASSESSMENT_SECRET:-change-me-in-production-0123456789abcdef}
   WEBHOOK_SECRET: ${WEBHOOK_SECRET:-change-me-in-production-webhooks-0123456789}
+  WEBHOOK_ALLOW_PRIVATE: ${WEBHOOK_ALLOW_PRIVATE:-0}
   SMTP_HOST: mailpit
   SMTP_PORT: "1025"
   EMAIL_ENABLED: ${EMAIL_ENABLED:-true}

@@ -548,6 +548,7 @@ def test_fsp_kept_after_failed_upgrade_and_webhook_payload(client, monkeypatch):
     monkeypatch.setattr(fsp_router, "fetch_participant", lambda fid: reg if fid == "FSP-000123" else None)
     sent = []
     monkeypatch.setattr(inv_router.httpx, "post", lambda url, **kw: sent.append((url, kw)))
+    monkeypatch.setattr(inv_router, "_public_host", lambda url: True)  # ats.example не резолвится
 
     cand = make_candidate(client)
     # кандидат не заполнил почту в профиле — работодатель всё равно должен получить контакт
@@ -625,3 +626,84 @@ def test_need_parse_grade_confidence(client):
         },
     )
     assert r.json()["grade"] == "junior" and r.json()["grade_confidence"] == "medium"
+
+
+def test_industry_exclusion_not_bypassed_by_search_industry(client):
+    """Кандидат скрыт от отрасли компании: подборка с другой отраслью, прямая ссылка на карточку,
+    PDF и приглашение его не открывают."""
+    cand = make_candidate(client)
+    assert pass_test(cand, "middle")["status"] == "passed"
+    cid = cand.get("/api/candidate/profile").json()["user_id"]
+    cand.put("/api/candidate/privacy", json={"show_fsp": True, "excluded_industries": ["gamedev"]})
+    emp = make_employer(client)
+    emp.put("/api/employer/company", json={"name": "ООО «Игры»", "industry": "gamedev"})
+    r = emp.post(
+        "/api/employer/searches",
+        json={
+            "title": "Python-разработчик (Middle)",
+            "text": "Нужен бэкенд-разработчик: Python, FastAPI, PostgreSQL. Вилка 230-300 тыс ₽.",
+            "industry": "fintech",
+        },
+    )
+    assert r.status_code == 201, r.text
+    assert all(x["card"]["id"] != cid for x in r.json()["results"])
+    assert emp.get(f"/api/employer/candidates/{cid}").status_code == 404
+    assert emp.get(f"/api/employer/candidates/{cid}/profile.pdf").status_code == 404
+    inv = {
+        "candidate_id": cid,
+        "title": "Python",
+        "description": "Команда платежей",
+        "salary_from": 240000,
+        "salary_to": 300000,
+        "contact_method": "email",
+        "contact_value": "hr@example.ru",
+    }
+    assert emp.post("/api/employer/invitations", json=inv).status_code == 404
+
+
+def test_malformed_ids_are_404_not_500(client):
+    emp = make_employer(client)
+    assert emp.get("/api/employer/tasks/not-a-uuid/submissions").status_code == 404
+    assert emp.post("/api/employer/submissions/not-a-uuid/review", json={"score": 2}).status_code in (
+        404,
+        422,
+    )
+    cand = make_candidate(client)
+    assert pass_test(cand, "middle")["status"] == "passed"
+    cid = cand.get("/api/candidate/profile").json()["user_id"]
+    r = emp.post(
+        "/api/employer/invitations",
+        json={
+            "candidate_id": cid,
+            "title": "Python",
+            "description": "Команда платежей",
+            "salary_from": 240000,
+            "salary_to": 300000,
+            "contact_method": "email",
+            "contact_value": "hr@example.ru",
+            "search_id": "not-a-uuid",
+        },
+    )
+    assert r.status_code == 404, r.text
+
+
+def test_webhook_only_to_public_http_addresses(client, monkeypatch):
+    from app.modules.invitations import router as inv_router
+
+    emp = make_employer(client)
+    r = emp.put("/api/employer/company", json={"name": "ООО «Тест»", "webhook_url": "file:///etc/passwd"})
+    assert r.status_code == 422
+    sent = []
+    monkeypatch.setattr(inv_router.httpx, "post", lambda url, **kw: sent.append(url))
+    for url in (
+        "http://127.0.0.1:8000/api/health",
+        "http://localhost:5432/",
+        "http://169.254.169.254/latest",
+    ):
+        inv_router._webhook(url, {"event": "invitation.accepted"}, "key")
+    assert not sent
+    monkeypatch.setattr(
+        inv_router.socket, "getaddrinfo", lambda *a, **k: [(2, 1, 6, "", ("93.184.215.14", 443))]
+    )
+    inv_router._webhook("https://ats.example/hook", {"event": "invitation.accepted"}, "key")
+    assert sent == ["https://ats.example/hook"]

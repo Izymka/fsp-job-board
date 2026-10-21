@@ -40,6 +40,8 @@ class Settings(BaseSettings):
     assessment_secret: str = "assessment-secret-change-me-0123456789abcdef"
     # Вебхуки ATS: ключ подписи компании = HMAC(webhook_secret, id компании). Сменить в production!
     webhook_secret: str = "webhook-secret-change-me-0123456789abcdef"
+    # Разрешить вебхуки на адреса локальной сети (ATS рядом со стендом). По умолчанию — только публичные.
+    webhook_allow_private: bool = False
 
     # Цифровой проктор: сверка лица 1:1. local_demo — эталон в нашей БД (AES-GCM, только демо);
     # ebs — Единая биометрическая система (production, 572-ФЗ). Ключ сменить в production!
@@ -69,6 +71,14 @@ class Settings(BaseSettings):
     invite_quota_per_week: int = 30
     consent_version: str = "2026-10-01"
     task_interval_days: int = 14
+
+    def insecure_defaults(self) -> list[str]:
+        """Что нельзя оставлять в production: dev-авторизация и секреты из примера конфигурации."""
+        bad = ["AUTH_MODE=dev"] if self.auth_mode == "dev" else []
+        for name in ("assessment_secret", "webhook_secret", "biometric_key"):
+            if "change-me" in getattr(self, name):
+                bad.append(name.upper())
+        return bad
 
     @property
     def keycloak_issuer(self) -> str:

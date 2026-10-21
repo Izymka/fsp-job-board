@@ -112,6 +112,21 @@
           "temporary": false
         }
       ]
+    },
+    {
+      "username": "federation@demo.fsp",
+      "email": "federation@demo.fsp",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Федерация",
+      "lastName": "ФСП",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo12345",
+          "temporary": false
+        }
+      ]
     }
   ]
 }

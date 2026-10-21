@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import ipaddress
 import json
+import logging
+import socket
 import uuid
 from datetime import datetime, timedelta
 from typing import Literal
+from urllib.parse import urlsplit
 
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends
@@ -24,16 +28,18 @@ from ..candidates.models import CandidateProfile
 from ..candidates.service import anonymous_alias, category_label, features, revealed_contacts
 from ..employers.models import Company, Search
 from ..employers.router import get_company
-from ..employers.service import webhook_signing_key
+from ..employers.service import excluded_for, webhook_signing_key
 from ..users.models import AuditLog, User
 from ..vacancies.models import Application, Vacancy
 from .models import ACCEPTED_STATUSES, Invitation
 
+log = logging.getLogger("webhooks")
 router = APIRouter(tags=["Приглашения"])
 EmployerUser = require_role("employer")
 CandidateUser = require_role("candidate")
 
 ACTIVE = ("sent", "viewed")
+MIN_SALARY_GROUP = 5  # процентили ожиданий по категории — только по группе не меньше 5 человек
 
 
 class InvitationIn(BaseModel):
@@ -170,7 +176,7 @@ def _candidate_for_company(db: Session, company: Company, candidate_id: str) -> 
         p = db.get(CandidateProfile, uuid.UUID(candidate_id))
     except ValueError:
         p = None
-    if p is None or p.hidden or not p.confirmed_grade or str(company.id) in (p.excluded_companies or []):
+    if p is None or p.hidden or not p.confirmed_grade or excluded_for(p, company):
         raise not_found("Кандидат")
     return p
 
@@ -206,11 +212,31 @@ def _notify_candidate(
     )
 
 
+def _public_host(url: str) -> bool:
+    """Адрес вебхука указывает работодатель, поэтому запросы во внутреннюю сеть стека (БД, Keycloak,
+    метаданные облака) запрещены: все адреса хоста должны быть публичными. WEBHOOK_ALLOW_PRIVATE=1 —
+    для стенда, где ATS стоит в той же локальной сети."""
+    parts = urlsplit(url)
+    if parts.scheme not in ("http", "https") or not parts.hostname:
+        return False
+    if get_settings().webhook_allow_private:
+        return True
+    try:
+        infos = socket.getaddrinfo(parts.hostname, parts.port or 443, proto=socket.IPPROTO_TCP)
+    except (OSError, ValueError):
+        return False
+    return bool(infos) and all(ipaddress.ip_address(i[4][0].split("%")[0]).is_global for i in infos)
+
+
 def _webhook(url: str, payload: dict, key: str) -> None:
     """ATS-интеграция: событие о принятом приглашении (best effort).
 
     Тело подписано: X-FSP-Signature: sha256=HMAC-SHA256(ключ компании, тело) — ключ виден работодателю
-    в профиле компании (`webhook_signing_key`), ATS проверяет, что событие пришло от платформы."""
+    в профиле компании (`webhook_signing_key`), ATS проверяет, что событие пришло от платформы.
+    Редиректы не выполняются: иначе публичный адрес мог бы перенаправить запрос во внутреннюю сеть."""
+    if not _public_host(url):
+        log.warning("webhook skipped: %s is not a public http(s) address", url)
+        return
     body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode()
     sig = hmac.new(key.encode(), body, hashlib.sha256).hexdigest()
     try:
@@ -223,6 +249,7 @@ def _webhook(url: str, payload: dict, key: str) -> None:
                 "X-FSP-Signature": f"sha256={sig}",
             },
             timeout=5,
+            follow_redirects=False,
         )
     except Exception:  # noqa: BLE001
         pass
@@ -294,12 +321,12 @@ def send_invitation(
         )
     search_id = vacancy_id = None
     if body.search_id:
-        s = db.get(Search, uuid.UUID(body.search_id))
+        s = db.get(Search, _parse_id(body.search_id, "Подборка"))
         if s is None or s.company_id != company.id:
             raise not_found("Подборка")
         search_id = s.id
     if body.vacancy_id:
-        v = db.get(Vacancy, uuid.UUID(body.vacancy_id))
+        v = db.get(Vacancy, _parse_id(body.vacancy_id, "Вакансия"))
         if v is None or v.company_id != company.id:
             raise not_found("Вакансия")
         vacancy_id = v.id
@@ -385,6 +412,13 @@ def mark_hired(inv_id: str, user: User = Depends(EmployerUser), db: Session = De
     inv.hired_at = utcnow()
     db.commit()
     return inv_out(db, inv, for_employer=True)
+
+
+def _parse_id(value: str, what: str) -> uuid.UUID:
+    try:
+        return uuid.UUID(value)
+    except ValueError:
+        raise not_found(what) from None
 
 
 def _get_inv(db: Session, inv_id: str) -> Invitation:
@@ -556,6 +590,8 @@ def insights(user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
             )
         ).all()
         sal = sorted(p.salary_from for p in pool if p.salary_from)
+        if len(sal) < MIN_SALARY_GROUP:
+            sal = []  # по малой группе восстанавливаются ожидания конкретного кандидата
         inv_cat = db.scalars(
             select(Invitation)
             .join(CandidateProfile, CandidateProfile.user_id == Invitation.candidate_id)
