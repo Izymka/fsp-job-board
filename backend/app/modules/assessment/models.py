@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, UniqueConstraint
+from sqlalchemy import Float, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from ...core.db import Base, new_id, utcnow
@@ -29,8 +29,9 @@ class Attempt(Base):
     # семейства заданий, которые кандидат видел в прошлых попытках: выбираются в последнюю очередь
     seen_families: Mapped[list] = mapped_column(default=list)
     # сила достижений ФСП на старте (0..1): сдвигает приор θ этой попытки (`with_fsp_prior`);
-    # фиксируется, чтобы привязка ФСП посреди теста не меняла уже идущую оценку
-    fsp_prior: Mapped[float] = mapped_column(default=0.0)
+    # фиксируется, чтобы привязка ФСП посреди теста не меняла уже идущую оценку.
+    # Float — как в миграции 0008 (в Postgres — тот же double precision)
+    fsp_prior: Mapped[float] = mapped_column(Float, default=0.0)
     started_at: Mapped[datetime] = mapped_column(default=utcnow)
     finished_at: Mapped[datetime | None] = mapped_column(default=None)
     result: Mapped[dict | None] = mapped_column(default=None)

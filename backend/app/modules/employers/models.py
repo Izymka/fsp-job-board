@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, Text, UniqueConstraint
+from sqlalchemy import Float, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from ...core.db import Base, TimestampMixin, new_id, utcnow
@@ -43,7 +43,8 @@ class Search(TimestampMixin, Base):
     salary_to: Mapped[int | None] = mapped_column(default=None)
     work_format: Mapped[str | None] = mapped_column(String(16))
     industry: Mapped[str | None] = mapped_column(String(32))
-    min_years: Mapped[float | None] = mapped_column(default=None)  # требуемый опыт; None — по грейду
+    # требуемый опыт; None — по грейду. Float — как в миграции 0007 (в Postgres — тот же double precision)
+    min_years: Mapped[float | None] = mapped_column(Float, default=None)
     include_adjacent: Mapped[bool] = mapped_column(default=True)
     fsp_friendly: Mapped[bool] = mapped_column(default=False, server_default="0")
     # уведомлять о новых участниках ФСП, попавших в топ подборки (см. `fsp_alerts`)
