@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
 from dataclasses import replace
 from datetime import date
+from pathlib import Path
 
+import pytest
 import yaml
 from fspml.catalog import DATA_DIR
 from fspml.matching.scoring import (
@@ -17,7 +20,7 @@ from fspml.matching.scoring import (
 )
 from fspml.nlp.resume import parse_resume_text
 from fspml.nlp.skills import get_dictionary
-from fspml.nlp.vacancy import parse_need
+from fspml.nlp.vacancy import estimate_grade, parse_experience, parse_need
 
 TODAY = date(2026, 10, 5)
 
@@ -214,3 +217,60 @@ def test_short_bullet_with_marker_is_content_not_heading():
     )
     assert {"Go", "PostgreSQL", "Redis"} <= set(n.must)
     assert {"Kafka", "Kubernetes"} <= set(n.plus)
+
+
+BENCH3 = Path(__file__).resolve().parents[1] / "bench3"
+
+
+@pytest.mark.parametrize(
+    "vid",
+    [
+        "h166829",  # Java Junior: «со старшими разработчиками» — про коллег, «от 6 месяцев»
+        "h167681",  # AI/ML Middle: «≥1 год» — по новой шкале Middle
+        "h168625",  # Системный аналитик Junior: только лексика («погружаться») и вилка
+        "h168633",  # AQA Python Junior: «базовое понимание», наставники, вилка
+        "h169403",  # DevOps Middle: требования — сплошь «Опыт …»
+    ],
+)
+def test_grade_regressions_bench3(vid):
+    """Пять ошибок прежнего разбора на реальных вакансиях bench3."""
+    v = next(x for x in json.loads((BENCH3 / "vacancies.json").read_text(encoding="utf-8")) if x["id"] == vid)
+    n = parse_need(v["text"], v["title"], v["salary_from"], v["salary_to"])
+    assert n.grade == v["grade"], n.grade_reason
+    assert n.grade_confidence in ("high", "medium") and n.grade_reason
+
+
+def test_experience_months_ranges_and_bounds():
+    assert parse_experience("Опыт коммерческой разработки от 6 месяцев") == 0.5
+    assert parse_experience("опыт от 1,5 до 2 лет") == 1.5  # диапазон → нижняя граница, а не 2
+    assert parse_experience("Коммерческий опыт в ML/AI ≥1 год") == 1.0
+    assert parse_experience("От 3 лет опыта бизнес-анализа") == 3.0
+    assert parse_experience("Разрабатывал на Kotlin больше двух лет") == 2.0
+    assert parse_experience("Работаем с 2007 года, опыт работы с Kafka") is None
+
+
+def test_grade_words_about_colleagues_are_ignored():
+    e = estimate_grade(
+        "Java-разработчик", "Будете работать со старшими разработчиками и под руководством тимлида."
+    )
+    assert e.grade != "senior" and e.grade != "lead"
+    e = estimate_grade(
+        "Аналитик", "Мы — один из ведущих разработчиков ПО, выступаем на ведущих конференциях."
+    )
+    assert e.grade is None
+    assert estimate_grade("QA", "Ищем Senior-инженера по тестированию").grade == "senior"
+
+
+def test_grade_confidence_levels():
+    assert (
+        estimate_grade("Senior Go Developer", "опыт от 1 года").confidence == "high"
+    )  # заголовок решает сам
+    agree = estimate_grade(
+        "Аналитик", "Начинающим аналитикам — наставник и дообучение.", "analyst", 90_000, 120_000
+    )
+    assert (agree.grade, agree.confidence) == ("junior", "high")
+    one = estimate_grade("Аналитик", "Опыт работы от 2 лет.")
+    assert (one.grade, one.confidence) == ("middle", "medium")
+    none = parse_need("Ищем аналитика в команду платежей.", "Аналитик")
+    assert none.grade is None and none.grade_confidence == "low"
+    assert "выберите вручную" in none.grade_reason

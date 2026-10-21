@@ -382,6 +382,7 @@ export interface NeedParse {
   spec_scores: Record<string, number>
   grade: GradeId | null
   grade_reason: string | null
+  grade_confidence: 'high' | 'medium' | 'low'
   skills: Record<string, number>
   must: string[]
   plus: string[]

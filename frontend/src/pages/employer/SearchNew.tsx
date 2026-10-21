@@ -30,14 +30,20 @@ export default function SearchNew() {
   const [years, setYears] = useState('')
   const [adjacent, setAdjacent] = useState(true)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
-  const parse = useMutation({ mutationFn: () => api.post<NeedParse>('/api/employer/needs/parse', { text, title }) })
+  // вилку, введённую вручную, учитываем в разборе: она — один из сигналов грейда
+  const formFrom = touched.from && from ? Number(from) : null
+  const formTo = touched.to && to ? Number(to) : null
+  const parse = useMutation({
+    mutationFn: () => api.post<NeedParse>('/api/employer/needs/parse', { text, title, salary_from: formFrom, salary_to: formTo }),
+  })
   useEffect(() => {
     if (text.length < 25) return
     const t = setTimeout(() => parse.mutate(), 600)
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, title])
+  }, [text, title, formFrom, formTo])
   const p = parse.data
+  const checkGrade = !!p && !touched.grade && p.grade_confidence !== 'high'
   useEffect(() => {
     if (!p) return
     if (!touched.spec && p.specialization) setSpec(p.specialization)
@@ -118,8 +124,16 @@ export default function SearchNew() {
                       ))}
                     </select>
                   </Field>
-                  <Field label="Грейд" required>
-                    <select className="input" value={grade} onChange={(e) => (setGrade(e.target.value as GradeId), touch('grade'))}>
+                  <Field
+                    label={
+                      <>
+                        Грейд{checkGrade && <span className="ml-1 font-normal text-warn-600">· проверьте</span>}
+                      </>
+                    }
+                    hint={checkGrade ? <span className="text-warn-600">{p.grade ? p.grade_reason : 'Уровень в тексте не указан — выберите вручную'}</span> : undefined}
+                    required
+                  >
+                    <select className={clsx('input', checkGrade && 'border-warn-600 bg-warn-50')} value={grade} onChange={(e) => (setGrade(e.target.value as GradeId), touch('grade'))}>
                       <option value="">—</option>
                       {cat?.grades.map((g) => (
                         <option key={g.id} value={g.id}>

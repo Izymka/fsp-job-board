@@ -101,6 +101,8 @@ def upsert_company(body: CompanyIn, user: User = Depends(EmployerUser), db: Sess
 class NeedParseIn(BaseModel):
     text: str = Field(max_length=20000)
     title: str | None = Field(default=None, max_length=255)
+    salary_from: int | None = Field(default=None, ge=0, description="вилка из формы — сигнал для грейда")
+    salary_to: int | None = Field(default=None, ge=0)
 
 
 class NeedParseOut(BaseModel):
@@ -108,6 +110,9 @@ class NeedParseOut(BaseModel):
     spec_scores: dict[str, float]
     grade: str | None
     grade_reason: str | None
+    grade_confidence: Literal["high", "medium", "low"] = Field(
+        description="high — заголовок или согласие ≥2 сигналов; medium — один сигнал; low — конфликт или сигналов нет"
+    )
     skills: dict[str, float]
     must: list[str]
     plus: list[str]
@@ -126,12 +131,13 @@ class NeedParseOut(BaseModel):
     responses=responses(401, 403),
 )
 def parse(body: NeedParseIn, user: User = Depends(EmployerUser)):
-    n = parse_need(body.text, body.title or "")
+    n = parse_need(body.text, body.title or "", body.salary_from, body.salary_to)
     return NeedParseOut(
         specialization=n.specialization,
         spec_scores={k: round(v, 3) for k, v in n.spec_scores.items()},
         grade=n.grade,
         grade_reason=n.grade_reason,
+        grade_confidence=n.grade_confidence,
         skills={k: round(v, 2) for k, v in n.skills.items()},
         must=n.must,
         plus=n.plus,
@@ -281,7 +287,12 @@ def search_out(db: Session, company: Company, s: Search) -> SearchOut:
 )
 def create_search(body: SearchIn, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     company = get_company(db, user)
-    n = parse_need("\n".join(x for x in (body.text, body.team_description or "") if x), body.title)
+    n = parse_need(
+        "\n".join(x for x in (body.text, body.team_description or "") if x),
+        body.title,
+        body.salary_from,
+        body.salary_to,
+    )
     spec = body.specialization or n.specialization
     grade = body.grade or n.grade
     if not spec or spec not in get_catalog().specializations:
@@ -311,6 +322,7 @@ def create_search(body: SearchIn, user: User = Depends(EmployerUser), db: Sessio
             "blueprint": n.blueprint,
             "must": n.must,
             "plus": n.plus,
+            "grade_confidence": n.grade_confidence,
         },
         filters={},
         version=1,

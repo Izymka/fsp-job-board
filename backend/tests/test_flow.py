@@ -597,3 +597,31 @@ def test_fsp_kept_after_failed_upgrade_and_webhook_payload(client, monkeypatch):
     c = json.loads(body)["candidate"]
     assert c["name"] == "Иванова Мария Сергеевна" and c["email"] == "cand@example.ru"
     assert c["phone"] == "+79161234567" and c["fsp_id"] == "FSP-000123" and c["grade"] == "middle"
+
+
+def test_need_parse_grade_confidence(client):
+    emp = make_employer(client)
+    r = emp.post(
+        "/api/employer/needs/parse",
+        json={"title": "Senior Go Developer", "text": "Go, PostgreSQL, Kafka, опыт от 5 лет"},
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["grade"] == "senior" and r.json()["grade_confidence"] == "high"
+    r = emp.post(
+        "/api/employer/needs/parse",
+        json={"title": "Системный аналитик", "text": "Ищем аналитика в команду платежей: BPMN, SQL, REST."},
+    )
+    body = r.json()
+    assert body["grade"] is None and body["grade_confidence"] == "low"
+    assert "выберите вручную" in body["grade_reason"]
+    # вилка из формы — тоже сигнал
+    r = emp.post(
+        "/api/employer/needs/parse",
+        json={
+            "title": "Системный аналитик",
+            "text": "Ищем аналитика: BPMN, SQL, REST.",
+            "salary_from": 80000,
+            "salary_to": 110000,
+        },
+    )
+    assert r.json()["grade"] == "junior" and r.json()["grade_confidence"] == "medium"
