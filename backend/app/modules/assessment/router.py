@@ -28,6 +28,7 @@ from .models import Attempt, AttemptItem
 
 router = APIRouter(prefix="/api/assessment", tags=["Тестирование"])
 CandidateUser = require_role("candidate")
+EmployerUser = require_role("employer")
 GRADES = Literal["intern", "junior", "middle", "senior", "lead"]
 
 
@@ -481,21 +482,24 @@ class PreviewOut(BaseModel):
     "/preview",
     response_model=PreviewOut,
     summary="Как система формирует тест по описанию вакансии",
-    responses=responses(400, 404),
+    responses=responses(400, 401, 403, 404),
 )
-def preview(body: PreviewIn, db: Session = Depends(get_db)):
+def preview(body: PreviewIn, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     """Разбор вакансии → blueprint → несколько независимых адаптивных прогонов для кандидатов
     одинаковой силы. Показывает, что тесты разные (утечка одного бесполезна для другого),
-    но сопоставимы по составу навыков и сложности."""
+    но сопоставимы по составу навыков и сложности. Отдаёт формулировки заданий из банка,
+    поэтому доступен только работодателю; по vacancy_id — своя или опубликованная вакансия."""
     cat = get_catalog()
     if body.vacancy_id:
+        from ..employers.models import Company
         from ..vacancies.models import Vacancy
 
         try:
             v = db.get(Vacancy, uuid.UUID(body.vacancy_id))
         except ValueError:
             v = None
-        if v is None:
+        company_id = db.scalar(select(Company.id).where(Company.owner_id == user.id))
+        if v is None or (v.status != "published" and v.company_id != company_id):
             raise not_found("Вакансия")
         text, title, grade = v.text, v.title, body.grade or v.grade
     else:
