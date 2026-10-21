@@ -183,6 +183,48 @@ def test_fsp_alert_digest_once_per_pair_and_day(client, monkeypatch):
     assert len(sent) == 1
 
 
+def test_fsp_alert_repeat_and_race_do_not_duplicate_notice(client, monkeypatch):
+    import pytest
+    from app.core.db import SessionLocal
+    from app.modules.assessment.service import notify_fsp_alerts
+    from app.modules.candidates.models import CandidateProfile
+    from app.modules.employers import fsp_alerts
+    from app.modules.employers.models import FspMatchNotice
+    from sqlalchemy.exc import IntegrityError
+
+    fsp_router = _registry(monkeypatch)
+    monkeypatch.setattr(fsp_alerts, "send_email", lambda *a: None)
+    emp = make_employer(client)
+    emp.post(
+        "/api/employer/searches",
+        json={
+            "title": "Backend",
+            "text": "Python FastAPI PostgreSQL",
+            "specialization": "backend",
+            "grade": "middle",
+            "notify_fsp": True,
+        },
+    )
+    a = make_candidate(client, "a@example.ru")
+    a.post("/api/fsp/link/demo", json={"fsp_id": "FSP-000123"})
+    pass_test(a)
+    with SessionLocal() as db:
+        (first,) = db.query(FspMatchNotice).all()
+        p = db.get(CandidateProfile, first.candidate_id)
+        # повторное событие по той же паре (второй воркер, повторная синхронизация)
+        assert fsp_alerts.on_fsp_candidate_update(db, p) == []
+        notify_fsp_alerts(db, p)
+        db.commit()
+        assert db.query(FspMatchNotice).count() == 1
+        # гонка мимо проверки в коде: дубль отсекает уникальное ограничение
+        db.add(FspMatchNotice(search_id=first.search_id, candidate_id=p.user_id, rank=1, reason=""))
+        with pytest.raises(IntegrityError):
+            db.flush()
+        db.rollback()
+        assert db.query(FspMatchNotice).count() == 1
+        assert fsp_router._sync_leader(db)  # SQLite: без блокировки, итерация идёт как раньше
+
+
 def test_hired_status_keeps_contacts_and_feeds_funnel(client, monkeypatch):
     _registry(monkeypatch)
     cand = make_candidate(client)

@@ -20,7 +20,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from fspml.catalog import get_catalog
 from pydantic import BaseModel, Field
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from ...core.config import Settings, get_settings
@@ -446,12 +446,26 @@ def funnel(user: User = Depends(FspAdmin), db: Session = Depends(get_db)):
     )
 
 
+SYNC_LOCK_KEY = 0x0F5B_5C01  # произвольный ключ advisory-блокировки фоновой синхронизации
+
+
+def _sync_leader(db: Session) -> bool:
+    """Итерацию выполняет один воркер uvicorn: иначе дайджест и вебхук `candidate.fsp_match` уходят
+    дважды. Блокировка транзакционная — снимается на commit/rollback и не «залипает» на соединении
+    в пуле. На SQLite (dev, тесты) процесс один — блокировка не нужна."""
+    if db.get_bind().dialect.name != "postgresql":
+        return True
+    return bool(db.scalar(select(func.pg_try_advisory_xact_lock(SYNC_LOCK_KEY))))
+
+
 def sync_loop(stop: threading.Event) -> None:
     """Фоновая синхронизация привязанных профилей с реестром (по расписанию)."""
     s = get_settings()
     while not stop.wait(60):
         try:
             with SessionLocal() as db:
+                if not _sync_leader(db):
+                    continue
                 cutoff = utcnow() - timedelta(hours=s.fsp_sync_interval_hours)
                 rows = db.scalars(
                     select(CandidateProfile)
