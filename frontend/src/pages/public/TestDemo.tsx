@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { BlueprintBars } from '../../components/domain'
 import { Badge, CodeBlock, ErrorBox, Md, More, PageHeader, Section } from '../../components/ui'
 import { api } from '../../lib/api'
+import { useAuth, useMe } from '../../lib/auth'
 import { lookup, useCatalog } from '../../lib/catalog'
 import type { GradeId, PreviewOut } from '../../lib/types'
 
@@ -20,6 +21,10 @@ const LEVEL = ['', 'базовый', 'начальный', 'средний', 'п
 export default function TestDemo() {
   const { data: cat } = useCatalog()
   const L = lookup(cat)
+  // превью отдаёт формулировки заданий из банка — генерация доступна только работодателю
+  const { ready, authenticated, login } = useAuth()
+  const me = useMe()
+  const canRun = me.data?.role === 'employer'
   const { data: demos } = useQuery({ queryKey: ['demo-vacancies'], queryFn: () => api.get<DemoVacancy[]>('/api/catalog/demo-vacancies'), staleTime: Infinity })
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
@@ -61,9 +66,15 @@ export default function TestDemo() {
                 </option>
               ))}
             </select>
-            <button className="btn-primary" disabled={text.length < 20 || m.isPending} onClick={() => m.mutate()}>
-              <Wand2 className="h-4 w-4" /> Сформировать тест
-            </button>
+            {canRun ? (
+              <button className="btn-primary" disabled={text.length < 20 || m.isPending} onClick={() => m.mutate()}>
+                <Wand2 className="h-4 w-4" /> Сформировать тест
+              </button>
+            ) : ready && !authenticated ? (
+              <button className="btn-primary" onClick={() => login('/test-demo')}>
+                <Wand2 className="h-4 w-4" /> Войти как работодатель
+              </button>
+            ) : null}
           </div>
           <div className="mt-3">
             <ErrorBox error={m.error} />
@@ -73,7 +84,11 @@ export default function TestDemo() {
         <div className="space-y-6">
           {!d && (
             <div className="card flex min-h-64 items-center justify-center p-8 text-center text-sm text-muted">
-              Выберите пример вакансии или вставьте свою — и нажмите «Сформировать тест».
+              {canRun
+                ? 'Выберите пример вакансии или вставьте свою — и нажмите «Сформировать тест».'
+                : me.data?.role
+                  ? 'Генерация теста по вакансии доступна в кабинете работодателя: она показывает формулировки заданий из банка теста.'
+                  : 'Генерация теста по вакансии доступна работодателям — войдите, чтобы попробовать на своём тексте или на примере.'}
             </div>
           )}
           {d && (

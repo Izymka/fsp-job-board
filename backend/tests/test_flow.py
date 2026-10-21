@@ -416,10 +416,13 @@ def test_preview_tests_from_vacancy(client):
     text = (
         "Python-разработчик (Middle). Требования: Python, FastAPI, PostgreSQL, Docker, понимание HTTP и REST."
     )
-    r = client.post(
-        "/api/assessment/preview",
-        json={"text": text, "title": "Python-разработчик (Middle)", "candidates": 2, "items": 8},
-    )
+    body = {"text": text, "title": "Python-разработчик (Middle)", "candidates": 2, "items": 8}
+    # формулировки заданий из банка — только работодателю
+    assert client.post("/api/assessment/preview", json=body).status_code == 401
+    cand = make_candidate(client)
+    assert cand.post("/api/assessment/preview", json=body).status_code == 403
+    emp = make_employer(client)
+    r = emp.post("/api/assessment/preview", json=body)
     assert r.status_code == 200, r.text
     d = r.json()
     assert d["specialization"] == "backend" and d["grade"] == "middle"
@@ -427,6 +430,24 @@ def test_preview_tests_from_vacancy(client):
     # концептуальные вопросы с выбором имеют небольшое число формулировок — редкие совпадения допустимы
     assert d["shared_instances"] <= 2
     assert abs(d["tests"][0]["mean_b"] - d["tests"][1]["mean_b"]) < 1.0
+
+
+def test_preview_by_vacancy_respects_ownership(client):
+    owner = make_employer(client)
+    vac = {
+        "title": "Python-разработчик (Middle)",
+        "text": "Разработка сервисов на Python и FastAPI, PostgreSQL, Docker. Опыт от 2 лет.",
+        "salary_from": 200000,
+        "salary_to": 260000,
+    }
+    draft = owner.post("/api/employer/vacancies", json={**vac, "status": "draft"}).json()
+    pub = owner.post("/api/employer/vacancies", json=vac).json()
+    other = make_employer(client, "hr2@example.ru", "ООО «Другая»")
+    q = {"candidates": 2, "items": 4}
+    assert owner.post("/api/assessment/preview", json={**q, "vacancy_id": draft["id"]}).status_code == 200
+    # чужой черновик не читается — как будто его нет
+    assert other.post("/api/assessment/preview", json={**q, "vacancy_id": draft["id"]}).status_code == 404
+    assert other.post("/api/assessment/preview", json={**q, "vacancy_id": pub["id"]}).status_code == 200
 
 
 def test_specialization_change_resets_category(client):
