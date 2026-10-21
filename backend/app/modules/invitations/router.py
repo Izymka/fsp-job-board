@@ -1,17 +1,10 @@
 from __future__ import annotations
 
-import hashlib
-import hmac
-import ipaddress
-import json
-import logging
-import socket
 import uuid
 from datetime import datetime, timedelta
 from typing import Literal
-from urllib.parse import urlsplit
 
-import httpx
+import numpy as np
 from fastapi import APIRouter, BackgroundTasks, Depends
 from fspml.catalog import get_catalog
 from fspml.matching.scoring import salary_fit
@@ -26,14 +19,14 @@ from ...core.errors import AppError, conflict, not_found, responses
 from ...core.security import require_role
 from ..candidates.models import CandidateProfile
 from ..candidates.service import anonymous_alias, category_label, features, revealed_contacts
+from ..employers import webhooks
 from ..employers.models import Company, Search
 from ..employers.router import get_company
-from ..employers.service import excluded_for, webhook_signing_key
+from ..employers.service import excluded_for
 from ..users.models import AuditLog, User
 from ..vacancies.models import Application, Vacancy
 from .models import ACCEPTED_STATUSES, Invitation
 
-log = logging.getLogger("webhooks")
 router = APIRouter(tags=["Приглашения"])
 EmployerUser = require_role("employer")
 CandidateUser = require_role("candidate")
@@ -212,49 +205,6 @@ def _notify_candidate(
     )
 
 
-def _public_host(url: str) -> bool:
-    """Адрес вебхука указывает работодатель, поэтому запросы во внутреннюю сеть стека (БД, Keycloak,
-    метаданные облака) запрещены: все адреса хоста должны быть публичными. WEBHOOK_ALLOW_PRIVATE=1 —
-    для стенда, где ATS стоит в той же локальной сети."""
-    parts = urlsplit(url)
-    if parts.scheme not in ("http", "https") or not parts.hostname:
-        return False
-    if get_settings().webhook_allow_private:
-        return True
-    try:
-        infos = socket.getaddrinfo(parts.hostname, parts.port or 443, proto=socket.IPPROTO_TCP)
-    except (OSError, ValueError):
-        return False
-    return bool(infos) and all(ipaddress.ip_address(i[4][0].split("%")[0]).is_global for i in infos)
-
-
-def _webhook(url: str, payload: dict, key: str) -> None:
-    """ATS-интеграция: событие о принятом приглашении (best effort).
-
-    Тело подписано: X-FSP-Signature: sha256=HMAC-SHA256(ключ компании, тело) — ключ виден работодателю
-    в профиле компании (`webhook_signing_key`), ATS проверяет, что событие пришло от платформы.
-    Редиректы не выполняются: иначе публичный адрес мог бы перенаправить запрос во внутреннюю сеть."""
-    if not _public_host(url):
-        log.warning("webhook skipped: %s is not a public http(s) address", url)
-        return
-    body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode()
-    sig = hmac.new(key.encode(), body, hashlib.sha256).hexdigest()
-    try:
-        httpx.post(
-            url,
-            content=body,
-            headers={
-                "Content-Type": "application/json",
-                "X-FSP-Event": payload["event"],
-                "X-FSP-Signature": f"sha256={sig}",
-            },
-            timeout=5,
-            follow_redirects=False,
-        )
-    except Exception:  # noqa: BLE001
-        pass
-
-
 def accepted_payload(inv: Invitation, p: CandidateProfile) -> dict:
     """Событие invitation.accepted: кандидат дал согласие (принял приглашение) — контакты открыты."""
     name, contacts = revealed_contacts(p)
@@ -348,7 +298,7 @@ def send_invitation(
     db.commit()
     bg.add_task(
         _notify_candidate,
-        p.contact_email,
+        revealed_contacts(p)[1].get("email"),
         company.name,
         body.title,
         body.salary_from,
@@ -512,7 +462,10 @@ def accept(
         )
         if company.webhook_url:
             bg.add_task(
-                _webhook, company.webhook_url, accepted_payload(inv, p), webhook_signing_key(company.id)
+                webhooks.send,
+                company.webhook_url,
+                accepted_payload(inv, p),
+                webhooks.signing_key(company.id),
             )
     return inv_out(db, inv, for_employer=False)
 
@@ -555,8 +508,6 @@ class InsightsOut(BaseModel):
     responses=responses(401, 403, 409),
 )
 def insights(user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
-    import numpy as np
-
     company = get_company(db, user)
     cat = get_catalog()
     rows = db.scalars(select(Invitation).where(Invitation.company_id == company.id)).all()
@@ -623,6 +574,3 @@ def insights(user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
         median_response_hours=round(float(np.median(hours)), 1) if hours else None,
         market=market,
     )
-
-
-__all__ = ["router", "datetime"]

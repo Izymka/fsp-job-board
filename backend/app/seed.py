@@ -184,6 +184,10 @@ def _proctored_summary(rng: random.Random) -> dict:
     }
 
 
+# ФСП ID демо-аккаунтов в realm fsp-id (maria@demo.fsp и свободный для живой привязки)
+RESERVED_FSP = {123, 999}
+
+
 def seed(n_candidates: int = 300) -> None:
     rng = random.Random(42)
     with SessionLocal() as db:
@@ -215,8 +219,8 @@ def seed(n_candidates: int = 300) -> None:
             _consents(db, u)
             fsp_id = ach = fsp_profile = None
             if c.fsp is not None:
-                fsp_counter += 1
-                fsp_id = f"FSP-{fsp_counter:06d}" if fsp_counter != 123 else "FSP-000401"
+                fsp_counter += 1 + (fsp_counter + 1 in RESERVED_FSP)
+                fsp_id = f"FSP-{fsp_counter:06d}"
                 # если реестр недоступен — не ждём таймаута на каждом кандидате
                 ach, fsp_profile, ok = _fsp_for(fsp_id, c.fsp, offline=not registry_ok)
                 registry_ok = registry_ok and ok

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import io
 
-from tests.conftest import SURVEY, Api, make_candidate, make_employer, pass_test
+from tests.conftest import SURVEY, Api, capture_webhooks, make_candidate, make_employer, pass_test
 
 
 def test_unauthenticated_and_wrong_role(client):
@@ -528,8 +528,8 @@ def test_fsp_kept_after_failed_upgrade_and_webhook_payload(client, monkeypatch):
     import hmac
     import json
 
+    from app.modules.employers import webhooks
     from app.modules.fsp import router as fsp_router
-    from app.modules.invitations import router as inv_router
 
     reg = {
         "fsp_id": "FSP-000123",
@@ -546,9 +546,10 @@ def test_fsp_kept_after_failed_upgrade_and_webhook_payload(client, monkeypatch):
         ],
     }
     monkeypatch.setattr(fsp_router, "fetch_participant", lambda fid: reg if fid == "FSP-000123" else None)
-    sent = []
-    monkeypatch.setattr(inv_router.httpx, "post", lambda url, **kw: sent.append((url, kw)))
-    monkeypatch.setattr(inv_router, "_public_host", lambda url: True)  # ats.example не резолвится
+    sent = capture_webhooks(monkeypatch)
+    monkeypatch.setattr(  # ats.example не резолвится
+        webhooks.socket, "getaddrinfo", lambda *a, **k: [(2, 1, 6, "", ("93.184.215.14", 443))]
+    )
 
     cand = make_candidate(client)
     # кандидат не заполнил почту в профиле — работодатель всё равно должен получить контакт
@@ -592,7 +593,9 @@ def test_fsp_kept_after_failed_upgrade_and_webhook_payload(client, monkeypatch):
     url, kw = sent[0]
     body = kw["content"]
     sig = hmac.new(key.encode(), body, hashlib.sha256).hexdigest()
-    assert url == "https://ats.example/hook" and kw["headers"]["X-FSP-Signature"] == f"sha256={sig}"
+    assert url == "https://93.184.215.14:443/hook" and kw["headers"]["Host"] == "ats.example"
+    assert kw["extensions"] == {"sni_hostname": "ats.example"}
+    assert kw["headers"]["X-FSP-Signature"] == f"sha256={sig}"
     card = emp.get(f"/api/employer/candidates/{cid}").json()
     assert card["fsp_id"] == "FSP-000123" and card["contacts"]["email"] == "cand@example.ru"
     c = json.loads(body)["candidate"]
@@ -688,22 +691,22 @@ def test_malformed_ids_are_404_not_500(client):
 
 
 def test_webhook_only_to_public_http_addresses(client, monkeypatch):
-    from app.modules.invitations import router as inv_router
+    from app.modules.employers import webhooks
 
     emp = make_employer(client)
     r = emp.put("/api/employer/company", json={"name": "ООО «Тест»", "webhook_url": "file:///etc/passwd"})
     assert r.status_code == 422
-    sent = []
-    monkeypatch.setattr(inv_router.httpx, "post", lambda url, **kw: sent.append(url))
+    sent = capture_webhooks(monkeypatch)
     for url in (
         "http://127.0.0.1:8000/api/health",
         "http://localhost:5432/",
         "http://169.254.169.254/latest",
     ):
-        inv_router._webhook(url, {"event": "invitation.accepted"}, "key")
+        webhooks.send(url, {"event": "invitation.accepted"}, "key")
     assert not sent
-    monkeypatch.setattr(
-        inv_router.socket, "getaddrinfo", lambda *a, **k: [(2, 1, 6, "", ("93.184.215.14", 443))]
-    )
-    inv_router._webhook("https://ats.example/hook", {"event": "invitation.accepted"}, "key")
-    assert sent == ["https://ats.example/hook"]
+    # соединение идёт на проверенный адрес: повторный DNS-ответ (rebinding) не используется
+    answers = iter(["93.184.215.14", "127.0.0.1"])
+    monkeypatch.setattr(webhooks.socket, "getaddrinfo", lambda *a, **k: [(2, 1, 6, "", (next(answers), 80))])
+    webhooks.send("http://ats.example:8080/hook?x=1", {"event": "invitation.accepted"}, "key")
+    assert [url for url, _ in sent] == ["http://93.184.215.14:8080/hook?x=1"]
+    assert sent[0][1]["headers"]["Host"] == "ats.example:8080"

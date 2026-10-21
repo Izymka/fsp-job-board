@@ -265,9 +265,11 @@ def attempt_out(db: Session, attempt: Attempt) -> AttemptOut:
     )
 
 
-def _own_attempt(db: Session, user: User, attempt_id: str) -> Attempt:
+def _own_attempt(db: Session, user: User, attempt_id: str, *, lock: bool = False) -> Attempt:
     try:
-        a = db.get(Attempt, uuid.UUID(attempt_id))
+        # ответы на одну попытку сериализуются: иначе параллельные запросы примут два ответа на
+        # одно задание и выдадут два следующих
+        a = db.get(Attempt, uuid.UUID(attempt_id), with_for_update=lock)
     except ValueError:
         a = None
     if a is None or a.candidate_id != user.id:
@@ -389,7 +391,7 @@ def get_attempt(attempt_id: str, user: User = Depends(CandidateUser), db: Sessio
 def post_answer(
     attempt_id: str, body: AnswerIn, user: User = Depends(CandidateUser), db: Session = Depends(get_db)
 ):
-    a = _own_attempt(db, user, attempt_id)
+    a = _own_attempt(db, user, attempt_id, lock=True)
     p = get_profile(db, user)
     service.answer(
         db,

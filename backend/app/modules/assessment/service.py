@@ -22,7 +22,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ...core.config import get_settings
-from ...core.db import aware, utcnow
+from ...core.db import utcnow
 from ...core.errors import AppError
 from ..candidates.models import CandidateProfile
 from ..candidates.service import fsp_achievements
@@ -93,11 +93,9 @@ def grade_state(db: Session, p: CandidateProfile) -> gp.GradeState:
     ).all()
     return gp.GradeState(
         confirmed_grade=p.confirmed_grade,
-        confirmed_at=aware(p.confirmed_at),
-        last_change_at=aware(p.last_grade_change_at),
-        attempts=tuple(
-            gp.AttemptRecord(a.grade, a.status, aware(a.started_at), aware(a.finished_at)) for a in rows
-        ),
+        confirmed_at=p.confirmed_at,
+        last_change_at=p.last_grade_change_at,
+        attempts=tuple(gp.AttemptRecord(a.grade, a.status, a.started_at, a.finished_at) for a in rows),
     )
 
 
@@ -105,7 +103,7 @@ def expire_stale(db: Session, p: CandidateProfile) -> None:
     for a in db.scalars(
         select(Attempt).where(Attempt.candidate_id == p.user_id, Attempt.status == "in_progress")
     ).all():
-        if utcnow() - aware(a.started_at) > STALE_AFTER:
+        if utcnow() - a.started_at > STALE_AFTER:
             a.status = "abandoned"
             a.finished_at = utcnow()
 
@@ -400,12 +398,17 @@ def answer(
 ) -> CatResult | None:
     if attempt.status != "in_progress":
         raise AppError(409, "attempt_finished", "Попытка уже завершена")
+    if utcnow() - attempt.started_at > STALE_AFTER:
+        attempt.status = "abandoned"
+        attempt.finished_at = utcnow()
+        db.commit()
+        raise AppError(409, "attempt_finished", "Время попытки истекло — она засчитана как брошенная")
     item = current_item(db, attempt)
     if item is None or item.position != position:
         raise AppError(409, "wrong_position", "Ответ на это задание уже принят или задание не выдано")
     engine = get_engine(db)
     limit = item_time_limit(engine, item)
-    elapsed = (utcnow() - aware(item.issued_at)).total_seconds()
+    elapsed = (utcnow() - item.issued_at).total_seconds()
     over = elapsed > limit + TIME_GRACE_SEC
     pace = {"overtime": over, "overtime_sec": int(elapsed - limit) if over else 0}
     item.answered_at = utcnow()
@@ -658,6 +661,5 @@ def result_payload(
         "knowledge_p_claimed": knowledge.p_claimed if knowledge is not None else r.p_claimed,
         "scenario": scenario,
         "integrity": report.to_dict() if report is not None else None,
-        "tab_switches": report.items_left if report is not None else 0,
         "pace": pace,
     }

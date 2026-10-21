@@ -35,7 +35,13 @@ async function request<T>(method: string, url: string, body?: unknown, opts: { r
   }
   if (res.status === 204) return undefined as T
   const text = await res.text()
-  const data = text ? JSON.parse(text) : null
+  let data = null
+  try {
+    data = text ? JSON.parse(text) : null
+  } catch {
+    // не JSON: страница ошибки прокси (502/504) или обрыв ответа
+    if (res.ok) throw new ApiError(res.status, 'bad_response', 'Некорректный ответ сервера')
+  }
   if (!res.ok) {
     const e = data?.error
     let message = e?.message || `Ошибка ${res.status}`
@@ -68,7 +74,7 @@ export const api = {
     a.href = URL.createObjectURL(blob)
     a.download = filename
     a.click()
-    URL.revokeObjectURL(a.href)
+    setTimeout(() => URL.revokeObjectURL(a.href), 0)
   },
 }
 

@@ -16,7 +16,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ...core.config import get_settings
-from ...core.db import aware, get_db, utcnow
+from ...core.db import get_db, utcnow
 from ...core.errors import AppError, conflict, not_found, responses
 from ...core.security import require_role
 from ..candidates.models import CandidateProfile
@@ -267,7 +267,7 @@ def recompute_tasks_score(db: Session, p: CandidateProfile) -> None:
     total = 0.0
     for a in rows:
         s = a.score if a.score is not None else (1.0 if a.correct else 0.0 if a.correct is False else 0.5)
-        age = (now - aware(a.submitted_at or a.assigned_at)).days
+        age = (now - (a.submitted_at or a.assigned_at)).days
         total += s * 0.5 ** (age / 60)
     p.tasks_score = round(min(1.0, total / 3), 3)
 
@@ -279,7 +279,7 @@ def _maybe_assign(db: Session, p: CandidateProfile) -> None:
     last = db.scalar(
         select(func.max(TaskAssignment.assigned_at)).where(TaskAssignment.candidate_id == p.user_id)
     )
-    if last and utcnow() - aware(last) < interval:
+    if last and utcnow() - last < interval:
         return
     done = set(
         db.scalars(select(TaskAssignment.task_id).where(TaskAssignment.candidate_id == p.user_id)).all()
@@ -293,25 +293,30 @@ def _maybe_assign(db: Session, p: CandidateProfile) -> None:
         ).all()
         if t.id not in done
     ]
-    if not pool:
-        return
     # приоритет — задания по навыкам, где подтверждение слабее (даём шанс подтвердить)
     weak = {k for k, v in (p.skill_scores or {}).items() if v.get("status") != "confirmed"}
     pool.sort(key=lambda t: (t.skill not in weak, random.random()))
-    t = pool[0]
-    a = TaskAssignment(
-        id=uuid.uuid4(), task_id=t.id, candidate_id=p.user_id, due_at=utcnow() + timedelta(days=7)
-    )
-    if t.kind == "auto":
-        level = GRADE_LEVEL.get(p.confirmed_grade, 3)
-        fams = sorted(
-            (f for f in REGISTRY.values() if f.skill == t.skill),
-            key=lambda f: (abs(f.level - level), random.random()),
+    level = GRADE_LEVEL.get(p.confirmed_grade, 3)
+    for t in pool:
+        family_id = None
+        if t.kind == "auto":
+            fams = sorted(
+                (f for f in REGISTRY.values() if f.skill == t.skill),
+                key=lambda f: (abs(f.level - level), random.random()),
+            )
+            if not fams:
+                continue  # по навыку нет заданий в банке — берём следующее задание
+            family_id = fams[0].id
+        db.add(
+            TaskAssignment(
+                id=uuid.uuid4(),
+                task_id=t.id,
+                candidate_id=p.user_id,
+                family_id=family_id,
+                due_at=utcnow() + timedelta(days=7),
+            )
         )
-        if not fams:
-            return
-        a.family_id = fams[0].id
-    db.add(a)
+        return
 
 
 @router.get(
@@ -328,7 +333,7 @@ def my_tasks(user: User = Depends(CandidateUser), db: Session = Depends(get_db))
             TaskAssignment.candidate_id == p.user_id, TaskAssignment.status == "assigned"
         )
     ).all():
-        if a.due_at and aware(a.due_at) < utcnow():
+        if a.due_at and a.due_at < utcnow():
             a.status = "expired"
     db.commit()
     rows = db.scalars(
@@ -355,10 +360,13 @@ def submit(
         a = None
     if a is None or a.candidate_id != p.user_id:
         raise not_found("Задание")
+    now = utcnow()
+    if a.status == "assigned" and a.due_at and a.due_at < now:
+        a.status = "expired"
+        db.commit()
     if a.status != "assigned":
         raise conflict("not_open", "Задание уже отправлено или просрочено")
     t = db.get(RegularTask, a.task_id)
-    now = utcnow()
     if t.kind == "auto":
         inst = _instance(a)
         if inst is None:

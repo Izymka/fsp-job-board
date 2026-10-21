@@ -60,7 +60,7 @@ class CandidateProfile(TimestampMixin, Base):
     tasks_score: Mapped[float] = mapped_column(default=0.0)
     task_skills: Mapped[dict] = mapped_column(default=dict)
     # ФСП
-    fsp_id: Mapped[str | None] = mapped_column(String(64), index=True)
+    fsp_id: Mapped[str | None] = mapped_column(String(64), index=True, unique=True)
     fsp_linked_at: Mapped[datetime | None] = mapped_column(default=None)
     fsp_synced_at: Mapped[datetime | None] = mapped_column(default=None)
     fsp_profile: Mapped[dict | None] = mapped_column(default=None)  # {name, rank, region}

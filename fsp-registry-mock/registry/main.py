@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+import hmac
 import os
 import random
 from datetime import date, datetime, timedelta
@@ -276,7 +277,7 @@ app = FastAPI(
 
 
 def require_key(x_api_key: str | None = Header(default=None)):
-    if x_api_key != API_KEY:
+    if not hmac.compare_digest((x_api_key or "").encode(), API_KEY.encode()):
         raise HTTPException(401, "invalid api key")
 
 

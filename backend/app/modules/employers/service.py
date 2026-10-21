@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
-import hmac
 import uuid
 from datetime import date
 
@@ -25,13 +23,13 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ...core.config import get_settings
-from ...core.db import aware, utcnow
+from ...core.db import utcnow
 from ..candidates.models import CandidateProfile
 from ..candidates.service import (
     anonymous_alias,
     category_label,
     embeddings_for,
-    experience_summary,
+    experience_fields,
     features,
     revealed_contacts,
 )
@@ -109,13 +107,6 @@ class RankedCandidate(BaseModel):
     shortlisted: bool = False
 
 
-def webhook_signing_key(company_id) -> str:
-    """Ключ подписи вебхуков компании: производный от секрета платформы, хранить отдельно не нужно."""
-    return hmac.new(
-        get_settings().webhook_secret.encode(), str(company_id).encode(), hashlib.sha256
-    ).hexdigest()
-
-
 # FSP_RANKER → версия формулы `rank`; гибриды (hybrid, v4) — кросс-энкодер поверх v5 / v1
 FORMULA_VERSIONS = {"v1": 1, "v4": 1, "v5": 5, "hybrid": 5, "v6": 6, "v7": 7}
 
@@ -147,7 +138,7 @@ def visible_profiles(
     return list(db.scalars(q).all())
 
 
-def _percentiles(profiles: list[CandidateProfile]) -> dict[uuid.UUID, float]:
+def percentiles(profiles: list[CandidateProfile]) -> dict[uuid.UUID, float]:
     groups: dict[tuple, list[float]] = {}
     for p in profiles:
         if p.theta is not None:
@@ -162,18 +153,6 @@ def _percentiles(profiles: list[CandidateProfile]) -> dict[uuid.UUID, float]:
     return out
 
 
-def _experience_card(p: CandidateProfile) -> dict:
-    s = experience_summary(p)
-    if s is None:
-        return {}
-    return {
-        "experience_years": max(s.total_years, p.experience_years or 0.0),
-        "relevant_years": s.relevant_years,
-        "it_years": s.it_years,
-        "industry_years": s.industry_years,
-    }
-
-
 def card(
     p: CandidateProfile,
     *,
@@ -185,7 +164,7 @@ def card(
     cat = get_catalog()
     today = today or utcnow().date()
     f = features(p)
-    la = aware(p.last_active_at)
+    la = p.last_active_at
     fsp_items = []
     if p.fsp_id and p.show_fsp:
         for a in sorted(p.fsp_achievements or [], key=lambda a: a.get("date", ""), reverse=True):
@@ -218,7 +197,7 @@ def card(
         city=p.city,
         headline=p.headline,
         about=p.about,
-        **{"experience_years": p.experience_years, **_experience_card(p)},
+        **experience_fields(p),
         stack=list(p.stack or []),
         confirmed_skills=[
             cat.assessment_skills.get(k, {}).get("title", k)
@@ -305,11 +284,11 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
     by_id = {str(p.user_id): p for p in profiles}
     ranker = get_settings().fsp_ranker
     version = formula_version(ranker)
+    pct = percentiles(profiles)
     if ranker in ("hybrid", "v4"):
         from fspml.bench.dossier import render_candidate
         from fspml.matching.hybrid import rank_hybrid
 
-        pct_ = _percentiles(profiles)
         scored = rank_hybrid(
             feats,
             need,
@@ -318,7 +297,7 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
                 f,
                 today,
                 alias=anonymous_alias(by_id[f.id]),
-                percentile=pct_.get(by_id[f.id].user_id),
+                percentile=pct.get(by_id[f.id].user_id),
             ),
             version=version,
         )
@@ -326,7 +305,6 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
         scored = rank(feats, need, today, version=version)
     base_total = len(scored)
     filtered = apply_filters(scored, by_id, s.filters or {})
-    pct = _percentiles(profiles)
     top = filtered[:limit]
     revealed = revealed_set(db, company.id, [by_id[x.candidate_id].user_id for x in top])
     results = []
@@ -343,7 +321,7 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
                 salary_fit=sc.salary_fit,
             )
         )
-    all_feats = [features(p) for p in visible_profiles(db, None, None)]
+    all_feats = [features(p) for p in visible_profiles(db) if not excluded_for(p, company)]
     spec_scores = (s.parsed or {}).get("spec_scores")
     cats = recommend_categories(all_feats, need, spec_scores)
     return {

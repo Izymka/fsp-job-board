@@ -108,10 +108,7 @@ def get_current_user(
     }:
         user.role = "fsp_admin"  # роль федерации не выбирается самостоятельно — только по списку
     now = utcnow()
-    last = user.last_seen_at
-    if last is None or (now - (last if last.tzinfo else last.replace(tzinfo=now.tzinfo))) > timedelta(
-        minutes=5
-    ):
+    if user.last_seen_at is None or now - user.last_seen_at > timedelta(minutes=5):
         user.last_seen_at = now
     return user
 
@@ -128,6 +125,3 @@ def require_role(role: str):
         return user
 
     return dep
-
-
-CurrentUser = Annotated[object, Depends(get_current_user)]

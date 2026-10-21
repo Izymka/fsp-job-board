@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 
 from ...core.config import get_settings
 from ...core.db import get_db, utcnow
-from ...core.errors import AppError, bad_request, responses
+from ...core.errors import bad_request, responses
 from ...core.security import require_role
 from ..users.models import User
 from .models import CandidateProfile
@@ -26,6 +26,7 @@ router = APIRouter(prefix="/api/candidate", tags=["Кандидат: профи�
 CandidateUser = require_role("candidate")
 
 GRADES = Literal["intern", "junior", "middle", "senior", "lead"]
+RESUME_MAX_BYTES = 5 * 1024 * 1024
 
 
 class JobIn(BaseModel):
@@ -105,9 +106,9 @@ class SurveyIn(BaseModel):
 
 class PrivacyIn(BaseModel):
     show_fsp: bool = True
-    excluded_industries: list[str] = Field(default_factory=list)
+    excluded_industries: list[str] = Field(default_factory=list, max_length=50)
     excluded_companies: list[str] = Field(
-        default_factory=list, description="id компаний, от которых профиль скрыт"
+        default_factory=list, max_length=200, description="id компаний, от которых профиль скрыт"
     )
     search_status: Literal["active", "open", "closed"] | None = None
 
@@ -237,7 +238,6 @@ def update_profile(body: ProfileIn, user: User = Depends(CandidateUser), db: Ses
     p = get_profile(db, user)
     for k, v in body.model_dump().items():
         setattr(p, k, v)
-    p.experience = [j.model_dump() for j in body.experience]
     p.last_active_at = utcnow()
     update_embedding(p)
     db.commit()
@@ -321,8 +321,8 @@ class ResumeParseOut(BaseModel):
 async def upload_resume(
     file: UploadFile = File(...), user: User = Depends(CandidateUser), db: Session = Depends(get_db)
 ):
-    data = await file.read()
-    if len(data) > 5 * 1024 * 1024:
+    data = await file.read(RESUME_MAX_BYTES + 1)
+    if len(data) > RESUME_MAX_BYTES:
         raise bad_request("file_too_large", "Файл больше 5 МБ")
     if data[:4] == b"%PDF":
         try:
@@ -463,6 +463,3 @@ def dashboard(user: User = Depends(CandidateUser), db: Session = Depends(get_db)
         profile_completeness=round(completeness, 2),
         next_actions=actions,
     )
-
-
-__all__ = ["router", "get_profile", "profile_out", "AppError"]

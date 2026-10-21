@@ -14,11 +14,15 @@ os.environ.update(
     }
 )
 
+from types import SimpleNamespace  # noqa: E402
+
+import httpx  # noqa: E402
 import pytest  # noqa: E402
 from app.core.config import get_settings  # noqa: E402
 from app.core.db import Base, engine  # noqa: E402
 from app.main import create_app  # noqa: E402
 from app.modules.assessment import service as assessment_service  # noqa: E402
+from app.modules.employers import webhooks  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
 
 get_settings.cache_clear()
@@ -179,3 +183,24 @@ def pass_test(api: Api, grade="middle", correct=True) -> dict:
         assert r.status_code == 200, r.text
         att = r.json()
     return att
+
+
+def capture_webhooks(monkeypatch) -> list[tuple[str, dict]]:
+    """Подменить HTTP-клиент вебхуков: запросы складываются в список (url, kwargs)."""
+    sent: list[tuple[str, dict]] = []
+
+    class _Client:
+        def __init__(self, **_):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def post(self, url, **kw):
+            sent.append((url, kw))
+
+    monkeypatch.setattr(webhooks, "httpx", SimpleNamespace(Client=_Client, HTTPError=httpx.HTTPError))
+    return sent

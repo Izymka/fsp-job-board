@@ -80,10 +80,3 @@ def get_db() -> Iterator[Session]:
         raise
     finally:
         db.close()
-
-
-def aware(dt: datetime | None) -> datetime | None:
-    """SQLite теряет таймзону — приводим к UTC-aware для сравнения."""
-    if dt is None or dt.tzinfo is not None:
-        return dt
-    return dt.replace(tzinfo=UTC)

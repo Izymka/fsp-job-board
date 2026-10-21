@@ -26,7 +26,7 @@ from ...core.errors import AppError, conflict, not_found, responses
 from ...core.security import require_role
 from ..candidates.models import CandidateProfile
 from ..candidates.router import get_profile
-from ..candidates.service import category_label, features
+from ..candidates.service import features
 from ..employers.models import Company
 from ..employers.router import get_company
 from ..employers.service import CandidateCard, card, formula_version, visible_profiles
@@ -239,15 +239,7 @@ def _own_vacancy(db: Session, company: Company, vacancy_id: str) -> Vacancy:
 )
 def create_vacancy(body: VacancyIn, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     company = get_company(db, user)
-    v = Vacancy(
-        company_id=company.id,
-        title=body.title,
-        text=body.text,
-        specialization="backend",
-        grade="middle",
-        salary_from=body.salary_from,
-        salary_to=body.salary_to,
-    )
+    v = Vacancy(company_id=company.id)
     _apply_body(v, body)
     db.add(v)
     db.commit()
@@ -491,6 +483,3 @@ def my_applications(user: User = Depends(CandidateUser), db: Session = Depends(g
         select(Application).where(Application.candidate_id == user.id).order_by(Application.created_at.desc())
     ).all()
     return [app_out(db, a, with_candidate=False) for a in rows]
-
-
-__all__ = ["router", "category_label"]

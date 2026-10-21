@@ -16,11 +16,11 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ...core.config import get_settings
-from ...core.db import aware, utcnow
+from ...core.db import utcnow
 from ...core.email import send_email
 from ..candidates.models import CandidateProfile
 from ..users.models import User
-from . import service
+from . import service, webhooks
 from .models import Company, FspMatchNotice, Search
 
 log = logging.getLogger("fsp_alerts")
@@ -78,7 +78,7 @@ def send_digest(db: Session, s: Search) -> bool:
         .limit(1)
     )
     now = utcnow()
-    if last is not None and now - aware(last) < DIGEST_EVERY:
+    if last is not None and now - last < DIGEST_EVERY:
         return False
     company = db.get(Company, s.company_id)
     owner = db.get(User, company.owner_id) if company else None
@@ -98,11 +98,8 @@ def send_digest(db: Session, s: Search) -> bool:
     ]
     send_email(to, f"Новые участники ФСП в подборке «{s.title}»", "\n".join(lines))
     if company and company.webhook_url:
-        from ..invitations.router import _webhook
-        from .service import webhook_signing_key
-
         for n in pending:
-            _webhook(
+            webhooks.send(
                 company.webhook_url,
                 {
                     "event": "candidate.fsp_match",
@@ -110,9 +107,9 @@ def send_digest(db: Session, s: Search) -> bool:
                     "candidate_id": str(n.candidate_id),
                     "rank": n.rank,
                     "reason": n.reason,
-                    "created_at": aware(n.created_at).isoformat(),
+                    "created_at": n.created_at.isoformat(),
                 },
-                webhook_signing_key(company.id),
+                webhooks.signing_key(company.id),
             )
     for n in pending:
         n.emailed_at = now

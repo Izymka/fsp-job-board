@@ -32,6 +32,7 @@ function readDevToken(): string | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<AuthConfig | null>(null)
   const [ready, setReady] = useState(false)
+  const [unavailable, setUnavailable] = useState(false)
   const [authenticated, setAuthenticated] = useState(false)
   const kcRef = useRef<Keycloak | null>(null)
   const qc = useQueryClient()
@@ -43,7 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         cfg = await api.get<AuthConfig>('/api/auth/config')
       } catch {
-        cfg = { mode: 'dev', keycloak_url: '', realm: '', client_id: '', consent_version: '', consent_texts: {} }
+        // режим входа определяет только бэкенд: без его ответа не угадываем (в т.ч. не включаем dev)
+        if (!cancelled) setUnavailable(true)
+        return
       }
       if (cancelled) return
       setConfig(cfg)
@@ -123,6 +126,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [config, ready, authenticated, qc],
   )
 
+  if (unavailable)
+    return (
+      <EmptyState
+        title="Сервис временно недоступен"
+        text="Не удалось получить настройки входа. Попробуйте обновить страницу через минуту."
+        action={
+          <button className="btn-primary" onClick={() => window.location.reload()}>
+            Обновить
+          </button>
+        }
+      />
+    )
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
 

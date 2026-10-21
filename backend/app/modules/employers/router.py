@@ -9,7 +9,6 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.responses import Response
 from fspml.catalog import get_catalog
 from fspml.matching.scoring import profile_strength, weights_for
-from fspml.nlp.embed import get_embedder
 from fspml.nlp.vacancy import parse_need
 from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlalchemy import func, select
@@ -24,7 +23,7 @@ from ..candidates.pdf import render_profile_pdf
 from ..candidates.service import features
 from ..invitations.access import contacts_revealed, revealed_set
 from ..users.models import AuditLog, User
-from . import service
+from . import service, webhooks
 from .models import Company, Search, SearchVersion, ShortlistItem
 
 router = APIRouter(prefix="/api/employer", tags=["Работодатель"])
@@ -76,7 +75,7 @@ def company_out(c: Company) -> CompanyOut:
     return CompanyOut(
         id=str(c.id),
         created_at=c.created_at,
-        webhook_signing_key=service.webhook_signing_key(c.id),
+        webhook_signing_key=webhooks.signing_key(c.id),
         **{k: getattr(c, k) for k in CompanyIn.model_fields},
     )
 
@@ -551,7 +550,10 @@ class CategoryCell(BaseModel):
 def categories(user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     cat = get_catalog()
     out = []
-    profiles = service.visible_profiles(db)
+    company = get_company(db, user, required=False)
+    profiles = [
+        p for p in service.visible_profiles(db) if company is None or not service.excluded_for(p, company)
+    ]
     for spec in cat.specializations.values():
         for g in cat.grades:
             pool = [
@@ -621,7 +623,7 @@ def bank(
             continue
         rows.append((profile_strength(features(p), today, weights_for(service.formula_version()))[0], p))
     rows.sort(key=lambda x: (-x[0], str(x[1].user_id)))
-    pct = service._percentiles(profiles)
+    pct = service.percentiles(profiles)
     chunk = rows[(page - 1) * page_size : page * page_size]
     revealed = revealed_set(db, company.id, [p.user_id for _, p in chunk])
     return BankPage(
@@ -661,7 +663,7 @@ def candidate_card(
             )
         )
         db.commit()
-    pct = service._percentiles(service.visible_profiles(db, p.specialization, [p.confirmed_grade]))
+    pct = service.percentiles(service.visible_profiles(db, p.specialization, [p.confirmed_grade]))
     offer = (salary_from, salary_to) if (salary_from or salary_to) else None
     c = service.card(p, revealed=revealed, percentile=pct.get(p.user_id), offer=offer)
     c.test_photo_available = revealed and proctoring.latest_snapshot(db, p.user_id) is not None
@@ -715,7 +717,3 @@ def candidate_pdf(candidate_id: str, user: User = Depends(EmployerUser), db: Ses
         media_type="application/pdf",
         headers={"Content-Disposition": 'attachment; filename="candidate.pdf"'},
     )
-
-
-def embed_text(text: str):
-    return get_embedder().encode([text])[0]

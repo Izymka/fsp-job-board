@@ -237,3 +237,22 @@ def test_overtime_answer_counts_and_is_marked(client):
     att = _run_knowledge(cand, att)
     pace = att["result"]["pace"]
     assert pace["overtime_items"] == 1 and pace["items"] == att["result"]["n_items"]
+
+
+def test_answer_after_attempt_timeout_is_rejected(client):
+    from datetime import timedelta
+
+    from app.core.db import SessionLocal
+
+    cand = make_candidate(client)
+    att = cand.post("/api/assessment/attempts", json={"grade": "junior"}).json()
+    with SessionLocal() as db:
+        a = db.get(Attempt, uuid.UUID(att["id"]))
+        a.started_at -= assessment_service.STALE_AFTER + timedelta(minutes=1)
+        db.commit()
+    r = cand.post(
+        f"/api/assessment/attempts/{att['id']}/answer",
+        json={"position": att["item"]["position"], "value": 0},
+    )
+    assert r.status_code == 409 and r.json()["error"]["code"] == "attempt_finished"
+    assert cand.get(f"/api/assessment/attempts/{att['id']}").json()["status"] == "abandoned"

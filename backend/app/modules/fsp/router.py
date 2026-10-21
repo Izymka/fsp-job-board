@@ -11,6 +11,7 @@ import secrets
 import threading
 import time
 import urllib.parse
+import uuid
 from datetime import timedelta
 
 import httpx
@@ -23,7 +24,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from ...core.config import Settings, get_settings
-from ...core.db import SessionLocal, aware, get_db, utcnow
+from ...core.db import SessionLocal, get_db, utcnow
 from ...core.errors import AppError, conflict, responses
 from ...core.security import require_role
 from ..assessment.models import Attempt
@@ -133,7 +134,8 @@ def link_callback(
         st = jwt.decode(state, settings.assessment_secret, algorithms=["HS256"])
         if st.get("purpose") != "fsp-link":
             raise jwt.InvalidTokenError("purpose")
-    except jwt.PyJWTError:
+        user_id = uuid.UUID(st["uid"])
+    except (jwt.PyJWTError, KeyError, ValueError):
         return RedirectResponse(f"{back}?fsp=invalid_state")
     token_url = (
         f"{settings.keycloak_internal_url}/realms/{settings.fsp_id_realm}/protocol/openid-connect/token"
@@ -156,16 +158,15 @@ def link_callback(
     except Exception as e:  # noqa: BLE001
         log.warning("fsp token exchange failed: %s", e)
         return RedirectResponse(f"{back}?fsp=error")
-    raw_id = claims.get("fsp_id") or claims.get("preferred_username")
+    # только выделенный claim ФСП ID: preferred_username задаёт пользователь IdP, а не реестр
+    raw_id = claims.get("fsp_id")
     fsp_id = str(raw_id).upper() if raw_id else None  # Keycloak хранит логины в нижнем регистре
-    import uuid as _uuid
-
-    user = db.get(User, _uuid.UUID(st["uid"]))
+    user = db.get(User, user_id)
     if user is None or user.role != "candidate" or not fsp_id:
         return RedirectResponse(f"{back}?fsp=error")
     p = get_profile(db, user)
     try:
-        link_profile(db, p, str(fsp_id))
+        link_profile(db, p, fsp_id)
     except AppError as e:
         return RedirectResponse(f"{back}?fsp={e.code}")
     db.commit()
@@ -463,7 +464,7 @@ def sync_loop(stop: threading.Event) -> None:
                     .limit(50)
                 ).all()
                 for p in rows:
-                    if (p.fsp_synced_at is None or aware(p.fsp_synced_at) < cutoff) and sync_profile(p):
+                    if (p.fsp_synced_at is None or p.fsp_synced_at < cutoff) and sync_profile(p):
                         notify_fsp_alerts(db, p)
                 send_due_digests(db)
                 db.commit()

@@ -152,7 +152,6 @@ export interface AttemptResult {
   estimated_grade: GradeId
   skills: Record<string, { status: SkillScore['status']; theta: number | null; se: number | null; n: number; n_correct: number }>
   explanation: string[]
-  tab_switches: number
   knowledge_p_claimed?: number
   scenario?: ScenarioOutcome | null
   integrity?: IntegrityReport | null

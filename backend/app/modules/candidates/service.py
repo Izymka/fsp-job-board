@@ -13,7 +13,6 @@ from fspml.matching.scoring import CandidateFeatures, FspAchievement
 from fspml.nlp.embed import SentenceEmbedder, get_embedder
 from sqlalchemy.orm import object_session
 
-from ...core.db import aware
 from ..users.models import User
 from .models import CandidateProfile
 
@@ -81,8 +80,8 @@ def experience_summary(p: CandidateProfile, today: date | None = None) -> Experi
 
 def features(p: CandidateProfile, embedding: np.ndarray | None = None) -> CandidateFeatures:
     scores = p.skill_scores or {}
-    last_active = aware(p.last_active_at)
-    confirmed_at = aware(p.confirmed_at)
+    last_active = p.last_active_at
+    confirmed_at = p.confirmed_at
     return CandidateFeatures(
         id=str(p.user_id),
         specialization=p.specialization or "",
@@ -110,11 +109,11 @@ def features(p: CandidateProfile, embedding: np.ndarray | None = None) -> Candid
         proctored=((p.assessment_summary or {}).get("proctoring") or {}).get("status") == "verified",
         integrity=((p.assessment_summary or {}).get("integrity") or {}).get("level") or "ok",
         integrity_severity=((p.assessment_summary or {}).get("integrity") or {}).get("severity"),
-        **_experience_kw(p),
+        **experience_fields(p),
     )
 
 
-def _experience_kw(p: CandidateProfile) -> dict:
+def experience_fields(p: CandidateProfile) -> dict:
     s = experience_summary(p)
     if s is None:
         # заявленный стаж без мест работы; 0 — «нет опыта», явно указанный кандидатом
