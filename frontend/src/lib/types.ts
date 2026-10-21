@@ -405,6 +405,7 @@ export interface Company {
   contact_telegram: string | null
   inn: string | null
   webhook_url: string | null
+  webhook_signing_key?: string
   created_at: string
 }
 

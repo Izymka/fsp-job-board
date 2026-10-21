@@ -90,6 +90,14 @@ export default function EmployerCompany() {
               <input className="input" value={f.webhook_url} onChange={set('webhook_url')} placeholder="https://ats.example.ru/hooks/fsp" />
             </Field>
           </div>
+          {data?.webhook_signing_key && (
+            <Field
+              label="Ключ подписи вебхука"
+              hint="Заголовок X-FSP-Signature: sha256=HMAC-SHA256(ключ, тело запроса) — проверьте его на стороне ATS"
+            >
+              <input className="input font-mono text-xs" value={data.webhook_signing_key} readOnly />
+            </Field>
+          )}
         </Section>
         <ErrorBox error={save.error} />
         <button className="btn-primary px-6" disabled={save.isPending}>
