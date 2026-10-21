@@ -336,6 +336,8 @@ LOCAL_SYSTEMS = {
     "ours_v4": lambda corpus: _hybrid(corpus, 1),  # гибрид на формуле v1
     "ours_v5": lambda corpus: S.ours(corpus, TODAY, version=5),
     "ours_v5_ce": lambda corpus: _hybrid(corpus, 5),  # гибрид на формуле v5
+    "ours_v6": lambda corpus: S.ours(corpus, TODAY, version=6),
+    "ours_v7": lambda corpus: S.ours(corpus, TODAY, version=7),
     "ours": lambda corpus: S.ours(corpus, TODAY, version=1),
     "ours_v2": lambda corpus: S.ours(corpus, TODAY, version=2),
 }

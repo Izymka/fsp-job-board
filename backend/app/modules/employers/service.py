@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import hmac
 import uuid
 from datetime import date
 
@@ -15,6 +17,7 @@ from fspml.matching.scoring import (
     rank,
     recommend_categories,
     salary_fit,
+    weights_for,
 )
 from fspml.nlp.embed import get_embedder
 from pydantic import BaseModel
@@ -24,7 +27,14 @@ from sqlalchemy.orm import Session
 from ...core.config import get_settings
 from ...core.db import aware, utcnow
 from ..candidates.models import CandidateProfile
-from ..candidates.service import anonymous_alias, category_label, embeddings_for, experience_summary, features
+from ..candidates.service import (
+    anonymous_alias,
+    category_label,
+    embeddings_for,
+    experience_summary,
+    features,
+    revealed_contacts,
+)
 from ..invitations.access import revealed_set
 from .models import Company, Search
 
@@ -71,6 +81,9 @@ class CandidateCard(BaseModel):
     last_active_days: int | None
     fsp_linked: bool
     fsp_visible: bool
+    # сам ФСП ID — только после согласия кандидата (принятое приглашение или отклик): по нему
+    # в реестре находится ФИО, до согласия работодатель видит лишь факт привязки и достижения
+    fsp_id: str | None = None
     fsp_strength: float
     fsp: list[FspItem]
     profile_strength: float
@@ -90,6 +103,21 @@ class RankedCandidate(BaseModel):
     adjacent: bool
     salary_fit: str
     shortlisted: bool = False
+
+
+def webhook_signing_key(company_id) -> str:
+    """Ключ подписи вебхуков компании: производный от секрета платформы, хранить отдельно не нужно."""
+    return hmac.new(
+        get_settings().webhook_secret.encode(), str(company_id).encode(), hashlib.sha256
+    ).hexdigest()
+
+
+# FSP_RANKER → версия формулы `rank`; гибриды (hybrid, v4) — кросс-энкодер поверх v5 / v1
+FORMULA_VERSIONS = {"v1": 1, "v4": 1, "v5": 5, "hybrid": 5, "v6": 6, "v7": 7}
+
+
+def formula_version(ranker: str | None = None) -> int:
+    return FORMULA_VERSIONS.get(ranker or get_settings().fsp_ranker, 7)
 
 
 def visible_profiles(
@@ -157,24 +185,13 @@ def card(
                     role=a.get("role"),
                 )
             )
-    contacts = None
-    if revealed:
-        contacts = {
-            k: v
-            for k, v in {
-                "email": p.contact_email,
-                "phone": p.phone,
-                "telegram": p.telegram,
-                "github": p.github,
-            }.items()
-            if v
-        }
+    full_name, contacts = revealed_contacts(p) if revealed else (None, None)
     sal = salary_fit(f, *offer)[1] if offer else None
     return CandidateCard(
         id=str(p.user_id),
         alias=anonymous_alias(p),
         revealed=revealed,
-        full_name=p.full_name if revealed else None,
+        full_name=full_name,
         contacts=contacts,
         category=category_label(p),
         specialization=p.specialization,
@@ -197,9 +214,10 @@ def card(
         last_active_days=(today - la.date()).days if la else None,
         fsp_linked=bool(p.fsp_id),
         fsp_visible=bool(p.fsp_id and p.show_fsp),
+        fsp_id=p.fsp_id if (revealed and p.show_fsp) else None,
         fsp_strength=round(fsp_strength(f.fsp, p.specialization or "", today), 3),
         fsp=fsp_items,
-        profile_strength=round(profile_strength(f, today)[0], 3),
+        profile_strength=round(profile_strength(f, today, weights_for(formula_version()))[0], 3),
         salary_fit=sal,
         assessment=p.assessment_summary,
     )
@@ -267,7 +285,7 @@ def run_search(db: Session, company: Company, s: Search, *, limit: int = 50) -> 
     today = utcnow().date()
     by_id = {str(p.user_id): p for p in profiles}
     ranker = get_settings().fsp_ranker
-    version = 1 if ranker in ("v1", "v4") else 5
+    version = formula_version(ranker)
     if ranker in ("hybrid", "v4"):
         from fspml.bench.dossier import render_candidate
         from fspml.matching.hybrid import rank_hybrid

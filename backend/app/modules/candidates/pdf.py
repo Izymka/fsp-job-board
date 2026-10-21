@@ -8,7 +8,7 @@ from fpdf import FPDF
 from fspml.catalog import DATA_DIR, get_catalog
 
 from .models import CandidateProfile
-from .service import anonymous_alias, category_label
+from .service import anonymous_alias, category_label, revealed_contacts
 
 PRIMARY = (64, 47, 255)
 DARK = (27, 28, 33)
@@ -62,7 +62,8 @@ def render_profile_pdf(p: CandidateProfile, *, reveal_contacts: bool) -> bytes:
 
     pdf.set_font("JB", "B", 18)
     pdf.set_text_color(*DARK)
-    title = (p.full_name or "Кандидат") if reveal_contacts else anonymous_alias(p)
+    name, revealed = revealed_contacts(p) if reveal_contacts else (None, {})
+    title = (name or "Кандидат") if reveal_contacts else anonymous_alias(p)
     pdf.multi_cell(0, 9, title, new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("JB", "", 10)
     if p.headline:
@@ -82,7 +83,7 @@ def render_profile_pdf(p: CandidateProfile, *, reveal_contacts: bool) -> bytes:
         contacts = [
             x
             for x in (
-                p.contact_email,
+                revealed.get("email"),
                 p.phone,
                 p.telegram,
                 f"github.com/{p.github}" if p.github else None,
@@ -131,6 +132,8 @@ def render_profile_pdf(p: CandidateProfile, *, reveal_contacts: bool) -> bytes:
         pdf.multi_cell(0, 5, ", ".join(p.stack), new_x="LMARGIN", new_y="NEXT")
 
     _section(pdf, "Достижения ФСП")
+    if p.fsp_id and p.show_fsp and reveal_contacts:
+        pdf.cell(0, 5, f"ФСП ID: {p.fsp_id}", new_x="LMARGIN", new_y="NEXT")
     if not p.fsp_id:
         pdf.cell(0, 5, "ФСП ID не привязан", new_x="LMARGIN", new_y="NEXT")
     elif not p.show_fsp:

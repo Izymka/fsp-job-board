@@ -19,6 +19,7 @@ from ..matching.baselines import BM25, random_order
 from ..matching.scoring import (
     DEFAULT_WEIGHTS,
     DEFAULT_WEIGHTS_V2,
+    WEIGHTS_V7,
     CandidateFeatures,
     Need,
     Weights,
@@ -124,7 +125,7 @@ def _system_rankers(
     def ours(
         w: Weights = DEFAULT_WEIGHTS,
         transform: Callable[[CandidateFeatures], CandidateFeatures] | None = None,
-        version: int = 5,
+        version: int = 7,
         w2: WeightsV2 = DEFAULT_WEIGHTS_V2,
     ):
         def run(tn: TrueNeed, need: Need) -> list[str]:
@@ -169,9 +170,11 @@ def _system_rankers(
         "ours_without_fsp": ours(transform=no_fsp),
         "ours_claims_only": ours(transform=claims_only),
         "ours_without_conditions": ours(
-            w=replace(DEFAULT_WEIGHTS, conditions=0.0),
+            w=replace(WEIGHTS_V7, conditions=0.0),
             w2=replace(DEFAULT_WEIGHTS_V2, gate_format_soft=1.0, gate_format_hard=1.0, gate_salary_slope=0.0),
         ),
+        "ours_v6": ours(version=6),
+        "ours_v5": ours(version=5),
         "ours_v1": ours(version=1),
         "test_only_in_category": test_only,
         "random_in_category": cat_random,
@@ -216,7 +219,7 @@ def _stuffing_exposure(obs: Observed, needs, emb, rel_cache) -> dict[str, float]
     ours_share, bm_share = [], []
     for tn in needs:
         need = to_need(tn, emb)
-        top = [s.candidate_id for s in rank(feats, need, TODAY)][:K]
+        top = [s.candidate_id for s in rank(feats, need, TODAY, version=7)][:K]
         sc = bm25.scores(tn.text)
         btop = [ids[i] for i in np.argsort(sc)[::-1] if feats[i].specialization == tn.spec][:K]
         req = set(tn.skills)
@@ -245,11 +248,11 @@ def weight_sensitivity(
     def ndcg_for(w: Weights) -> float:
         vals = []
         for tn, need in prepared:
-            ranking = [s.candidate_id for s in rank(obs.features, need, TODAY, w=w)]
+            ranking = [s.candidate_id for s in rank(obs.features, need, TODAY, w=w, version=7)]
             vals.append(metrics_for(ranking, tn, obs, rel_cache)["ndcg@10"])
         return float(np.mean(vals))
 
-    base = ndcg_for(DEFAULT_WEIGHTS)
+    base = ndcg_for(WEIGHTS_V7)
     out: dict[str, dict[str, float]] = {"_base": {"ndcg@10": base}}
     for field_ in (
         "need_fit",
@@ -265,10 +268,10 @@ def weight_sensitivity(
     ):
         out[field_] = {}
         for f in factors:
-            value = getattr(DEFAULT_WEIGHTS, field_) * f
+            value = getattr(WEIGHTS_V7, field_) * f
             if field_ == "adjacent_grade_multiplier":
                 value = min(value, 1.0)  # множитель > 1 поднял бы соседнюю категорию выше целевой
-            w = replace(DEFAULT_WEIGHTS, **{field_: value})
+            w = replace(WEIGHTS_V7, **{field_: value})
             out[field_][f"x{f:g}"] = ndcg_for(w) - base
     return out
 

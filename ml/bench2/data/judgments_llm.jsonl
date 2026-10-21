@@ -1,3 +1,21 @@
+{"pair_id": "b2e8181f4593", "model": "claude-opus-5-5", "label": 1, "rationale": "Python Middle на Senior Go: нет Go; Kafka, gRPC, PostgreSQL, Docker есть; уровень на ступень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "df5edda3f94d", "model": "claude-opus-5-5", "label": 3, "rationale": "Middle, React и TypeScript подтверждены тестом, Jest, 2.5 года, вилка и гибрид подходят.", "rubric": "2026-10-05.1"}
+{"pair_id": "9fed37331967", "model": "claude-opus-5-5", "label": 2, "rationale": "Junior с 97-м перцентилем: Python, статистика, ML подтверждены, A/B, SQL; нет ClickHouse, стаж 1 год, уровень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "fa0cc049a366", "model": "claude-opus-5-5", "label": 1, "rationale": "Middle с опытом <1 года на Senior: Java и Allure есть, нет Selenium, Appium, Jenkins.", "rubric": "2026-10-05.1"}
+{"pair_id": "c865bb10e96f", "model": "claude-opus-5-5", "label": 1, "rationale": "Стажёр Python/1С: нет C#; MS SQL и REST есть; уровень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "c63013aab750", "model": "claude-opus-5-5", "label": 1, "rationale": "Junior Node.js, 5-й перцентиль: нет C#; MS SQL, REST, RabbitMQ есть.", "rubric": "2026-10-05.1"}
+{"pair_id": "4cc11e4258a1", "model": "claude-opus-5-5", "label": 1, "rationale": "Middle Java на Junior: стек закрыт, но ожидания 160k+ заметно выше вилки 100–130k, уровень выше.", "rubric": "2026-10-05.1"}
+{"pair_id": "87e0c5cc3b30", "model": "claude-opus-5-5", "label": 2, "rationale": "Middle Java/Spring, Kafka, PostgreSQL, Git; нет Elasticsearch, 3 года; уровень на ступень ниже при сильном профиле и ФСП.", "rubric": "2026-10-05.1"}
+{"pair_id": "530f1ef37734", "model": "claude-opus-5-5", "label": 1, "rationale": "Middle, 22-й перцентиль: Kubernetes частично, нет Terraform, Prometheus, ELK, Go.", "rubric": "2026-10-05.1"}
+{"pair_id": "5f9832f84ab3", "model": "claude-opus-5-5", "label": 2, "rationale": "Junior, 100-й перцентиль: Terraform, Kubernetes, Docker, Prometheus, ELK; нет Go/Python, стаж 8 мес., уровень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "430ba50946cf", "model": "claude-opus-5-5", "label": 2, "rationale": "Junior, 96-й перцентиль: Kubernetes, Docker, Prometheus, ELK, Python; нет Terraform и Go; уровень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "453ca99862f4", "model": "claude-opus-5-5", "label": 3, "rationale": "Junior, HTML/CSS и JavaScript подтверждены, Webpack; нет Figma; офис и вилка подходят.", "rubric": "2026-10-05.1"}
+{"pair_id": "3f46472458cb", "model": "claude-opus-5-5", "label": 2, "rationale": "Junior Node.js: PostgreSQL, RabbitMQ, SQL подтверждён; нет MS SQL, Redis, Git; низкий перцентиль.", "rubric": "2026-10-05.1"}
+{"pair_id": "fb808a299ee0", "model": "claude-opus-5-5", "label": 2, "rationale": "Junior ручной тестировщик, тест-дизайн подтверждён, ~1 год; нет Figma; уровень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "6c2bc825d999", "model": "claude-opus-5-5", "label": 1, "rationale": "Junior нагрузочный тестировщик: тест-дизайн подтверждён, но профиль не ручной, нет Figma, уровень ниже.", "rubric": "2026-10-05.1"}
+{"pair_id": "28fed5becb6f", "model": "claude-opus-5-5", "label": 1, "rationale": "Стажёр Go: нет PHP и MySQL, Laravel только заявлен; Redis, Docker, Git есть.", "rubric": "2026-10-05.1"}
+{"pair_id": "32e4817e62dd", "model": "claude-opus-5-5", "label": 3, "rationale": "Junior: Python, SQL, статистика, ML подтверждены, Jupyter; офис и вилка подходят.", "rubric": "2026-10-05.1"}
+{"pair_id": "bc7a59cfe0cb", "model": "claude-opus-5-5", "label": 2, "rationale": "Middle Go, 88-й перцентиль: PostgreSQL, Docker, распределённые системы; нет Kubernetes, 3 года; уровень ниже.", "rubric": "2026-10-05.1"}
 {"pair_id": "ee18793b6299", "model": "claude-opus-5-5", "label": 1, "rationale": "Senior с 2 годами без опыта руководства, слабый тест, только удалёнка, ожидания ниже вилки", "rubric": "2026-10-05.1"}
 {"pair_id": "a8d64659a9c1", "model": "claude-opus-5-5", "label": 1, "rationale": "Senior без управленческого опыта и PyTorch, только удалёнка", "rubric": "2026-10-05.1"}
 {"pair_id": "1cd71d184663", "model": "claude-opus-5-5", "label": 2, "rationale": "Lead 7 лет в ритейле, прогноз спроса, гибрид подходит; нет PyTorch", "rubric": "2026-10-05.1"}

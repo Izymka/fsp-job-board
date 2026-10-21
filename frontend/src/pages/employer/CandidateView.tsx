@@ -53,7 +53,7 @@ function ProctorBadges({ c }: { c: CandidateCard }) {
       {c.fsp_linked && (
         <Badge tone="bg-brand-50 text-brand-700">
           <BadgeCheck className="mr-1 inline h-3.5 w-3.5" />
-          Личность подтверждена · ФСП ID
+          Личность подтверждена · ФСП ID{c.fsp_id ? ` ${c.fsp_id}` : ''}
         </Badge>
       )}
     </div>

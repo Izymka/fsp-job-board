@@ -7,7 +7,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import Response
 from fspml.catalog import get_catalog
-from fspml.matching.scoring import profile_strength
+from fspml.matching.scoring import profile_strength, weights_for
 from fspml.nlp.embed import get_embedder
 from fspml.nlp.vacancy import parse_need
 from pydantic import BaseModel, Field, model_validator
@@ -50,6 +50,8 @@ class CompanyIn(BaseModel):
 class CompanyOut(CompanyIn):
     id: str
     created_at: datetime
+    # ключ проверки подписи вебхуков (заголовок X-FSP-Signature: sha256=HMAC-SHA256(ключ, тело))
+    webhook_signing_key: str
 
 
 def get_company(db: Session, user: User, *, required: bool = True) -> Company | None:
@@ -61,7 +63,10 @@ def get_company(db: Session, user: User, *, required: bool = True) -> Company | 
 
 def company_out(c: Company) -> CompanyOut:
     return CompanyOut(
-        id=str(c.id), created_at=c.created_at, **{k: getattr(c, k) for k in CompanyIn.model_fields}
+        id=str(c.id),
+        created_at=c.created_at,
+        webhook_signing_key=service.webhook_signing_key(c.id),
+        **{k: getattr(c, k) for k in CompanyIn.model_fields},
     )
 
 
@@ -457,7 +462,9 @@ def shortlist_remove(
 # ------------------------------------------------------------------------------ банк кандидатов
 
 
-def _visible_candidate(db: Session, candidate_id: str, company_id: uuid.UUID | None = None) -> CandidateProfile:
+def _visible_candidate(
+    db: Session, candidate_id: str, company_id: uuid.UUID | None = None
+) -> CandidateProfile:
     try:
         p = db.get(CandidateProfile, uuid.UUID(candidate_id))
     except ValueError:
@@ -560,7 +567,7 @@ def bank(
             continue
         if work_format and not set(work_format) & set(p.work_formats or []):
             continue
-        rows.append((profile_strength(features(p), today)[0], p))
+        rows.append((profile_strength(features(p), today, weights_for(service.formula_version()))[0], p))
     rows.sort(key=lambda x: (-x[0], str(x[1].user_id)))
     pct = service._percentiles(profiles)
     chunk = rows[(page - 1) * page_size : page * page_size]

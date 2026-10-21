@@ -17,6 +17,7 @@ x-backend-env: &backend-env
   FSP_REGISTRY_API_KEY: ${FSP_REGISTRY_API_KEY:-fsp-registry-demo-key}
   FSP_ID_CLIENT_SECRET: ${FSP_ID_CLIENT_SECRET:-fsp-jobs-link-secret}
   ASSESSMENT_SECRET: ${ASSESSMENT_SECRET:-change-me-in-production-0123456789abcdef}
+  WEBHOOK_SECRET: ${WEBHOOK_SECRET:-change-me-in-production-webhooks-0123456789}
   SMTP_HOST: mailpit
   SMTP_PORT: "1025"
   EMAIL_ENABLED: ${EMAIL_ENABLED:-true}
@@ -25,8 +26,8 @@ x-backend-env: &backend-env
   BIOMETRIC_KEY: ${BIOMETRIC_KEY:-biometric-demo-key-change-me-0123456789abcdef}
   SNAPSHOT_RETENTION_DAYS: ${SNAPSHOT_RETENTION_DAYS:-180}
   INVITE_QUOTA_PER_WEEK: ${INVITE_QUOTA_PER_WEEK:-30}
-  # Механика подбора: v5 | hybrid | v1 | v4
-  FSP_RANKER: ${FSP_RANKER:-v5}
+  # Механика подбора: v7 | v6 | v5 | hybrid | v1 | v4
+  FSP_RANKER: ${FSP_RANKER:-v7}
   FSP_EMBEDDINGS: ${FSP_EMBEDDINGS:-auto}
   # Опциональный LLM (Yandex AI Studio): только запасной разбор резюме, по умолчанию выключен
   LLM_ENABLED: ${LLM_ENABLED:-0}

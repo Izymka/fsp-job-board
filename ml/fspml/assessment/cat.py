@@ -24,7 +24,7 @@ from __future__ import annotations
 import random
 from collections import Counter
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Literal
 
 from ..catalog import Catalog, get_catalog
@@ -38,10 +38,12 @@ class CatConfig:
     max_items: int = 25
     stop_confidence: float = 0.95
     pass_probability: float = 0.6  # выбрано по валидации: макс. точность при завышении грейда ≤ 5%
-    # Повышение уже подтверждённого грейда требует большей уверенности: работодатели видят
-    # кандидата в категории, и ложное повышение дороже ложного отказа (повтор через 14 дней).
-    pass_probability_upgrade: float = 0.75
-    upgrade_probability: float = 0.8
+    # Повышение требует большей уверенности, чем подтверждение: работодатели видят кандидата в
+    # категории, и ложное повышение дороже ложного отказа (повтор через 14 дней). Пороги повышения
+    # подобраны по валидации: главная ошибка прежних 0.75 / 0.8 — занижение сильных кандидатов
+    # (29.5% против 2.7% завышения); 0.65 / 0.5 сдвигают баланс при завышении ≤ 5%.
+    pass_probability_upgrade: float = 0.65
+    upgrade_probability: float = 0.5
     warmup: int = 3
     randomesque: int = 4
     max_exposure: float = 0.35
@@ -50,6 +52,11 @@ class CatConfig:
     seen_info_factor: float = 0.0
     prior_mean: float = 0.0
     prior_sd: float = 1.0
+    # Сдвиг априорного среднего θ на силу подтверждённых достижений ФСП (0..1, `fsp_strength`):
+    # достижения из реестра — независимое свидетельство практического уровня, их нельзя заявить
+    # самому (в отличие от самооценки грейда). Решение по-прежнему принимают ответы; без истории
+    # ФСП приор прежний — штрафа нет.
+    fsp_prior_shift: float = 0.8
     # подоценки навыков
     skill_prior_sd: float = 0.6
     skill_min_items: int = 2
@@ -62,6 +69,13 @@ class CatConfig:
 
 
 DEFAULT_CONFIG = CatConfig()
+
+
+def with_fsp_prior(config: CatConfig, fsp_strength: float) -> CatConfig:
+    """Конфигурация попытки кандидата с достижениями ФСП: приор θ сдвинут на `fsp_prior_shift · сила`."""
+    if fsp_strength <= 0 or config.fsp_prior_shift == 0:
+        return config
+    return replace(config, prior_mean=config.prior_mean + config.fsp_prior_shift * min(fsp_strength, 1.0))
 
 
 @dataclass(frozen=True)

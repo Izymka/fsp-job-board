@@ -11,8 +11,10 @@ from fspml.catalog import get_catalog
 from fspml.matching.experience import ExperienceSummary, summarize
 from fspml.matching.scoring import CandidateFeatures, FspAchievement
 from fspml.nlp.embed import SentenceEmbedder, get_embedder
+from sqlalchemy.orm import object_session
 
 from ...core.db import aware
+from ..users.models import User
 from .models import CandidateProfile
 
 
@@ -130,6 +132,24 @@ def category_label(p: CandidateProfile) -> str | None:
         return None
     cat = get_catalog()
     return f"{cat.specializations[p.specialization].name} · {cat.grade(p.confirmed_grade).name}"
+
+
+def revealed_contacts(p: CandidateProfile) -> tuple[str | None, dict[str, str]]:
+    """ФИО и контакты для работодателя после принятия приглашения (карточка, приглашение, вебхук).
+
+    Поля профиля заполняются кандидатом по желанию; если их нет — имя и почта из учётной записи
+    (Keycloak), иначе работодатель получил бы «принято» без способа связаться.
+    """
+    session = object_session(p)
+    user = session.get(User, p.user_id) if session is not None else None
+    name = p.full_name or (user.display_name if user else None)
+    contacts = {
+        "email": p.contact_email or (user.email if user else None),
+        "phone": p.phone,
+        "telegram": p.telegram,
+        "github": p.github,
+    }
+    return name, {k: v for k, v in contacts.items() if v}
 
 
 def anonymous_alias(p: CandidateProfile) -> str:

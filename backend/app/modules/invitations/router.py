@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import hashlib
+import hmac
+import json
 import uuid
 from datetime import datetime, timedelta
 from typing import Literal
@@ -18,9 +21,10 @@ from ...core.email import send_email
 from ...core.errors import AppError, conflict, not_found, responses
 from ...core.security import require_role
 from ..candidates.models import CandidateProfile
-from ..candidates.service import anonymous_alias, category_label, features
+from ..candidates.service import anonymous_alias, category_label, features, revealed_contacts
 from ..employers.models import Company, Search
 from ..employers.router import get_company
+from ..employers.service import webhook_signing_key
 from ..users.models import AuditLog, User
 from ..vacancies.models import Application, Vacancy
 from .models import Invitation
@@ -138,21 +142,8 @@ def inv_out(db: Session, inv: Invitation, *, for_employer: bool) -> InvitationOu
         candidate_id=str(inv.candidate_id),
         candidate_alias=anonymous_alias(p) if p else "",
         candidate_category=category_label(p) if p else None,
-        candidate_name=p.full_name if (p and revealed) else None,
-        candidate_contacts=(
-            {
-                k: v
-                for k, v in {
-                    "email": p.contact_email,
-                    "phone": p.phone,
-                    "telegram": p.telegram,
-                    "github": p.github,
-                }.items()
-                if v
-            }
-            if (p and revealed)
-            else None
-        ),
+        candidate_name=revealed_contacts(p)[0] if (p and revealed) else None,
+        candidate_contacts=revealed_contacts(p)[1] if (p and revealed) else None,
         vacancy_id=str(inv.vacancy_id) if inv.vacancy_id else None,
         search_id=str(inv.search_id) if inv.search_id else None,
         salary_fit=inv.salary_fit if for_employer else None,
@@ -214,12 +205,51 @@ def _notify_candidate(
     )
 
 
-def _webhook(url: str, payload: dict) -> None:
-    """ATS-интеграция: событие о принятом приглашении (best effort)."""
+def _webhook(url: str, payload: dict, key: str) -> None:
+    """ATS-интеграция: событие о принятом приглашении (best effort).
+
+    Тело подписано: X-FSP-Signature: sha256=HMAC-SHA256(ключ компании, тело) — ключ виден работодателю
+    в профиле компании (`webhook_signing_key`), ATS проверяет, что событие пришло от платформы."""
+    body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode()
+    sig = hmac.new(key.encode(), body, hashlib.sha256).hexdigest()
     try:
-        httpx.post(url, json=payload, timeout=5)
+        httpx.post(
+            url,
+            content=body,
+            headers={
+                "Content-Type": "application/json",
+                "X-FSP-Event": payload["event"],
+                "X-FSP-Signature": f"sha256={sig}",
+            },
+            timeout=5,
+        )
     except Exception:  # noqa: BLE001
         pass
+
+
+def accepted_payload(inv: Invitation, p: CandidateProfile) -> dict:
+    """Событие invitation.accepted: кандидат дал согласие (принял приглашение) — контакты открыты."""
+    name, contacts = revealed_contacts(p)
+    return {
+        "event": "invitation.accepted",
+        "invitation_id": str(inv.id),
+        "accepted_at": inv.responded_at.isoformat() if inv.responded_at else None,
+        "title": inv.title,
+        "salary": {"from": inv.salary_from, "to": inv.salary_to},
+        "vacancy_id": str(inv.vacancy_id) if inv.vacancy_id else None,
+        "candidate": {
+            "id": str(p.user_id),
+            "name": name,
+            "email": contacts.get("email"),
+            "phone": contacts.get("phone"),
+            "telegram": contacts.get("telegram"),
+            "github": contacts.get("github"),
+            "category": category_label(p),
+            "specialization": p.specialization,
+            "grade": p.confirmed_grade,
+            "fsp_id": p.fsp_id if p.show_fsp else None,
+        },
+    }
 
 
 @router.post(
@@ -424,25 +454,11 @@ def accept(
             send_email,
             company.contact_email or (owner.email if owner else ""),
             f"Кандидат принял приглашение: {inv.title}",
-            f"{p.full_name or 'Кандидат'} принял(а) ваше приглашение. Контакты доступны в карточке: {settings.frontend_url}/employer/invitations",
+            f"{revealed_contacts(p)[0] or 'Кандидат'} принял(а) ваше приглашение. Контакты доступны в карточке: {settings.frontend_url}/employer/invitations",
         )
         if company.webhook_url:
             bg.add_task(
-                _webhook,
-                company.webhook_url,
-                {
-                    "event": "invitation.accepted",
-                    "invitation_id": str(inv.id),
-                    "title": inv.title,
-                    "salary": {"from": inv.salary_from, "to": inv.salary_to},
-                    "candidate": {
-                        "name": p.full_name,
-                        "email": p.contact_email,
-                        "phone": p.phone,
-                        "telegram": p.telegram,
-                        "category": category_label(p),
-                    },
-                },
+                _webhook, company.webhook_url, accepted_payload(inv, p), webhook_signing_key(company.id)
             )
     return inv_out(db, inv, for_employer=False)
 

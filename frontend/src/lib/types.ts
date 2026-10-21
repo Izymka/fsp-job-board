@@ -294,6 +294,7 @@ export interface CandidateCard {
   last_active_days: number | null
   fsp_linked: boolean
   fsp_visible: boolean
+  fsp_id?: string | null
   fsp_strength: number
   fsp: FspAchievement[]
   profile_strength: number

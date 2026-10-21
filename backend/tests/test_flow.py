@@ -519,3 +519,81 @@ def test_vacancy_match_uses_required_experience(client):
     feed = {v["min_years"]: v["match"] for v in cand.get("/api/vacancies").json()}
     assert feed[0]["score"] > feed[6]["score"]
     assert any("требуется от 6 лет" in x["text"] for x in feed[6]["reasons"])
+
+
+def test_fsp_kept_after_failed_upgrade_and_webhook_payload(client, monkeypatch):
+    """Провал повышения не трогает ни грейд, ни ФСП ID; вебхук после принятия несёт контакты
+    (с фолбэком на учётную запись), ФСП ID, грейд и подпись."""
+    import hashlib
+    import hmac
+    import json
+
+    from app.modules.fsp import router as fsp_router
+    from app.modules.invitations import router as inv_router
+
+    reg = {
+        "fsp_id": "FSP-000123",
+        "full_name": "Иванова М.С.",
+        "achievements": [
+            {
+                "id": "a1",
+                "event": "Всероссийские",
+                "discipline": "product",
+                "level": "national",
+                "result": "prize",
+                "date": "2026-04-10",
+            }
+        ],
+    }
+    monkeypatch.setattr(fsp_router, "fetch_participant", lambda fid: reg if fid == "FSP-000123" else None)
+    sent = []
+    monkeypatch.setattr(inv_router.httpx, "post", lambda url, **kw: sent.append((url, kw)))
+
+    cand = make_candidate(client)
+    # кандидат не заполнил почту в профиле — работодатель всё равно должен получить контакт
+    cand.put(
+        "/api/candidate/profile",
+        json={"full_name": "Иванова Мария Сергеевна", "phone": "+79161234567", "contact_email": None},
+    )
+    assert cand.post("/api/fsp/link/demo", json={"fsp_id": "FSP-000123"}).status_code == 200
+    assert pass_test(cand, "middle")["status"] == "passed"
+    failed = pass_test(cand, "senior", correct=False)
+    assert failed["status"] == "failed"
+    prof = cand.get("/api/candidate/profile").json()
+    assert prof["confirmed_grade"] == "middle" and prof["fsp_id"] == "FSP-000123"
+    assert prof["fsp_achievements"] and prof["fsp_profile"]
+
+    emp = make_employer(client)
+    emp.put(
+        "/api/employer/company",
+        json={"name": "ООО «Тест»", "industry": "ecommerce", "webhook_url": "https://ats.example/hook"},
+    )
+    key = emp.get("/api/employer/company").json()["webhook_signing_key"]
+    cid = prof["user_id"] if "user_id" in prof else prof["id"]
+    card = emp.get(f"/api/employer/candidates/{cid}").json()
+    assert card["fsp_linked"] and card["fsp"] and card["fsp_id"] is None  # до согласия — без ID
+    r = emp.post(
+        "/api/employer/invitations",
+        json={
+            "candidate_id": cid,
+            "title": "Python",
+            "description": "Команда платежей",
+            "salary_from": 240000,
+            "salary_to": 300000,
+            "contact_method": "email",
+            "contact_value": "hr@example.ru",
+        },
+    )
+    assert r.status_code == 201, r.text
+    assert not sent  # до принятия ничего не уходит
+    cand.post(f"/api/candidate/invitations/{r.json()['id']}/accept")
+    assert len(sent) == 1
+    url, kw = sent[0]
+    body = kw["content"]
+    sig = hmac.new(key.encode(), body, hashlib.sha256).hexdigest()
+    assert url == "https://ats.example/hook" and kw["headers"]["X-FSP-Signature"] == f"sha256={sig}"
+    card = emp.get(f"/api/employer/candidates/{cid}").json()
+    assert card["fsp_id"] == "FSP-000123" and card["contacts"]["email"] == "cand@example.ru"
+    c = json.loads(body)["candidate"]
+    assert c["name"] == "Иванова Мария Сергеевна" and c["email"] == "cand@example.ru"
+    assert c["phone"] == "+79161234567" and c["fsp_id"] == "FSP-000123" and c["grade"] == "middle"

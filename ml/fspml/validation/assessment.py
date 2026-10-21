@@ -33,13 +33,15 @@ from ..assessment.cat import (
     decide,
     select_next,
     should_stop,
+    with_fsp_prior,
 )
 from ..assessment.drift import CusumConfig, run_cusum
 from ..assessment.irt import ItemParams, information, prob
 from ..assessment.items import Family
 from ..catalog import get_catalog
+from ..matching.scoring import fsp_strength
 from ..nlp.skills import get_dictionary
-from .population import TrueCandidate, legacy_blueprint
+from .population import TODAY, TrueCandidate, legacy_blueprint
 
 
 @dataclass
@@ -195,6 +197,8 @@ def simulate_onboarding(
     g = cat.grade_index(cand.claimed_grade)
     logs: list[AttemptLog] = []
     before = set(seen)
+    # как в продукте: достижения ФСП из реестра сдвигают приор θ всех попыток онбординга
+    kw["config"] = with_fsp_prior(kw.get("config", DEFAULT_CONFIG), fsp_strength(cand.fsp, cand.spec, TODAY))
 
     def carry():
         return [r for l in logs for r in l.responses] if pool else []
@@ -288,6 +292,7 @@ def run_reliability(
         decisions2.append(r2.logs[0].result.decision)
     first_a, second_a, true_a = map(np.array, (first, second, true_g))
     border_a = np.array(border)
+    has_fsp = np.array([bool(c.fsp) for c in cands])
     confusion = np.zeros((k, k), dtype=int)
     for t, a in zip(true_g, first):
         confusion[t, a] += 1
@@ -310,6 +315,10 @@ def run_reliability(
         "share_border": float(border_a.mean()),
         "overgrade_rate": float(np.mean(first_a > true_a)),
         "undergrade_rate": float(np.mean(first_a < true_a)),
+        "accuracy_fsp": float(np.mean(first_a[has_fsp] == true_a[has_fsp]))
+        if has_fsp.any()
+        else float("nan"),
+        "accuracy_no_fsp": float(np.mean(first_a[~has_fsp] == true_a[~has_fsp])),
         "theta_true_r": float(np.corrcoef(th_true, th1)[0, 1]),
         "kappa_vs_truth": cohen_kappa(true_g, first, k),
         "items_mean": float(np.mean(items)),
@@ -490,7 +499,7 @@ def run_drift(
 def run_threshold_roc(
     cands: Sequence[TrueCandidate],
     truth: TrueBank,
-    thresholds=(0.5, 0.6, 0.7, 0.75, 0.8),
+    thresholds=(0.5, 0.6, 0.65, 0.7, 0.75, 0.8),
     seed: int = 31,
     n: int = 500,
 ) -> dict:

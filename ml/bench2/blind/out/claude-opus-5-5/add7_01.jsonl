@@ -1,0 +1,18 @@
+{"pair_id": "b2e8181f4593", "label": 1, "rationale": "Python Middle на Senior Go: нет Go; Kafka, gRPC, PostgreSQL, Docker есть; уровень на ступень ниже."}
+{"pair_id": "df5edda3f94d", "label": 3, "rationale": "Middle, React и TypeScript подтверждены тестом, Jest, 2.5 года, вилка и гибрид подходят."}
+{"pair_id": "9fed37331967", "label": 2, "rationale": "Junior с 97-м перцентилем: Python, статистика, ML подтверждены, A/B, SQL; нет ClickHouse, стаж 1 год, уровень ниже."}
+{"pair_id": "fa0cc049a366", "label": 1, "rationale": "Middle с опытом <1 года на Senior: Java и Allure есть, нет Selenium, Appium, Jenkins."}
+{"pair_id": "c865bb10e96f", "label": 1, "rationale": "Стажёр Python/1С: нет C#; MS SQL и REST есть; уровень ниже."}
+{"pair_id": "c63013aab750", "label": 1, "rationale": "Junior Node.js, 5-й перцентиль: нет C#; MS SQL, REST, RabbitMQ есть."}
+{"pair_id": "4cc11e4258a1", "label": 1, "rationale": "Middle Java на Junior: стек закрыт, но ожидания 160k+ заметно выше вилки 100–130k, уровень выше."}
+{"pair_id": "87e0c5cc3b30", "label": 2, "rationale": "Middle Java/Spring, Kafka, PostgreSQL, Git; нет Elasticsearch, 3 года; уровень на ступень ниже при сильном профиле и ФСП."}
+{"pair_id": "530f1ef37734", "label": 1, "rationale": "Middle, 22-й перцентиль: Kubernetes частично, нет Terraform, Prometheus, ELK, Go."}
+{"pair_id": "5f9832f84ab3", "label": 2, "rationale": "Junior, 100-й перцентиль: Terraform, Kubernetes, Docker, Prometheus, ELK; нет Go/Python, стаж 8 мес., уровень ниже."}
+{"pair_id": "430ba50946cf", "label": 2, "rationale": "Junior, 96-й перцентиль: Kubernetes, Docker, Prometheus, ELK, Python; нет Terraform и Go; уровень ниже."}
+{"pair_id": "453ca99862f4", "label": 3, "rationale": "Junior, HTML/CSS и JavaScript подтверждены, Webpack; нет Figma; офис и вилка подходят."}
+{"pair_id": "3f46472458cb", "label": 2, "rationale": "Junior Node.js: PostgreSQL, RabbitMQ, SQL подтверждён; нет MS SQL, Redis, Git; низкий перцентиль."}
+{"pair_id": "fb808a299ee0", "label": 2, "rationale": "Junior ручной тестировщик, тест-дизайн подтверждён, ~1 год; нет Figma; уровень ниже."}
+{"pair_id": "6c2bc825d999", "label": 1, "rationale": "Junior нагрузочный тестировщик: тест-дизайн подтверждён, но профиль не ручной, нет Figma, уровень ниже."}
+{"pair_id": "28fed5becb6f", "label": 1, "rationale": "Стажёр Go: нет PHP и MySQL, Laravel только заявлен; Redis, Docker, Git есть."}
+{"pair_id": "32e4817e62dd", "label": 3, "rationale": "Junior: Python, SQL, статистика, ML подтверждены, Jupyter; офис и вилка подходят."}
+{"pair_id": "bc7a59cfe0cb", "label": 2, "rationale": "Middle Go, 88-й перцентиль: PostgreSQL, Docker, распределённые системы; нет Kubernetes, 3 года; уровень ниже."}

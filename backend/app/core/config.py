@@ -36,6 +36,8 @@ class Settings(BaseSettings):
 
     # Тестирование: секрет для seed экземпляров заданий (HMAC). Сменить в production!
     assessment_secret: str = "assessment-secret-change-me-0123456789abcdef"
+    # Вебхуки ATS: ключ подписи компании = HMAC(webhook_secret, id компании). Сменить в production!
+    webhook_secret: str = "webhook-secret-change-me-0123456789abcdef"
 
     # Цифровой проктор: сверка лица 1:1. local_demo — эталон в нашей БД (AES-GCM, только демо);
     # ebs — Единая биометрическая система (production, 572-ФЗ). Ключ сменить в production!
@@ -45,10 +47,11 @@ class Settings(BaseSettings):
     biometric_mismatch_threshold: float = 0.35  # ниже — уверенно другое лицо; между порогами — серая зона
     snapshot_retention_days: int = 180
 
-    # Механика подбора: v5 — формула (специфичность требований + «ворота»); hybrid — v5 +
+    # Механика подбора: v7 — формула v6 + весомый ФСП и ФСП как опыт работы (по умолчанию);
+    # v6 — v5 + «ворота» основного стека; v5 — специфичность требований + «ворота»; hybrid — v5 +
     # кросс-энкодер (нужен WITH_EMBEDDINGS=1, без пакета/весов работает как v5); v1 — исходная
     # формула; v4 — прежний гибрид на v1. См. docs/matching.md и docs/bench.md.
-    fsp_ranker: str = "v5"
+    fsp_ranker: str = "v7"
 
     # Разбор резюме: если правила не нашли периодов работы — извлечь опыт через LLM
     # (Yandex AI Studio; работает, только если LLM_ENABLED=1 и заданы ключи)

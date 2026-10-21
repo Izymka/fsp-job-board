@@ -11,15 +11,16 @@ from fspml.matching.scoring import (
     CandidateFeatures,
     Need,
     Scored,
+    core_stack,
     score_candidate,
     specificity,
+    weights_for,
 )
 from fspml.nlp.vacancy import parse_need
 from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from ...core.config import get_settings
 from ...core.db import get_db, utcnow
 from ...core.errors import AppError, conflict, not_found, responses
 from ...core.security import require_role
@@ -28,7 +29,7 @@ from ..candidates.router import get_profile
 from ..candidates.service import category_label, features
 from ..employers.models import Company
 from ..employers.router import get_company
-from ..employers.service import CandidateCard, card, visible_profiles
+from ..employers.service import CandidateCard, card, formula_version, visible_profiles
 from ..invitations.router import company_stats
 from ..users.models import User
 from .models import Application, Vacancy
@@ -56,15 +57,26 @@ def score_for_vacancy(
 ) -> Scored:
     """Скор кандидата относительно вакансии — та же формула, что в подборке работодателя (FSP_RANKER):
     v5 — специфичность требований по пулу специализации, «ворота», доверие к тесту и стаж
-    (`min_years` вакансии). pools — кэш стеков пула по специализации на время запроса."""
+    (`min_years` вакансии); v6 — плюс «ворота» основного стека; v7 — плюс весомый ФСП и ФСП как опыт.
+    pools — кэш стеков пула по специализации на время запроса."""
     need = vacancy_need(v)
-    if get_settings().fsp_ranker in ("v1", "v4"):
+    version = formula_version()
+    if version == 1:
         return score_candidate(f, need, utcnow().date())
     pools = pools if pools is not None else {}
     if need.specialization not in pools:
         pools[need.specialization] = [set(p.stack or []) for p in visible_profiles(db, need.specialization)]
     spec_w = specificity([_Claimed(c) for c in pools[need.specialization]], need.skills)
-    return score_candidate(f, need, utcnow().date(), spec_weights=spec_w, gates=DEFAULT_WEIGHTS_V2)
+    return score_candidate(
+        f,
+        need,
+        utcnow().date(),
+        w=weights_for(version),
+        spec_weights=spec_w,
+        gates=DEFAULT_WEIGHTS_V2,
+        core=core_stack(need) if version >= 6 else (),
+        fsp_experience=version >= 7,
+    )
 
 
 class _Claimed:

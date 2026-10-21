@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 
 import numpy as np
@@ -103,6 +103,12 @@ EXP_SHORT_SLOPE, EXP_FLOOR = 0.5, 0.5
 EXP_ABOVE_STEP, EXP_MAX = 0.015, 1.06
 EXP_UNKNOWN = 0.9  # опыт не указан, а вакансия его требует
 EXP_INDUSTRY = 1.04  # от года опыта в отрасли вакансии
+# v7: подтверждённые реестром достижения ФСП — практический опыт командной разработки в сжатые сроки.
+# Сила ФСП (0..1, `fsp_strength`) засчитывается как до FSP_YEARS_MAX лет релевантного опыта и закрывает
+# только нехватку стажа: свежий призёр всероссийских соревнований (сила ≈ 0.5) закрывает требование
+# Junior (полгода), частично — Middle, на Senior почти не влияет. Так молодой участник ФСП без
+# коммерческого стажа не теряет половину скора только из-за пустой строки «место работы» в резюме.
+FSP_YEARS_MAX = 1.0
 
 
 def trust_level(c: CandidateFeatures) -> str | None:
@@ -122,24 +128,32 @@ def required_years(need: Need) -> tuple[float, bool]:
     return GRADE_MIN_YEARS.get(need.grade, 0.0), False
 
 
-def experience_fit(c: CandidateFeatures, need: Need) -> tuple[float, list[Reason]]:
+def experience_fit(c: CandidateFeatures, need: Need, fsp: float = 0.0) -> tuple[float, list[Reason]]:
+    """fsp — сила достижений ФСП (v7): засчитывается как опыт, если вакансия его требует."""
     req, explicit = required_years(need)
+    fsp_years = FSP_YEARS_MAX * min(max(fsp, 0.0), 1.0) if req > 0 else 0.0
     req_t = (
         f"требуется {years_from(req)}"
         if explicit
         else f"для {need.grade.capitalize()} обычно {years_from(req)}"
     )
     if c.relevant_years is None and c.experience_years is None:
-        return (EXP_UNKNOWN if req > 0 else 1.0), [Reason("neutral", "Опыт работы не указан")]
+        if fsp_years <= 0:
+            return (EXP_UNKNOWN if req > 0 else 1.0), [Reason("neutral", "Опыт работы не указан")]
+        f = max(EXP_UNKNOWN, _short_fit(fsp_years, req))
+        return f, [Reason("neutral", "Опыт работы не указан"), _fsp_experience_reason(min(fsp_years, req))]
     rel = c.relevant_years if c.relevant_years is not None else c.experience_years or 0.0
     it = c.it_years if c.it_years is not None else rel
     eff = effective_years(rel, it)
+    # ФСП закрывает только нехватку стажа: сверх требования бонус даёт лишь реальный опыт
+    fsp_counted = min(fsp_years, req - eff) if fsp_years > 0 and eff < req else 0.0
+    eff += fsp_counted
     if req <= 0:
         f = 1 + min(0.04, 0.02 * eff)
     elif eff >= req:
         f = 1 + min(EXP_MAX - 1, EXP_ABOVE_STEP * (eff - req))
     else:
-        f = max(EXP_FLOOR, 1 - EXP_SHORT_SLOPE * (req - eff) / req)
+        f = _short_fit(eff, req)
     reasons = []
     if it <= 0 and (c.experience_years or 0) <= 0:
         text, kind = "Нет коммерческого опыта", "negative" if req > 0 else "neutral"
@@ -149,16 +163,31 @@ def experience_fit(c: CandidateFeatures, need: Need) -> tuple[float, list[Reason
         text = f"Релевантный опыт: {years_ru(rel)}"
         if it > rel + 0.4:
             text += f" (всего в IT — {years_ru(it)})"
-        kind = "positive" if eff >= req else "negative"
+        kind = "positive" if eff - fsp_counted >= req else "negative"
     if req > 0:
         text += f"; {req_t}"
+    if fsp_counted and kind == "negative" and eff >= req:
+        kind = "neutral"  # нехватку стажа закрыли достижения ФСП
     reasons.append(Reason(kind, text))
+    if fsp_counted:
+        reasons.append(_fsp_experience_reason(fsp_counted))
     if need.industry and c.industry_years.get(need.industry, 0.0) >= 1.0:
         f *= EXP_INDUSTRY
         reasons.append(
             Reason("positive", f"Опыт в отрасли вакансии: {years_ru(c.industry_years[need.industry])}")
         )
     return f, reasons
+
+
+def _short_fit(eff: float, req: float) -> float:
+    if eff >= req:
+        return 1.0
+    return max(EXP_FLOOR, 1 - EXP_SHORT_SLOPE * (req - eff) / req)
+
+
+def _fsp_experience_reason(years: float) -> Reason:
+    months = max(1, round(years * 12))
+    return Reason("positive", f"Достижения ФСП засчитаны как практический опыт (≈ {months} мес.)")
 
 
 @dataclass
@@ -201,6 +230,17 @@ class Weights:
 
 
 DEFAULT_WEIGHTS = Weights()
+# v7: ФСП — весомая часть силы профиля. Доля ФСП в итоговом скоре: 0.30 · 0.25 = 7.5% (v5) →
+# 0.35 · 0.40 = 14% (v7); веса выбраны перебором (docs/matching.md), ограничение — NDCG@10 падает
+# не больше чем на 0.01 на синтетической валидации и бенчмарке со слепой разметкой.
+WEIGHTS_V7 = replace(DEFAULT_WEIGHTS, ps_test=0.45, ps_fsp=0.40, ps_tasks=0.15, need_fit=0.35, profile=0.35)
+
+
+def weights_for(version: int) -> Weights:
+    """Веса силы профиля и выдачи для версии формулы (`rank(version=...)`)."""
+    return WEIGHTS_V7 if version >= 7 else DEFAULT_WEIGHTS
+
+
 # Сила подтверждения навыка тестом. «Нет данных» — нейтрально, «слабо» — хуже, чем нет данных:
 # тест опроверг заявленное.
 STATUS_EVIDENCE = {"confirmed": 1.0, "uncertain": 0.6, "no_data": 0.35, "weak": 0.0}
@@ -383,6 +423,31 @@ def specificity(candidates: Sequence[CandidateFeatures], techs: Iterable[str]) -
     return {t: math.sqrt(-math.log((sum(t in c.claimed for c in pool) + 1) / (n + 2))) for t in techs}
 
 
+# Технологии, определяющие стек вакансии: языки и основные фреймворки. SQL и Bash есть почти
+# в любом стеке, инфраструктура и библиотеки (Docker, Kafka, Figma) стек не определяют.
+CORE_STACK = frozenset(
+    {
+        *"Python JavaScript TypeScript Java Kotlin Swift Objective-C Go C# C++ C Rust PHP Ruby".split(),
+        *"Scala Dart R 1C Django FastAPI Flask Spring Node.js NestJS Laravel Gin React".split(),
+        *"Next.js Vue Angular Svelte Android iOS Flutter".split(),
+        "React Native",
+        "Jetpack Compose",
+    }
+)
+
+
+def core_stack(need: Need) -> tuple[str, ...]:
+    """Основной стек вакансии (v6): обязательные языки и фреймворки — Go, PHP+Laravel, Vue.
+    Пусто — у вакансии нет основного языка (аналитик, QA, DevOps), «ворота» не действуют."""
+    return tuple(
+        sorted(
+            t
+            for t, imp in need.skills.items()
+            if imp >= DEFAULT_WEIGHTS_V2.must_importance and t in CORE_STACK
+        )
+    )
+
+
 def score_candidate(
     c: CandidateFeatures,
     need: Need,
@@ -394,9 +459,13 @@ def score_candidate(
     percentile: float | None = None,
     spec_weights: Mapping[str, float] | None = None,
     gates: WeightsV2 | None = None,
+    core: Sequence[str] = (),
+    fsp_experience: bool = False,
 ) -> Scored:
     """spec_weights — специфичность требований (`specificity`), None — все равны (v1).
-    gates — «ворота» v5: обязательные навыки, формат и вилка как множители; None — без ворот (v1)."""
+    gates — «ворота» v5: обязательные навыки, формат и вилка как множители; None — без ворот (v1).
+    core — основной стек вакансии (`core_stack`, v6): нет ни одной его технологии — жёсткий множитель.
+    fsp_experience — достижения ФСП засчитываются как опыт работы (v7, `experience_fit`)."""
     catalog = catalog or get_catalog()
     ps, ps_parts = profile_strength(c, today, w, catalog)
     spec_weights = spec_weights or {}
@@ -461,12 +530,20 @@ def score_candidate(
             else (gates.gate_format_soft if fmt >= 0.5 else gates.gate_format_hard),
             "salary": _gate_salary(c, need, gates),
         }
+        if core:
+            # основной стек не заменяется смежным: C#-джун без Java не подходит Java-вакансии,
+            # даже если тест, вилка и формат у него лучше, чем у Java-джуна
+            cut = catalog.grade(need.grade).cut
+            has = any(t in c.claimed or skill_evidence(c, t, w, cut=cut)[0] >= 0.5 for t in core)
+            gate["core"] = 1.0 if has else gates.gate_core
         mult *= math.prod(gate.values())
         # доверие к грейду и стаж — тоже множители: кандидат с проктором выше при сопоставимом
         # соответствии, но заметно лучше подходящий без проктора его обгоняет
         trust = trust_level(c)
         gate["trust"] = TRUST[trust] if trust else 1.0
-        gate["experience"], exp_reasons = experience_fit(c, need)
+        gate["experience"], exp_reasons = experience_fit(
+            c, need, fsp=ps_parts["fsp"] if fsp_experience else 0.0
+        )
         mult *= gate["trust"] * gate["experience"]
     else:
         exp_reasons = []
@@ -543,6 +620,8 @@ def score_candidate(
         )
     if adjacent:
         reasons.append(Reason("neutral", f"Соседняя категория: {catalog.grade(c.grade).name}"))
+    if gate.get("core", 1.0) < 1.0:
+        reasons.append(Reason("negative", "Нет основного стека вакансии: " + ", ".join(core)))
     if missing and gate.get("must", 1.0) < 1.0:
         reasons.append(Reason("negative", "Не закрыто из обязательного: " + ", ".join(missing[:4])))
     elif missing:
@@ -599,6 +678,7 @@ class WeightsV2:
     gate_grade_lower: float = 0.65  # кандидат на ступень ниже
     gate_grade_higher: float = 0.8  # на ступень выше: переплата и риск ухода
     gate_must_threshold: float = 0.5  # ниже — дополнительный штраф за пробелы в обязательном
+    gate_core: float = 0.25  # нет основного стека вакансии (v6); как нижняя граница вилки
     use_graph: bool = True
     fsp_needs_must: bool = True  # ФСП учитывается пропорционально покрытию обязательного
 
@@ -736,14 +816,20 @@ def rank(
     w2: WeightsV2 = DEFAULT_WEIGHTS_V2,
 ) -> list[Scored]:
     """version: 5 — формула v1 + специфичность требований + «ворота» (по умолчанию);
+    6 — v5 + жёсткие «ворота» основного стека вакансии;
+    7 — v6 + весомый ФСП (`WEIGHTS_V7`) и ФСП как опыт работы (`FSP_YEARS_MAX`); w по умолчанию
+    заменяется на `WEIGHTS_V7`;
     1 — исходная аддитивная формула; 2 — граф навыков и «ворота» (экспериментальная)."""
     catalog = catalog or get_catalog()
+    if version >= 7 and w is DEFAULT_WEIGHTS:
+        w = WEIGHTS_V7
     pool = []
     for c in candidates:
         ok, adj = eligible(c, need, catalog)
         if ok:
             pool.append((c, adj))
-    spec_w = specificity([c for c, _ in pool], need.skills) if version == 5 else None
+    spec_w = specificity([c for c, _ in pool], need.skills) if version in (5, 6, 7) else None
+    core = core_stack(need) if version in (6, 7) else ()
     # перцентиль θ внутри собственной категории кандидата (для объяснения)
     by_cat: dict[tuple, list[float]] = {}
     for c, _ in pool:
@@ -761,7 +847,7 @@ def rank(
             out.append(
                 score_candidate_v2(c, need, today, w=w2, adjacent=adj, catalog=catalog, percentile=pct)
             )
-        elif version == 5:
+        elif version in (5, 6, 7):
             out.append(
                 score_candidate(
                     c,
@@ -773,6 +859,8 @@ def rank(
                     percentile=pct,
                     spec_weights=spec_w,
                     gates=w2,
+                    core=core,
+                    fsp_experience=version >= 7,
                 )
             )
         else:

@@ -9,13 +9,14 @@ from datetime import datetime, timedelta
 from fspml.assessment import grade_policy as gp
 from fspml.assessment import integrity as integ
 from fspml.assessment import scenarios as scn
-from fspml.assessment.cat import CatPlan, CatResult, Response, estimate
+from fspml.assessment.cat import CatConfig, CatPlan, CatResult, Response, estimate, with_fsp_prior
 from fspml.assessment.drift import CusumConfig
 from fspml.assessment.engine import AssessmentEngine, IssuedItem
 from fspml.assessment.irt import ItemParams, prob
 from fspml.assessment.items import instance_seed
 from fspml.assessment.scenario_grader import grade_answer, grade_probe
 from fspml.catalog import get_catalog
+from fspml.matching.scoring import fsp_strength
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -23,6 +24,7 @@ from ...core.config import get_settings
 from ...core.db import aware, utcnow
 from ...core.errors import AppError
 from ..candidates.models import CandidateProfile
+from ..candidates.service import fsp_achievements
 from . import proctoring
 from .models import Attempt, AttemptItem, FamilyStats
 
@@ -105,11 +107,22 @@ def expire_stale(db: Session, p: CandidateProfile) -> None:
             a.finished_at = utcnow()
 
 
+def attempt_config(attempt: Attempt, engine: AssessmentEngine) -> CatConfig:
+    return with_fsp_prior(engine.config, attempt.fsp_prior or 0.0)
+
+
+def fsp_prior_for(p: CandidateProfile, today) -> float:
+    """Сила подтверждённых реестром достижений ФСП для приора теста; скрытые кандидатом не используются."""
+    if not p.show_fsp or not p.specialization:
+        return 0.0
+    return round(fsp_strength(fsp_achievements(p), p.specialization, today), 4)
+
+
 def plan_for(attempt: Attempt, engine: AssessmentEngine) -> CatPlan:
     return CatPlan(
         blueprint=dict(attempt.blueprint),
         claimed_grade=attempt.grade,
-        config=engine.config,
+        config=attempt_config(attempt, engine),
         kind=attempt.kind,
         seen=frozenset(attempt.seen_families or ()),
     )
@@ -169,7 +182,7 @@ def issue_next(
     issued = engine.next_item(str(attempt.id), plan, responses, exposure=exposure_rates(db))
     if issued is None:
         return None
-    post = estimate(responses, engine.config)
+    post = estimate(responses, plan.config)
     f = issued.family
     expected = float(prob(post.mean, f.a, f.b, f.c))
     db.add(
@@ -221,6 +234,7 @@ def start_attempt(
         blueprint=plan.blueprint,
         stack=list(p.stack or []),
         seen_families=seen_families(db, p, now),
+        fsp_prior=fsp_prior_for(p, now.date()),
         env=client_env(env),
         started_at=now,
     )
@@ -293,7 +307,7 @@ def _proctor_signals(it: AttemptItem) -> integ.ProctorSignals:
 def integrity_report(db: Session, attempt: Attempt, engine: AssessmentEngine) -> integ.IntegrityReport:
     items = answered_items(db, attempt)
     resp = responses_of(db, attempt, engine)
-    theta = estimate(resp, engine.config).mean if resp else None
+    theta = estimate(resp, attempt_config(attempt, engine)).mean if resp else None
     return integ.assess(
         [_signals(it) for it in items],
         pairs=[(r.params, r.correct) for r in resp],

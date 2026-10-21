@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 from fspml.assessment import grade_policy as gp
 from fspml.assessment.calibration import calibrate
-from fspml.assessment.cat import CatPlan
+from fspml.assessment.cat import DEFAULT_CONFIG, CatPlan, with_fsp_prior
 from fspml.assessment.drift import run_cusum
 from fspml.assessment.engine import AssessmentEngine
 from fspml.assessment.irt import GRID, ItemParams, posterior, prob
@@ -82,6 +82,19 @@ def test_cat_classifies_clear_cases(spec):
     strong = [simulate(cut + 1.2, plan, f"s{i}", rng)[0].decision for i in range(15)]
     weak = [simulate(cut - 1.2, plan, f"w{i}", rng)[0].decision for i in range(15)]
     assert strong.count("confirmed") >= 13
+    assert weak.count("not_confirmed") >= 13
+
+
+def test_fsp_prior_shifts_start_but_answers_decide():
+    assert with_fsp_prior(DEFAULT_CONFIG, 0.0) is DEFAULT_CONFIG  # без истории ФСП — прежний приор
+    cfg = with_fsp_prior(DEFAULT_CONFIG, 0.6)
+    assert cfg.prior_mean == DEFAULT_CONFIG.prior_mean + DEFAULT_CONFIG.fsp_prior_shift * 0.6
+    cat = get_catalog()
+    rng = random.Random(7)
+    plan = replace(
+        ENGINE.plan_for_specialization("backend", "middle"), config=with_fsp_prior(DEFAULT_CONFIG, 1.0)
+    )
+    weak = [simulate(cat.grade("middle").cut - 1.2, plan, f"fw{i}", rng)[0].decision for i in range(15)]
     assert weak.count("not_confirmed") >= 13
 
 
