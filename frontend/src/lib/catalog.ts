@@ -19,6 +19,7 @@ export function lookup(cat: Catalog | undefined) {
     fspResult: (id?: string | null) => cat?.fsp.results.find((s) => s.id === id)?.title ?? id ?? '',
     fspLevel: (id?: string | null) => cat?.fsp.levels.find((s) => s.id === id)?.title ?? id ?? '',
     fspDiscipline: (id?: string | null) => cat?.fsp.disciplines.find((s) => s.id === id)?.title ?? id ?? '',
+    fspDisciplineInfo: (id?: string | null) => cat?.fsp.disciplines.find((s) => s.id === id),
   }
 }
 
@@ -52,6 +53,7 @@ export const INVITE_STATUS: Record<string, { label: string; tone: string }> = {
   accepted: { label: 'Принято', tone: 'bg-ok-50 text-ok-600' },
   declined: { label: 'Отклонено', tone: 'bg-accent-50 text-accent-600' },
   withdrawn: { label: 'Отозвано', tone: 'bg-surface text-muted' },
+  hired: { label: 'Вышел на работу', tone: 'bg-ok-50 text-ok-600' },
 }
 
 export const APP_STATUS: Record<string, { label: string; tone: string }> = {

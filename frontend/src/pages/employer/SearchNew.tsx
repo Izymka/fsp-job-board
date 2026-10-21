@@ -29,6 +29,8 @@ export default function SearchNew() {
   const [format, setFormat] = useState('')
   const [years, setYears] = useState('')
   const [adjacent, setAdjacent] = useState(true)
+  const [fspFriendly, setFspFriendly] = useState(false)
+  const [notifyFsp, setNotifyFsp] = useState(true)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   // вилку, введённую вручную, учитываем в разборе: она — один из сигналов грейда
   const formFrom = touched.from && from ? Number(from) : null
@@ -68,6 +70,8 @@ export default function SearchNew() {
         work_format: format || null,
         min_years: years === '' ? null : Number(years),
         include_adjacent: adjacent,
+        fsp_friendly: fspFriendly,
+        notify_fsp: notifyFsp,
       }),
     onSuccess: (d) => nav(`/employer/searches/${d.search.id}`),
   })
@@ -191,6 +195,14 @@ export default function SearchNew() {
                 <label className="flex items-center gap-2 text-sm">
                   <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={adjacent} onChange={(e) => setAdjacent(e.target.checked)} />
                   Показывать соседние грейды (с пометкой)
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={fspFriendly} onChange={(e) => setFspFriendly(e.target.checked)} />
+                  Засчитывать достижения ФСП как опыт работы
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={notifyFsp} onChange={(e) => setNotifyFsp(e.target.checked)} />
+                  Сообщать о новых участниках ФСП в топе подборки
                 </label>
               </div>
             )}

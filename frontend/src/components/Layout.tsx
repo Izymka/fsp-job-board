@@ -23,6 +23,9 @@ const EMPLOYER_NAV = [
   { to: '/employer/company', label: 'Компания' },
 ]
 
+const FSP_NAV = [{ to: '/fsp', label: 'Трудоустройство участников ФСП', end: true }]
+const ROLE_LABEL: Record<string, string> = { candidate: 'Кандидат', employer: 'Работодатель', fsp_admin: 'Федерация ФСП' }
+
 export function Logo({ dark }: { dark?: boolean }) {
   return (
     <Link to="/" className="flex items-center gap-2.5" aria-label="ФСП Job Board — на главную">
@@ -36,7 +39,7 @@ export function Header() {
   const { authenticated, login, register, logout } = useAuth()
   const { data: me } = useMe()
   const [open, setOpen] = useState(false)
-  const nav = me?.role === 'candidate' ? CANDIDATE_NAV : me?.role === 'employer' ? EMPLOYER_NAV : []
+  const nav = me?.role === 'candidate' ? CANDIDATE_NAV : me?.role === 'employer' ? EMPLOYER_NAV : me?.role === 'fsp_admin' ? FSP_NAV : []
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
@@ -58,7 +61,7 @@ export function Header() {
             <>
               <span className="hidden max-w-48 truncate text-sm text-muted 2xl:inline">{me?.email}</span>
               {me?.role && (
-                <span className="hidden rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-ink-soft sm:inline">{me.role === 'candidate' ? 'Кандидат' : 'Работодатель'}</span>
+                <span className="hidden rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-ink-soft sm:inline">{ROLE_LABEL[me.role] ?? me.role}</span>
               )}
               <button className="btn-ghost p-2" onClick={logout} title="Выйти" aria-label="Выйти">
                 <LogOut className="h-4 w-4" />

@@ -103,6 +103,10 @@ def get_current_user(
         )
         db.add(user)
         db.flush()
+    if user.role is None and user.email.lower() in {
+        e.strip().lower() for e in settings.fsp_admin_emails.split(",") if e.strip()
+    }:
+        user.role = "fsp_admin"  # роль федерации не выбирается самостоятельно — только по списку
     now = utcnow()
     last = user.last_seen_at
     if last is None or (now - (last if last.tzinfo else last.replace(tzinfo=now.tzinfo))) > timedelta(
@@ -118,7 +122,8 @@ def require_role(role: str):
             raise AppError(
                 403,
                 "wrong_role",
-                "Раздел доступен только для роли: " + ("кандидат" if role == "candidate" else "работодатель"),
+                "Раздел доступен только для роли: "
+                + {"candidate": "кандидат", "employer": "работодатель"}.get(role, "федерация ФСП"),
             )
         return user
 

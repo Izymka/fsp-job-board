@@ -85,6 +85,32 @@ def test_cat_classifies_clear_cases(spec):
     assert weak.count("not_confirmed") >= 13
 
 
+def test_confident_candidate_stops_well_before_max_items():
+    """Остановка по уверенности 0.85: явный случай решается на минимуме длины (плюс покрытие навыков),
+    а не добирается до потолка; пограничный — длиннее."""
+    cat = get_catalog()
+    rng = random.Random(3)
+    plan = ENGINE.plan_for_specialization("backend", "middle", ["python"])
+    cut = cat.grade("middle").cut
+    clear = [len(simulate(cut + 1.5, plan, f"c{i}", rng)[1]) for i in range(10)]
+    border = [len(simulate(cut, plan, f"b{i}", rng)[1]) for i in range(10)]
+    assert np.mean(clear) <= DEFAULT_CONFIG.min_items + 6
+    assert np.mean(clear) < np.mean(border)
+    assert max(clear) < DEFAULT_CONFIG.max_items
+
+
+def test_onboarding_shorter_than_before_threshold_change():
+    """Регресс по длине: средний онбординг на малой популяции не длиннее 31 задания
+    (до пересмотра порогов было 30.9, с порогами 0.65/0.5 и остановкой 0.95 — 35)."""
+    from fspml.validation import assessment as va
+    from fspml.validation.population import make_candidates
+
+    cands = make_candidates(150, stuffing_rate=0.3, history=True)
+    truth = va.make_true_bank()
+    items = [va.simulate_onboarding(c, truth, va.candidate_rng(1, i)).items for i, c in enumerate(cands)]
+    assert np.mean(items) <= 31
+
+
 def test_fsp_prior_shifts_start_but_answers_decide():
     assert with_fsp_prior(DEFAULT_CONFIG, 0.0) is DEFAULT_CONFIG  # без истории ФСП — прежний приор
     cfg = with_fsp_prior(DEFAULT_CONFIG, 0.6)

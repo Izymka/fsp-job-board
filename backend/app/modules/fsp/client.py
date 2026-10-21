@@ -40,6 +40,23 @@ def fetch_participant(fsp_id: str) -> dict | None:
     return r.json()
 
 
+def fetch_upcoming_events() -> list[dict]:
+    """Предстоящие соревнования из справочника реестра (`GET /api/v1/events?upcoming=true`)."""
+    s = get_settings()
+    try:
+        r = httpx.get(
+            f"{s.fsp_registry_url}/api/v1/events",
+            params={"upcoming": "true"},
+            headers={"X-API-Key": s.fsp_registry_api_key},
+            timeout=5,
+        )
+    except httpx.HTTPError as e:
+        raise RegistryUnavailable(str(e)) from e
+    if r.status_code != 200:
+        raise RegistryUnavailable(f"HTTP {r.status_code}")
+    return r.json()
+
+
 def normalize_achievements(data: dict | None) -> list[dict]:
     if not data:
         return []

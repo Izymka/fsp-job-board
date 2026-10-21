@@ -15,6 +15,7 @@ export default function EmployerInvitations() {
   const invs = useQuery({ queryKey: ['employer-invitations'], queryFn: () => api.get<Invitation[]>('/api/employer/invitations') })
   const data = invs.data
   const withdraw = useMutation({ mutationFn: (id: string) => api.post(`/api/employer/invitations/${id}/withdraw`), onSuccess: () => qc.invalidateQueries({ queryKey: ['employer-invitations'] }) })
+  const hired = useMutation({ mutationFn: (id: string) => api.post(`/api/employer/invitations/${id}/hired`), onSuccess: () => qc.invalidateQueries({ queryKey: ['employer-invitations'] }) })
   if (!data) return <PageLoader queries={[invs]} />
   const counts = data.reduce<Record<string, number>>((a, i) => ((a[i.status] = (a[i.status] ?? 0) + 1), a), {})
   const rows = tab === 'all' ? data : data.filter((i) => i.status === tab)
@@ -77,6 +78,11 @@ export default function EmployerInvitations() {
                     {(i.status === 'sent' || i.status === 'viewed') && (
                       <button className="btn-ghost btn-sm" onClick={() => window.confirm('Отозвать приглашение?') && withdraw.mutate(i.id)}>
                         Отозвать
+                      </button>
+                    )}
+                    {i.status === 'accepted' && (
+                      <button className="btn-secondary btn-sm" title="Помогает федерации ФСП видеть, сколько участников трудоустроено" onClick={() => window.confirm('Кандидат вышел на работу?') && hired.mutate(i.id)}>
+                        Вышел на работу
                       </button>
                     )}
                   </td>

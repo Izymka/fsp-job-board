@@ -86,6 +86,8 @@ def _active_consents(db: Session, user: User) -> dict[str, bool]:
 def _onboarding_step(db: Session, user: User) -> str:
     if not user.role:
         return "choose_role"
+    if user.role == "fsp_admin":
+        return "done"
     if user.role == "employer":
         return "done" if db.scalar(select(Company).where(Company.owner_id == user.id)) else "company"
     p = db.get(CandidateProfile, user.id)

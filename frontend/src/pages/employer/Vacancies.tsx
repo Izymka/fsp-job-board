@@ -20,10 +20,11 @@ function VacancyForm({ v, onClose }: { v: Vacancy | null; onClose: () => void })
   const [fmt, setFmt] = useState(v?.work_format ?? '')
   const [city, setCity] = useState(v?.city ?? '')
   const [years, setYears] = useState(v?.min_years != null ? String(v.min_years) : '')
+  const [fspFriendly, setFspFriendly] = useState(v?.fsp_friendly ?? false)
   const [status, setStatus] = useState(v?.status ?? 'published')
   const save = useMutation({
     mutationFn: () => {
-      const body = { title, text, specialization: spec || null, grade: grade || null, salary_from: Number(from), salary_to: Number(to), work_format: fmt || null, city: city || null, min_years: years === '' ? null : Number(years), status }
+      const body = { title, text, specialization: spec || null, grade: grade || null, salary_from: Number(from), salary_to: Number(to), work_format: fmt || null, city: city || null, min_years: years === '' ? null : Number(years), fsp_friendly: fspFriendly, status }
       return v ? api.put<Vacancy>(`/api/employer/vacancies/${v.id}`, body) : api.post<Vacancy>('/api/employer/vacancies', body)
     },
     onSuccess: () => {
@@ -90,6 +91,13 @@ function VacancyForm({ v, onClose }: { v: Vacancy | null; onClose: () => void })
             <input className="input" type="number" min={0} max={20} step={0.5} value={years} onChange={(e) => setYears(e.target.value)} />
           </Field>
         </div>
+        <label className="flex items-start gap-2 rounded-xl border border-line p-3 text-sm">
+          <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-500" checked={fspFriendly} onChange={(e) => setFspFriendly(e.target.checked)} />
+          <span>
+            <b>Открыта для участников ФСП</b>
+            <span className="block text-muted">Засчитываем подтверждённые реестром достижения ФСП как опыт работы — до требуемого стажа. Вакансия получит бейдж в ленте кандидатов, компания — бейдж «Партнёр ФСП».</span>
+          </span>
+        </label>
         <Field label="Статус">
           <select className="input w-auto" value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="published">Опубликована</option>
@@ -188,6 +196,7 @@ export default function EmployerVacancies() {
                     <Badge tone="bg-brand-50 text-brand-700">{v.category}</Badge>
                     <Badge>{v.status === 'published' ? 'опубликована' : v.status === 'draft' ? 'черновик' : 'закрыта'}</Badge>
                     {v.work_format && <Badge>{L.format(v.work_format)}</Badge>}
+                    {v.fsp_friendly && <Badge tone="bg-ok-50 text-ok-600">открыта для ФСП</Badge>}
                   </div>
                 </div>
                 <button className="btn-ghost p-2" onClick={() => setEdit(v)} aria-label="Редактировать">

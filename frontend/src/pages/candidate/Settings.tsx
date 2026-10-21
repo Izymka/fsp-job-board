@@ -86,7 +86,7 @@ export default function CandidateSettings() {
                 </button>
               </div>
             </div>
-            <FspList items={p.fsp_achievements} linked visible />
+            <FspList items={p.fsp_achievements} linked visible editable />
           </div>
         ) : (
           <div className="space-y-3">

@@ -182,6 +182,10 @@ class SearchIn(BaseModel):
         default=None, ge=0, le=20, description="требуемый опыт, лет; если не задано — из текста"
     )
     include_adjacent: bool = True
+    fsp_friendly: bool = Field(
+        default=False, description="засчитывать достижения ФСП как опыт до требуемого стажа"
+    )
+    notify_fsp: bool = Field(default=False, description="сообщать о новых участниках ФСП в топе подборки")
 
     @model_validator(mode="after")
     def _check(self):
@@ -201,6 +205,8 @@ class SearchSummary(BaseModel):
     updated_at: datetime
     shortlist: int
     filters: dict
+    fsp_friendly: bool = False
+    notify_fsp: bool = False
 
 
 class SearchOut(BaseModel):
@@ -227,6 +233,8 @@ def _summary(db: Session, s: Search) -> SearchSummary:
         updated_at=s.updated_at,
         shortlist=n,
         filters=s.filters or {},
+        fsp_friendly=bool(s.fsp_friendly),
+        notify_fsp=bool(s.notify_fsp),
     )
 
 
@@ -260,6 +268,7 @@ def search_out(db: Session, company: Company, s: Search) -> SearchOut:
             "industry": s.industry,
             "min_years": s.min_years,
             "include_adjacent": s.include_adjacent,
+            "fsp_friendly": bool(s.fsp_friendly),
             "explanation": (s.parsed or {}).get("explanation", []),
         },
         base_total=res["base_total"],
@@ -316,6 +325,8 @@ def create_search(body: SearchIn, user: User = Depends(EmployerUser), db: Sessio
         industry=body.industry or company.industry,
         min_years=body.min_years if body.min_years is not None else n.min_years,
         include_adjacent=body.include_adjacent,
+        fsp_friendly=body.fsp_friendly,
+        notify_fsp=body.notify_fsp,
         parsed={
             "spec_scores": n.spec_scores,
             "explanation": n.explanation,
@@ -357,6 +368,30 @@ def list_searches(user: User = Depends(EmployerUser), db: Session = Depends(get_
 def get_search(search_id: str, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
     company = get_company(db, user)
     return search_out(db, company, _own_search(db, company, search_id))
+
+
+class FspSettingsIn(BaseModel):
+    fsp_friendly: bool | None = None
+    notify_fsp: bool | None = None
+
+
+@router.put(
+    "/searches/{search_id}/fsp",
+    response_model=SearchSummary,
+    summary="ФСП-настройки подборки: засчитывать ФСП как опыт, уведомлять о новых участниках ФСП",
+    responses=responses(401, 403, 404, 409, 422),
+)
+def search_fsp_settings(
+    search_id: str, body: FspSettingsIn, user: User = Depends(EmployerUser), db: Session = Depends(get_db)
+):
+    company = get_company(db, user)
+    s = _own_search(db, company, search_id)
+    if body.fsp_friendly is not None:
+        s.fsp_friendly = body.fsp_friendly
+    if body.notify_fsp is not None:
+        s.notify_fsp = body.notify_fsp
+    db.commit()
+    return _summary(db, s)
 
 
 class FiltersIn(BaseModel):

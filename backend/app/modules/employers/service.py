@@ -45,12 +45,16 @@ class ReasonOut(BaseModel):
 
 
 class FspItem(BaseModel):
+    id: str | None = None
     title: str
     discipline: str
     level: str
     result: str
     date: str
+    place: int | None = None
     role: str | None = None
+    team: str | None = None
+    project_url: str | None = None
 
 
 class CandidateCard(BaseModel):
@@ -177,12 +181,16 @@ def card(
         for a in sorted(p.fsp_achievements or [], key=lambda a: a.get("date", ""), reverse=True):
             fsp_items.append(
                 FspItem(
+                    id=a.get("id"),
                     title=a.get("title", ""),
                     discipline=a.get("discipline", ""),
                     level=a.get("level", ""),
                     result=a.get("result", ""),
                     date=a.get("date", ""),
+                    place=a.get("place"),
                     role=a.get("role"),
+                    team=a.get("team"),
+                    project_url=a.get("project_url"),
                 )
             )
     full_name, contacts = revealed_contacts(p) if revealed else (None, None)
@@ -233,6 +241,7 @@ def need_of(s: Search) -> Need:
         work_format=s.work_format,
         industry=s.industry,
         min_years=s.min_years,
+        fsp_friendly=bool(s.fsp_friendly),
         text="\n".join(x for x in (s.title, s.team_description or "", s.text or "") if x),
         include_adjacent=s.include_adjacent and not (s.filters or {}).get("exclude_adjacent", False),
     )

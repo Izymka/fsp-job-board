@@ -1,6 +1,6 @@
 // Типы ответов API (см. Swagger: /api/docs)
 
-export type Role = 'candidate' | 'employer'
+export type Role = 'candidate' | 'employer' | 'fsp_admin'
 export type GradeId = 'intern' | 'junior' | 'middle' | 'senior' | 'lead'
 
 export interface Me {
@@ -35,7 +35,7 @@ export interface Catalog {
   fsp: {
     levels: { id: string; title: string; weight: number }[]
     results: { id: string; title: string; weight: number }[]
-    disciplines: { id: string; title: string }[]
+    disciplines: { id: string; title: string; format?: string; proves?: string }[]
   }
   technologies: { name: string; assess: string[]; specializations: Record<string, number> }[]
   bank: { families: number; by_skill: Record<string, number> }
@@ -59,6 +59,7 @@ export interface FspAchievement {
   date: string
   role?: string | null
   team?: string | null
+  project_url?: string | null
 }
 
 export interface Job {
@@ -330,6 +331,8 @@ export interface SearchSummary {
   updated_at: string
   shortlist: number
   filters: Filters
+  fsp_friendly: boolean
+  notify_fsp: boolean
 }
 
 export interface Filters {
@@ -456,6 +459,8 @@ export interface Vacancy {
   work_format: string | null
   city: string | null
   min_years: number | null
+  fsp_friendly: boolean
+  company_fsp_partner: boolean
   status: string
   blueprint: Record<string, number>
   created_at: string
@@ -568,4 +573,27 @@ export interface Insights {
     declines_total: number
     declines_salary_share: number | null
   }[]
+}
+
+export interface GrowthPlan {
+  weak_skills: string[]
+  events: { id: string; title: string; discipline: string; level: string; start_date: string; city: string | null; relevance: number }[]
+  registry_available: boolean
+}
+
+export interface FunnelRow {
+  key: string
+  title: string
+  counts: Record<string, number | null>
+}
+
+export interface Funnel {
+  stages: { id: string; title: string }[]
+  fsp: FunnelRow
+  baseline: FunnelRow
+  by_level: FunnelRow[]
+  by_discipline: FunnelRow[]
+  by_specialization: FunnelRow[]
+  by_region: FunnelRow[]
+  min_cell: number
 }

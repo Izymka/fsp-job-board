@@ -27,6 +27,8 @@ function VacancyModal({ v, onClose }: { v: Vacancy; onClose: () => void }) {
           <b>{v.company_name}</b>
           <Badge tone="bg-brand-50 text-brand-700">{v.category}</Badge>
           {v.work_format && <Badge>{L.format(v.work_format)}</Badge>}
+          {v.fsp_friendly && <Badge tone="bg-ok-50 text-ok-600">открыта для участников ФСП</Badge>}
+          {v.company_fsp_partner && <Badge tone="bg-brand-50 text-brand-700">партнёр ФСП</Badge>}
           {v.city && <span className="text-muted">{v.city}</span>}
         </div>
         <div className="font-mono text-2xl font-bold text-brand-600">{range(v.salary_from, v.salary_to)}</div>
@@ -35,6 +37,9 @@ function VacancyModal({ v, onClose }: { v: Vacancy; onClose: () => void }) {
             <div className="mb-2 text-xs font-medium text-muted">Насколько вы подходите — {Math.round(v.match.score * 100)} / 100</div>
             <Reasons reasons={v.match.reasons} compact />
           </div>
+        )}
+        {v.fsp_friendly && (
+          <Notice tone="ok">Компания засчитывает подтверждённые достижения ФСП как опыт работы — отсутствие коммерческого стажа здесь не помеха.</Notice>
         )}
         <Md text={v.text} />
         {v.company_stats && <p className="text-xs text-muted">Компания отвечает на {pct(v.company_stats.application_response_rate)} откликов.</p>}
@@ -61,9 +66,10 @@ function VacancyModal({ v, onClose }: { v: Vacancy; onClose: () => void }) {
 
 export default function CandidateVacancies() {
   const [all, setAll] = useState(false)
+  const [fspOnly, setFspOnly] = useState(false)
   const [q, setQ] = useState('')
   const [open, setOpen] = useState<Vacancy | null>(null)
-  const { data, isLoading } = useQuery({ queryKey: ['vacancies', all], queryFn: () => api.get<Vacancy[]>(`/api/vacancies?all_specializations=${all}`) })
+  const { data, isLoading } = useQuery({ queryKey: ['vacancies', all, fspOnly], queryFn: () => api.get<Vacancy[]>(`/api/vacancies?all_specializations=${all}&fsp_friendly=${fspOnly}`) })
   const rows = (data ?? []).filter((v) => !q || (v.title + v.company_name + v.text).toLowerCase().includes(q.toLowerCase()))
   return (
     <div>
@@ -84,11 +90,17 @@ export default function CandidateVacancies() {
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={all} onChange={(e) => setAll(e.target.checked)} /> Все специализации
         </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={fspOnly} onChange={(e) => setFspOnly(e.target.checked)} /> Открытые для ФСП
+        </label>
       </div>
       {isLoading ? (
         <PageLoader />
       ) : rows.length === 0 ? (
-        <EmptyState title="Вакансий не найдено" text="Попробуйте включить все специализации или изменить запрос." />
+        <EmptyState
+          title="Вакансий не найдено"
+          text={fspOnly ? 'Пока нет вакансий, открытых для участников ФСП, в вашей специализации. Попробуйте включить все специализации.' : 'Попробуйте включить все специализации или изменить запрос.'}
+        />
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {rows.map((v) => (
@@ -110,6 +122,7 @@ export default function CandidateVacancies() {
                   .map((s) => (
                     <Badge key={s}>{s}</Badge>
                   ))}
+                {v.fsp_friendly && <Badge tone="bg-ok-50 text-ok-600">открыта для ФСП</Badge>}
                 {v.applied && <Badge tone="bg-ok-50 text-ok-600">отклик отправлен</Badge>}
               </div>
             </button>

@@ -119,7 +119,42 @@ export function SkillList({ scores }: { scores: Record<string, SkillScore | stri
   )
 }
 
-export function FspList({ items, linked, visible = true }: { items: FspAchievement[]; linked: boolean; visible?: boolean }) {
+function ProjectLink({ a }: { a: FspAchievement }) {
+  const qc = useQueryClient()
+  const [edit, setEdit] = useState(false)
+  const [url, setUrl] = useState(a.project_url ?? '')
+  const save = useMutation({
+    mutationFn: (v: string | null) => api.put(`/api/fsp/achievements/${a.id}/project`, { url: v }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['profile'] })
+      setEdit(false)
+    },
+  })
+  if (!a.id) return null
+  if (!edit)
+    return (
+      <button className="link text-xs" onClick={() => setEdit(true)}>
+        {a.project_url ? 'изменить ссылку на проект' : '+ ссылка на проект команды'}
+      </button>
+    )
+  return (
+    <form
+      className="mt-1 flex flex-wrap items-center gap-2"
+      onSubmit={(e) => {
+        e.preventDefault()
+        save.mutate(url.trim() || null)
+      }}
+    >
+      <input className="input h-8 min-w-56 flex-1 text-xs" type="url" pattern="https://.*" placeholder="https://github.com/…" value={url} onChange={(e) => setUrl(e.target.value)} />
+      <button className="btn-secondary btn-sm" disabled={save.isPending}>
+        Сохранить
+      </button>
+      <ErrorBox error={save.error} />
+    </form>
+  )
+}
+
+export function FspList({ items, linked, visible = true, editable = false }: { items: FspAchievement[]; linked: boolean; visible?: boolean; editable?: boolean }) {
   const { data: cat } = useCatalog()
   const L = lookup(cat)
   if (!linked) return <p className="text-sm text-muted">ФСП ID не привязан — это не влияет на категорию, профиль ранжируется по результатам теста.</p>
@@ -138,7 +173,19 @@ export function FspList({ items, linked, visible = true }: { items: FspAchieveme
               {L.fspResult(a.result)}
               {a.place ? ` (${a.place} место)` : ''} · {L.fspLevel(a.level)} · {date(a.date)}
               {a.role ? ` · роль: ${a.role}` : ''}
+              {a.team ? ` · ${a.team}` : ''}
             </div>
+            {L.fspDisciplineInfo(a.discipline)?.proves && (
+              <div className="mt-1 text-xs text-ink-soft" title={L.fspDisciplineInfo(a.discipline)?.format}>
+                <span className="text-muted">Что подтверждает:</span> {L.fspDisciplineInfo(a.discipline)?.proves}
+              </div>
+            )}
+            {a.project_url && (
+              <a href={a.project_url} target="_blank" rel="noreferrer noopener" className="link mt-1 inline-block text-xs">
+                Проект команды ↗
+              </a>
+            )}
+            {editable && <ProjectLink a={a} />}
           </div>
         </li>
       ))}

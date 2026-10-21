@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     fsp_registry_url: str = "http://localhost:8090"
     fsp_registry_api_key: str = "fsp-registry-demo-key"
     fsp_sync_interval_hours: float = 6.0
+    # Учётные записи федерации (роль fsp_admin: агрегированная воронка трудоустройства участников ФСП)
+    fsp_admin_emails: str = "federation@demo.fsp"
 
     # Тестирование: секрет для seed экземпляров заданий (HMAC). Сменить в production!
     assessment_secret: str = "assessment-secret-change-me-0123456789abcdef"

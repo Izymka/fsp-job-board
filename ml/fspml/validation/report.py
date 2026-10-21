@@ -111,7 +111,9 @@ def run(out_dir: Path, n_candidates: int = 1000, n_needs: int = 30, quick: bool 
 
     # ---------------------------------------------------------------- тестирование
     res["bank"] = bank_stats()
-    res["reliability"] = va.run_reliability(cands, truth)
+    # главные цифры точности — среднее по 5 сидам (свои случайные числа у каждого кандидата)
+    seeds = (1,) if quick else va.REPORT_SEEDS
+    res["reliability"] = va.run_multi_seed(cands, truth, seeds=seeds)
     sub = cands[: max(300, n_candidates // 2)]
     res["threshold_tradeoff"] = {}
     for pp in (0.5, 0.6, 0.7, 0.8):
@@ -163,29 +165,33 @@ def run(out_dir: Path, n_candidates: int = 1000, n_needs: int = 30, quick: bool 
         "accuracy_no_fsp",
         "retest_kappa_weighted",
         "items_mean",
+        "accuracy_exact_min",
+        "accuracy_exact_max",
+        "overgrade_rate_min",
+        "overgrade_rate_max",
     )
-    prev_thr = dict(pass_probability_upgrade=0.75, upgrade_probability=0.8)
+    # Абляция на тех же 5 сидах. prev — до пересмотра порогов (без ФСП-приора, остановка 0.95);
+    # v2 — пороги 0.65 / 0.5 и ФСП-приор с прежней остановкой 0.95 (удлинили онбординг);
+    # current — короткая остановка 0.85 и подтверждение повышения 0.70.
+    prev = dict(stop_confidence=0.95, pass_probability_upgrade=0.75, upgrade_probability=0.8)
+    v2 = dict(stop_confidence=0.95, pass_probability_upgrade=0.65, upgrade_probability=0.5)
+
+    def ms(**cfg):
+        r = va.run_multi_seed(cands, truth, seeds=seeds, config=replace(DEFAULT_CONFIG, **cfg))
+        return {k: r[k] for k in acc_keys if k in r}
+
     res["accuracy_ablation"] = {
-        "prev": {
-            k: v
-            for k, v in va.run_reliability(
-                cands, truth, config=replace(DEFAULT_CONFIG, fsp_prior_shift=0.0, **prev_thr)
-            ).items()
-            if k in acc_keys
-        },
-        "thresholds_only": {
-            k: v
-            for k, v in va.run_reliability(
-                cands, truth, config=replace(DEFAULT_CONFIG, fsp_prior_shift=0.0)
-            ).items()
-            if k in acc_keys
-        },
-        "fsp_prior_only": {
-            k: v
-            for k, v in va.run_reliability(cands, truth, config=replace(DEFAULT_CONFIG, **prev_thr)).items()
-            if k in acc_keys
-        },
+        "prev": ms(fsp_prior_shift=0.0, **prev),
+        "thresholds_only": ms(fsp_prior_shift=0.0, **v2),
+        "fsp_prior_only": ms(**prev),
+        "v2": ms(**v2),
         "current": {k: res["reliability"][k] for k in acc_keys if k in res["reliability"]},
+    }
+    # правило остановки при текущих порогах (выбор — на сидах отбора, см. SELECTION_SEEDS)
+    res["stop_rule"] = {
+        "0.95": ms(stop_confidence=0.95),
+        "0.90": ms(stop_confidence=0.90),
+        f"{DEFAULT_CONFIG.stop_confidence:.2f}": res["accuracy_ablation"]["current"],
     }
     res["leaks"] = va.run_leak_experiment(cands[: 400 if not quick else 150], truth)
     person, items, correct, thetas = va.collect_responses(cands, truth)
@@ -402,6 +408,12 @@ def pct(x: float) -> str:
     return f"{x * 100:.1f}%"
 
 
+def _rng(a: dict, key: str) -> str:
+    """« (71.5–73.8)» — разброс по сидам, если метрика посчитана на нескольких."""
+    lo, hi = a.get(f"{key}_min"), a.get(f"{key}_max")
+    return f" ({lo * 100:.1f}–{hi * 100:.1f})" if lo is not None and hi is not None and hi > lo else ""
+
+
 def render_md(r: dict) -> str:
     cat = get_catalog()
     rel = r["reliability"]
@@ -473,6 +485,13 @@ def render_md(r: dict) -> str:
         "Повтор (ретест) — второй онбординг того же кандидата; как и в продукте, система помнит семейства прошлых попыток и выбирает другие, "
         "то есть ретест идёт на *параллельной форме*, а не на тех же шаблонах с другими числами.\n"
     )
+    seeds = rel.get("seeds", [1])
+    if len(seeds) > 1:
+        w(
+            f"Числа этого раздела — **среднее по {len(seeds)} сидам**; у каждого кандидата свой поток случайных чисел, поэтому "
+            "варианты настройки сравниваются на одних и тех же случайных числах. Разброс точности между сидами — "
+            f"{pct(rel['accuracy_exact_min'])}–{pct(rel['accuracy_exact_max'])}.\n"
+        )
     w("| Метрика | Значение |\n|---|---|")
     w(
         f"| Совпадение с истинным грейдом | **{pct(rel['accuracy_exact'])}** (±1 ступень — {pct(rel['accuracy_within1'])}) |"
@@ -555,16 +574,20 @@ def render_md(r: dict) -> str:
     ab = r.get("accuracy_ablation")
     if ab:
         w(
-            "*Точность грейда: пороги повышения и ФСП-приор.* Главная ошибка прежней настройки — занижение сильных кандидатов, а не завышение. "
-            "Пороги повышения снижены (предложить повышение — при P(θ > следующий порог) ≥ 0.5 вместо 0.8, подтвердить — при ≥ 0.65 вместо 0.75), "
+            "*Точность грейда: пороги повышения, ФСП-приор и правило остановки.* Главная ошибка прежней настройки — занижение сильных кандидатов, а не завышение. "
+            "Пороги повышения снижены (предложить повышение — при P(θ > следующий порог) ≥ 0.5 вместо 0.8, подтвердить — при ≥ "
+            f"{DEFAULT_CONFIG.pass_probability_upgrade:.2f} вместо 0.75), "
             "а достижения ФСП из реестра сдвигают априорное среднее θ на 0.8 × силу ФСП (без истории ФСП приор прежний). "
-            "Та же популяция и те же сиды:\n"
+            "Само по себе это удлинило онбординг: кандидатам чаще предлагается тест на ступень выше, и каждый идёт с нуля. "
+            f"Длину вернула остановка при уверенности {DEFAULT_CONFIG.stop_confidence} вместо 0.95. "
+            "Та же популяция и те же сиды (среднее, в скобках — min–max по сидам):\n"
         )
         ab_names = {
             "prev": "Прежняя настройка",
-            "thresholds_only": "Только новые пороги",
+            "thresholds_only": "Только новые пороги (остановка 0.95)",
             "fsp_prior_only": "Только ФСП-приор",
-            "current": "**Текущая** (пороги + ФСП-приор)",
+            "v2": "Пороги + ФСП-приор, остановка 0.95",
+            "current": f"**Текущая**: пороги + ФСП-приор, остановка {DEFAULT_CONFIG.stop_confidence}",
         }
         w(
             "| Вариант | Точно | ±1 | Завышение | Занижение | Точно, с ФСП | Точно, без ФСП | Взв. κ ретеста | Заданий |"
@@ -573,11 +596,29 @@ def render_md(r: dict) -> str:
         for key, title in ab_names.items():
             a = ab[key]
             w(
-                f"| {title} | {pct(a['accuracy_exact'])} | {pct(a['accuracy_within1'])} | {pct(a['overgrade_rate'])} | "
+                f"| {title} | {pct(a['accuracy_exact'])}{_rng(a, 'accuracy_exact')} | {pct(a['accuracy_within1'])} | {pct(a['overgrade_rate'])}{_rng(a, 'overgrade_rate')} | "
                 f"{pct(a['undergrade_rate'])} | {pct(a['accuracy_fsp'])} | {pct(a['accuracy_no_fsp'])} | "
                 f"{a['retest_kappa_weighted']:.2f} | {a['items_mean']:.1f} |"
             )
         w("")
+        sr = r.get("stop_rule")
+        if sr:
+            w(
+                "**Правило остановки.** Тест останавливается, когда P(θ > порог) выходит из интервала (1 − c, c). Решение о грейде "
+                f"принимается при P ≥ {DEFAULT_CONFIG.pass_probability}, поэтому задания сверх уверенности c почти не меняют итог. "
+                "c выбрано перебором на сидах отбора (101–105), отличных от отчётных: минимум заданий при точности не ниже прежней − 0.5 п.п., "
+                "завышении ≤ 5% и не выше прежнего + 0.5 п.п., взвешенной κ ретеста не ниже прежней − 0.01 и точности у кандидатов с ФСП не ниже прежней.\n"
+            )
+            w(
+                "| c | Точно | Завышение | Точно, с ФСП | Взв. κ ретеста | Заданий за онбординг |\n|---|---|---|---|---|---|"
+            )
+            for c_, a in sr.items():
+                mark = "**" if float(c_) == DEFAULT_CONFIG.stop_confidence else ""
+                w(
+                    f"| {mark}{c_}{mark} | {pct(a['accuracy_exact'])} | {pct(a['overgrade_rate'])} | {pct(a['accuracy_fsp'])} | "
+                    f"{a['retest_kappa_weighted']:.2f} | {mark}{a['items_mean']:.1f}{mark} |"
+                )
+            w("")
         w(
             "*Проверенная и отклонённая гипотеза:* приор по заявленному грейду (самооценка как стартовая точка оценки θ) поднимает точность ещё на ~3 п.п., "
             "но увеличивает завышение у тех, кто заявил грейд выше реального (≈ 10% → 12%), — это поощряло бы завышенную заявку. "

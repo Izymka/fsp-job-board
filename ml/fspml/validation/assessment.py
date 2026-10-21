@@ -256,6 +256,13 @@ def grade_idx(g: str | None) -> int:
     return get_catalog().grade_index(g) if g else 0
 
 
+def candidate_rng(seed: int, i: int) -> random.Random:
+    """Свой поток случайных чисел у каждого кандидата: варианты настройки сравниваются на одних и
+    тех же случайных числах, а изменённый путь одного кандидата не сдвигает случайные числа следующих
+    (с общим потоком любое изменение «перетасовывает» всю популяцию, и разница вариантов тонет в шуме)."""
+    return random.Random(seed * 100_003 + i)
+
+
 def run_reliability(
     cands: Sequence[TrueCandidate], truth: TrueBank, seed: int = 1, avoid_seen: bool = True, **kw
 ) -> dict:
@@ -263,17 +270,21 @@ def run_reliability(
     семейства первого и идёт на параллельной форме, как в продукте."""
     cat = get_catalog()
     k = len(cat.grades)
-    rng1, rng2 = random.Random(seed), random.Random(seed + 1000)
     first, second, true_g = [], [], []
     th1, th2, th_true = [], [], []
     items, attempts = [], []
     border = []  # |θ − ближайший порог| < 0.25 — самые сложные для классификации
     decisions1, decisions2 = [], []
     rep_retest, rep_onboarding = [], []
-    for c in cands:
-        r1 = simulate_onboarding(c, truth, rng1, avoid_seen=avoid_seen, **kw)
+    for i, c in enumerate(cands):
+        r1 = simulate_onboarding(c, truth, candidate_rng(seed, i), avoid_seen=avoid_seen, **kw)
         r2 = simulate_onboarding(
-            c, truth, rng2, seen=r1.families if avoid_seen else (), avoid_seen=avoid_seen, **kw
+            c,
+            truth,
+            candidate_rng(seed + 1000, i),
+            seen=r1.families if avoid_seen else (),
+            avoid_seen=avoid_seen,
+            **kw,
         )
         rep_retest.append(repeat_share([r.family_id for lg in r2.logs for r in lg.responses], r1.families))
         for i in range(1, len(r1.logs)):
@@ -330,6 +341,48 @@ def run_reliability(
         "confusion": confusion.tolist(),
         "retest_matrix": retest.tolist(),
     }
+
+
+REPORT_SEEDS = (1, 2, 3, 4, 5)
+# Настройки выбираются на других сидах, чем публикуются: иначе выбор подгоняется под отчётный поток.
+SELECTION_SEEDS = (101, 102, 103, 104, 105)
+
+
+def _reliability_at(seed: int, cands, truth, kw: dict) -> dict:
+    return run_reliability(cands, truth, seed=seed, **kw)
+
+
+def run_multi_seed(
+    cands: Sequence[TrueCandidate],
+    truth: TrueBank,
+    seeds: Sequence[int] = REPORT_SEEDS,
+    workers: int | None = None,
+    **kw,
+) -> dict:
+    """run_reliability на нескольких сидах: по скалярным метрикам — среднее, min и max; матрицы —
+    по первому сиду. При 1000 кандидатах разброс точности между сидами — около ±1.5 п.п., поэтому
+    варианты сравниваются по среднему, а не по одному прогону. Сиды считаются параллельно
+    (workers=1 — последовательно)."""
+    import os
+    from concurrent.futures import ProcessPoolExecutor
+    from functools import partial
+
+    job = partial(_reliability_at, cands=cands, truth=truth, kw=kw)
+    workers = workers if workers is not None else min(len(seeds), max(1, (os.cpu_count() or 2) - 1))
+    if workers <= 1 or len(seeds) == 1:
+        runs = [job(s) for s in seeds]
+    else:
+        with ProcessPoolExecutor(max_workers=workers) as ex:
+            runs = list(ex.map(job, seeds))
+    out: dict = {"seeds": list(seeds)}
+    for key, v in runs[0].items():
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            vals = [r[key] for r in runs]
+            out[key] = float(np.mean(vals))
+            out[f"{key}_min"], out[f"{key}_max"] = float(np.min(vals)), float(np.max(vals))
+        else:
+            out[key] = v
+    return out
 
 
 # ----------------------------------------------------------------------------------- утечки

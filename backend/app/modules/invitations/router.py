@@ -27,7 +27,7 @@ from ..employers.router import get_company
 from ..employers.service import webhook_signing_key
 from ..users.models import AuditLog, User
 from ..vacancies.models import Application, Vacancy
-from .models import Invitation
+from .models import ACCEPTED_STATUSES, Invitation
 
 router = APIRouter(tags=["Приглашения"])
 EmployerUser = require_role("employer")
@@ -104,7 +104,8 @@ def company_stats(db: Session, company_id: uuid.UUID) -> dict:
     ).all()
     counts = dict(inv)
     total = sum(counts.values())
-    answered = counts.get("accepted", 0) + counts.get("declined", 0)
+    accepted = counts.get("accepted", 0) + counts.get("hired", 0)
+    answered = accepted + counts.get("declined", 0)
     apps = db.execute(
         select(Application.status, func.count())
         .join(Vacancy, Vacancy.id == Application.vacancy_id)
@@ -116,7 +117,7 @@ def company_stats(db: Session, company_id: uuid.UUID) -> dict:
     apps_answered = apps_total - ac.get("sent", 0)
     return {
         "invitations_90d": total,
-        "acceptance_rate": round(counts.get("accepted", 0) / answered, 2) if answered else None,
+        "acceptance_rate": round(accepted / answered, 2) if answered else None,
         "application_response_rate": round(apps_answered / apps_total, 2) if apps_total else None,
     }
 
@@ -124,7 +125,7 @@ def company_stats(db: Session, company_id: uuid.UUID) -> dict:
 def inv_out(db: Session, inv: Invitation, *, for_employer: bool) -> InvitationOut:
     company = db.get(Company, inv.company_id)
     p = db.get(CandidateProfile, inv.candidate_id)
-    revealed = for_employer and inv.status == "accepted"
+    revealed = for_employer and inv.status in ACCEPTED_STATUSES
     return InvitationOut(
         id=str(inv.id),
         status=inv.status,
@@ -367,6 +368,25 @@ def withdraw(inv_id: str, user: User = Depends(EmployerUser), db: Session = Depe
     return inv_out(db, inv, for_employer=True)
 
 
+@router.post(
+    "/api/employer/invitations/{inv_id}/hired",
+    response_model=InvitationOut,
+    summary="Отметить, что кандидат вышел на работу (для воронки трудоустройства)",
+    responses=responses(401, 403, 404, 409),
+)
+def mark_hired(inv_id: str, user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
+    company = get_company(db, user)
+    inv = _get_inv(db, inv_id)
+    if inv.company_id != company.id:
+        raise not_found("Приглашение")
+    if inv.status != "accepted":
+        raise conflict("not_accepted", "Отметить выход на работу можно только по принятому приглашению")
+    inv.status = "hired"
+    inv.hired_at = utcnow()
+    db.commit()
+    return inv_out(db, inv, for_employer=True)
+
+
 def _get_inv(db: Session, inv_id: str) -> Invitation:
     try:
         inv = db.get(Invitation, uuid.UUID(inv_id))
@@ -515,11 +535,12 @@ def insights(user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
             reasons[r.decline_reason] = reasons.get(r.decline_reason, 0) + 1
     total_declined = sum(reasons.values())
     titles = {x["id"]: x["title"] for x in cat.decline_reasons}
-    answered = statuses.get("accepted", 0) + statuses.get("declined", 0)
+    accepted = statuses.get("accepted", 0) + statuses.get("hired", 0)
+    answered = accepted + statuses.get("declined", 0)
     hours = [
         ((r.responded_at - r.created_at).total_seconds() / 3600)
         for r in rows
-        if r.responded_at and r.status in ("accepted", "declined")
+        if r.responded_at and r.status in (*ACCEPTED_STATUSES, "declined")
     ]
     # рынок: категории, в которых компания искала
     searched = db.execute(
@@ -562,7 +583,7 @@ def insights(user: User = Depends(EmployerUser), db: Session = Depends(get_db)):
             {"reason": k, "title": titles.get(k, k), "count": v, "share": round(v / total_declined, 2)}
             for k, v in sorted(reasons.items(), key=lambda x: -x[1])
         ],
-        acceptance_rate=round(statuses.get("accepted", 0) / answered, 2) if answered else None,
+        acceptance_rate=round(accepted / answered, 2) if answered else None,
         median_response_hours=round(float(np.median(hours)), 1) if hours else None,
         market=market,
     )

@@ -330,6 +330,8 @@ def seed(n_candidates: int = 300) -> None:
                     salary_to=n.salary_to or 250000,
                     work_format=n.work_format,
                     min_years=n.min_years,
+                    # стажировки и джуниор-позиции демо-компаний открыты для участников ФСП
+                    fsp_friendly=v["expected"]["grade"] in ("intern", "junior"),
                     city=comp.city,
                     status="published",
                     blueprint=n.blueprint,
@@ -401,6 +403,11 @@ def seed(n_candidates: int = 300) -> None:
                     if status in ("accepted", "declined")
                     else None,
                 )
+                # часть давних принятых приглашений закончилась выходом на работу — для воронки
+                # федерации; отдельный генератор, чтобы не сдвигать остальные демо-данные
+                if status == "accepted" and created < now - timedelta(days=21):
+                    if random.Random(f"hired-{ci}-{p.user_id}").random() < 0.4:
+                        inv.status, inv.hired_at = "hired", inv.responded_at + timedelta(days=14)
                 db.add(inv)
 
         # ---------------------------------------------------------------- демо-кандидат «Мария»

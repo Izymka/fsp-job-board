@@ -129,9 +129,11 @@ def required_years(need: Need) -> tuple[float, bool]:
 
 
 def experience_fit(c: CandidateFeatures, need: Need, fsp: float = 0.0) -> tuple[float, list[Reason]]:
-    """fsp — сила достижений ФСП (v7): засчитывается как опыт, если вакансия его требует."""
+    """fsp — сила достижений ФСП (v7): засчитывается как опыт, если вакансия его требует.
+    У вакансии «открыта для ФСП» потолок — требуемый стаж, а не FSP_YEARS_MAX."""
     req, explicit = required_years(need)
-    fsp_years = FSP_YEARS_MAX * min(max(fsp, 0.0), 1.0) if req > 0 else 0.0
+    cap = max(FSP_YEARS_MAX, req) if need.fsp_friendly else FSP_YEARS_MAX
+    fsp_years = cap * min(max(fsp, 0.0), 1.0) if req > 0 else 0.0
     req_t = (
         f"требуется {years_from(req)}"
         if explicit
@@ -204,6 +206,9 @@ class Need:
     embedding: np.ndarray | None = None
     include_adjacent: bool = True
     min_years: float | None = None  # требуемый опыт из вакансии; None — типичный для грейда
+    # «Открыта для участников ФСП»: работодатель засчитывает достижения ФСП как опыт целиком —
+    # потолок ФСП-опыта поднимается с FSP_YEARS_MAX до требования вакансии (только v7)
+    fsp_friendly: bool = False
 
 
 @dataclass(frozen=True)

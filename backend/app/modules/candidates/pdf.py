@@ -143,14 +143,23 @@ def render_profile_pdf(p: CandidateProfile, *, reveal_contacts: bool) -> bytes:
     else:
         res = {x["id"]: x["title"] for x in cat.fsp["results"]}
         lvl = {x["id"]: x["title"] for x in cat.fsp["levels"]}
+        proves = {x["id"]: x.get("proves") for x in cat.fsp["disciplines"]}
         for a in sorted(p.fsp_achievements, key=lambda a: a.get("date", ""), reverse=True)[:12]:
+            role = f", роль: {a['role']}" if a.get("role") else ""
             pdf.multi_cell(
                 0,
                 5,
-                f"{a.get('date', '')[:4]} · {res.get(a.get('result'), '')} · {a.get('title', '')} ({lvl.get(a.get('level'), '')})",
+                f"{a.get('date', '')[:4]} · {res.get(a.get('result'), '')} · {a.get('title', '')} ({lvl.get(a.get('level'), '')}{role})",
                 new_x="LMARGIN",
                 new_y="NEXT",
             )
+            extra = [f"Подтверждает: {proves[a['discipline']]}" if proves.get(a.get("discipline")) else ""]
+            if a.get("project_url"):
+                extra.append(f"Проект команды: {a['project_url']}")
+            if any(extra):
+                pdf.set_font("JB", "", 8)
+                pdf.multi_cell(0, 4, "   " + " · ".join(x for x in extra if x), new_x="LMARGIN", new_y="NEXT")
+                pdf.set_font("JB", "", 9)
 
     if p.experience:
         _section(pdf, "Опыт работы")

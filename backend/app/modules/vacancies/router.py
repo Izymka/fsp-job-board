@@ -49,6 +49,7 @@ def vacancy_need(v: Vacancy) -> Need:
         v.salary_to,
         v.work_format,
         min_years=v.min_years,
+        fsp_friendly=bool(v.fsp_friendly),
     )
 
 
@@ -88,6 +89,17 @@ class _Claimed:
         self.claimed = claimed
 
 
+def fsp_partner(db: Session, company_id) -> bool:
+    """«Партнёр ФСП» — у компании есть опубликованная вакансия, открытая для участников ФСП."""
+    return bool(
+        db.scalar(
+            select(func.count())
+            .select_from(Vacancy)
+            .where(Vacancy.company_id == company_id, Vacancy.status == "published", Vacancy.fsp_friendly)
+        )
+    )
+
+
 class VacancyIn(BaseModel):
     title: str = Field(min_length=3, max_length=255)
     text: str = Field(min_length=20, max_length=20000)
@@ -99,6 +111,9 @@ class VacancyIn(BaseModel):
     city: str | None = Field(default=None, max_length=128)
     min_years: float | None = Field(
         default=None, ge=0, le=20, description="требуемый опыт, лет; если не задано — из текста"
+    )
+    fsp_friendly: bool = Field(
+        default=False, description="Открыта для участников ФСП: достижения ФСП засчитываются как опыт"
     )
     status: Literal["draft", "published", "closed"] = "published"
 
@@ -126,6 +141,8 @@ class VacancyOut(BaseModel):
     work_format: str | None
     city: str | None
     min_years: float | None = None
+    fsp_friendly: bool = False
+    company_fsp_partner: bool = False
     status: str
     blueprint: dict[str, float]
     created_at: datetime
@@ -167,6 +184,8 @@ def vac_out(
         work_format=v.work_format,
         city=v.city,
         min_years=v.min_years,
+        fsp_friendly=bool(v.fsp_friendly),
+        company_fsp_partner=fsp_partner(db, v.company_id),
         status=v.status,
         blueprint=v.blueprint or {},
         created_at=v.created_at,
@@ -178,9 +197,10 @@ def vac_out(
 
 
 def _apply_body(v: Vacancy, body: VacancyIn) -> None:
-    n = parse_need(body.text, body.title)
+    n = parse_need(body.text, body.title, body.salary_from, body.salary_to)
     spec = body.specialization or n.specialization
-    grade = body.grade or n.grade
+    # при конфликте сигналов (уверенность low) грейд не угадываем — работодатель выбирает сам
+    grade = body.grade or (n.grade if n.grade_confidence != "low" else None)
     if not spec or spec not in get_catalog().specializations:
         raise AppError(
             400, "specialization_required", "Не удалось определить специализацию — укажите её явно"
@@ -194,6 +214,7 @@ def _apply_body(v: Vacancy, body: VacancyIn) -> None:
     v.work_format = body.work_format or n.work_format
     v.city = body.city
     v.min_years = body.min_years if body.min_years is not None else n.min_years
+    v.fsp_friendly = body.fsp_friendly
     v.status = body.status
     v.blueprint = n.blueprint
     v.parsed = {"must": n.must, "plus": n.plus, "explanation": n.explanation, "spec_scores": n.spec_scores}
@@ -365,6 +386,7 @@ def set_app_status(
 def feed(
     specialization: str | None = None,
     all_specializations: bool = False,
+    fsp_friendly: bool = Query(default=False, description="только вакансии, открытые для участников ФСП"),
     q: str | None = Query(default=None, max_length=100),
     user: User = Depends(CandidateUser),
     db: Session = Depends(get_db),
@@ -374,6 +396,8 @@ def feed(
     spec = specialization or (None if all_specializations else p.specialization)
     if spec:
         query = query.where(Vacancy.specialization == spec)
+    if fsp_friendly:
+        query = query.where(Vacancy.fsp_friendly)
     rows = db.scalars(query).all()
     if q:
         ql = q.lower()

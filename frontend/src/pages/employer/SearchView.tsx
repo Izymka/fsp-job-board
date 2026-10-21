@@ -99,6 +99,10 @@ export default function SearchView() {
   const [invite, setInvite] = useState<{ id: string; label: string } | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   const apply = useMutation({ mutationFn: (v: { filters: Filters; note: string }) => api.put<SearchOut>(`/api/employer/searches/${id}/filters`, v), onSuccess: (d) => qc.setQueryData(key, d) })
+  const fsp = useMutation({
+    mutationFn: (v: { fsp_friendly?: boolean; notify_fsp?: boolean }) => api.put(`/api/employer/searches/${id}/fsp`, v),
+    onSuccess: () => qc.invalidateQueries({ queryKey: key }),
+  })
   const pin = useMutation({
     mutationFn: (v: { cid: string; on: boolean }) => (v.on ? api.put(`/api/employer/searches/${id}/shortlist/${v.cid}`, {}) : api.del(`/api/employer/searches/${id}/shortlist/${v.cid}`)),
     onSuccess: () => qc.invalidateQueries({ queryKey: key }),
@@ -116,6 +120,7 @@ export default function SearchView() {
             <span className="ml-1">{range(s.need.salary_from, s.need.salary_to)}</span>
             {s.need.work_format && <span>· {L.format(s.need.work_format)}</span>}
             {s.need.min_years != null && <span>· {s.need.min_years ? `опыт от ${String(s.need.min_years).replace('.', ',')} г.` : 'можно без опыта'}</span>}
+            {s.search.fsp_friendly && <Badge tone="bg-ok-50 text-ok-600">ФСП засчитывается как опыт</Badge>}
           </span>
         }
         actions={
@@ -125,6 +130,16 @@ export default function SearchView() {
         }
       />
 
+      <div className="mb-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        <label className="flex items-center gap-2">
+          <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={s.search.fsp_friendly} disabled={fsp.isPending} onChange={(e) => fsp.mutate({ fsp_friendly: e.target.checked })} />
+          Засчитывать достижения ФСП как опыт
+        </label>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" className="h-4 w-4 accent-brand-500" checked={s.search.notify_fsp} disabled={fsp.isPending} onChange={(e) => fsp.mutate({ notify_fsp: e.target.checked })} />
+          Сообщать о новых участниках ФСП в топе (не чаще раза в день)
+        </label>
+      </div>
       <div className="mb-6 flex flex-wrap gap-2">
         {s.categories.map((c) => (
           <span

@@ -18,7 +18,7 @@ class User(TimestampMixin, Base):
     subject: Mapped[str | None] = mapped_column(String(255), unique=True, index=True)  # sub из токена IdP
     email: Mapped[str] = mapped_column(String(320), index=True)
     email_verified: Mapped[bool] = mapped_column(default=False)
-    role: Mapped[str | None] = mapped_column(String(16))  # candidate | employer
+    role: Mapped[str | None] = mapped_column(String(16))  # candidate | employer | fsp_admin (федерация)
     display_name: Mapped[str | None] = mapped_column(String(255))
     last_seen_at: Mapped[datetime | None] = mapped_column(default=None)
     is_demo: Mapped[bool] = mapped_column(default=False)

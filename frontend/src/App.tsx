@@ -24,6 +24,7 @@ import SearchView from './pages/employer/SearchView'
 import Searches from './pages/employer/Searches'
 import EmployerTasks from './pages/employer/Tasks'
 import EmployerVacancies from './pages/employer/Vacancies'
+import FspFunnel from './pages/fsp/Funnel'
 import DevLogin from './pages/public/DevLogin'
 import HowItWorks from './pages/public/HowItWorks'
 import Landing from './pages/public/Landing'
@@ -59,6 +60,7 @@ function AppRedirect() {
   if (!me) return <PageLoader />
   if (!me.role) return <Navigate to="/onboarding" replace />
   if (me.role === 'employer') return <Navigate to={me.has_company ? '/employer' : '/employer/company'} replace />
+  if (me.role === 'fsp_admin') return <Navigate to="/fsp" replace />
   if (me.onboarding_step === 'survey') return <Navigate to="/candidate/survey" replace />
   return <Navigate to="/candidate" replace />
 }
@@ -102,6 +104,8 @@ export default function App() {
         <Route path="/employer/invitations" element={<Gate role="employer"><EmployerInvitations /></Gate>} />
         <Route path="/employer/vacancies" element={<Gate role="employer"><EmployerVacancies /></Gate>} />
         <Route path="/employer/tasks" element={<Gate role="employer"><EmployerTasks /></Gate>} />
+
+        <Route path="/fsp" element={<Gate role="fsp_admin"><FspFunnel /></Gate>} />
 
         <Route path="*" element={<EmptyState title="Страница не найдена" text="Проверьте адрес или вернитесь на главную." action={<a className="btn-primary" href="/">На главную</a>} />} />
       </Route>

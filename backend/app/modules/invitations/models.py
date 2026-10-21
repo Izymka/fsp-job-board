@@ -8,6 +8,10 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from ...core.db import Base, new_id, utcnow
 
+# Статусы, при которых кандидат согласился на контакт: контакты открыты работодателю.
+# hired — работодатель отметил выход на работу после принятия, согласие сохраняется.
+ACCEPTED_STATUSES = ("accepted", "hired")
+
 
 class Invitation(Base):
     """Приглашение от работодателя конкретному кандидату (механика «инициатива у работодателя»).
@@ -33,7 +37,7 @@ class Invitation(Base):
     contact_value: Mapped[str] = mapped_column(String(255))
     status: Mapped[str] = mapped_column(
         String(16), default="sent", index=True
-    )  # sent | viewed | accepted | declined | withdrawn
+    )  # sent | viewed | accepted | declined | withdrawn | hired
     decline_reason: Mapped[str | None] = mapped_column(String(32))
     decline_comment: Mapped[str | None] = mapped_column(String(1000))
     salary_fit: Mapped[str | None] = mapped_column(String(16))  # индикатор на момент отправки
@@ -41,3 +45,4 @@ class Invitation(Base):
     created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
     viewed_at: Mapped[datetime | None] = mapped_column(default=None)
     responded_at: Mapped[datetime | None] = mapped_column(default=None)
+    hired_at: Mapped[datetime | None] = mapped_column(default=None)  # работодатель отметил выход на работу

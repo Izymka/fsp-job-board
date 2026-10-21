@@ -109,3 +109,20 @@ def test_no_fsp_history_is_not_penalized_vs_v6():
     v7 = rank([c], JUNIOR_NEED, TODAY, version=7)[0]
     assert v7.details["gate_experience"] == v6.details["gate_experience"]
     assert any(r.text == "ФСП ID не привязан" for r in v7.reasons)
+
+
+def test_fsp_friendly_vacancy_counts_fsp_up_to_requirement():
+    """«Открыта для ФСП»: на Middle (от 2 лет) обычный потолок ФСП-опыта — 1 год, у такой вакансии — 2."""
+    need = Need(specialization="backend", grade="middle", skills={"Python": 1.0}, min_years=2.0)
+    friendly = Need(**{**need.__dict__, "fsp_friendly": True})
+    c = junior(
+        "champ", grade="middle", fsp=[FspAchievement("product", "international", "winner", date(2026, 6, 1))]
+    )
+    f = fsp_strength(c.fsp, "backend", TODAY)
+    plain, _ = experience_fit(c, need, fsp=f)
+    open_, reasons = experience_fit(c, friendly, fsp=f)
+    assert open_ > plain
+    assert any("Достижения ФСП засчитаны как практический опыт" in r.text for r in reasons)
+    # без ФСП разницы нет: флаг не даёт преимущества кандидатам без достижений
+    nobody = junior("plain", grade="middle")
+    assert experience_fit(nobody, need)[0] == experience_fit(nobody, friendly)[0]

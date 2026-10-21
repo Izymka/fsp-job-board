@@ -25,6 +25,8 @@ class Vacancy(TimestampMixin, Base):
     work_format: Mapped[str | None] = mapped_column(String(16))
     city: Mapped[str | None] = mapped_column(String(128))
     min_years: Mapped[float | None] = mapped_column(default=None)  # требуемый опыт; None — по грейду
+    # «Открыта для участников ФСП»: достижения ФСП засчитываются как опыт до требуемого стажа
+    fsp_friendly: Mapped[bool] = mapped_column(default=False, server_default="0")
     status: Mapped[str] = mapped_column(
         String(16), default="published", index=True
     )  # draft | published | closed

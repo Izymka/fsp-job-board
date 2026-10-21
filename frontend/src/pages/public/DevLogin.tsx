@@ -8,6 +8,7 @@ const DEMO = [
   { email: 'employer@demo.fsp', label: 'Работодатель «Рубль+»' },
   { email: 'maria@demo.fsp', label: 'Кандидат с категорией и ФСП' },
   { email: 'candidate@demo.fsp', label: 'Новый кандидат (онбординг)' },
+  { email: 'federation@demo.fsp', label: 'Федерация ФСП (воронка трудоустройства)' },
 ]
 
 /** Вход без Keycloak — только когда бэкенд запущен в AUTH_MODE=dev (локальная отладка). */

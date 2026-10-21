@@ -237,6 +237,31 @@ def _build(seed: int = 2026):
             ),
         ],
     )
+    # Предстоящие соревнования (для «плана роста» кандидата) — после участников, чтобы их
+    # достижения и порядок случайных чисел не менялись; отсчёт от сегодняшней даты, чтобы
+    # календарь в демо не «устаревал».
+    up_rng = random.Random(seed + 1)
+    base = max(today, date.today())
+    for i in range(18):
+        disc = list(DISC_TITLES)[i % len(DISC_TITLES)]
+        level = up_rng.choices(list(LEVEL_PREFIX), [0.08, 0.35, 0.42, 0.15])[0]
+        reg_i = up_rng.randrange(len(REGIONS))
+        prefix = up_rng.choice(LEVEL_PREFIX[level]).format(region=REGIONS[reg_i])
+        start = base + timedelta(days=up_rng.randint(7, 200))
+        events.append(
+            Event(
+                id=f"EV-U{i + 1:03d}",
+                title=f"{prefix} {DISC_TITLES[disc]} {start.year}",
+                discipline=disc,
+                level=level,
+                start_date=start,
+                end_date=start + timedelta(days=up_rng.randint(1, 3)),
+                city=up_rng.choice(CITIES),
+                organizer="ФСП России"
+                if level in ("national", "international")
+                else f"Региональное отделение ФСП ({REGION_NAMES[reg_i]})",
+            )
+        )
     return {e.id: e for e in events}, participants
 
 
@@ -292,10 +317,12 @@ def participants(changed_since: datetime | None = None, limit: int = Query(100, 
     dependencies=[Depends(require_key)],
     summary="Справочник соревнований",
 )
-def events(discipline: Discipline | None = None, level: Level | None = None):
+def events(discipline: Discipline | None = None, level: Level | None = None, upcoming: bool = False):
     rows = list(EVENTS.values())
+    if upcoming:
+        rows = sorted((e for e in rows if e.start_date >= date.today()), key=lambda e: e.start_date)
     if discipline:
         rows = [e for e in rows if e.discipline == discipline]
     if level:
         rows = [e for e in rows if e.level == level]
-    return sorted(rows, key=lambda e: e.start_date, reverse=True)
+    return rows if upcoming else sorted(rows, key=lambda e: e.start_date, reverse=True)

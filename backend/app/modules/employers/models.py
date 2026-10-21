@@ -45,6 +45,9 @@ class Search(TimestampMixin, Base):
     industry: Mapped[str | None] = mapped_column(String(32))
     min_years: Mapped[float | None] = mapped_column(default=None)  # требуемый опыт; None — по грейду
     include_adjacent: Mapped[bool] = mapped_column(default=True)
+    fsp_friendly: Mapped[bool] = mapped_column(default=False, server_default="0")
+    # уведомлять о новых участниках ФСП, попавших в топ подборки (см. `fsp_alerts`)
+    notify_fsp: Mapped[bool] = mapped_column(default=False, server_default="0")
     parsed: Mapped[dict | None] = mapped_column(default=None)
     filters: Mapped[dict] = mapped_column(default=dict)
     version: Mapped[int] = mapped_column(default=1)
@@ -74,3 +77,21 @@ class ShortlistItem(Base):
     )
     note: Mapped[str | None] = mapped_column(String(500))
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+
+class FspMatchNotice(Base):
+    """Участник ФСП попал в топ сохранённой подборки с `notify_fsp`: одна запись на пару, письмо —
+    дайджестом не чаще раза в сутки на подборку (`emailed_at`)."""
+
+    __tablename__ = "fsp_match_notices"
+    __table_args__ = (UniqueConstraint("search_id", "candidate_id"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)
+    search_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("searches.id", ondelete="CASCADE"), index=True)
+    candidate_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("candidate_profiles.user_id", ondelete="CASCADE")
+    )
+    rank: Mapped[int]
+    reason: Mapped[str] = mapped_column(String(500))
+    created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
+    emailed_at: Mapped[datetime | None] = mapped_column(default=None)

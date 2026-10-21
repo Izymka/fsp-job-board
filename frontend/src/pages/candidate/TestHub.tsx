@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { AlertTriangle, Lock, Play, ShieldCheck } from 'lucide-react'
+import { AlertTriangle, Lock, Medal, Play, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BlueprintBars, StatusBadge } from '../../components/domain'
@@ -10,7 +10,7 @@ import { api } from '../../lib/api'
 import { date, dateTime, lookup, useCatalog } from '../../lib/catalog'
 import { detectEnv, enterFullscreen, isDesktop, screenExtended } from '../../lib/environment'
 import { proctor } from '../../lib/proctor/session'
-import type { Attempt, Eligibility, GradeId, Profile } from '../../lib/types'
+import type { Attempt, Eligibility, GradeId, GrowthPlan, Profile } from '../../lib/types'
 
 const ATTEMPT_STATUS = {
   in_progress: { label: 'В процессе', tone: 'bg-brand-50 text-brand-700' },
@@ -166,6 +166,8 @@ export default function TestHub() {
         </Section>
       </div>
 
+      {hist.data?.some((a) => a.status !== 'in_progress') && <GrowthSection />}
+
       {hist.data && hist.data.length > 0 && (
         <Section title="История попыток" className="mt-6">
           <div className="overflow-x-auto">
@@ -247,5 +249,52 @@ function LaunchModal({ grade, label, onClose, onStart }: { grade: GradeId | null
         </button>
       </div>
     </Modal>
+  )
+}
+
+function GrowthSection() {
+  const { data: cat } = useCatalog()
+  const L = lookup(cat)
+  const q = useQuery({ queryKey: ['fsp-growth'], queryFn: () => api.get<GrowthPlan>('/api/fsp/growth') })
+  const g = q.data
+  if (!g || (!g.weak_skills.length && !g.events.length)) return null
+  return (
+    <Section title="План роста" className="mt-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        {g.weak_skills.length > 0 && (
+          <div>
+            <div className="mb-2 text-xs font-medium text-muted">Что подтянуть по итогам теста</div>
+            <div className="flex flex-wrap gap-1.5">
+              {g.weak_skills.map((s) => (
+                <Badge key={s} tone="bg-warn-50 text-warn-600">
+                  {L.skill(s)}
+                </Badge>
+              ))}
+            </div>
+            <p className="hint mt-2">Повторить тест на этот же уровень можно через 14 дней — на других заданиях.</p>
+          </div>
+        )}
+        {g.events.length > 0 && (
+          <div>
+            <div className="mb-2 text-xs font-medium text-muted">Ближайшие соревнования ФСП по вашей специализации</div>
+            <ul className="space-y-2">
+              {g.events.map((e) => (
+                <li key={e.id} className="flex items-start gap-2 text-sm">
+                  <Medal className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" />
+                  <span>
+                    <span className="font-medium">{e.title}</span>
+                    <span className="block text-xs text-muted">
+                      {date(e.start_date)}
+                      {e.city ? ` · ${e.city}` : ''} · {L.fspLevel(e.level)}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="hint mt-2">Призовое место в реестре ФСП засчитывается работодателями как практический опыт и учитывается в подборе.</p>
+          </div>
+        )}
+      </div>
+    </Section>
   )
 }

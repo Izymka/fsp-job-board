@@ -9,7 +9,7 @@ from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
 from ..vacancies.models import Application, Vacancy
-from .models import Invitation
+from .models import ACCEPTED_STATUSES, Invitation
 
 
 def contacts_revealed(db: Session, company_id: uuid.UUID, candidate_id: uuid.UUID) -> bool:
@@ -18,7 +18,7 @@ def contacts_revealed(db: Session, company_id: uuid.UUID, candidate_id: uuid.UUI
             exists().where(
                 Invitation.company_id == company_id,
                 Invitation.candidate_id == candidate_id,
-                Invitation.status == "accepted",
+                Invitation.status.in_(ACCEPTED_STATUSES),
             )
         )
     )
@@ -42,7 +42,7 @@ def revealed_set(db: Session, company_id: uuid.UUID, candidate_ids: list[uuid.UU
     a = db.scalars(
         select(Invitation.candidate_id).where(
             Invitation.company_id == company_id,
-            Invitation.status == "accepted",
+            Invitation.status.in_(ACCEPTED_STATUSES),
             Invitation.candidate_id.in_(candidate_ids),
         )
     ).all()

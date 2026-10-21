@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import time
 import uuid
 from datetime import datetime, timedelta
@@ -27,6 +28,8 @@ from ..candidates.models import CandidateProfile
 from ..candidates.service import fsp_achievements
 from . import proctoring
 from .models import Attempt, AttemptItem, FamilyStats
+
+log = logging.getLogger("assessment")
 
 STALE_AFTER = timedelta(hours=3)
 # Окно памяти о показанных заданиях: повторная попытка (не раньше чем через 14 дней) идёт на других
@@ -571,7 +574,19 @@ def finish(
                 {k: sc_out[k] for k in ("title", "category", "category_title", "method")} if sc_out else None
             ),
         }
+        notify_fsp_alerts(db, p)
     return result
+
+
+def notify_fsp_alerts(db: Session, p: CandidateProfile) -> None:
+    """Подписка работодателей на новых участников ФСП (best effort: сбой не ломает завершение теста)."""
+    from ..employers.fsp_alerts import on_fsp_candidate_update
+
+    try:
+        with db.begin_nested():
+            on_fsp_candidate_update(db, p)
+    except Exception as e:  # noqa: BLE001
+        log.warning("fsp alerts failed for %s: %s", p.user_id, e)
 
 
 def void(db: Session, attempt: Attempt, report: integ.IntegrityReport) -> None:
